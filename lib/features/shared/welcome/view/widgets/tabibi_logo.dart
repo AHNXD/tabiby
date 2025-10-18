@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 class TabibiLogo extends StatelessWidget {
@@ -9,7 +10,7 @@ class TabibiLogo extends StatelessWidget {
     return Column(
       children: [
         Image.asset(
-          'assets/images/Main Logo First platte.png',
+          AssetsData.logoGreen,
           height: 70,
 
           color: AppColors.primaryColors,
