@@ -6,6 +6,7 @@ import 'sections/welcome_section.dart';
 import 'widgets/tabibi_logo.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  static const String routeName = "/welcome";
   const WelcomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,9 @@ class WelcomeScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 60),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -36,8 +39,3 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

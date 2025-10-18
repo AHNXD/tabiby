@@ -4,6 +4,7 @@ import '../../../../core/widgets/custom_appbar.dart';
 import 'widgets/booking_form.dart';
 
 class BookingScreen extends StatelessWidget {
+  static const String routeName = "/add_appointment";
   const BookingScreen({super.key});
 
   @override

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'sections/appbar_section.dart';
 import 'sections/steps_section.dart';
 
-
 class SignUpScreen extends StatelessWidget {
+  static const String routeName = "/sign_up";
   const SignUpScreen({super.key});
 
   @override
@@ -16,7 +16,7 @@ class SignUpScreen extends StatelessWidget {
           children: const [
             AppBarSection(),
             SizedBox(height: 20),
-            Expanded(child: StepsSectionWrapper()), 
+            Expanded(child: StepsSectionWrapper()),
           ],
         ),
       ),

@@ -8,6 +8,7 @@ import 'widgets/appointment_list.dart';
 import 'widgets/data.dart';
 
 class UserAppointmentScreen extends StatelessWidget {
+  static const String routeName = "/user_appointments";
   const UserAppointmentScreen({super.key});
 
   @override

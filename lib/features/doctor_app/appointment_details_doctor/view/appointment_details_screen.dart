@@ -8,6 +8,7 @@ import 'widgets/appointment_details_header.dart';
 import 'widgets/end_appointment_dialog.dart';
 
 class AppointmentDetailsDoctor extends StatelessWidget {
+  static const String routeName = "/doctor_appointment_details";
   final Map<String, dynamic> appointment;
   const AppointmentDetailsDoctor({super.key, required this.appointment});
 

@@ -3,9 +3,8 @@ import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../center_details/view/center_details_screen.dart';
 import 'widgets/clinic_card.dart';
 
-
-
 class AllClinicsScreen extends StatelessWidget {
+  static const String routeName = "/clinics";
   final List<Map<String, dynamic>> medicalCenters;
 
   const AllClinicsScreen({super.key, required this.medicalCenters});
@@ -21,7 +20,7 @@ class AllClinicsScreen extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-            childAspectRatio: 0.8, 
+            childAspectRatio: 0.8,
           ),
           itemCount: medicalCenters.length,
           itemBuilder: (context, index) {

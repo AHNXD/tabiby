@@ -8,6 +8,7 @@ import 'widgets/doctor_header.dart';
 import 'widgets/doctor_rating.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
+  static const String routeName = "/doctor_details";
   final String doctorName;
   final String specialty;
   final String experience;

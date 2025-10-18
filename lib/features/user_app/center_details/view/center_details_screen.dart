@@ -5,6 +5,7 @@ import 'sections/about_section.dart';
 import 'sections/clinics_section.dart';
 
 class CenterDetailsScreen extends StatelessWidget {
+  static const String routeName = "/center_details";
   final Map<String, dynamic> center;
 
   const CenterDetailsScreen({super.key, required this.center});

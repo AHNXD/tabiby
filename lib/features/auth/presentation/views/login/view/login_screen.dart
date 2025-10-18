@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/widgets/custom_login_sign_up_appbar.dart';
 import 'widgets/login_form.dart';
+
 class LoginScreen extends StatelessWidget {
+  static const String routeName = "/login";
   const LoginScreen({super.key});
 
   @override

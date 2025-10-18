@@ -7,6 +7,7 @@ import 'widgets/dashboard_controller.dart';
 import 'widgets/data.dart';
 
 class DoctorDashboardScreen extends StatefulWidget {
+  static const String routeName = "/doctor_dashboard";
   const DoctorDashboardScreen({super.key});
 
   @override

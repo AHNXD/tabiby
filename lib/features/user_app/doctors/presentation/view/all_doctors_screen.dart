@@ -4,6 +4,7 @@ import 'widgets/doctor_card.dart';
 
 
 class AllDoctorsScreen extends StatelessWidget {
+  static const String routeName = "/doctors";
   final List<Map<String, dynamic>> doctors;
 
   const AllDoctorsScreen({super.key, required this.doctors});

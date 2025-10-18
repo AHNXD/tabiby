@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/widgets/custom_appbar.dart';
 
-Widget _buildCategoryGridItem(BuildContext context, Map<String, dynamic> category) {
+Widget _buildCategoryGridItem(
+  BuildContext context,
+  Map<String, dynamic> category,
+) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       TextButton(
-        onPressed: () {
-
-        },
+        onPressed: () {},
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
@@ -24,11 +25,7 @@ Widget _buildCategoryGridItem(BuildContext context, Map<String, dynamic> categor
             shape: BoxShape.circle,
           ),
           child: Center(
-            child: Image.asset(
-              category['icon'],
-              width: 40,
-              height: 40,
-            ),
+            child: Image.asset(category['icon'], width: 40, height: 40),
           ),
         ),
       ),
@@ -45,6 +42,7 @@ Widget _buildCategoryGridItem(BuildContext context, Map<String, dynamic> categor
 }
 
 class AllCategoriesScreen extends StatelessWidget {
+  static const String routeName = "/categories";
   final List<Map<String, dynamic>> categories;
 
   const AllCategoriesScreen({super.key, required this.categories});

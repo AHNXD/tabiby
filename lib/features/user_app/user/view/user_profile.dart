@@ -7,6 +7,7 @@ import 'widgets/profile_avatar.dart';
 import 'widgets/profile_form.dart';
 
 class UserProfileScreen extends StatefulWidget {
+  static const String routeName = "/user_profile";
   const UserProfileScreen({super.key});
 
   @override
