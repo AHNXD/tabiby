@@ -4,7 +4,7 @@ import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/password_textfield.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
-import '../../../../../../shared/home/presentation/view/home_screen.dart';
+import '../../../../../../user_app/home/presentation/view/home_screen.dart';
 
 class LoginInputs extends StatelessWidget {
   const LoginInputs({super.key});

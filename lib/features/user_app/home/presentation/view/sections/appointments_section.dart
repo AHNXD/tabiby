@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/widgets/secondry_button.dart';
-import '../../../../../user_app/user_appointments/view/appointment_screen.dart';
+import '../../../../user_appointments/view/appointment_screen.dart';
 
 
 

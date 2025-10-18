@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/widgets/primary_button.dart';
-import '../../../../core/widgets/secondry_button.dart';
-import '../../../auth/presentation/views/login/view/login_screen.dart';
-import '../../../auth/presentation/views/sign_up/view/sign_up_screen.dart';
+import '../../../../../core/widgets/primary_button.dart';
+import '../../../../../core/widgets/secondry_button.dart';
+import '../../../../auth/presentation/views/login/view/login_screen.dart';
+import '../../../../auth/presentation/views/sign_up/view/sign_up_screen.dart';
 
 class ButtonsSection extends StatelessWidget {
   const ButtonsSection({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../user_app/user/view/user_profile.dart';
+import '../../../../user/view/user_profile.dart';
 import '../widgets/build_appbar.dart';
 
 class AppBarSection extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../../user_app/doctor_details/view/doctor_details_screen.dart';
+import '../../../../doctor_details/view/doctor_details_screen.dart';
 
 class DoctorCard extends StatelessWidget {
   final Map<String, dynamic> doctor;

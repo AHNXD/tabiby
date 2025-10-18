@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tabiby/features/shared/home/presentation/view/home_screen.dart';
+import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/utils/app_localizations.dart';
 import 'core/utils/cache_helper.dart';

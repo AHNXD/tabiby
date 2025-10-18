@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
-import '../../../../../user_app/center_details/view/center_details_screen.dart';
-import '../all_clinics_screen.dart';
-import '../widgets/clinic_card.dart';
+
+import '../../../../doctors/presentation/view/all_doctors_screen.dart';
 import '../widgets/data.dart';
+import '../../../../doctors/presentation/view/widgets/doctor_card.dart';
 import '../widgets/section_header.dart';
 
-class ClinicsSection extends StatelessWidget {
-  const ClinicsSection({super.key});
+
+
+class DoctorsSection extends StatelessWidget {
+  const DoctorsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SectionHeader(
-          title: 'Popular Clinics:',
+          title: 'Popular Doctors:',
           onSeeAll: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AllClinicsScreen(medicalCenters: medicalCenters),
+                builder: (context) => AllDoctorsScreen(doctors: doctors),
               ),
             );
           },
@@ -36,19 +38,8 @@ class ClinicsSection extends StatelessWidget {
                 crossAxisSpacing: 10,
                 childAspectRatio: 1,
               ),
-              itemCount: medicalCenters.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CenterDetailsScreen(center: medicalCenters[index]),
-                    ),
-                  );
-                },
-                child: ClinicCard(center: medicalCenters[index]),
-              ),
+              itemCount: doctors.length,
+              itemBuilder: (context, index) => DoctorCard(doctor: doctors[index]),
             ),
           ),
         ),

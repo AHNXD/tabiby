@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
-import '../../../../user_app/center_details/view/center_details_screen.dart';
+import '../../../center_details/view/center_details_screen.dart';
 import 'widgets/clinic_card.dart';
 
 

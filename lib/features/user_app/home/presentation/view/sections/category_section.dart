@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../all_categories_screen.dart';
-import '../widgets/category_item.dart';
+import '../../../../categories/presentation/view/all_categories_screen.dart';
+import '../../../../categories/presentation/view/widgets/category_item.dart';
 import '../widgets/data.dart';
 import '../widgets/section_header.dart';
 
