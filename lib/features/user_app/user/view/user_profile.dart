@@ -75,17 +75,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         title: "My Profile",
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.settings_outlined, color: Colors.white),
             onPressed: () {
-              // الانتقال إلى صفحة الإعدادات
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );
             },
           ),
@@ -108,14 +102,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 weightController: _weightController,
                 maritalStatus: _maritalStatus,
                 isSmoker: _isSmoker,
-                onMaritalStatusChanged: (v) => setState(() => _maritalStatus = v),
+                onMaritalStatusChanged: (v) =>
+                    setState(() => _maritalStatus = v),
                 onIsSmokerChanged: (v) => setState(() => _isSmoker = v),
               ),
               const SizedBox(height: 30),
-              PrimaryButton(
-                text: "Save Changes",
-                onPressed: _saveChanges,
-              ),
+              PrimaryButton(text: "Save Changes", onPressed: _saveChanges),
             ],
           ),
         ),

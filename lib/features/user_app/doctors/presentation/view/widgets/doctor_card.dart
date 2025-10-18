@@ -51,7 +51,7 @@ class DoctorCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.withValues(alpha: 0.2),
                     blurRadius: 8,
                     spreadRadius: 2,
                   ),
@@ -83,14 +83,18 @@ class DoctorCard extends StatelessWidget {
                         doctor['isAvailable']
                             ? FontAwesomeIcons.circleCheck
                             : FontAwesomeIcons.circleXmark,
-                        color: doctor['isAvailable'] ? Colors.green : Colors.redAccent,
+                        color: doctor['isAvailable']
+                            ? Colors.green
+                            : Colors.redAccent,
                         size: 13,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         doctor['isAvailable'] ? 'Available' : 'Unavailable',
                         style: TextStyle(
-                          color: doctor['isAvailable'] ? Colors.green : Colors.redAccent,
+                          color: doctor['isAvailable']
+                              ? Colors.green
+                              : Colors.redAccent,
                           fontSize: 10,
                         ),
                       ),

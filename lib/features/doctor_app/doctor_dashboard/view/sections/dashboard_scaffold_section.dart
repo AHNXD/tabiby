@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'appBar_section.dart';
+import 'app_bar_section.dart';
 
 class DashboardScaffold extends StatelessWidget {
   final Widget body;

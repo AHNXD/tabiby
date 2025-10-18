@@ -22,7 +22,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         hintText: widget.hintText,
         hintStyle: TextStyle(color: AppColors.textFieldColor),
         filled: true,
-        fillColor: AppColors.textFieldColor.withOpacity(0.1),
+        fillColor: AppColors.textFieldColor.withValues(alpha: 0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: BorderSide.none,

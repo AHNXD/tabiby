@@ -19,17 +19,19 @@ class AppointmentDetailsHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: Colors.grey.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 5),
-          )
+          ),
         ],
       ),
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
           CircleAvatar(
-              radius: 36, backgroundImage: AssetImage(appointment['image'])),
+            radius: 36,
+            backgroundImage: AssetImage(appointment['image']),
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -38,17 +40,23 @@ class AppointmentDetailsHeader extends StatelessWidget {
                 Text(
                   appointment['patientName'],
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold, color: primaryColor),
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text('Patient ID: 123-456-789',
-                    style: TextStyle(color: primaryColor)),
+                Text(
+                  'Patient ID: 123-456-789',
+                  style: TextStyle(color: primaryColor),
+                ),
                 const SizedBox(height: 6),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.1),
+                    color: primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
