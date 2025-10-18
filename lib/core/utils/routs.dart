@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../features/home/presentation/views/home_page.dart';
+import 'package:tabiby/features/shared/home/presentation/view/home_screen.dart';
 
 class Routes {
   static Map<String, Widget Function(BuildContext)> routes = {
-    HomePage.routeName: (context) => HomePage(),
+    HomeScreen.routeName: (context) => HomeScreen(),
   };
 }

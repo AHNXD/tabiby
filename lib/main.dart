@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tabiby/features/home/presentation/views/home_page.dart';
-
+import 'package:tabiby/features/shared/home/presentation/view/home_screen.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/utils/app_localizations.dart';
 import 'core/utils/cache_helper.dart';
@@ -73,7 +72,7 @@ class MyApp extends StatelessWidget {
               ),
               useMaterial3: true,
             ),
-            initialRoute: HomePage.routeName,
+            initialRoute: HomeScreen.routeName,
             routes: Routes.routes,
           );
         },

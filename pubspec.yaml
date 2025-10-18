@@ -11,6 +11,7 @@ environment:
 dependencies:
   awesome_dialog: ^3.2.1
   cached_network_image: ^3.4.1
+  collection: ^1.19.1
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   date_format: ^2.0.9
@@ -25,7 +26,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_otp_text_field: ^1.5.1+1
+  font_awesome_flutter: ^10.7.0
   get_it: ^8.0.3
+  intl: ^0.20.2
   lottie: ^3.3.1
   no_screenshot: ^0.3.1
   phone_form_field: ^10.0.4

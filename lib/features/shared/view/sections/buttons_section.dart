@@ -1,0 +1,37 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/secondry_button.dart';
+import '../../../auth/presentation/views/login/view/login_screen.dart';
+import '../../../auth/presentation/views/sign_up/view/sign_up_screen.dart';
+
+class ButtonsSection extends StatelessWidget {
+  const ButtonsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        PrimaryButton(
+          text: "Log in",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          },
+        ),
+        const SizedBox(height: 20),
+        SecondryButton(
+          text: "Sign up",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
