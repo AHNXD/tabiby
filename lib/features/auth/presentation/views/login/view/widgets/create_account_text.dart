@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../sign_up/view/sign_up_screen.dart';
@@ -15,9 +16,9 @@ class CreateAccountText extends StatelessWidget {
         text: TextSpan(
           style: const TextStyle(fontSize: 14, color: AppColors.textColor),
           children: [
-            const TextSpan(text: "Don't have account? "),
+             TextSpan(text: "dont_have_an_account".tr(context)),
             TextSpan(
-              text: 'Create one.',
+              text: 'create_one'.tr(context),
               style: const TextStyle(
                 color: AppColors.primaryColors,
                 decoration: TextDecoration.underline,

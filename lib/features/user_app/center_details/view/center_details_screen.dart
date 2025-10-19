@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'sections/appbar_section.dart';
 import 'sections/header_section.dart';
 import 'sections/about_section.dart';
@@ -22,14 +23,14 @@ class CenterDetailsScreen extends StatelessWidget {
               delegate: SliverChildListDelegate(
                 [
                   HeaderSection(
-                    name: center['name'] ?? 'Unknown Center',
-                    location: center['location'] ?? 'No location',
+                    name: center['name'] ?? 'unknown_center'.tr(context),
+                    location: center['location'] ?? 'no_location'.tr(context),
                     imageUrl: center['image'] ?? '',
                     rating: center['rating'] ?? 0.0,
                   ),
                   AboutSection(
                     description: center['description'] ??
-                        'The Advanced Healthcare Center provides comprehensive medical services including consultations, diagnosis, and treatment in various specialties.',
+                        'default_center_description'.tr(context),
                   ),
                   const ClinicsSection(),
                 ],

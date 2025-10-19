@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import '../../../../core/widgets/custom_appbar.dart';
 import 'sections/bottom_buttons_section.dart';
@@ -16,7 +17,7 @@ class AppointmentDetailsDoctor extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: CustomAppbar(title: "Appointment Details"),
+      appBar: CustomAppbar(title: "appointment_details".tr(context)),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),

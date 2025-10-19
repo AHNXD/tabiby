@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class BuildAppbar extends StatelessWidget {
   final VoidCallback? onProfileTap;
-  final VoidCallback? onMenuTap; 
+  final VoidCallback? onMenuTap;
 
   const BuildAppbar({super.key, this.onProfileTap, this.onMenuTap});
 
@@ -18,11 +19,13 @@ class BuildAppbar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome back',
-                style: TextStyle(color: Colors.grey, fontSize: 12)),
+            Text(
+              'welcome_back'.tr(context),
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
             Text('Mr. Esam Derawan', style: TextStyle(fontSize: 18)),
           ],
         ),
@@ -35,19 +38,20 @@ class BuildAppbar extends StatelessWidget {
             icon: const Icon(Icons.search, color: Colors.grey, size: 26),
           ),
         ),
-        const SizedBox(width:10),
+        const SizedBox(width: 10),
 
         CircleAvatar(
           backgroundColor: const Color.fromARGB(255, 244, 240, 240),
           child: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.notifications_none_outlined,
-                color: Colors.grey, size: 26),
+            icon: const Icon(
+              Icons.notifications_none_outlined,
+              color: Colors.grey,
+              size: 26,
+            ),
           ),
         ),
         const SizedBox(width: 5),
-
-       
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/widgets/custom_appbar.dart';
 
@@ -52,7 +53,7 @@ class AllCategoriesScreen extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: CustomAppbar(title: "All Categories"),
+        child: CustomAppbar(title: "all_categories".tr(context)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

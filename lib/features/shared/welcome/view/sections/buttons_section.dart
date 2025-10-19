@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/widgets/primary_button.dart';
 import '../../../../../core/widgets/secondry_button.dart';
@@ -13,7 +14,7 @@ class ButtonsSection extends StatelessWidget {
     return Column(
       children: [
         PrimaryButton(
-          text: "Log in",
+          text: "login".tr(context),
           onPressed: () {
             Navigator.push(
               context,
@@ -23,7 +24,7 @@ class ButtonsSection extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         SecondryButton(
-          text: "Sign up",
+          text: "sign_up".tr(context),
           onPressed: () {
             Navigator.push(
               context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class ColoredTextTabBar extends StatelessWidget {
   const ColoredTextTabBar({super.key});
@@ -28,7 +29,7 @@ class ColoredTextTabBar extends StatelessWidget {
           tabs: [
             Tab(
               child: Text(
-                'Finished',
+                'finished'.tr(context),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -38,7 +39,7 @@ class ColoredTextTabBar extends StatelessWidget {
             ),
             Tab(
               child: Text(
-                'Canceled',
+                'canceled'.tr(context),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -48,7 +49,7 @@ class ColoredTextTabBar extends StatelessWidget {
             ),
             Tab(
               child: Text(
-                'Pending',
+                'pending'.tr(context),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

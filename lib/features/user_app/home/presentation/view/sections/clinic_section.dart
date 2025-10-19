@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../center_details/view/center_details_screen.dart';
 import '../../../../clinics/presentation/view/all_clinics_screen.dart';
 import '../../../../clinics/presentation/view/widgets/clinic_card.dart';
@@ -13,12 +14,13 @@ class ClinicsSection extends StatelessWidget {
     return Column(
       children: [
         SectionHeader(
-          title: 'Popular Clinics:',
+          title: 'popular_clinics'.tr(context),
           onSeeAll: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AllClinicsScreen(medicalCenters: medicalCenters),
+                builder: (context) =>
+                    AllClinicsScreen(medicalCenters: medicalCenters),
               ),
             );
           },

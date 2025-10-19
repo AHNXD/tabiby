@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 class TermsCheckbox extends StatelessWidget {
@@ -44,18 +45,18 @@ class TermsCheckbox extends StatelessWidget {
             text: TextSpan(
               style: const TextStyle(fontSize: 12, color: AppColors.textColor),
               children: [
-                const TextSpan(text: 'I have read and agree to the app '),
+                TextSpan(text: 'read_and_agree_conditions'.tr(context)),
                 TextSpan(
-                  text: 'terms conditions',
+                  text: 'terms_conditions'.tr(context),
                   style: const TextStyle(
                     color: AppColors.primaryColors,
                     decoration: TextDecoration.underline,
                   ),
                   recognizer: TapGestureRecognizer()..onTap = () {},
                 ),
-                const TextSpan(text: ' and '),
+                TextSpan(text: ' ${"and".tr(context)} '),
                 TextSpan(
-                  text: 'privacy policy.',
+                  text: 'privacy_policy'.tr(context),
                   style: const TextStyle(
                     color: AppColors.primaryColors,
                     decoration: TextDecoration.underline,

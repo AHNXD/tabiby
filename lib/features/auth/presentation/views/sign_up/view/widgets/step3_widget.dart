@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/custome_text_field.dart';
@@ -66,7 +67,7 @@ class _Step3WidgetState extends State<Step3Widget> {
       child: Column(
         children: [
           const SizedBox(height: 30),
-          const CustomTextField(hintText: 'Marital Status'),
+          CustomTextField(hintText: 'marital_status'.tr(context)),
           const SizedBox(height: 30),
 
           // --- Have Children ---
@@ -87,8 +88,8 @@ class _Step3WidgetState extends State<Step3Widget> {
                         color: const Color(0xFFF6F6F6),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: const Text(
-                        'Have Children?',
+                      child: Text(
+                        'have_children'.tr(context),
                         style: TextStyle(
                           color: AppColors.textFieldColor,
                           fontSize: 16,
@@ -133,8 +134,8 @@ class _Step3WidgetState extends State<Step3Widget> {
                         color: const Color(0xFFF6F6F6),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: const Text(
-                        'Number of Children',
+                      child: Text(
+                        'number_of_children'.tr(context),
                         style: TextStyle(
                           color: AppColors.textFieldColor,
                           fontSize: 16,
@@ -170,7 +171,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   _selectedDate == null
-                      ? 'Type of birth'
+                      ? 'select_your_birth'.tr(context)
                       : DateFormat('dd-MM-yyyy').format(_selectedDate!),
                   style: TextStyle(
                     color: _selectedDate == null
@@ -220,18 +221,18 @@ class _Step3WidgetState extends State<Step3Widget> {
                       color: AppColors.textColor,
                     ),
                     children: [
-                      const TextSpan(text: 'I have read and agree to the app '),
+                      TextSpan(text: 'read_and_agree_conditions'.tr(context)),
                       TextSpan(
-                        text: 'terms conditions',
+                        text: 'terms_conditions'.tr(context),
                         style: const TextStyle(
                           color: AppColors.primaryColors,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
-                      const TextSpan(text: ' and '),
+                       TextSpan(text: ' ${"and".tr(context)} '),
                       TextSpan(
-                        text: 'privacy policy.',
+                        text: 'privacy_policy'.tr(context),
                         style: const TextStyle(
                           color: AppColors.primaryColors,
                           decoration: TextDecoration.underline,
@@ -248,7 +249,7 @@ class _Step3WidgetState extends State<Step3Widget> {
 
           // --- Sign Up Button ---
           SecondryButton(
-            text: 'Sign up',
+            text: 'sign_up'.tr(context),
             onPressed: () {
               Navigator.push(
                 context,

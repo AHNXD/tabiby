@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/utils/colors.dart';
 
@@ -23,7 +24,7 @@ class DoctorRating extends StatelessWidget {
         ),
         const SizedBox(width: 6),
         Text(
-          '(234 Reviews)',
+          '(234 ${"reviews".tr(context)})',
           style: TextStyle(fontSize: 15, color: AppColors.lightTextColor),
         ),
       ],

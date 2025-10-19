@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import '../widgets/clinic_tile.dart';
 
@@ -9,10 +10,10 @@ class ClinicsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         SizedBox(height: 30),
         Text(
-          'Clinics & Departments',
+          'clinics_and_departments'.tr(context),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -25,10 +26,7 @@ class ClinicsSection extends StatelessWidget {
           clinicName: 'Cardiology Unit',
           specialty: 'Heart & Vascular',
         ),
-        ClinicTile(
-          clinicName: 'Orthopedics Clinic',
-          specialty: 'Bone & Joint',
-        ),
+        ClinicTile(clinicName: 'Orthopedics Clinic', specialty: 'Bone & Joint'),
         SizedBox(height: 24),
       ],
     );

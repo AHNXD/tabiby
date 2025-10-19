@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import 'widgets/doctor_card.dart';
 
@@ -12,7 +13,7 @@ class AllDoctorsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppbar(title: "All Popular Doctors"),
+      appBar:  CustomAppbar(title: "all_popular_doctors".tr(context)),
       
       body: Padding(
         padding: const EdgeInsets.all(16.0),

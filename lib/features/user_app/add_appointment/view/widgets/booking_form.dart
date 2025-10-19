@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../core/widgets/primary_button.dart';
@@ -43,11 +44,11 @@ class _BookingFormState extends State<BookingForm> {
         const SizedBox(height: 24),
         Center(
           child: PrimaryButton(
-            text: 'Book Appointment',
+            text: 'book_an_appointment'.tr(context),
             onPressed: () {
               CustomSnackBar.show(
                 context,
-                message: 'Booking request sent!',
+                message: 'booking_request_sent'.tr(context),
                 backgroundColor: Colors.green,
                 icon: Icons.check_circle,
               );

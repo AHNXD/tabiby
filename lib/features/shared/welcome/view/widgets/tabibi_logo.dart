@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
@@ -17,7 +18,7 @@ class TabibiLogo extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         Text(
-          'Tabiby',
+          'tabiby'.tr(context),
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,

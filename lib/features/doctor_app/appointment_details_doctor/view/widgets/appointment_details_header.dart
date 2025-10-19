@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class AppointmentDetailsHeader extends StatelessWidget {
   final Map<String, dynamic> appointment;
@@ -46,7 +47,7 @@ class AppointmentDetailsHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Patient ID: 123-456-789',
+                  '${"patient_id".tr(context)}: 123-456-789',
                   style: TextStyle(color: primaryColor),
                 ),
                 const SizedBox(height: 6),

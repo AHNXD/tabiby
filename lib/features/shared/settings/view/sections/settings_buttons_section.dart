@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../widgets/settings_tile.dart';
 import 'settings_header_section.dart';
@@ -10,33 +11,37 @@ class SettingsButtonsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        const SettingsSectionHeader(title: 'Account'),
+        SettingsSectionHeader(title: 'account'.tr(context)),
         SettingsTile(
           icon: Icons.language_outlined,
-          title: 'Change Language',
+          title: 'change_language'.tr(context),
           onTap: () {},
         ),
         SettingsTile(
           icon: Icons.lock_outline,
-          title: 'Change Password',
+          title: 'change_password'.tr(context),
           onTap: () {},
         ),
 
-        const SettingsSectionHeader(title: 'About'),
-        SettingsTile(icon: Icons.info_outline, title: 'About Us', onTap: () {}),
+        SettingsSectionHeader(title: 'about'.tr(context)),
+        SettingsTile(
+          icon: Icons.info_outline,
+          title: 'about_us'.tr(context),
+          onTap: () {},
+        ),
         SettingsTile(
           icon: Icons.description_outlined,
-          title: 'Terms of Use',
+          title: 'terms_conditions'.tr(context),
           onTap: () {},
         ),
         SettingsTile(
           icon: Icons.privacy_tip_outlined,
-          title: 'Privacy Policy',
+          title: 'privacy_policy'.tr(context),
           onTap: () {},
         ),
         SettingsTile(
           icon: Icons.contact_support_outlined,
-          title: 'Contact Us',
+          title: 'contact_us'.tr(context),
           onTap: () {},
         ),
 
@@ -50,8 +55,8 @@ class SettingsButtonsSection extends StatelessWidget {
             ),
             child: ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text(
-                'Log Out',
+              title: Text(
+                'log_out'.tr(context),
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.w500,

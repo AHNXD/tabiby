@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class FiltersWidget extends StatelessWidget {
   final String selectedDate;
@@ -20,32 +21,42 @@ class FiltersWidget extends StatelessWidget {
       children: [
         Expanded(
           child: DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               prefixIcon: Icon(Icons.calendar_today_outlined, size: 20),
-              labelText: 'Date',
+              labelText: 'date'.tr(context),
             ),
             isExpanded: true,
             value: selectedDate,
-            items: ['Today', 'Tomorrow', 'This Week']
-                .map((label) =>
-                    DropdownMenuItem(value: label, child: Text(label)))
-                .toList(),
+            items:
+                [
+                      'today'.tr(context),
+                      'tomorrow'.tr(context),
+                      'this_week'.tr(context),
+                    ]
+                    .map(
+                      (label) =>
+                          DropdownMenuItem(value: label, child: Text(label)),
+                    )
+                    .toList(),
             onChanged: onDateChanged,
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               prefixIcon: Icon(Icons.location_on_outlined, size: 20),
-              labelText: 'Center',
+              labelText: 'center'.tr(context),
             ),
             isExpanded: true,
             value: selectedCenter,
-            items: ['All', 'Downtown Medical Center', 'Uptown Clinic']
-                .map((label) =>
-                    DropdownMenuItem(value: label, child: Text(label)))
-                .toList(),
+            items:
+                ['all'.tr(context), 'Downtown Medical Center', 'Uptown Clinic']
+                    .map(
+                      (label) =>
+                          DropdownMenuItem(value: label, child: Text(label)),
+                    )
+                    .toList(),
             onChanged: onCenterChanged,
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/utils/colors.dart';
 
@@ -35,7 +36,7 @@ class ProfileForm extends StatelessWidget {
         TextFormField(
           controller: nameController,
           decoration: InputDecoration(
-            labelText: 'Name',
+            labelText: 'name'.tr(context),
             prefixIcon: const Icon(
               Icons.person_outline,
               color: AppColors.primaryColors,
@@ -48,7 +49,7 @@ class ProfileForm extends StatelessWidget {
         TextFormField(
           controller: emailController,
           decoration: InputDecoration(
-            labelText: 'Email',
+            labelText: 'email'.tr(context),
             prefixIcon: const Icon(
               Icons.email_outlined,
               color: AppColors.primaryColors,
@@ -63,7 +64,7 @@ class ProfileForm extends StatelessWidget {
         TextFormField(
           controller: phoneController,
           decoration: InputDecoration(
-            labelText: 'Phone Number',
+            labelText: 'phone'.tr(context),
             prefixIcon: const Icon(
               Icons.phone_outlined,
               color: AppColors.primaryColors,
@@ -75,7 +76,7 @@ class ProfileForm extends StatelessWidget {
         TextFormField(
           controller: residenceController,
           decoration: InputDecoration(
-            labelText: 'Residence',
+            labelText: 'residence'.tr(context),
             prefixIcon: const Icon(
               Icons.home_outlined,
               color: AppColors.primaryColors,
@@ -86,17 +87,24 @@ class ProfileForm extends StatelessWidget {
         DropdownButtonFormField<String>(
           value: maritalStatus,
           decoration: InputDecoration(
-            labelText: 'Marital Status',
+            labelText: 'marital_status'.tr(context),
             prefixIcon: const Icon(
               Icons.favorite_border,
               color: AppColors.primaryColors,
             ),
           ),
-          items: ['Single', 'Married', 'Divorced', 'Widowed']
-              .map(
-                (label) => DropdownMenuItem(value: label, child: Text(label)),
-              )
-              .toList(),
+          items:
+              [
+                    'single'.tr(context),
+                    'married'.tr(context),
+                    'divorced'.tr(context),
+                    'widowed'.tr(context),
+                  ]
+                  .map(
+                    (label) =>
+                        DropdownMenuItem(value: label, child: Text(label)),
+                  )
+                  .toList(),
           onChanged: onMaritalStatusChanged,
         ),
         const SizedBox(height: 16),
@@ -106,7 +114,7 @@ class ProfileForm extends StatelessWidget {
               child: TextFormField(
                 controller: heightController,
                 decoration: InputDecoration(
-                  labelText: 'Height (cm)',
+                  labelText: 'height'.tr(context),
                   prefixIcon: const Icon(
                     Icons.height,
                     color: AppColors.primaryColors,
@@ -120,7 +128,7 @@ class ProfileForm extends StatelessWidget {
               child: TextFormField(
                 controller: weightController,
                 decoration: InputDecoration(
-                  labelText: 'Weight (kg)',
+                  labelText: 'weight'.tr(context),
                   prefixIcon: const Icon(
                     Icons.monitor_weight_outlined,
                     color: AppColors.primaryColors,
@@ -135,10 +143,10 @@ class ProfileForm extends StatelessWidget {
         DropdownButtonFormField<String>(
           value: isSmoker,
           decoration: InputDecoration(
-            labelText: 'Smoker',
+            labelText: 'smoker'.tr(context),
             prefixIcon: Icon(Icons.smoke_free, color: AppColors.primaryColors),
           ),
-          items: ['Yes', 'No']
+          items: ['yes'.tr(context), 'no'.tr(context)]
               .map(
                 (label) => DropdownMenuItem(value: label, child: Text(label)),
               )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -17,8 +18,8 @@ class SectionHeader extends StatelessWidget {
         ),
         TextButton.icon(
           onPressed: onSeeAll,
-          icon: const Text(
-            'See All',
+          icon:  Text(
+            'see_all'.tr(context),
             style: TextStyle(color: Colors.grey),
           ),
           label: const Icon(

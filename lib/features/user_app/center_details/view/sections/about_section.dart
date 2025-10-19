@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
-
 
 class AboutSection extends StatelessWidget {
   final String description;
@@ -13,8 +13,8 @@ class AboutSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        const Text(
-          'About the Center',
+        Text(
+          'about_the_center'.tr(context),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -22,10 +22,7 @@ class AboutSection extends StatelessWidget {
           ),
         ),
         const Divider(height: 10, thickness: 1),
-        Text(
-          description,
-          style: const TextStyle(fontSize: 15.0),
-        ),
+        Text(description, style: const TextStyle(fontSize: 15.0)),
       ],
     );
   }

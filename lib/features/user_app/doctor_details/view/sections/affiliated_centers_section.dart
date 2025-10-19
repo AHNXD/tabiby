@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 import '../widgets/center_card.dart';
@@ -13,8 +14,8 @@ class AffiliatedCentersSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Affiliated Centers',
+        Text(
+          'affiliated_centers'.tr(context),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

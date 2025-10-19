@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../doctors/presentation/view/all_doctors_screen.dart';
 import '../widgets/data.dart';
@@ -15,7 +16,7 @@ class DoctorsSection extends StatelessWidget {
     return Column(
       children: [
         SectionHeader(
-          title: 'Popular Doctors:',
+          title: 'popular_doctors'.tr(context),
           onSeeAll: () {
             Navigator.push(
               context,

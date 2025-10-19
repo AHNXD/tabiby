@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../doctor_details/view/doctor_details_screen.dart';
 
@@ -12,35 +13,30 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // ✅ Navigation to details screen remains the same
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => DoctorDetailsScreen(
               doctorName: doctor['name'],
               specialty: doctor['specialty'],
-              experience: '15 Years of Experience',
+              experience: '15 ${"years_of_experience".tr(context)}',
               imageUrl: doctor['image'],
               rating: doctor['rating'].toString(),
             ),
           ),
         );
       },
-      // The Stack's parent (the GridView cell) has a defined size.
-      // We use Clip.none to allow the image to draw outside these bounds.
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          // 1. The white card container at the bottom
           Positioned(
-            bottom: 0, // Pin the card to the bottom of the available space
+            bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              height: 125, // Set a fixed height for the card itself
+              height: 125,
               padding: const EdgeInsets.only(
-                // Leave space at the top for the overlapping image
                 top: 45,
                 bottom: 10,
                 right: 10,
@@ -90,7 +86,9 @@ class DoctorCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        doctor['isAvailable'] ? 'Available' : 'Unavailable',
+                        doctor['isAvailable']
+                            ? 'available'.tr(context)
+                            : 'unavailable'.tr(context),
                         style: TextStyle(
                           color: doctor['isAvailable']
                               ? Colors.green
@@ -98,7 +96,7 @@ class DoctorCard extends StatelessWidget {
                           fontSize: 10,
                         ),
                       ),
-                      const SizedBox(width: 8), // Spacer
+                      const SizedBox(width: 8),
                       const Icon(
                         FontAwesomeIcons.solidStar,
                         color: Colors.amber,
@@ -118,14 +116,12 @@ class DoctorCard extends StatelessWidget {
               ),
             ),
           ),
-          // 2. The overflowing doctor image at the top
+
           Positioned(
-            // A negative 'top' value pushes the widget upwards,
-            // outside the Stack's original bounds.
             top: -20,
             child: Image.asset(
-              "assets/images/doctor.png", // Use the dynamic image from your data
-              height: 100, // Define a clear size for the image
+              "assets/images/doctor.png",
+              height: 100,
               width: 100,
               fit: BoxFit.contain,
             ),

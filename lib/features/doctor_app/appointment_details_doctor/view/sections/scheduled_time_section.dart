@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 class ScheduledTimeSection extends StatelessWidget {
@@ -9,7 +10,7 @@ class ScheduledTimeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "Scheduled for ${appointment['time']}, "
+        "${"scheduled_for".tr(context)} ${appointment['time']}, "
         "${appointment['date'].day}/${appointment['date'].month}/${appointment['date'].year}",
         style: TextStyle(color: AppColors.primaryColors),
       ),

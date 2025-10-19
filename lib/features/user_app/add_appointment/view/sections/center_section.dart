@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../widgets/center_selector.dart';
 import '../widgets/section_title.dart';
@@ -20,7 +21,7 @@ class CenterSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionTitle(title: '1. Select a Center'),
+        SectionTitle(title: '1. ${"select_a_center".tr(context)}'),
         CenterSelector(
           centers: centers,
           selectedIndex: selectedIndex,

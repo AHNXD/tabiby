@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../core/widgets/custom_appbar.dart';
 import 'widgets/booking_form.dart';
@@ -10,9 +11,9 @@ class BookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
+      appBar:  PreferredSize(
         preferredSize: Size.fromHeight(70),
-        child: CustomAppbar(title: "Book Appointment"),
+        child: CustomAppbar(title: "book_appointment".tr(context)),
       ),
       body: const SingleChildScrollView(
         padding: EdgeInsets.all(16.0),

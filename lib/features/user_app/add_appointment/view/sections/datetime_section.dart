@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../widgets/date_selector.dart';
 import '../widgets/section_title.dart';
@@ -28,7 +29,7 @@ class DateTimeSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionTitle(title: '2. Select Date & Time'),
+        SectionTitle(title: '2. ${"select_date_and_time".tr(context)}'),
         const SizedBox(height: 12),
         DateSelector(
           dates: dates,

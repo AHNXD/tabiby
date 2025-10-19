@@ -15,7 +15,7 @@ class AppointmentDetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // نستخدم لون الـ Theme الرئيسي
+
 
     return ListTile(
       leading: Icon(icon, color: AppColors.primaryColors),

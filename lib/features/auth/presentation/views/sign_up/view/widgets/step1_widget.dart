@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/password_textfield.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
-
 
 class Step1Widget extends StatelessWidget {
   final VoidCallback onNext;
@@ -17,15 +17,18 @@ class Step1Widget extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 30),
-          const CustomTextField(hintText: 'Name'),
+          CustomTextField(hintText: 'first_name'.tr(context)),
           const SizedBox(height: 30),
-          const CustomTextField(hintText: 'Last Name'),
+          CustomTextField(hintText: 'last_name'.tr(context)),
           const SizedBox(height: 30),
-          const CustomTextField(hintText: 'Number', suffixIcon: Icons.phone_outlined),
+          CustomTextField(
+            hintText: 'phone'.tr(context),
+            suffixIcon: Icons.phone_outlined,
+          ),
           const SizedBox(height: 30),
-          const PasswordTextField(hintText: 'Password'),
+          PasswordTextField(hintText: 'password'.tr(context)),
           const SizedBox(height: 40),
-          SecondryButton(text: 'Next', onPressed: onNext),
+          SecondryButton(text: 'next'.tr(context), onPressed: onNext),
         ],
       ),
     );

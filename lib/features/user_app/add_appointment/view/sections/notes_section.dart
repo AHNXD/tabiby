@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../widgets/notes_field.dart';
 import '../widgets/section_title.dart';
@@ -8,10 +9,10 @@ class NotesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: '3. Add Notes (Optional)'),
+        SectionTitle(title: '3. ${"add_notes".tr(context)}'),
         NotesField(),
       ],
     );

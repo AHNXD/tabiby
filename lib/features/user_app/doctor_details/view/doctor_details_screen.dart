@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../core/widgets/custom_appbar.dart';
 import 'sections/affiliated_centers_section.dart';
@@ -43,7 +44,7 @@ class DoctorDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbar(title: "Doctor Details"),
+      appBar:  CustomAppbar(title: "doctor_details".tr(context)),
       body: Column(
         children: [
           Expanded(

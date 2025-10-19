@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../core/widgets/custom_appbar.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -55,14 +56,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Changes Saved Successfully!'),
+          content:  Text('changes_saved_successfully'.tr(context)),
           backgroundColor: Colors.green[600],
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Please fix the errors in the form.'),
+          content:  Text('fix_form_error'.tr(context)),
           backgroundColor: Colors.red[600],
         ),
       );
@@ -73,7 +74,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(
-        title: "My Profile",
+        title: "my_profile".tr(context),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: Colors.white),
@@ -108,7 +109,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onIsSmokerChanged: (v) => setState(() => _isSmoker = v),
               ),
               const SizedBox(height: 30),
-              PrimaryButton(text: "Save Changes", onPressed: _saveChanges),
+              PrimaryButton(text: "save_changes".tr(context), onPressed: _saveChanges),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 import '../widgets/appointment_details_card.dart';
@@ -12,7 +13,7 @@ class PatientInfoSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Patient Information",
+          "patient_information".tr(context),
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             color: AppColors.primaryColors,
             fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../center_details/view/center_details_screen.dart';
 import 'widgets/clinic_card.dart';
@@ -12,7 +13,7 @@ class AllClinicsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbar(title: "All Popular Clinics"),
+      appBar:  CustomAppbar(title: "all_popular_clinics".tr(context)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(

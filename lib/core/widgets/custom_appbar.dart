@@ -5,7 +5,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
   final VoidCallback? onBackButtonPressed;
-  final List<Widget>? actions; // أيقونات اختيارية في الـ AppBar
+  final List<Widget>? actions; 
   final double toolbarHeight;
 
   const CustomAppbar({
@@ -14,7 +14,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = true,
     this.onBackButtonPressed,
     this.actions,
-    this.toolbarHeight = kToolbarHeight + 16.0, // يمكن تعديلها عند الاستخدام
+    this.toolbarHeight = kToolbarHeight + 16.0, 
   });
 
   @override
@@ -23,7 +23,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Container(
-          height: toolbarHeight.toDouble(), // ✅ تحويل num إلى double
+          height: toolbarHeight.toDouble(), 
           decoration: BoxDecoration(
             color: AppColors.primaryColors,
             borderRadius: const BorderRadius.only(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class CreatedBySection extends StatelessWidget {
   const CreatedBySection({
@@ -7,8 +8,8 @@ class CreatedBySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Created By',
+    return  Text(
+      'created_by'.tr(context),
       textAlign: TextAlign.center,
       style: TextStyle(
         fontWeight: FontWeight.bold,

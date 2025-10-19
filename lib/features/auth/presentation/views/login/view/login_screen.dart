@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../core/widgets/custom_login_sign_up_appbar.dart';
 import 'widgets/login_form.dart';
@@ -11,7 +12,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomLoginSignUpAppBar(title: 'Log in'),
+      appBar:  CustomLoginSignUpAppBar(title: 'login'.tr(context)),
       body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.0),

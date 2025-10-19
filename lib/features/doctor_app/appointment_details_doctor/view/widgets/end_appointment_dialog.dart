@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class EndAppointmentDialog extends StatefulWidget {
   final Color primaryColor;
@@ -18,7 +19,7 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Complete Appointment',
+        'complete_appointment'.tr(context),
         style: TextStyle(color: widget.primaryColor),
       ),
       content: SingleChildScrollView(
@@ -26,7 +27,7 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Notes',
+              'notes'.tr(context),
               style: TextStyle(
                 color: widget.primaryColor,
                 fontWeight: FontWeight.bold,
@@ -37,14 +38,14 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
               controller: notesController,
               maxLines: 4,
               decoration: InputDecoration(
-                hintText: 'Add clinical notes here...',
+                hintText: 'hint_add_clinical_notes'.tr(context),
                 filled: true,
                 fillColor: widget.primaryColor.withValues(alpha: 0.1),
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'Prescription',
+              'prescription'.tr(context),
               style: TextStyle(
                 color: widget.primaryColor,
                 fontWeight: FontWeight.bold,
@@ -57,12 +58,15 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel', style: TextStyle(color: widget.primaryColor)),
+          child: Text(
+            'cancel'.tr(context),
+            style: TextStyle(color: widget.primaryColor),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: widget.primaryColor),
-          child: const Text('Submit'),
+          child: Text('submit'.tr(context)),
           onPressed: () {
             if (kDebugMode) {
               print('Notes: ${notesController.text}');
@@ -85,7 +89,7 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
         TextButton.icon(
           icon: Icon(Icons.add_circle_outline, color: widget.primaryColor),
           label: Text(
-            'Add Medication',
+            'add_medication'.tr(context),
             style: TextStyle(color: widget.primaryColor),
           ),
           onPressed: () {
@@ -105,7 +109,7 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
           flex: 3,
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Medication',
+              hintText: 'medication'.tr(context),
               hintStyle: TextStyle(color: widget.primaryColor),
             ),
           ),
@@ -115,7 +119,7 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
           flex: 2,
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Dose',
+              hintText: 'dose'.tr(context),
               hintStyle: TextStyle(color: widget.primaryColor),
             ),
           ),
@@ -125,7 +129,7 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
           flex: 2,
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Duration',
+              hintText: 'duration'.tr(context),
               hintStyle: TextStyle(color: widget.primaryColor),
             ),
           ),

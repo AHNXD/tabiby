@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../widgets/step1_widget.dart';
 import '../widgets/step2_widget.dart';
 import '../widgets/step3_widget.dart';
 import 'progress_section.dart';
-
 
 class StepsSectionWrapper extends StatefulWidget {
   const StepsSectionWrapper({super.key});
@@ -40,10 +40,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ProgressSection(
-          currentStep: currentStep,
-          onStepTapped: goToStep,
-        ),
+        ProgressSection(currentStep: currentStep, onStepTapped: goToStep),
         const SizedBox(height: 20),
         Expanded(
           child: PageView(
@@ -56,12 +53,14 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                 onGenderChanged: (val) => setState(() => gender = val),
               ),
               Step3Widget(
-                gender: gender ?? 'Female',
-                hasChildren: gender == 'Male' ? false : hasChildren,
-                numberOfChildren: gender == 'Male' ? 0 : numberOfChildren,
+                gender: gender ?? 'female'.tr(context),
+                hasChildren: gender == 'male'.tr(context) ? false : hasChildren,
+                numberOfChildren: gender == 'male'.tr(context)
+                    ? 0
+                    : numberOfChildren,
                 agreeToTerms: agreeToTerms,
                 onChildrenChanged: (val) {
-                  if (gender != 'Male') {
+                  if (gender != 'male'.tr(context)) {
                     setState(() {
                       hasChildren = val;
                       if (val == false) numberOfChildren = 0;
@@ -69,14 +68,17 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                   }
                 },
                 onIncrement: () {
-                  if (gender != 'Male') setState(() => numberOfChildren++);
+                  if (gender != 'male'.tr(context)) {
+                    setState(() => numberOfChildren++);
+                  }
                 },
                 onDecrement: () {
-                  if (gender != 'Male' && numberOfChildren > 0) {
+                  if (gender != 'male'.tr(context) && numberOfChildren > 0) {
                     setState(() => numberOfChildren--);
                   }
                 },
-                onAgreeToggle: () => setState(() => agreeToTerms = !agreeToTerms),
+                onAgreeToggle: () =>
+                    setState(() => agreeToTerms = !agreeToTerms),
                 onSignUp: () {},
               ),
             ],

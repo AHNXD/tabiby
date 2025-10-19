@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 import '../../../add_appointment/view/booking_screen.dart';
@@ -26,8 +27,8 @@ class BookingButton extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        child: const Text(
-          'Book an appointment',
+        child: Text(
+          'book_an_appointment'.tr(context),
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,

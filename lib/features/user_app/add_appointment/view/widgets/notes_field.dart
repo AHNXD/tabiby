@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class NotesField extends StatelessWidget {
   const NotesField({super.key});
@@ -8,7 +9,7 @@ class NotesField extends StatelessWidget {
     return TextFormField(
       maxLines: 4,
       decoration: InputDecoration(
-        hintText: 'Provide any specific details for the center or doctor...',
+        hintText: 'hint_for_center_or_doctor'.tr(context),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -20,7 +21,9 @@ class NotesField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-              color: Theme.of(context).primaryColor, width: 2),
+            color: Theme.of(context).primaryColor,
+            width: 2,
+          ),
         ),
       ),
     );

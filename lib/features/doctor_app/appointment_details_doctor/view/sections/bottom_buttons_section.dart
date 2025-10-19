@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 class BottomButtonsSection extends StatelessWidget {
@@ -21,7 +22,7 @@ class BottomButtonsSection extends StatelessWidget {
           Expanded(
             child: OutlinedButton.icon(
               icon: const Icon(Icons.cancel_outlined),
-              label: const Text('Cancel'),
+              label: Text('cancel'.tr(context)),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primaryColors,
                 side: BorderSide(color: AppColors.primaryColors),
@@ -39,7 +40,7 @@ class BottomButtonsSection extends StatelessWidget {
           Expanded(
             child: ElevatedButton.icon(
               icon: const Icon(Icons.check_circle_outline),
-              label: const Text('End Appointment'),
+              label: Text('end_appointment'.tr(context)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColors,
                 foregroundColor: Colors.white,

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class WelcomSection extends StatelessWidget {
-  const WelcomSection({
-    super.key,
-  });
+  const WelcomSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         Text(
-          'Welcome In Our Community!',
+          'welcome_in_our_community'.tr(context),
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -19,7 +18,7 @@ class WelcomSection extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Text(
-          'Lorem ipsum dolor sit Lorem ipsum dolor sit amet, consectetuer amet, consectetuer',
+          'lorem'.tr(context),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,

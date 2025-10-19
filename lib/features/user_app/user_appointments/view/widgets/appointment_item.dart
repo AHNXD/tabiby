@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 class AppointmentItem extends StatelessWidget {
@@ -93,7 +94,7 @@ class AppointmentItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'Took It At: $time',
+                      '${"took_it_at".tr(context)} $time',
                       style: const TextStyle(
                         color: Color(0xFF79BCA4),
                         fontSize: 12,
@@ -110,8 +111,8 @@ class AppointmentItem extends StatelessWidget {
                         onPressed: () {
                           _showDetailsDialog(context);
                         },
-                        child: const Text(
-                          'See More',
+                        child: Text(
+                          'see_more'.tr(context),
                           style: TextStyle(
                             color: AppColors.primaryColors,
                             fontWeight: FontWeight.bold,
@@ -158,7 +159,7 @@ class AppointmentItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Details",
+                "details".tr(context),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -169,7 +170,7 @@ class AppointmentItem extends StatelessWidget {
               if (doctorNotes != null)
                 _buildDetailSection(
                   icon: Icons.notes_rounded,
-                  title: "Doctor's Notes",
+                  title: "doctor_notes".tr(context),
                   content: doctorNotes!,
                 ),
               if (doctorNotes != null && prescription != null)
@@ -180,7 +181,7 @@ class AppointmentItem extends StatelessWidget {
               if (prescription != null)
                 _buildDetailSection(
                   icon: Icons.medical_services_rounded,
-                  title: 'Prescription',
+                  title: 'prescription'.tr(context),
                   content: prescription!,
                 ),
               const SizedBox(height: 24),
@@ -195,7 +196,7 @@ class AppointmentItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Close'),
+                  child: Text('close'.tr(context)),
                 ),
               ),
             ],

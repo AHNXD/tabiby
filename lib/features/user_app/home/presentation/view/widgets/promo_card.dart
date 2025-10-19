@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class PromoCard extends StatelessWidget {
   const PromoCard({super.key});
@@ -7,7 +8,7 @@ class PromoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 160,
-      clipBehavior: Clip.none, 
+      clipBehavior: Clip.none,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         gradient: const LinearGradient(
@@ -17,26 +18,22 @@ class PromoCard extends StatelessWidget {
         ),
       ),
       child: Stack(
-        clipBehavior: Clip.none, 
+        clipBehavior: Clip.none,
         children: [
-         
           Positioned(
             bottom: 0,
-            left:110,
-            top: -30, 
-            child: Image.asset(
-              'assets/images/doctor.png',
-              height: 220, 
-            ),
+            left: 110,
+            top: -30,
+            child: Image.asset('assets/images/doctor.png', height: 220),
           ),
-         
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Looking for a professional\ndermatologist?',
+                Text(
+                  'looking_for_a_professional_dermatologist'.tr(context),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 17,
@@ -46,19 +43,19 @@ class PromoCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.green,
-                    
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                  
                   ),
-                  child: const Text('Explore',
-                      style: TextStyle(color: Colors.black, fontSize: 17)),
+                  child: Text(
+                    'explore'.tr(context),
+                    style: TextStyle(color: Colors.black, fontSize: 17),
+                  ),
                 ),
               ],
             ),

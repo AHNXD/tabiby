@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 class PatientInfoCard extends StatelessWidget {
   const PatientInfoCard({super.key});
@@ -26,20 +27,13 @@ class PatientInfoCard extends StatelessWidget {
             const SizedBox(height: 4),
             const Text(
               '2008 / 21 / 5',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF888888),
-              ),
+              style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
             ),
 
-            
             const SizedBox(height: 4),
-            const Text(
-              '1 Appointment',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF888888),
-              ),
+             Text(
+              '1 ${"appointment".tr(context)}',
+              style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
             ),
           ],
         ),
