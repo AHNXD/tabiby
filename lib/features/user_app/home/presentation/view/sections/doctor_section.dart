@@ -6,8 +6,6 @@ import '../widgets/data.dart';
 import '../../../../doctors/presentation/view/widgets/doctor_card.dart';
 import '../widgets/section_header.dart';
 
-
-
 class DoctorsSection extends StatelessWidget {
   const DoctorsSection({super.key});
 
@@ -40,7 +38,8 @@ class DoctorsSection extends StatelessWidget {
                 childAspectRatio: 1,
               ),
               itemCount: doctors.length,
-              itemBuilder: (context, index) => DoctorCard(doctor: doctors[index]),
+              itemBuilder: (context, index) =>
+                  DoctorCard(doctor: doctors[index]),
             ),
           ),
         ),

@@ -1,6 +1,6 @@
 {
     "tabiby": "Tabiby",
-    "welcome_in_our_community":"'Welcome In Our Community!",
+    "welcome_in_our_community":"Welcome In Our Community!",
     "lorem": "Lorem ipsum dolor sit Lorem ipsum dolor sit amet, consectetuer amet, consectetuer",
     "created_by": "Created By",
     "account": "Account",
@@ -59,9 +59,9 @@
     "default_center_description" : "The Advanced Healthcare Center provides comprehensive medical services including consultations, diagnosis, and treatment in various specialties.",
     "clinic_details": "Clinic Details",
     "all_popular_clinics": "All Popular Clinics",
-    "popular_clinics:": "Popular Clinics:",
     "all_popular_doctors": "All Popular Doctors",
     "popular_doctors": "Popular Doctors:",
+    "popular_centers": "Popular Centers:",
     "doctor_details":"Doctor Details",
     "available":"Available",
     "unavailable":"Unavailable",

@@ -13,7 +13,7 @@ class AllClinicsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppbar(title: "all_popular_clinics".tr(context)),
+      appBar: CustomAppbar(title: "all_popular_clinics".tr(context)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(

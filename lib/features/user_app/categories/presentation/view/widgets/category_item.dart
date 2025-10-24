@@ -4,11 +4,7 @@ class CategoryItem extends StatelessWidget {
   final List<Map<String, dynamic>> categories;
   final VoidCallback? onSeeAll;
 
-  const CategoryItem({
-    super.key,
-    required this.categories,
-    this.onSeeAll,
-  });
+  const CategoryItem({super.key, required this.categories, this.onSeeAll});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +22,7 @@ class CategoryItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
@@ -52,13 +46,13 @@ class CategoryItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  category['name'],
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 14,
+                Expanded(
+                  child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    category['name'],
+                    style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),

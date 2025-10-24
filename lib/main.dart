@@ -20,11 +20,11 @@ void main() async {
   setupLocatorServices();
   enableScreenshot();
   // await FirebaseApi().initNotifications();
-  runApp(const MyApp());
+  runApp(const Tabiby());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Tabiby extends StatelessWidget {
+  const Tabiby({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             navigatorKey: navigatorKey,
-            locale: state.locale,
-            // locale: Locale("ar"),
+            // locale: state.locale,
+            locale: Locale("ar"),
             supportedLocales: const [Locale("en"), Locale("ar")],
             localizationsDelegates: const [
               AppLocalizations.delegate,

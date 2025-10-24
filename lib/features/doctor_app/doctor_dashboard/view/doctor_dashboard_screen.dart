@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'sections/appointments_info_section.dart';
 import 'sections/appointments_list_section.dart';
 import 'sections/dashboard_scaffold_section.dart';
@@ -8,6 +9,7 @@ import 'widgets/data.dart';
 
 class DoctorDashboardScreen extends StatefulWidget {
   static const String routeName = "/doctor_dashboard";
+
   const DoctorDashboardScreen({super.key});
 
   @override
@@ -15,15 +17,35 @@ class DoctorDashboardScreen extends StatefulWidget {
 }
 
 class _DoctorDashboardViewState extends State<DoctorDashboardScreen> {
-  String _selectedDateFilter = 'Today';
-  String _selectedCenterFilter = 'All';
+  late String _selectedDateFilter;
+  late String _selectedCenterFilter;
   List<Map<String, dynamic>> _filteredAppointments = [];
   final _controller = DashboardController();
+
+  bool _isInitialSetup = true;
 
   @override
   void initState() {
     super.initState();
-    _updateAppointments();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_isInitialSetup) {
+      _selectedDateFilter = 'today'.tr(context);
+      _selectedCenterFilter = 'all'.tr(context);
+
+      _filteredAppointments = _controller.filterAppointments(
+        allAppointments: allAppointments,
+        selectedDateFilter: _selectedDateFilter,
+        selectedCenterFilter: _selectedCenterFilter,
+        context: context,
+      );
+
+      _isInitialSetup = false;
+    }
   }
 
   void _updateAppointments() {
@@ -32,6 +54,7 @@ class _DoctorDashboardViewState extends State<DoctorDashboardScreen> {
         allAppointments: allAppointments,
         selectedDateFilter: _selectedDateFilter,
         selectedCenterFilter: _selectedCenterFilter,
+        context: context,
       );
     });
   }
@@ -54,13 +77,13 @@ class _DoctorDashboardViewState extends State<DoctorDashboardScreen> {
             onDateChanged: (value) {
               if (value != null) {
                 setState(() => _selectedDateFilter = value);
-                _updateAppointments();
+                _updateAppointments(); // Recalculate based on new filter
               }
             },
             onCenterChanged: (value) {
               if (value != null) {
                 setState(() => _selectedCenterFilter = value);
-                _updateAppointments();
+                _updateAppointments(); // Recalculate based on new filter
               }
             },
           ),

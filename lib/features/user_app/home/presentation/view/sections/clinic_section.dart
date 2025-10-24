@@ -14,7 +14,7 @@ class ClinicsSection extends StatelessWidget {
     return Column(
       children: [
         SectionHeader(
-          title: 'popular_clinics'.tr(context),
+          title: 'popular_centers'.tr(context),
           onSeeAll: () {
             Navigator.push(
               context,

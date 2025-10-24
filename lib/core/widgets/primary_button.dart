@@ -14,23 +14,27 @@ class PrimaryButton extends StatelessWidget {
 
     return SizedBox(
       height: 65,
-      child: ElevatedButton(
-        onPressed: onPressed,
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ElevatedButton(
+          onPressed: onPressed,
 
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColors,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryColors,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            minimumSize: Size(screenWidth * 0.7, 55),
+            elevation: 5,
           ),
-          minimumSize: Size(screenWidth * 0.7, 55),
-          elevation: 5,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

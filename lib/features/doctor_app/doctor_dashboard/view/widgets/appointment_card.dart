@@ -20,7 +20,7 @@ class AppointmentCard extends StatelessWidget {
           ),
         );
       },
-      borderRadius: BorderRadius.circular(12.0),
+      borderRadius: BorderRadius.circular(16.0),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
@@ -114,6 +114,7 @@ class AppointmentCard extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(width: 16),
           ],
         ),
       ),
