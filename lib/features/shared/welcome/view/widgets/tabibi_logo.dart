@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
@@ -8,25 +7,15 @@ class TabibiLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 64.0),
+      child: Hero(
+        tag: 'app-logo',
+        child: Image.asset(
           AssetsData.logoGreen,
-          height: 70,
-
           color: AppColors.primaryColors,
         ),
-        const SizedBox(height: 15),
-        Text(
-          'tabiby'.tr(context),
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primaryColors,
-            letterSpacing: 1.2,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

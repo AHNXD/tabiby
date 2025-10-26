@@ -25,13 +25,11 @@ class ButtonsSection extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         PrimaryButton(
-          text: "my_profile".tr(context),
+          text: "go_doctor".tr(context),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => DoctorDashboardScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => DoctorDashboardScreen()),
             );
           },
         ),

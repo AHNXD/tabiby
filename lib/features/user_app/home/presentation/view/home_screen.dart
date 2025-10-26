@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'sections/appbar_section.dart';
-import 'sections/appointments_section.dart';
 import 'sections/category_section.dart';
-import 'sections/clinic_section.dart';
-import 'sections/divider_section.dart';
+import 'sections/centers_section.dart';
 import 'sections/doctor_section.dart';
 import 'sections/promo_section.dart';
 
@@ -30,10 +28,6 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 16),
             ClinicsSection(),
             SizedBox(height: 16),
-            DividerSection(),
-            SizedBox(height: 5),
-            AppointmentsSection(),
-            SizedBox(height: 24),
           ],
         ),
       ),

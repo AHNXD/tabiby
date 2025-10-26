@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class ClinicCard extends StatelessWidget {
+class CenterCard extends StatelessWidget {
   final Map<String, dynamic> center;
-  const ClinicCard({super.key, required this.center});
+  const CenterCard({super.key, required this.center});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade100,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          )
+            color: Colors.grey.withValues(alpha: 0.2),
+            blurRadius: 8,
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: Column(

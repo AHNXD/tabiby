@@ -10,8 +10,9 @@ class ColoredTextTabBar extends StatelessWidget {
 
     final List<Color> tabColors = [
       const Color(0xFF79BCA4), // Finished
-      Colors.red,              // Canceled
-      Colors.amber,            // Pending
+
+      Colors.amber, // Pending
+      Colors.red, // Canceled
     ];
 
     return AnimatedBuilder(
@@ -19,9 +20,13 @@ class ColoredTextTabBar extends StatelessWidget {
       builder: (context, _) {
         return TabBar(
           controller: controller,
+          indicatorWeight: 5,
+          dividerHeight: 0.5,
+          indicatorSize: TabBarIndicatorSize.tab,
           indicator: UnderlineTabIndicator(
             borderSide: BorderSide(
               width: 3,
+
               color: tabColors[controller.index],
             ),
             insets: const EdgeInsets.symmetric(horizontal: 16),
@@ -37,9 +42,10 @@ class ColoredTextTabBar extends StatelessWidget {
                 ),
               ),
             ),
+
             Tab(
               child: Text(
-                'canceled'.tr(context),
+                'pending'.tr(context),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -49,7 +55,7 @@ class ColoredTextTabBar extends StatelessWidget {
             ),
             Tab(
               child: Text(
-                'pending'.tr(context),
+                'canceled'.tr(context),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

@@ -9,53 +9,38 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 90,
-      child: ListView.separated(
+      height: 125,
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
         itemCount: categories.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 16),
         itemBuilder: (context, index) {
           final category = categories[index];
-          return SizedBox(
-            width: 70,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                  ),
-                  child: Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        category['icon'],
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                  ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  shape: BoxShape.circle,
                 ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: Text(
-                    overflow: TextOverflow.ellipsis,
-                    category['name'],
-                    style: TextStyle(color: Colors.grey[700], fontSize: 14),
-                    textAlign: TextAlign.center,
-                  ),
+                child: Center(
+                  child: Image.asset(category['icon'], width: 32, height: 32),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  category['name'],
+                  style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           );
         },
       ),

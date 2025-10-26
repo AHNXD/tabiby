@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
 import '../../features/auth/presentation/views/sign_up/view/sign_up_screen.dart';
@@ -9,12 +10,13 @@ import '../../features/shared/welcome/view/welcome_screen.dart';
 import '../../features/user_app/add_appointment/view/booking_screen.dart';
 import '../../features/user_app/categories/presentation/view/all_categories_screen.dart';
 import '../../features/user_app/center_details/view/center_details_screen.dart';
-import '../../features/user_app/clinics/presentation/view/all_clinics_screen.dart';
+import '../../features/user_app/centers/presentation/view/all_centers_screen.dart';
 import '../../features/user_app/doctor_details/view/doctor_details_screen.dart';
 import '../../features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../features/user_app/home/presentation/view/home_screen.dart';
 import '../../features/user_app/user/view/user_profile.dart';
 import '../../features/user_app/user_appointments/view/appointment_screen.dart';
+import '../widgets/main_screen.dart';
 
 class Routes {
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -28,8 +30,8 @@ class Routes {
     AllCategoriesScreen.routeName: (context) =>
         AllCategoriesScreen(categories: []),
     CenterDetailsScreen.routeName: (context) => CenterDetailsScreen(center: {}),
-    AllClinicsScreen.routeName: (context) =>
-        AllClinicsScreen(medicalCenters: []),
+    AllCentersScreen.routeName: (context) =>
+        AllCentersScreen(medicalCenters: []),
     DoctorDetailsScreen.routeName: (context) => DoctorDetailsScreen(
       doctorName: '',
       specialty: '',
@@ -40,6 +42,7 @@ class Routes {
     AllDoctorsScreen.routeName: (context) => AllDoctorsScreen(doctors: []),
     UserProfileScreen.routeName: (context) => UserProfileScreen(),
     UserAppointmentScreen.routeName: (context) => UserAppointmentScreen(),
+    MainScreen.routeName: (context) => MainScreen(),
 
     //doctor
     AppointmentDetailsDoctor.routeName: (context) =>
@@ -49,5 +52,6 @@ class Routes {
     //shared
     SettingsScreen.routeName: (context) => SettingsScreen(),
     WelcomeScreen.routeName: (context) => WelcomeScreen(),
+    SplashScreen.routeName: (context) => SplashScreen(),
   };
 }

@@ -3,15 +3,13 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/widgets/custom_appbar.dart';
 
-
 class AppBarSection extends StatelessWidget implements PreferredSizeWidget {
-
   const AppBarSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CustomAppbar(
-      title:  "clinic_details".tr(context),
+      title: "center_details".tr(context),
       onBackButtonPressed: () {
         Navigator.of(context).pop();
       },

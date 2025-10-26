@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/widgets/main_screen.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/password_textfield.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
-import '../../../../../../user_app/home/presentation/view/home_screen.dart';
 
 class LoginInputs extends StatelessWidget {
   const LoginInputs({super.key});
@@ -15,9 +15,9 @@ class LoginInputs extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-         CustomTextField(hintText: "phone".tr(context)),
+        CustomTextField(hintText: "phone".tr(context)),
         const SizedBox(height: 30),
-         PasswordTextField(hintText: "password".tr(context)),
+        PasswordTextField(hintText: "password".tr(context)),
         const SizedBox(height: 25),
         Align(
           alignment: Alignment.centerRight,
@@ -32,7 +32,7 @@ class LoginInputs extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              MaterialPageRoute(builder: (context) => const MainScreen()),
             );
           },
         ),

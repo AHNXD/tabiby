@@ -21,8 +21,8 @@ class AppointmentList extends StatelessWidget {
           time: appt['time']!,
           rating: appt['rating']!,
           avatarUrl: appt['avatarUrl']!,
-          doctorNotes: appt['doctorNotes'],      
-          prescription: appt['prescription'],    
+          doctorNotes: appt['doctorNotes'],
+          prescription: appt['prescription'],
         );
       },
     );

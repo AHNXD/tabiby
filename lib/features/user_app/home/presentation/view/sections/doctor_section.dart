@@ -24,22 +24,23 @@ class DoctorsSection extends StatelessWidget {
             );
           },
         ),
+        SizedBox(height: 8),
         SizedBox(
-          height: 165,
+          height: 200,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: GridView.builder(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.none,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1,
-              ),
+
               itemCount: doctors.length,
-              itemBuilder: (context, index) =>
-                  DoctorCard(doctor: doctors[index]),
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: DoctorCard(doctor: doctors[index]),
+                ),
+              ),
             ),
           ),
         ),

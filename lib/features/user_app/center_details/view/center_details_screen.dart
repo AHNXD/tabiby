@@ -20,21 +20,20 @@ class CenterDetailsScreen extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  HeaderSection(
-                    name: center['name'] ?? 'unknown_center'.tr(context),
-                    location: center['location'] ?? 'no_location'.tr(context),
-                    imageUrl: center['image'] ?? '',
-                    rating: center['rating'] ?? 0.0,
-                  ),
-                  AboutSection(
-                    description: center['description'] ??
-                        'default_center_description'.tr(context),
-                  ),
-                  const ClinicsSection(),
-                ],
-              ),
+              delegate: SliverChildListDelegate([
+                HeaderSection(
+                  name: center['name'] ?? 'unknown_center'.tr(context),
+                  location: center['location'] ?? 'no_location'.tr(context),
+                  imageUrl: center['image'] ?? '',
+                  rating: center['rating'] ?? 0.0,
+                ),
+                AboutSection(
+                  description:
+                      center['description'] ??
+                      'default_center_description'.tr(context),
+                ),
+                const ClinicsSection(),
+              ]),
             ),
           ),
         ],

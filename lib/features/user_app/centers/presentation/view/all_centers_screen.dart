@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../center_details/view/center_details_screen.dart';
-import 'widgets/clinic_card.dart';
+import 'widgets/center_card.dart';
 
-class AllClinicsScreen extends StatelessWidget {
-  static const String routeName = "/clinics";
+class AllCentersScreen extends StatelessWidget {
+  static const String routeName = "/centers";
   final List<Map<String, dynamic>> medicalCenters;
 
-  const AllClinicsScreen({super.key, required this.medicalCenters});
+  const AllCentersScreen({super.key, required this.medicalCenters});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(title: "all_popular_clinics".tr(context)),
+      appBar: CustomAppbar(title: "all_popular_centers".tr(context)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(
@@ -35,7 +35,7 @@ class AllClinicsScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: ClinicCard(center: center),
+              child: CenterCard(center: center),
             );
           },
         ),

@@ -18,7 +18,7 @@ class WelcomSection extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Text(
-          'lorem'.tr(context),
+          'welcome_message'.tr(context),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,

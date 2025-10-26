@@ -1,7 +1,7 @@
 {
     "tabiby": "طبيبي",
     "welcome_in_our_community": "مرحباً بك في مجتمعنا!",
-    "lorem": "هذا نص تجريبي يستخدم لأغراض التصميم فقط",
+    "welcome_message": "سارع بحجز مواعيدك مع افضل الأطباء",
     "created_by": "تم الإنشاء بواسطة",
     "account": "الحساب",
     "change_language": "تغيير اللغة",
@@ -57,8 +57,8 @@
     "unknown_center": "مركز غير معروف",
     "no_location": "لا يوجد موقع",
     "default_center_description": "يقدم مركز الرعاية الصحية المتقدم خدمات طبية شاملة تشمل الاستشارات والتشخيص والعلاج في مختلف التخصصات.",
-    "clinic_details": "تفاصيل العيادة",
-    "all_popular_clinics": "جميع العيادات الشائعة",
+    "center_details": "تفاصيل المركز",
+    "all_popular_centers": "جميع المراكز الشائعة",
     "all_popular_doctors": "جميع الأطباء الشائعين",
     "popular_doctors": "الأطباء الشائعون:",
     "popular_centers": "المراكز الشائعة:",
@@ -124,5 +124,7 @@
     "age": "العمر",
     "end_appointment": "إنهاء الموعد",
     "housing": "السكن",
-    "or": "أو"
+    "or": "أو",
+    "go_doctor": "متابعة كطبيب",
+    "home":"الرئيسية"
 }

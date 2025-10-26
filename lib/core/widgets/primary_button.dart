@@ -5,36 +5,38 @@ import '../utils/colors.dart';
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final double fontSize;
 
-  const PrimaryButton({super.key, required this.text, required this.onPressed});
+  const PrimaryButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.fontSize = 26,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SizedBox(
-      height: 65,
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ElevatedButton(
-          onPressed: onPressed,
+    return ElevatedButton(
+      onPressed: onPressed,
 
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primaryColors,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            minimumSize: Size(screenWidth * 0.7, 55),
-            elevation: 5,
-          ),
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryColors,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        minimumSize: Size(screenWidth * 0.7, 55),
+        elevation: 5,
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown, 
+        child: Text(
+          text,
+          maxLines: 1,
+     
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fontSize,
+            color: Colors.white,
           ),
         ),
       ),

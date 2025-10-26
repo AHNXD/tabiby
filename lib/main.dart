@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tabiby/features/shared/welcome/view/welcome_screen.dart';
-
+import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/utils/app_localizations.dart';
 import 'core/utils/cache_helper.dart';
@@ -36,8 +35,8 @@ class Tabiby extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             navigatorKey: navigatorKey,
-            // locale: state.locale,
-            locale: Locale("ar"),
+            locale: state.locale,
+            // locale: Locale("en"),
             supportedLocales: const [Locale("en"), Locale("ar")],
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -73,7 +72,7 @@ class Tabiby extends StatelessWidget {
               ),
               useMaterial3: true,
             ),
-            initialRoute: WelcomeScreen.routeName,
+            initialRoute: SplashScreen.routeName,
             routes: Routes.routes,
           );
         },

@@ -2,13 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/widgets/main_screen.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
-import '../../../../../../user_app/home/presentation/view/home_screen.dart';
 import 'number_of_children_field.dart';
-import 'selectable_circle.dart'; // ✅ لإظهار التاريخ بشكل جميل
+import 'selectable_circle.dart';
 
 class Step3Widget extends StatefulWidget {
   final bool? hasChildren;
@@ -230,7 +230,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
-                       TextSpan(text: ' ${"and".tr(context)} '),
+                      TextSpan(text: ' ${"and".tr(context)} '),
                       TextSpan(
                         text: 'privacy_policy'.tr(context),
                         style: const TextStyle(
@@ -253,7 +253,7 @@ class _Step3WidgetState extends State<Step3Widget> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                MaterialPageRoute(builder: (context) => const MainScreen()),
               );
             },
           ),

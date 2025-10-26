@@ -33,8 +33,8 @@ class UserAppointmentScreen extends StatelessWidget {
                   child: TabBarView(
                     children: [
                       AppointmentList(appointments: finishedAppointments),
-                      AppointmentList(appointments: canceledAppointments),
                       AppointmentList(appointments: pendingAppointments),
+                      AppointmentList(appointments: canceledAppointments),
                     ],
                   ),
                 ),

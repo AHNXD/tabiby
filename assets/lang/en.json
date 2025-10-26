@@ -1,7 +1,7 @@
 {
     "tabiby": "Tabiby",
     "welcome_in_our_community":"Welcome In Our Community!",
-    "lorem": "Lorem ipsum dolor sit Lorem ipsum dolor sit amet, consectetuer amet, consectetuer",
+    "welcome_message": "Hurry and book your appointments with the best doctors",
     "created_by": "Created By",
     "account": "Account",
     "change_language": "Change Language",
@@ -57,8 +57,8 @@
     "unknown_center": "Unknown Center",
     "no_location": "No location",
     "default_center_description" : "The Advanced Healthcare Center provides comprehensive medical services including consultations, diagnosis, and treatment in various specialties.",
-    "clinic_details": "Clinic Details",
-    "all_popular_clinics": "All Popular Clinics",
+    "center_details": "Center Details",
+    "all_popular_centers": "All Popular Centers",
     "all_popular_doctors": "All Popular Doctors",
     "popular_doctors": "Popular Doctors:",
     "popular_centers": "Popular Centers:",
@@ -124,5 +124,7 @@
     "age": "Age",
     "end_appointment": "End Appointment",
     "housing":"Housing",
-    "or": "Or"
+    "or": "Or",
+    "go_doctor": "Continue as a doctor",
+    "home":"Home"
 }
