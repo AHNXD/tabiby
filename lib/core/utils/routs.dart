@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
+import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
+import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
 
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
 import '../../features/auth/presentation/views/sign_up/view/sign_up_screen.dart';
@@ -11,6 +13,7 @@ import '../../features/user_app/add_appointment/view/booking_screen.dart';
 import '../../features/user_app/categories/presentation/view/all_categories_screen.dart';
 import '../../features/user_app/center_details/view/center_details_screen.dart';
 import '../../features/user_app/centers/presentation/view/all_centers_screen.dart';
+import '../../features/user_app/diagnose/presentation/views/result_screen.dart';
 import '../../features/user_app/doctor_details/view/doctor_details_screen.dart';
 import '../../features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../features/user_app/home/presentation/view/home_screen.dart';
@@ -53,5 +56,10 @@ class Routes {
     SettingsScreen.routeName: (context) => SettingsScreen(),
     WelcomeScreen.routeName: (context) => WelcomeScreen(),
     SplashScreen.routeName: (context) => SplashScreen(),
+
+    //Diagnosis
+    CategoryScreen.routeName: (context) => CategoryScreen(),
+    QuestionScreen.routeName: (context) => QuestionScreen(),
+    ResultScreen.routeName: (context) => ResultScreen(),
   };
 }

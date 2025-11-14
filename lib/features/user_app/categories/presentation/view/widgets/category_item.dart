@@ -23,9 +23,17 @@ class CategoryItem extends StatelessWidget {
                 width: 64,
                 height: 64,
                 margin: EdgeInsets.all(8),
+
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
                 child: Center(
                   child: Image.asset(category['icon'], width: 32, height: 32),

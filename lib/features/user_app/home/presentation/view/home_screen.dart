@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 
 import 'sections/appbar_section.dart';
 import 'sections/category_section.dart';
@@ -13,6 +15,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColors,
+        onPressed: () {
+          Navigator.pushNamed(context, CategoryScreen.routeName);
+        },
+        child: Icon(Icons.warning),
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),

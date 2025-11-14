@@ -31,38 +31,52 @@ class ApiServices {
     //   ),
     // );
   }
+  Future<String?> _getStoredToken() async {
+    return CacheHelper.getData(key: 'token');
+  }
 
-  Map<String, String> _headers() {
-    return {
-      'Authorization': "Bearer ${CacheHelper.getData(key: 'token')}",
+  Future<Map<String, String>> _headers() async {
+    final token = await _getStoredToken();
+    final Map<String, String> headers = {
       'Content-Type': 'application/json',
       "Accept": 'application/json',
       "Accept-Charset": "application/json",
       "Accept-Language": lang,
     };
+
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    return headers;
   }
 
-  Future<Response> get({required String endPoint}) {
-    return _dio.get(endPoint, options: Options(headers: _headers()));
+  Future<Response> get({required String endPoint}) async {
+    return _dio.get(endPoint, options: Options(headers: await _headers()));
   }
 
-  Future<Response> post({required String endPoint, required dynamic data}) {
+  Future<Response> post({
+    required String endPoint,
+    required dynamic data,
+  }) async {
     return _dio.post(
       endPoint,
       data: data,
-      options: Options(headers: _headers()),
+      options: Options(headers: await _headers()),
     );
   }
 
-  Future<Response> put({required String endPoint, required dynamic data}) {
+  Future<Response> put({
+    required String endPoint,
+    required dynamic data,
+  }) async {
     return _dio.put(
       endPoint,
       data: data,
-      options: Options(headers: _headers()),
+      options: Options(headers: await _headers()),
     );
   }
 
-  Future<Response> delete({required String endPoint}) {
-    return _dio.delete(endPoint, options: Options(headers: _headers()));
+  Future<Response> delete({required String endPoint}) async {
+    return _dio.delete(endPoint, options: Options(headers: await _headers()));
   }
 }

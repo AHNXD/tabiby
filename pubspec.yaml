@@ -27,7 +27,7 @@ dependencies:
     sdk: flutter
   flutter_otp_text_field: ^1.5.1+1
   font_awesome_flutter: ^10.7.0
-  get_it: ^8.0.3
+  get_it: ^9.0.5
   intl: ^0.20.2
   lottie: ^3.3.1
   no_screenshot: ^0.3.1

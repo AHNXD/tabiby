@@ -11,6 +11,8 @@ import 'core/utils/functions.dart';
 import 'core/utils/routs.dart';
 import 'core/utils/services_locater.dart';
 import 'core/utils/styles.dart';
+import 'features/user_app/diagnose/data/repos/diagnosis_repository.dart';
+import 'features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,50 +32,57 @@ class Tabiby extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LocaleCubit()..getSaveLanguage()),
+        BlocProvider(
+          create: (context) => DiagnosisCubit(getit.get<DiagnosisRepository>()),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, ChangeLocaleState>(
         builder: (context, state) {
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            locale: state.locale,
-            // locale: Locale("en"),
-            supportedLocales: const [Locale("en"), Locale("ar")],
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            localeResolutionCallback: (deviceLocal, supportedLocales) {
-              for (var locale in supportedLocales) {
-                if (deviceLocal != null &&
-                    deviceLocal.languageCode == locale.languageCode) {
-                  return deviceLocal;
-                }
-              }
-              return supportedLocales.first;
-            },
-            title: 'Tabiby',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              appBarTheme: AppBarTheme(
-                backgroundColor: AppColors.backgroundColor,
-                scrolledUnderElevation: 0,
-                centerTitle: true,
-                elevation: 0,
-                titleTextStyle: Styles.textStyle18.copyWith(
-                  color: AppColors.backgroundColor,
+          return BlocBuilder<DiagnosisCubit, DiagnosisState>(
+            builder: (context, diagnosisState) {
+              return MaterialApp(
+                navigatorKey: navigatorKey,
+                locale: state.locale,
+                // locale: Locale("en"),
+                supportedLocales: const [Locale("en"), Locale("ar")],
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                localeResolutionCallback: (deviceLocal, supportedLocales) {
+                  for (var locale in supportedLocales) {
+                    if (deviceLocal != null &&
+                        deviceLocal.languageCode == locale.languageCode) {
+                      return deviceLocal;
+                    }
+                  }
+                  return supportedLocales.first;
+                },
+                title: 'Tabiby',
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  appBarTheme: AppBarTheme(
+                    backgroundColor: AppColors.backgroundColor,
+                    scrolledUnderElevation: 0,
+                    centerTitle: true,
+                    elevation: 0,
+                    titleTextStyle: Styles.textStyle18.copyWith(
+                      color: AppColors.backgroundColor,
+                    ),
+                  ),
+                  fontFamily: "cocon-next-arabic",
+                  scaffoldBackgroundColor: AppColors.backgroundColor,
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: AppColors.primaryColors,
+                  ),
+                  useMaterial3: true,
                 ),
-              ),
-              fontFamily: "cocon-next-arabic",
-              scaffoldBackgroundColor: AppColors.backgroundColor,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: AppColors.primaryColors,
-              ),
-              useMaterial3: true,
-            ),
-            initialRoute: SplashScreen.routeName,
-            routes: Routes.routes,
+                initialRoute: SplashScreen.routeName,
+                routes: Routes.routes,
+              );
+            },
           );
         },
       ),

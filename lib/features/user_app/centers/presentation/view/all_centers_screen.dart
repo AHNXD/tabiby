@@ -35,7 +35,10 @@ class AllCentersScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: CenterCard(center: center),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CenterCard(center: center),
+              ),
             );
           },
         ),

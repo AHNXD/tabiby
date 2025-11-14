@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'sections/buttons_section.dart';
-import 'sections/created_by_section.dart';
 import 'sections/welcome_section.dart';
 import 'widgets/tabibi_logo.dart';
 
@@ -29,8 +28,8 @@ class WelcomeScreen extends StatelessWidget {
                 WelcomSection(),
                 const SizedBox(height: 50),
                 ButtonsSection(),
-                const SizedBox(height: 10),
-                CreatedBySection(),
+                // const SizedBox(height: 10),
+                // CreatedBySection(),
               ],
             ),
           ),
