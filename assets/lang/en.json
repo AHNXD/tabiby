@@ -146,5 +146,6 @@
     "couldnt_get_condition":"Could not determine a likely condition.",
     "conflicting_symptoms":"This may be due to conflicting symptoms or a lack of data. Please try again or consult a doctor.",
     "doctor": "Doctor",
-    "find_a": "Find a"
+    "find_a": "Find a",
+    "are_you_a_smoker": "Are You A Smoker?"
 }

@@ -3,36 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/widgets/main_screen.dart';
+import 'package:tabiby/features/auth/presentation/views/sign_up/view/widgets/custom_dropdown_field.dart';
 
 import '../../../../../../../core/utils/colors.dart';
-import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
 import 'number_of_children_field.dart';
 import 'selectable_circle.dart';
 
 class Step3Widget extends StatefulWidget {
   final bool? hasChildren;
+  final bool? isSmoke;
   final int numberOfChildren;
   final bool agreeToTerms;
   final String gender;
 
   final ValueChanged<bool?> onChildrenChanged;
+  final ValueChanged<bool?> onSmokeChanged;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final VoidCallback onAgreeToggle;
   final VoidCallback onSignUp;
+  final ValueChanged<String> onMaritalStatusChanged;
 
   const Step3Widget({
     super.key,
     required this.hasChildren,
+    required this.isSmoke,
     required this.numberOfChildren,
     required this.agreeToTerms,
     required this.gender,
     required this.onChildrenChanged,
+    required this.onSmokeChanged,
     required this.onIncrement,
     required this.onDecrement,
     required this.onAgreeToggle,
     required this.onSignUp,
+    required this.onMaritalStatusChanged,
   });
 
   @override
@@ -40,7 +46,8 @@ class Step3Widget extends StatefulWidget {
 }
 
 class _Step3WidgetState extends State<Step3Widget> {
-  DateTime? _selectedDate; // 👈 لتخزين التاريخ المختار
+  DateTime? _selectedDate;
+  String? selectedMaritalStatus;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
@@ -67,7 +74,25 @@ class _Step3WidgetState extends State<Step3Widget> {
       child: Column(
         children: [
           const SizedBox(height: 30),
-          CustomTextField(hintText: 'marital_status'.tr(context)),
+          CustomDropdownField(
+            hintText: 'marital_status'.tr(context),
+            items: [
+              "single".tr(context),
+              "maarrid".tr(context),
+              "divorced".tr(context),
+              "widowed".tr(context),
+            ],
+            value: selectedMaritalStatus,
+            onChanged: (value) {
+              setState(() {
+                selectedMaritalStatus = value;
+              });
+
+              if (value != null) {
+                widget.onMaritalStatusChanged(value);
+              }
+            },
+          ),
           const SizedBox(height: 30),
 
           // --- Have Children ---
@@ -155,7 +180,44 @@ class _Step3WidgetState extends State<Step3Widget> {
             ),
           ),
           const SizedBox(height: 30),
-
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 55,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 24,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF6F6F6),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Text(
+                    'are_you_a_smoker'.tr(context),
+                    style: TextStyle(
+                      color: AppColors.textFieldColor,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              SelectableCircle(
+                icon: Icons.check,
+                isSelected: widget.isSmoke == true,
+                onTap: () => widget.onSmokeChanged(true),
+              ),
+              const SizedBox(width: 10),
+              SelectableCircle(
+                icon: Icons.close,
+                isSelected: widget.isSmoke == false,
+                selectedColor: Colors.red,
+                onTap: () => widget.onSmokeChanged(false),
+              ),
+            ],
+          ),
+          const SizedBox(height: 30),
           // --- Date of Birth Field ---
           GestureDetector(
             onTap: () => _selectDate(context),

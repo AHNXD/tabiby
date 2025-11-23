@@ -17,7 +17,9 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
   final PageController _pageController = PageController();
   int currentStep = 0;
   String? gender;
+  String? marialStatus;
   bool? hasChildren;
+  bool? isSmoke;
   int numberOfChildren = 0;
   bool agreeToTerms = false;
 
@@ -55,6 +57,14 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
               Step3Widget(
                 gender: gender ?? 'female'.tr(context),
                 hasChildren: gender == 'male'.tr(context) ? false : hasChildren,
+                isSmoke: isSmoke,
+                onSmokeChanged: (val) {
+                  setState(() {
+                    isSmoke = val;
+                  });
+                },
+                onMaritalStatusChanged: (val) =>
+                    setState(() => marialStatus = val),
                 numberOfChildren: gender == 'male'.tr(context)
                     ? 0
                     : numberOfChildren,

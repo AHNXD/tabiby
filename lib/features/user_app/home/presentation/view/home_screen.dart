@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(context, CategoryScreen.routeName);
         },
-        child: Icon(Icons.warning),
+        child: Icon(Icons.medical_information),
       ),
       body: SafeArea(
         child: ListView(

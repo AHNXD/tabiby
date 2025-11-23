@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/functions.dart';
 
 import '../../../../core/widgets/custom_appbar.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -54,19 +55,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _saveChanges() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:  Text('changes_saved_successfully'.tr(context)),
-          backgroundColor: Colors.green[600],
-        ),
-      );
+      messages(context, 'changes_saved_successfully'.tr(context), Colors.green);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:  Text('fix_form_error'.tr(context)),
-          backgroundColor: Colors.red[600],
-        ),
-      );
+      messages(context, 'fix_form_error'.tr(context), Colors.red);
     }
   }
 
@@ -109,7 +100,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onIsSmokerChanged: (v) => setState(() => _isSmoker = v),
               ),
               const SizedBox(height: 30),
-              PrimaryButton(text: "save_changes".tr(context), onPressed: _saveChanges),
+              PrimaryButton(
+                text: "save_changes".tr(context),
+                onPressed: _saveChanges,
+              ),
             ],
           ),
         ),

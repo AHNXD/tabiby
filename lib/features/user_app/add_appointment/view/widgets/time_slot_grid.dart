@@ -42,7 +42,7 @@ class TimeSlotGrid extends StatelessWidget {
                   onSelected: (selected) => onSelect(selected ? time : null),
                   selectedColor: AppColors.primaryColors,
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
+                    color: isSelected ? Colors.white : Colors.black87,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

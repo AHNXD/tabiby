@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tabiby/core/utils/app_localizations.dart';
-import '../../../../core/widgets/primary_button.dart';
-import '../../add_appointment/view/booking_screen.dart';
 import 'widgets/colored_text_bar.dart';
 import 'widgets/patient_info_card.dart';
 
@@ -37,18 +34,6 @@ class UserAppointmentScreen extends StatelessWidget {
                       AppointmentList(appointments: canceledAppointments),
                     ],
                   ),
-                ),
-
-                PrimaryButton(
-                  text: 'add_appointment'.tr(context),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BookingScreen(),
-                      ),
-                    );
-                  },
                 ),
               ],
             ),

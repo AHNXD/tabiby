@@ -57,7 +57,7 @@ class _MainScreenState extends State<MainScreen> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: AppColors.primaryColors,
-        unselectedItemColor: Colors.grey,
+        unselectedItemColor: AppColors.baseShimmerColor,
         showUnselectedLabels: true,
         onTap: _onItemTapped,
         elevation: 10,

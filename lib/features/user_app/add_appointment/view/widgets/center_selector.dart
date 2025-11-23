@@ -27,16 +27,10 @@ class CenterSelector extends StatelessWidget {
             onTap: () => onSelect(index),
             child: Card(
               color: isSelected
-                  ? Theme.of(context).primaryColorLight
-                  : Colors.white,
+                  ? AppColors.primaryColors
+                  : Colors.grey.shade100,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: isSelected
-                      ? Theme.of(context).primaryColor
-                      : AppColors.primaryColors,
-                  width: 1.5,
-                ),
               ),
               child: Container(
                 width: 250,
@@ -47,8 +41,9 @@ class CenterSelector extends StatelessWidget {
                   children: [
                     Text(
                       center['name']!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: isSelected ? Colors.white : Colors.black87,
                         fontSize: 16,
                       ),
                     ),
@@ -56,7 +51,7 @@ class CenterSelector extends StatelessWidget {
                     Text(
                       center['address']!,
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: isSelected ? Colors.white : Colors.black54,
                         fontSize: 12,
                       ),
                     ),
@@ -66,7 +61,9 @@ class CenterSelector extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: Theme.of(context).primaryColor,
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.primaryColors,
                       ),
                     ),
                   ],

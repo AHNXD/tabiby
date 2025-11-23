@@ -54,6 +54,20 @@ class AppointmentItem extends StatelessWidget {
                 ),
               ),
             ),
+            Spacer(),
+            if (doctorNotes != null || prescription != null)
+              TextButton(
+                onPressed: () {
+                  _showDetailsDialog(context);
+                },
+                child: Text(
+                  'see_more'.tr(context),
+                  style: TextStyle(
+                    color: AppColors.primaryColors,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
           ],
         ),
         const SizedBox(height: 16),
@@ -102,24 +116,6 @@ class AppointmentItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-
-                  if (doctorNotes != null || prescription != null)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          _showDetailsDialog(context);
-                        },
-                        child: Text(
-                          'see_more'.tr(context),
-                          style: TextStyle(
-                            color: AppColors.primaryColors,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
                 ],
               ),
             ),
