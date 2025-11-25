@@ -5,13 +5,19 @@ import '../utils/colors.dart';
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final IconData? suffixIcon;
+  final TextInputType keyboardType;
 
-  const CustomTextField({super.key, required this.hintText, this.suffixIcon});
+  const CustomTextField({
+    super.key,
+    required this.hintText,
+    this.suffixIcon,
+    this.keyboardType = TextInputType.text,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      keyboardType: TextInputType.text,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: AppColors.textFieldColor),

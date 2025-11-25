@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/widgets/main_screen.dart';
+import 'package:tabiby/features/auth/presentation/views/reset_password/presentation/view/reset_password_screen.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/custome_text_field.dart';
@@ -15,15 +16,23 @@ class LoginInputs extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        CustomTextField(hintText: "phone".tr(context)),
+        CustomTextField(
+          hintText: "phone".tr(context),
+          suffixIcon: Icons.phone,
+          keyboardType: TextInputType.phone,
+        ),
         const SizedBox(height: 30),
         PasswordTextField(hintText: "password".tr(context)),
         const SizedBox(height: 25),
         Align(
           alignment: Alignment.centerRight,
-          child: Text(
-            'forget_password'.tr(context),
-            style: TextStyle(color: AppColors.textColor, fontSize: 12),
+          child: GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, ResetPasswordScreen.routeName),
+            child: Text(
+              'forget_password'.tr(context),
+              style: TextStyle(color: AppColors.textColor, fontSize: 12),
+            ),
           ),
         ),
         const SizedBox(height: 40),

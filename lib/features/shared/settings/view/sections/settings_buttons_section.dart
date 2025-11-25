@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 
 import '../../../../../core/locale/locale_cubit.dart';
 import '../widgets/settings_tile.dart';
@@ -90,7 +91,8 @@ class SettingsButtonsSection extends StatelessWidget {
         SettingsTile(
           icon: Icons.lock_outline,
           title: 'change_password'.tr(context),
-          onTap: () {},
+          onTap: () =>
+              Navigator.pushNamed(context, ConfirmPasswordScreen.routeName),
         ),
 
         SettingsSectionHeader(title: 'about'.tr(context)),

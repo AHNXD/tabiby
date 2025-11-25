@@ -69,38 +69,121 @@ class _Step3WidgetState extends State<Step3Widget> {
   Widget build(BuildContext context) {
     final bool isMale = widget.gender == "Male";
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
-          CustomDropdownField(
-            hintText: 'marital_status'.tr(context),
-            items: [
-              "single".tr(context),
-              "maarrid".tr(context),
-              "divorced".tr(context),
-              "widowed".tr(context),
-            ],
-            value: selectedMaritalStatus,
-            onChanged: (value) {
-              setState(() {
-                selectedMaritalStatus = value;
-              });
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 32),
+            children: [
+              const SizedBox(height: 30),
+              CustomDropdownField(
+                hintText: 'marital_status'.tr(context),
+                items: [
+                  "single".tr(context),
+                  "married".tr(context),
+                  "divorced".tr(context),
+                  "widowed".tr(context),
+                ],
+                value: selectedMaritalStatus,
+                onChanged: (value) {
+                  setState(() {
+                    selectedMaritalStatus = value;
+                  });
 
-              if (value != null) {
-                widget.onMaritalStatusChanged(value);
-              }
-            },
-          ),
-          const SizedBox(height: 30),
+                  if (value != null) {
+                    widget.onMaritalStatusChanged(value);
+                  }
+                },
+              ),
+              const SizedBox(height: 30),
 
-          // --- Have Children ---
-          Opacity(
-            opacity: isMale ? 0.5 : 1.0,
-            child: IgnorePointer(
-              ignoring: isMale,
-              child: Row(
+              // --- Have Children ---
+              Opacity(
+                opacity: isMale ? 0.5 : 1.0,
+                child: IgnorePointer(
+                  ignoring: isMale,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 55,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 24,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF6F6F6),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Text(
+                            'have_children'.tr(context),
+                            style: TextStyle(
+                              color: AppColors.textFieldColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      SelectableCircle(
+                        icon: Icons.check,
+                        isSelected: widget.hasChildren == true,
+                        onTap: () => widget.onChildrenChanged(true),
+                      ),
+                      const SizedBox(width: 10),
+                      SelectableCircle(
+                        icon: Icons.close,
+                        isSelected: widget.hasChildren == false,
+                        selectedColor: Colors.red,
+                        onTap: () => widget.onChildrenChanged(false),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              // --- Number of Children ---
+              Opacity(
+                opacity: isMale ? 0.5 : 1.0,
+                child: IgnorePointer(
+                  ignoring: isMale,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 55,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 24,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF6F6F6),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Text(
+                            'number_of_children'.tr(context),
+                            style: TextStyle(
+                              color: AppColors.textFieldColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      NumberOfChildrenField(
+                        enabled: widget.hasChildren == true,
+                        value: widget.numberOfChildren,
+                        onIncrement: widget.onIncrement,
+                        onDecrement: widget.onDecrement,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Row(
                 children: [
                   Expanded(
                     child: Container(
@@ -114,7 +197,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Text(
-                        'have_children'.tr(context),
+                        'are_you_a_smoker'.tr(context),
                         style: TextStyle(
                           color: AppColors.textFieldColor,
                           fontSize: 16,
@@ -125,66 +208,25 @@ class _Step3WidgetState extends State<Step3Widget> {
                   const SizedBox(width: 10),
                   SelectableCircle(
                     icon: Icons.check,
-                    isSelected: widget.hasChildren == true,
-                    onTap: () => widget.onChildrenChanged(true),
+                    isSelected: widget.isSmoke == true,
+                    onTap: () => widget.onSmokeChanged(true),
                   ),
                   const SizedBox(width: 10),
                   SelectableCircle(
                     icon: Icons.close,
-                    isSelected: widget.hasChildren == false,
+                    isSelected: widget.isSmoke == false,
                     selectedColor: Colors.red,
-                    onTap: () => widget.onChildrenChanged(false),
+                    onTap: () => widget.onSmokeChanged(false),
                   ),
                 ],
               ),
-            ),
-          ),
-          const SizedBox(height: 30),
-
-          // --- Number of Children ---
-          Opacity(
-            opacity: isMale ? 0.5 : 1.0,
-            child: IgnorePointer(
-              ignoring: isMale,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 55,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 24,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF6F6F6),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        'number_of_children'.tr(context),
-                        style: TextStyle(
-                          color: AppColors.textFieldColor,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  NumberOfChildrenField(
-                    enabled: widget.hasChildren == true,
-                    value: widget.numberOfChildren,
-                    onIncrement: widget.onIncrement,
-                    onDecrement: widget.onDecrement,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-          Row(
-            children: [
-              Expanded(
+              const SizedBox(height: 30),
+              // --- Date of Birth Field ---
+              GestureDetector(
+                onTap: () => _selectDate(context),
                 child: Container(
                   height: 55,
+                  width: double.infinity,
                   padding: const EdgeInsets.symmetric(
                     vertical: 16,
                     horizontal: 24,
@@ -193,64 +235,28 @@ class _Step3WidgetState extends State<Step3Widget> {
                     color: const Color(0xFFF6F6F6),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: Text(
-                    'are_you_a_smoker'.tr(context),
-                    style: TextStyle(
-                      color: AppColors.textFieldColor,
-                      fontSize: 16,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _selectedDate == null
+                          ? 'select_your_birth'.tr(context)
+                          : DateFormat('dd-MM-yyyy').format(_selectedDate!),
+                      style: TextStyle(
+                        color: _selectedDate == null
+                            ? AppColors.textFieldColor
+                            : Colors.black87,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              SelectableCircle(
-                icon: Icons.check,
-                isSelected: widget.isSmoke == true,
-                onTap: () => widget.onSmokeChanged(true),
-              ),
-              const SizedBox(width: 10),
-              SelectableCircle(
-                icon: Icons.close,
-                isSelected: widget.isSmoke == false,
-                selectedColor: Colors.red,
-                onTap: () => widget.onSmokeChanged(false),
-              ),
             ],
           ),
-          const SizedBox(height: 30),
-          // --- Date of Birth Field ---
-          GestureDetector(
-            onTap: () => _selectDate(context),
-            child: Container(
-              height: 55,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF6F6F6),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  _selectedDate == null
-                      ? 'select_your_birth'.tr(context)
-                      : DateFormat('dd-MM-yyyy').format(_selectedDate!),
-                  style: TextStyle(
-                    color: _selectedDate == null
-                        ? AppColors.textFieldColor
-                        : Colors.black87,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-
-          const SizedBox(height: 60),
-
-          // --- Agree to Terms ---
-          Row(
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
+          child: Row(
             children: [
               GestureDetector(
                 onTap: widget.onAgreeToggle,
@@ -307,20 +313,17 @@ class _Step3WidgetState extends State<Step3Widget> {
               ),
             ],
           ),
-          const SizedBox(height: 60),
-
-          // --- Sign Up Button ---
-          SecondryButton(
-            text: 'sign_up'.tr(context),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MainScreen()),
-              );
-            },
-          ),
-        ],
-      ),
+        ),
+        SecondryButton(
+          text: 'sign_up'.tr(context),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MainScreen()),
+            );
+          },
+        ),
+      ],
     );
   }
 }

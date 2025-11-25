@@ -19,7 +19,8 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  late TextEditingController _nameController;
+  late TextEditingController _fnController;
+  late TextEditingController _lnController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _residenceController;
@@ -32,7 +33,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _fnController = TextEditingController();
+    _lnController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _residenceController = TextEditingController();
@@ -44,7 +46,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _fnController.dispose();
+    _lnController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _residenceController.dispose();
@@ -66,6 +69,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       appBar: CustomAppbar(
         title: "my_profile".tr(context),
+        showBackButton: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: Colors.white),
@@ -87,7 +91,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               const ProfileAvatar(),
               const SizedBox(height: 24),
               ProfileForm(
-                nameController: _nameController,
+                fnController: _fnController,
+                lnController: _lnController,
                 emailController: _emailController,
                 phoneController: _phoneController,
                 residenceController: _residenceController,

@@ -3,9 +3,9 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../core/widgets/custom_appbar.dart';
 
-Widget _buildCategoryGridItem(
+Widget _buildSpecialtyGridItem(
   BuildContext context,
-  Map<String, dynamic> category,
+  Map<String, dynamic> specialty,
 ) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -26,13 +26,13 @@ Widget _buildCategoryGridItem(
             shape: BoxShape.circle,
           ),
           child: Center(
-            child: Image.asset(category['icon'], width: 40, height: 40),
+            child: Image.asset(specialty['icon'], width: 40, height: 40),
           ),
         ),
       ),
       const SizedBox(height: 8),
       Text(
-        category['name'],
+        specialty['name'],
         style: TextStyle(color: Colors.grey[700], fontSize: 14),
         textAlign: TextAlign.center,
         maxLines: 1,
@@ -42,18 +42,18 @@ Widget _buildCategoryGridItem(
   );
 }
 
-class AllCategoriesScreen extends StatelessWidget {
-  static const String routeName = "/categories";
-  final List<Map<String, dynamic>> categories;
+class AllSpecialtiesScreen extends StatelessWidget {
+  static const String routeName = "/specialties";
+  final List<Map<String, dynamic>> specialties;
 
-  const AllCategoriesScreen({super.key, required this.categories});
+  const AllSpecialtiesScreen({super.key, required this.specialties});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: CustomAppbar(title: "all_categories".tr(context)),
+        child: CustomAppbar(title: "all_specialties".tr(context)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -64,9 +64,9 @@ class AllCategoriesScreen extends StatelessWidget {
             mainAxisSpacing: 20,
             childAspectRatio: 0.9,
           ),
-          itemCount: categories.length,
+          itemCount: specialties.length,
           itemBuilder: (context, index) {
-            return _buildCategoryGridItem(context, categories[index]);
+            return _buildSpecialtyGridItem(context, specialties[index]);
           },
         ),
       ),

@@ -43,10 +43,7 @@ class AppointmentCard extends StatelessWidget {
               height: 70,
               decoration: BoxDecoration(
                 color: statusColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  bottomLeft: Radius.circular(12.0),
-                ),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
               ),
             ),
             const SizedBox(width: 12),

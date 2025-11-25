@@ -1,4 +1,4 @@
-final List<Map<String, dynamic>> categories = [
+final List<Map<String, dynamic>> specialties = [
   {'icon': 'assets/icons/heart.png', 'name': 'Heart'},
   {'icon': 'assets/icons/stomach.png', 'name': 'Stomach'},
   {'icon': 'assets/icons/bones.png', 'name': 'Bones'},
@@ -13,56 +13,56 @@ final List<Map<String, dynamic>> doctors = [
     'name': 'Dr. David Apactchy',
     'specialty': 'Dermatologist',
     'isAvailable': true,
-    'rating': 4.5
+    'rating': 4.5,
   },
   {
     'image': 'assets/images/doctor2.jpg',
     'name': 'Dr. Abd Alrahman',
     'specialty': 'Dentist',
     'isAvailable': false,
-    'rating': 3.0
+    'rating': 3.0,
   },
   {
     'image': 'assets/images/doctor3.png',
     'name': 'Dr. Mostafa Karem',
     'specialty': 'Cardiologist',
     'isAvailable': true,
-    'rating': 5.0
+    'rating': 5.0,
   },
   {
     'image': 'assets/images/doctor4.png',
     'name': 'Dr. Sarah Mohsen',
     'specialty': 'Neurologist',
     'isAvailable': true,
-    'rating': 4.8
+    'rating': 4.8,
   },
-   {
+  {
     'image': 'assets/images/doctor4.png',
     'name': 'Dr. Sarah Mohsen',
     'specialty': 'Neurologist',
     'isAvailable': true,
-    'rating': 4.8
+    'rating': 4.8,
   },
-   {
+  {
     'image': 'assets/images/doctor4.png',
     'name': 'Dr. Sarah Mohsen',
     'specialty': 'Neurologist',
     'isAvailable': true,
-    'rating': 4.8
+    'rating': 4.8,
   },
-     {
+  {
     'image': 'assets/images/doctor4.png',
     'name': 'Dr. Sarah Mohsen',
     'specialty': 'Neurologist',
     'isAvailable': true,
-    'rating': 4.8
+    'rating': 4.8,
   },
-     {
+  {
     'image': 'assets/images/doctor4.png',
     'name': 'Dr. Sarah Mohsen',
     'specialty': 'Neurologist',
     'isAvailable': true,
-    'rating': 4.8
+    'rating': 4.8,
   },
 ];
 final List<Map<String, dynamic>> medicalCenters = [

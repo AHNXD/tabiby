@@ -66,11 +66,7 @@ class _DoctorDashboardViewState extends State<DoctorDashboardScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         children: [
           const SizedBox(height: 16),
-          AppointmentsInfoSection(
-            appointmentCount: _filteredAppointments.length,
-            selectedDate: _selectedDateFilter,
-          ),
-          const SizedBox(height: 24),
+
           FiltersSection(
             selectedDate: _selectedDateFilter,
             selectedCenter: _selectedCenterFilter,
@@ -87,7 +83,12 @@ class _DoctorDashboardViewState extends State<DoctorDashboardScreen> {
               }
             },
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
+          AppointmentsInfoSection(
+            appointmentCount: _filteredAppointments.length,
+            selectedDate: _selectedDateFilter,
+          ),
+          const SizedBox(height: 16),
           AppointmentsListSection(appointments: _filteredAppointments),
         ],
       ),

@@ -4,7 +4,8 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../core/utils/colors.dart';
 
 class ProfileForm extends StatelessWidget {
-  final TextEditingController nameController;
+  final TextEditingController fnController;
+  final TextEditingController lnController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
   final TextEditingController residenceController;
@@ -17,7 +18,8 @@ class ProfileForm extends StatelessWidget {
 
   const ProfileForm({
     super.key,
-    required this.nameController,
+    required this.fnController,
+    required this.lnController,
     required this.emailController,
     required this.phoneController,
     required this.residenceController,
@@ -34,16 +36,31 @@ class ProfileForm extends StatelessWidget {
     return Column(
       children: [
         TextFormField(
-          controller: nameController,
+          controller: fnController,
           decoration: InputDecoration(
-            labelText: 'name'.tr(context),
+            labelText: 'first_name'.tr(context),
             prefixIcon: const Icon(
               Icons.person_outline,
               color: AppColors.primaryColors,
             ),
           ),
-          validator: (value) =>
-              value == null || value.isEmpty ? 'Please enter your name' : null,
+          validator: (value) => value == null || value.isEmpty
+              ? 'Please enter your first name'
+              : null,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: lnController,
+          decoration: InputDecoration(
+            labelText: 'last_name'.tr(context),
+            prefixIcon: const Icon(
+              Icons.person_outline,
+              color: AppColors.primaryColors,
+            ),
+          ),
+          validator: (value) => value == null || value.isEmpty
+              ? 'Please enter your last name'
+              : null,
         ),
         const SizedBox(height: 16),
         TextFormField(

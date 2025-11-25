@@ -24,45 +24,48 @@ class _Step2WidgetState extends State<Step2Widget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 32),
+            children: [
+              const SizedBox(height: 30),
 
-          // --- Housing ---
-          CustomTextField(hintText: 'housing'.tr(context)),
-          const SizedBox(height: 30),
+              // --- Housing ---
+              CustomTextField(hintText: 'housing'.tr(context)),
+              const SizedBox(height: 30),
 
-          // --- Gender Dropdown ---
-          CustomDropdownField(
-            hintText: 'gender'.tr(context),
-            items: ['male'.tr(context), 'female'.tr(context)],
-            value: selectedGender,
-            onChanged: (value) {
-              setState(() {
-                selectedGender = value;
-              });
+              // --- Gender Dropdown ---
+              CustomDropdownField(
+                hintText: 'gender'.tr(context),
+                items: ['male'.tr(context), 'female'.tr(context)],
+                value: selectedGender,
+                onChanged: (value) {
+                  setState(() {
+                    selectedGender = value;
+                  });
 
-              if (value != null) {
-                widget.onGenderChanged(value);
-              }
-            },
+                  if (value != null) {
+                    widget.onGenderChanged(value);
+                  }
+                },
+              ),
+              const SizedBox(height: 30),
+
+              // --- Weight ---
+              CustomTextField(hintText: 'weight'.tr(context)),
+              const SizedBox(height: 30),
+
+              // --- Height ---
+              CustomTextField(hintText: 'height'.tr(context)),
+              const SizedBox(height: 40),
+            ],
           ),
-          const SizedBox(height: 30),
-
-          // --- Weight ---
-          CustomTextField(hintText: 'weight'.tr(context)),
-          const SizedBox(height: 30),
-
-          // --- Height ---
-          CustomTextField(hintText: 'height'.tr(context)),
-          const SizedBox(height: 40),
-
-          // --- Next Button ---
-          SecondryButton(text: 'next'.tr(context), onPressed: widget.onNext),
-        ],
-      ),
+        ),
+        SecondryButton(text: 'next'.tr(context), onPressed: widget.onNext),
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class PromoCard extends StatelessWidget {
   const PromoCard({super.key});
@@ -55,7 +56,7 @@ class PromoCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             gradient: const LinearGradient(
-              colors: [Color(0xFF81C784), Color.fromARGB(255, 5, 89, 53)],
+              colors: [AppColors.primaryColors, AppColors.secColors],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'app_bar_section.dart';
+import 'package:tabiby/features/user_app/home/presentation/view/widgets/build_appbar.dart';
 
 class DashboardScaffold extends StatelessWidget {
   final Widget body;
@@ -10,7 +9,7 @@ class DashboardScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: BuildAppbar(name: "Tabibi Doctor", isDoctor: true),
       body: SafeArea(child: body),
     );
   }
