@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'widgets/colored_text_bar.dart';
-import 'widgets/patient_info_card.dart';
-
 import 'widgets/appointment_list.dart';
 import 'widgets/data.dart';
 
@@ -20,9 +18,6 @@ class UserAppointmentScreen extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                const PatientInfoCard(),
-                const SizedBox(height: 16),
                 const ColoredTextTabBar(),
                 const SizedBox(height: 16),
 

@@ -15,7 +15,7 @@ class AllDoctorsScreen extends StatelessWidget {
       appBar: CustomAppbar(title: "all_popular_doctors".tr(context)),
 
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
