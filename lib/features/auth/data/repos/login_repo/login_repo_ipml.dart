@@ -21,10 +21,16 @@ class LoginRepoIpml implements LoginRepo {
       };
       var resp = await apiServices.post(endPoint: Urls.login, data: loginData);
       if (resp.statusCode == 200 && resp.data['status']) {
-        CacheHelper.setString(key: 'token', value: resp.data['token']);
-        CacheHelper.setString(key: 'role', value: resp.data['role'].toString());
+        CacheHelper.setString(
+          key: 'token',
+          value: resp.data['user']['main_data']['token'],
+        );
+        CacheHelper.setString(
+          key: 'role',
+          value: resp.data['user']['main_data']['role'].toString(),
+        );
         isGuest = false;
-        return right(resp.data['role'].toString());
+        return right(resp.data['user']['main_data']['role'].toString());
       }
       return left(
         resp.data['message'] ?? ServerFailure(ErrorHandler.defaultMessage()),

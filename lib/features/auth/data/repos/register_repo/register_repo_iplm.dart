@@ -23,9 +23,15 @@ class RegisterRepoIplm implements RegisterRepo {
       );
 
       if (resp.statusCode == 201 && resp.data['status'] == true) {
-        CacheHelper.setString(key: 'token', value: resp.data['token']);
-
-        UserModel user = UserModel.fromJson(resp.data);
+        CacheHelper.setString(
+          key: 'token',
+          value: resp.data['user']['main_data']['token'],
+        );
+        CacheHelper.setString(
+          key: 'role',
+          value: resp.data['user']['main_data']['role'].toString(),
+        );
+        UserModel user = UserModel.fromJson(resp.data['user']);
 
         return right(user);
       }

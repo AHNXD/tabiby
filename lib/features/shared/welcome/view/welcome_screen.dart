@@ -15,18 +15,17 @@ class WelcomeScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
+              minHeight: MediaQuery.of(context).size.height * 0.9,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 60),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(height: 30),
                 TabibiLogo(),
-                SizedBox(height: 20),
-                const SizedBox(height: 60),
+                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 WelcomSection(),
-                const SizedBox(height: 50),
+                const SizedBox(height: 16),
                 ButtonsSection(),
                 // const SizedBox(height: 10),
                 // CreatedBySection(),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 
-import '../../../../core/widgets/custom_appbar.dart';
-import '../../../../core/widgets/primary_button.dart';
-import '../../../shared/settings/view/settings_screen.dart';
+import '../../../../../core/widgets/custom_appbar.dart';
+import '../../../../../core/widgets/primary_button.dart';
+import '../../../../shared/settings/view/settings_screen.dart';
 import 'widgets/profile_avatar.dart';
 import 'widgets/profile_form.dart';
 

@@ -1,41 +1,50 @@
 class UserModel {
-  Patient? patient;
-  MoreInfo? moreInfo;
+  MainData? mainData;
+  MoreData? moreData;
 
-  UserModel({this.patient, this.moreInfo});
+  UserModel({this.mainData, this.moreData});
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    patient = json['patient'] != null
-        ? Patient.fromJson(json['patient'])
+    mainData = json['main_data'] != null
+        ? MainData.fromJson(json['main_data'])
         : null;
-    moreInfo = json['more_info'] != null
-        ? MoreInfo.fromJson(json['more_info'])
+    moreData = json['more_data'] != null
+        ? MoreData.fromJson(json['more_data'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (patient != null) {
-      data['patient'] = patient!.toJson();
+    if (mainData != null) {
+      data['main_data'] = mainData!.toJson();
     }
-    if (moreInfo != null) {
-      data['more_info'] = moreInfo!.toJson();
+    if (moreData != null) {
+      data['more_data'] = moreData!.toJson();
     }
     return data;
   }
 }
 
-class Patient {
+class MainData {
   int? id;
+  String? image;
   String? firstName;
   String? lastName;
   String? phone;
   String? role;
 
-  Patient({this.id, this.firstName, this.lastName, this.phone, this.role});
+  MainData({
+    this.id,
+    this.image,
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.role,
+  });
 
-  Patient.fromJson(Map<String, dynamic> json) {
+  MainData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    image = json['profile_image'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     phone = json['phone'];
@@ -45,6 +54,7 @@ class Patient {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['profile_image'] = image;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['phone'] = phone;
@@ -53,7 +63,7 @@ class Patient {
   }
 }
 
-class MoreInfo {
+class MoreData {
   String? address;
   String? gender;
   String? weight;
@@ -64,7 +74,7 @@ class MoreInfo {
   String? birthDate;
   String? isSmoke;
 
-  MoreInfo({
+  MoreData({
     this.address,
     this.gender,
     this.weight,
@@ -76,7 +86,7 @@ class MoreInfo {
     this.isSmoke,
   });
 
-  MoreInfo.fromJson(Map<String, dynamic> json) {
+  MoreData.fromJson(Map<String, dynamic> json) {
     address = json['address'];
     gender = json['gender'];
     weight = json['weight'];

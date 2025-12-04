@@ -22,4 +22,3 @@ final class RegisterSuccess extends RegisterState {
 
   const RegisterSuccess({required this.user});
 }
-

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
+import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/utils/app_localizations.dart';
 import 'core/utils/cache_helper.dart';
@@ -13,6 +14,7 @@ import 'core/utils/services_locater.dart';
 import 'core/utils/styles.dart';
 import 'features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 import 'features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart';
+import 'features/user_app/user/data/repos/user_repo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ class Tabiby extends StatelessWidget {
         BlocProvider(
           create: (context) => DiagnosisCubit(getit.get<DiagnosisRepository>()),
         ),
+        BlocProvider(create: (context) => UserCubit(getit.get<UserRepo>())),
       ],
       child: BlocBuilder<LocaleCubit, ChangeLocaleState>(
         builder: (context, state) {

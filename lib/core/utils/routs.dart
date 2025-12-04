@@ -20,7 +20,7 @@ import '../../features/user_app/diagnose/presentation/views/result_screen.dart';
 import '../../features/user_app/doctor_details/view/doctor_details_screen.dart';
 import '../../features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../features/user_app/home/presentation/view/home_screen.dart';
-import '../../features/user_app/user/view/user_profile.dart';
+import '../../features/user_app/user/presentation/view/user_profile.dart';
 import '../../features/user_app/user_appointments/view/appointment_screen.dart';
 import '../widgets/main_screen.dart';
 

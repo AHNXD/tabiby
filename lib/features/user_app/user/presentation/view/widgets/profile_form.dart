@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
-import '../../../../../core/utils/colors.dart';
+import '../../../../../../core/utils/colors.dart';
 
 class ProfileForm extends StatelessWidget {
   final TextEditingController fnController;

@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
+import 'package:tabiby/core/utils/cache_helper.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/core/widgets/main_screen.dart';
+import 'package:tabiby/features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
 import 'package:tabiby/features/shared/welcome/view/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -39,15 +42,41 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Timer(const Duration(seconds: 1), _navigateToWelcome);
+        Timer(const Duration(seconds: 1), _splashLogic);
       }
     });
 
     _controller.forward();
   }
 
-  void _navigateToWelcome() {
-    Navigator.popAndPushNamed(context, WelcomeScreen.routeName);
+  bool _checkToken() {
+    String token = CacheHelper.getData(key: 'token') ?? '';
+    return token.isNotEmpty;
+  }
+
+  String _getRole() {
+    String role = CacheHelper.getData(key: 'role') ?? '';
+    return role;
+  }
+
+  void _splashLogic() {
+    bool trueToken = _checkToken();
+    if (trueToken) {
+      String role = _getRole();
+
+      if (role == "patient") {
+        Navigator.pushReplacementNamed(context, MainScreen.routeName);
+      } else if (role == "doctor") {
+        Navigator.pushReplacementNamed(
+          context,
+          DoctorDashboardScreen.routeName,
+        );
+      } else {
+        Navigator.pushReplacementNamed(context, WelcomeScreen.routeName);
+      }
+    } else {
+      Navigator.pushReplacementNamed(context, WelcomeScreen.routeName);
+    }
   }
 
   @override

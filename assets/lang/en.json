@@ -157,5 +157,8 @@
     "confirm_password_message": "Enter and confirm the new password",
     "please_agree_terms": "Please agree to the terms and conditions",
     "registration_successful": "Registration Successful!",
-    "login_success":"Login Successful!"
+    "login_success":"Login Successful!",
+    "logout_confirmation_message":"Are you sure you want to log out?",
+    "logout_success":"Logout Successful!",
+    "logging_out":"Logging Out..."
 }

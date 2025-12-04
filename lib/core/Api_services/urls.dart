@@ -11,7 +11,12 @@ class Urls {
   static String forgetPassword = "forget-password";
   static String verfiResetPassword = "verify-reset-password";
   static String resendCode = "resend-code";
-  static String getProfile = "me";
+  static String getProfile = "get_profile";
+
+  //Specialists endpoint
+  static const String specialists = "get_all_specialties";
+
+  //Diagnose endpoint
   static const String categories = "v1/categories";
   static String questions(int categoryId) =>
       "v1/categories/$categoryId/questions";

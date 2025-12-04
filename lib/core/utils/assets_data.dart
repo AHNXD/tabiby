@@ -4,4 +4,9 @@ class AssetsData {
   static const logoWhite = 'assets/images/logo_white.png';
   static const logoGreen = 'assets/images/logo_green.png';
   static const logoBlue = 'assets/images/logo_blue.png';
+
+  static const bones = 'assets/icons/bones.png';
+  static const brain = 'assets/icons/brain.png';
+  static const heart = 'assets/icons/heart.png';
+  static const stomach = 'assets/icons/stomach.png';
 }

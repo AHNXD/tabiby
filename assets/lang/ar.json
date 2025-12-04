@@ -157,5 +157,8 @@
     "confirm_password_message": "قم بادخال كلمة المرور الجديدة وتأكيدها",
     "please_agree_terms": "يرجى الموافقة على الشروط والأحكام",
     "registration_successful":"تم التسجيل بنجاح!",
-    "login_success":"تم تسجيل الدخول بنجاح!"
+    "login_success":"تم تسجيل الدخول بنجاح!",
+    "logout_confirmation_message":"هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "logout_success":"تم تسجيل الخروج بنجاح!",
+    "logging_out":"جاري تسجيل الخروج..."
 }
