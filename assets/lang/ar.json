@@ -160,5 +160,6 @@
     "login_success":"تم تسجيل الدخول بنجاح!",
     "logout_confirmation_message":"هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "logout_success":"تم تسجيل الخروج بنجاح!",
-    "logging_out":"جاري تسجيل الخروج..."
+    "logging_out":"جاري تسجيل الخروج...",
+    "error":"خطأ"
 }

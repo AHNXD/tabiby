@@ -89,14 +89,14 @@ class MoreData {
   MoreData.fromJson(Map<String, dynamic> json) {
     address = json['address'];
     gender = json['gender'];
-    weight = json['weight'];
-    height = json['height'];
+    weight = json['weight'].toString();
+    height = json['height'].toString();
     maritalStatus = json['marital_status'];
     hasChildren = json['has_children'];
-    numberOfChildren = json['number_of_children'];
+    numberOfChildren = json['number_of_children'].toString();
     birthDate = json['birth_date'];
 
-    isSmoke = json['is_smoke'];
+    isSmoke = json['is_smoke'].toString();
   }
 
   Map<String, dynamic> toJson() {
