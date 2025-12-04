@@ -33,9 +33,15 @@ class ConfirmPasswordScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 32),
-                  PasswordTextField(hintText: "new_password".tr(context)),
+                  PasswordTextField(
+                    hintText: "new_password".tr(context),
+                    controller: TextEditingController(),
+                  ),
                   SizedBox(height: 32),
-                  PasswordTextField(hintText: "confirm_password".tr(context)),
+                  PasswordTextField(
+                    hintText: "confirm_password".tr(context),
+                    controller: TextEditingController(),
+                  ),
                 ],
               ),
             ),

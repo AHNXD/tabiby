@@ -62,11 +62,7 @@ class MoreInfo {
   bool? hasChildren;
   String? numberOfChildren;
   String? birthDate;
-  int? userId;
   String? isSmoke;
-  String? updatedAt;
-  String? createdAt;
-  int? id;
 
   MoreInfo({
     this.address,
@@ -77,11 +73,7 @@ class MoreInfo {
     this.hasChildren,
     this.numberOfChildren,
     this.birthDate,
-    this.userId,
     this.isSmoke,
-    this.updatedAt,
-    this.createdAt,
-    this.id,
   });
 
   MoreInfo.fromJson(Map<String, dynamic> json) {
@@ -93,11 +85,8 @@ class MoreInfo {
     hasChildren = json['has_children'];
     numberOfChildren = json['number_of_children'];
     birthDate = json['birth_date'];
-    userId = json['user_id'];
+
     isSmoke = json['is_smoke'];
-    updatedAt = json['updated_at'];
-    createdAt = json['created_at'];
-    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -110,11 +99,9 @@ class MoreInfo {
     data['has_children'] = hasChildren;
     data['number_of_children'] = numberOfChildren;
     data['birth_date'] = birthDate;
-    data['user_id'] = userId;
+
     data['is_smoke'] = isSmoke;
-    data['updated_at'] = updatedAt;
-    data['created_at'] = createdAt;
-    data['id'] = id;
+
     return data;
   }
 }

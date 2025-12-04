@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
 
 import '../../../../../core/widgets/primary_button.dart';
 import '../../../../../core/widgets/secondry_button.dart';
@@ -17,29 +16,22 @@ class ButtonsSection extends StatelessWidget {
         PrimaryButton(
           text: "login".tr(context),
           onPressed: () {
-            Navigator.push(
+            Navigator.pushNamedAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              LoginScreen.routeName,
+              (Route<dynamic> route) => false,
             );
           },
         ),
-        const SizedBox(height: 20),
-        PrimaryButton(
-          text: "go_doctor".tr(context),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DoctorDashboardScreen()),
-            );
-          },
-        ),
+
         const SizedBox(height: 20),
         SecondryButton(
           text: "sign_up".tr(context),
           onPressed: () {
-            Navigator.push(
+            Navigator.pushNamedAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+              SignUpScreen.routeName,
+              (Route<dynamic> route) => false,
             );
           },
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/core/widgets/main_screen.dart';
+// import 'package:tabiby/core/widgets/main_screen.dart'; // No longer needed here
 import 'package:tabiby/features/auth/presentation/views/reset_password/presentation/view/reset_password_screen.dart';
 
 import '../../../../../../../core/utils/colors.dart';
@@ -9,26 +9,58 @@ import '../../../../../../../core/widgets/password_textfield.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
 
 class LoginInputs extends StatelessWidget {
-  const LoginInputs({super.key});
+  const LoginInputs({
+    super.key,
+    required this.phoneController,
+    required this.passwordController,
+    required this.onLoginPressed,
+    required this.isLoading,
+  });
+
+  final TextEditingController passwordController;
+  final TextEditingController phoneController;
+  final VoidCallback onLoginPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        CustomTextField(
-          hintText: "phone".tr(context),
-          suffixIcon: Icons.phone,
-          keyboardType: TextInputType.phone,
+        Opacity(
+          opacity: isLoading ? 0.6 : 1.0,
+          child: IgnorePointer(
+            ignoring: isLoading,
+            child: CustomTextField(
+              hintText: "phone".tr(context),
+              suffixIcon: Icons.phone,
+              keyboardType: TextInputType.phone,
+              controller: phoneController,
+            ),
+          ),
         ),
         const SizedBox(height: 30),
-        PasswordTextField(hintText: "password".tr(context)),
+        Opacity(
+          opacity: isLoading ? 0.6 : 1.0,
+          child: IgnorePointer(
+            ignoring: isLoading,
+            child: PasswordTextField(
+              hintText: "password".tr(context),
+              controller: passwordController,
+            ),
+          ),
+        ),
         const SizedBox(height: 25),
+
         Align(
           alignment: Alignment.centerRight,
           child: GestureDetector(
-            onTap: () =>
-                Navigator.pushNamed(context, ResetPasswordScreen.routeName),
+            onTap: isLoading
+                ? null
+                : () => Navigator.pushNamed(
+                    context,
+                    ResetPasswordScreen.routeName,
+                  ),
             child: Text(
               'forget_password'.tr(context),
               style: TextStyle(color: AppColors.textColor, fontSize: 12),
@@ -36,15 +68,17 @@ class LoginInputs extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 40),
-        SecondryButton(
-          text: "login".tr(context),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MainScreen()),
-            );
-          },
-        ),
+
+        isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColors,
+                ),
+              )
+            : SecondryButton(
+                text: "login".tr(context),
+                onPressed: onLoginPressed,
+              ),
       ],
     );
   }

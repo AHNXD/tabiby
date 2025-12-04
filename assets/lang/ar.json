@@ -154,5 +154,8 @@
     "new_password": "ادخل كلمة المرور الجديدة",
     "reset_password_message":"قم بادخال رقمك للتحقق من صحة الرقم واستلام رمز التحقق",
     "otp_message": "قم بادخال رمز التحقق للمتابعة",
-    "confirm_password_message": "قم بادخال كلمة المرور الجديدة وتأكيدها"
+    "confirm_password_message": "قم بادخال كلمة المرور الجديدة وتأكيدها",
+    "please_agree_terms": "يرجى الموافقة على الشروط والأحكام",
+    "registration_successful":"تم التسجيل بنجاح!",
+    "login_success":"تم تسجيل الدخول بنجاح!"
 }

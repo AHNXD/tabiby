@@ -4,8 +4,13 @@ import '../utils/colors.dart';
 
 class PasswordTextField extends StatefulWidget {
   final String hintText;
+  final TextEditingController controller;
 
-  const PasswordTextField({super.key, required this.hintText});
+  const PasswordTextField({
+    super.key,
+    required this.hintText,
+    required this.controller,
+  });
 
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
@@ -18,6 +23,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: !_isPasswordVisible,
+      controller: widget.controller,
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(color: AppColors.textFieldColor),

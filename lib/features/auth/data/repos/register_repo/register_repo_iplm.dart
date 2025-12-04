@@ -21,17 +21,20 @@ class RegisterRepoIplm implements RegisterRepo {
         endPoint: Urls.register,
         data: registerData,
       );
-      if (resp.statusCode == 200 && resp.data['status']) {
+
+      if (resp.statusCode == 201 && resp.data['status'] == true) {
         CacheHelper.setString(key: 'token', value: resp.data['token']);
+
         UserModel user = UserModel.fromJson(resp.data);
 
         return right(user);
       }
+
       return left(
-        resp.data['message'] ?? ServerFailure(ErrorHandler.defaultMessage()),
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
     } catch (e) {
-      return left(ErrorHandler.handle(e));
+      return left(ServerFailure(e.toString()));
     }
   }
 }

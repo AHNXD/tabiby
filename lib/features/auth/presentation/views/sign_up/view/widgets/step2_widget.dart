@@ -5,22 +5,23 @@ import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
 import 'custom_dropdown_field.dart';
 
-class Step2Widget extends StatefulWidget {
+class Step2Widget extends StatelessWidget {
   final VoidCallback onNext;
   final ValueChanged<String> onGenderChanged;
+  final TextEditingController housingCtrl;
+  final TextEditingController weightCtrl;
+  final TextEditingController heightCtrl;
+  final String? selectedGender;
 
   const Step2Widget({
     super.key,
     required this.onNext,
     required this.onGenderChanged,
+    required this.housingCtrl,
+    required this.weightCtrl,
+    required this.heightCtrl,
+    this.selectedGender,
   });
-
-  @override
-  State<Step2Widget> createState() => _Step2WidgetState();
-}
-
-class _Step2WidgetState extends State<Step2Widget> {
-  String? selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -29,42 +30,39 @@ class _Step2WidgetState extends State<Step2Widget> {
         Expanded(
           child: ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             children: [
               const SizedBox(height: 30),
-
-              // --- Housing ---
-              CustomTextField(hintText: 'housing'.tr(context)),
+              CustomTextField(
+                hintText: 'housing'.tr(context),
+                controller: housingCtrl,
+              ),
               const SizedBox(height: 30),
-
-              // --- Gender Dropdown ---
               CustomDropdownField(
                 hintText: 'gender'.tr(context),
                 items: ['male'.tr(context), 'female'.tr(context)],
                 value: selectedGender,
                 onChanged: (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
-
-                  if (value != null) {
-                    widget.onGenderChanged(value);
-                  }
+                  if (value != null) onGenderChanged(value);
                 },
               ),
               const SizedBox(height: 30),
-
-              // --- Weight ---
-              CustomTextField(hintText: 'weight'.tr(context)),
+              CustomTextField(
+                hintText: 'weight'.tr(context),
+                controller: weightCtrl,
+                keyboardType: TextInputType.number,
+              ),
               const SizedBox(height: 30),
-
-              // --- Height ---
-              CustomTextField(hintText: 'height'.tr(context)),
+              CustomTextField(
+                hintText: 'height'.tr(context),
+                controller: heightCtrl,
+                keyboardType: TextInputType.number,
+              ),
               const SizedBox(height: 40),
             ],
           ),
         ),
-        SecondryButton(text: 'next'.tr(context), onPressed: widget.onNext),
+        SecondryButton(text: 'next'.tr(context), onPressed: onNext),
       ],
     );
   }

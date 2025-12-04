@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/core/widgets/main_screen.dart';
+
 import 'package:tabiby/features/auth/presentation/views/sign_up/view/widgets/custom_dropdown_field.dart';
 
 import '../../../../../../../core/utils/colors.dart';
@@ -16,6 +16,9 @@ class Step3Widget extends StatefulWidget {
   final int numberOfChildren;
   final bool agreeToTerms;
   final String gender;
+  final String? maritalStatus;
+  final DateTime? selectedDate;
+  final bool isLoading;
 
   final ValueChanged<bool?> onChildrenChanged;
   final ValueChanged<bool?> onSmokeChanged;
@@ -24,6 +27,7 @@ class Step3Widget extends StatefulWidget {
   final VoidCallback onAgreeToggle;
   final VoidCallback onSignUp;
   final ValueChanged<String> onMaritalStatusChanged;
+  final ValueChanged<DateTime> onDateChanged;
 
   const Step3Widget({
     super.key,
@@ -32,6 +36,9 @@ class Step3Widget extends StatefulWidget {
     required this.numberOfChildren,
     required this.agreeToTerms,
     required this.gender,
+    required this.maritalStatus,
+    required this.selectedDate,
+    required this.isLoading,
     required this.onChildrenChanged,
     required this.onSmokeChanged,
     required this.onIncrement,
@@ -39,6 +46,7 @@ class Step3Widget extends StatefulWidget {
     required this.onAgreeToggle,
     required this.onSignUp,
     required this.onMaritalStatusChanged,
+    required this.onDateChanged,
   });
 
   @override
@@ -46,28 +54,24 @@ class Step3Widget extends StatefulWidget {
 }
 
 class _Step3WidgetState extends State<Step3Widget> {
-  DateTime? _selectedDate;
-  String? selectedMaritalStatus;
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime(2000),
+      initialDate: widget.selectedDate ?? DateTime(2000),
       firstDate: DateTime(1900),
       lastDate: DateTime(now.year, now.month, now.day),
     );
 
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
+    if (picked != null) {
+      widget.onDateChanged(picked);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isMale = widget.gender == "Male";
+    final bool isMale =
+        widget.gender == 'male'.tr(context) || widget.gender == 'Male';
 
     return Column(
       children: [
@@ -85,12 +89,8 @@ class _Step3WidgetState extends State<Step3Widget> {
                   "divorced".tr(context),
                   "widowed".tr(context),
                 ],
-                value: selectedMaritalStatus,
+                value: widget.maritalStatus,
                 onChanged: (value) {
-                  setState(() {
-                    selectedMaritalStatus = value;
-                  });
-
                   if (value != null) {
                     widget.onMaritalStatusChanged(value);
                   }
@@ -118,13 +118,14 @@ class _Step3WidgetState extends State<Step3Widget> {
                           ),
                           child: Text(
                             'have_children'.tr(context),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: AppColors.textFieldColor,
                               fontSize: 16,
                             ),
                           ),
                         ),
                       ),
+
                       const SizedBox(width: 10),
                       SelectableCircle(
                         icon: Icons.check,
@@ -164,7 +165,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                           ),
                           child: Text(
                             'number_of_children'.tr(context),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: AppColors.textFieldColor,
                               fontSize: 16,
                             ),
@@ -198,7 +199,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                       ),
                       child: Text(
                         'are_you_a_smoker'.tr(context),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.textFieldColor,
                           fontSize: 16,
                         ),
@@ -238,11 +239,13 @@ class _Step3WidgetState extends State<Step3Widget> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      _selectedDate == null
+                      widget.selectedDate == null
                           ? 'select_your_birth'.tr(context)
-                          : DateFormat('dd-MM-yyyy').format(_selectedDate!),
+                          : DateFormat(
+                              'dd-MM-yyyy',
+                            ).format(widget.selectedDate!),
                       style: TextStyle(
-                        color: _selectedDate == null
+                        color: widget.selectedDate == null
                             ? AppColors.textFieldColor
                             : Colors.black87,
                         fontSize: 16,
@@ -254,74 +257,90 @@ class _Step3WidgetState extends State<Step3Widget> {
             ],
           ),
         ),
+        // --- Bottom Section: Terms & Button ---
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
-          child: Row(
+          child: Column(
             children: [
-              GestureDetector(
-                onTap: widget.onAgreeToggle,
-                child: Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: widget.agreeToTerms
-                        ? AppColors.primaryColors
-                        : Colors.transparent,
-                    border: Border.all(
-                      color: widget.agreeToTerms
-                          ? AppColors.primaryColors
-                          : AppColors.textColor,
-                      width: 1.5,
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: widget.onAgreeToggle,
+                    child: Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: widget.agreeToTerms
+                            ? AppColors.primaryColors
+                            : Colors.transparent,
+                        border: Border.all(
+                          color: widget.agreeToTerms
+                              ? AppColors.primaryColors
+                              : AppColors.textColor,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: widget.agreeToTerms
+                          ? const Icon(
+                              Icons.check,
+                              size: 16,
+                              color: Colors.white,
+                            )
+                          : null,
                     ),
                   ),
-                  child: widget.agreeToTerms
-                      ? const Icon(Icons.check, size: 16, color: Colors.white)
-                      : null,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textColor,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textColor,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'read_and_agree_conditions'.tr(context),
+                          ),
+                          TextSpan(
+                            text: 'terms_conditions'.tr(context),
+                            style: const TextStyle(
+                              color: AppColors.primaryColors,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()..onTap = () {},
+                          ),
+                          TextSpan(text: ' ${"and".tr(context)} '),
+                          TextSpan(
+                            text: 'privacy_policy'.tr(context),
+                            style: const TextStyle(
+                              color: AppColors.primaryColors,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()..onTap = () {},
+                          ),
+                        ],
+                      ),
                     ),
-                    children: [
-                      TextSpan(text: 'read_and_agree_conditions'.tr(context)),
-                      TextSpan(
-                        text: 'terms_conditions'.tr(context),
-                        style: const TextStyle(
-                          color: AppColors.primaryColors,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()..onTap = () {},
-                      ),
-                      TextSpan(text: ' ${"and".tr(context)} '),
-                      TextSpan(
-                        text: 'privacy_policy'.tr(context),
-                        style: const TextStyle(
-                          color: AppColors.primaryColors,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()..onTap = () {},
-                      ),
-                    ],
                   ),
-                ),
+                ],
               ),
+              const SizedBox(height: 15),
+
+              // --- Sign Up Button with Loading State ---
+              widget.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColors,
+                      ),
+                    )
+                  : SecondryButton(
+                      text: 'sign_up'.tr(context),
+                      onPressed: widget.onSignUp,
+                    ),
+              const SizedBox(height: 10),
             ],
           ),
-        ),
-        SecondryButton(
-          text: 'sign_up'.tr(context),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MainScreen()),
-            );
-          },
         ),
       ],
     );

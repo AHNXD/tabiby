@@ -4,6 +4,8 @@ import 'package:tabiby/features/auth/data/repos/register_repo/register_repo.dart
 import 'package:tabiby/features/auth/data/repos/register_repo/register_repo_iplm.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository_iplm.dart';
+import '../../features/auth/data/repos/login_repo/login_repo.dart';
+import '../../features/auth/data/repos/login_repo/login_repo_ipml.dart';
 import '../Api_services/api_services.dart';
 
 final getit = GetIt.instance;
@@ -26,6 +28,7 @@ void setupLocatorServices() {
   getit.registerSingleton<RegisterRepo>(
     RegisterRepoIplm(getit.get<ApiServices>()),
   );
+  getit.registerSingleton<LoginRepo>(LoginRepoIpml(getit.get<ApiServices>()));
 
   //Diagnose
   getit.registerSingleton<DiagnosisRepository>(

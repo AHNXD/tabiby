@@ -154,5 +154,8 @@
     "new_password": "Enter the new password",
     "reset_password_message":"Enter your number to verify the correctness of the number and receive the verification code",
     "otp_message": "Enter the verification code",
-    "confirm_password_message": "Enter and confirm the new password"
+    "confirm_password_message": "Enter and confirm the new password",
+    "please_agree_terms": "Please agree to the terms and conditions",
+    "registration_successful": "Registration Successful!",
+    "login_success":"Login Successful!"
 }

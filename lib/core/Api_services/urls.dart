@@ -4,15 +4,14 @@ class Urls {
   static String baseUrl = "http://$ip/api/";
 
   //auth endpoint
-  static String login = "auth/login";
-  static String logout = "auth/logout";
-  static String register = "auth/register";
-  static String verifiPhoneNum = "auth/verify-account";
-  static String forgetPassword = "auth/forget-password";
-  static String verfiResetPassword = "auth/verify-reset-password";
-  static String resendCode = "/auth/resend-code";
-  static String getProfile = "/auth/me";
-
+  static String login = "login";
+  static String logout = "logout";
+  static String register = "register";
+  static String verifiPhoneNum = "verify-account";
+  static String forgetPassword = "forget-password";
+  static String verfiResetPassword = "verify-reset-password";
+  static String resendCode = "resend-code";
+  static String getProfile = "me";
   static const String categories = "v1/categories";
   static String questions(int categoryId) =>
       "v1/categories/$categoryId/questions";
