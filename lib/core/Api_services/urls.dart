@@ -1,7 +1,7 @@
 class Urls {
   //base urls
-  static String ip = "192.168.1.2:5000";
-  static String baseUrl = "http://$ip/api/v1/";
+  static String ip = "192.168.1.3:8000";
+  static String baseUrl = "http://$ip/api/";
 
   //auth endpoint
   static String login = "auth/login";
@@ -13,8 +13,8 @@ class Urls {
   static String resendCode = "/auth/resend-code";
   static String getProfile = "/auth/me";
 
-  static const String categories = "/categories";
+  static const String categories = "v1/categories";
   static String questions(int categoryId) =>
-      "/categories/$categoryId/questions";
-  static const String diagnose = "diagnose";
+      "v1/categories/$categoryId/questions";
+  static const String diagnose = "v1/diagnose";
 }

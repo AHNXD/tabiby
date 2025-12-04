@@ -15,21 +15,9 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(RegisterLoading());
     var data = await _registerRepo.register(registerData);
     data.fold((failure) => emit(RegisterError(errorMsg: failure.message)), (
-      phoneNum,
+      user,
     ) {
-      emit(RegisterSuccess(phoneNum: phoneNum));
+      emit(RegisterSuccess(user: user));
     });
-  }
-
-  Future verifiPhoneNum({required String phone, required String code}) async {
-    emit(VerifiPhoneLoading());
-    var data = await _registerRepo.verifiPhoneNum(
-      phoneNumber: phone,
-      code: code,
-    );
-    data.fold(
-      (failure) => emit(VerifiPhoneError(errorMsg: failure.message)),
-      (user) => emit(VerifiPhoneSuccess(user: user)),
-    );
   }
 }

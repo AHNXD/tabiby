@@ -60,7 +60,6 @@ flutter:
     - assets/lang/
     - assets/images/
     - assets/icons/
-    - assets/audio/
 
 
   fonts:
