@@ -16,8 +16,10 @@ class SpecialtiesRepoIplm implements SpecialtiesRepo {
     try {
       var resp = await _apiServices.get(endPoint: Urls.specialists);
 
-      if (resp.statusCode == 200) {
-        SpecialtiesModel specialties = SpecialtiesModel.fromJson(resp.data);
+      if (resp.statusCode == 200 && resp.data['status'] == true) {
+        SpecialtiesModel specialties = SpecialtiesModel.fromJson(
+          resp.data['data'],
+        );
 
         return right(specialties);
       }

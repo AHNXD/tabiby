@@ -17,7 +17,7 @@ class UserRepoIplm implements UserRepo {
       var resp = await _apiServices.get(endPoint: Urls.getProfile);
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
-        UserModel user = UserModel.fromJson(resp.data['user']);
+        UserModel user = UserModel.fromJson(resp.data['data']['user']);
 
         return right(user);
       }
@@ -36,7 +36,7 @@ class UserRepoIplm implements UserRepo {
       var resp = await _apiServices.get(endPoint: Urls.getProfile);
 
       if (resp.statusCode == 201 && resp.data['status'] == true) {
-        UserModel user = UserModel.fromJson(resp.data['user']);
+        UserModel user = UserModel.fromJson(resp.data['data']['user']);
 
         return right(user);
       }
@@ -55,7 +55,7 @@ class UserRepoIplm implements UserRepo {
       var resp = await _apiServices.get(endPoint: Urls.getProfile);
 
       if (resp.statusCode == 201 && resp.data['status'] == true) {
-        UserModel user = UserModel.fromJson(resp.data['user']);
+        UserModel user = UserModel.fromJson(resp.data['data']['user']);
 
         return right(user);
       }

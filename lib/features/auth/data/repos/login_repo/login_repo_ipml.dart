@@ -23,14 +23,14 @@ class LoginRepoIpml implements LoginRepo {
       if (resp.statusCode == 200 && resp.data['status']) {
         CacheHelper.setString(
           key: 'token',
-          value: resp.data['user']['main_data']['token'],
+          value: resp.data['data']['user']['main_data']['token'],
         );
         CacheHelper.setString(
           key: 'role',
-          value: resp.data['user']['main_data']['role'].toString(),
+          value: resp.data['data']['user']['main_data']['role'].toString(),
         );
         isGuest = false;
-        return right(resp.data['user']['main_data']['role'].toString());
+        return right(resp.data['data']['user']['main_data']['role'].toString());
       }
       return left(
         resp.data['message'] ?? ServerFailure(ErrorHandler.defaultMessage()),
