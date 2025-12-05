@@ -16,7 +16,10 @@ class Urls {
   //Specialists endpoint
   static const String specialists = "get_all_specialties";
 
-  //Diagnose endpoint
+  //Home endpoint
+  static const String home = "home";
+
+  //Diagnose endpoints
   static const String categories = "v1/categories";
   static String questions(int categoryId) =>
       "v1/categories/$categoryId/questions";

@@ -55,9 +55,8 @@ Widget _buildSpecialtyGridItem(
 
 class AllSpecialtiesScreen extends StatelessWidget {
   static const String routeName = "/specialties";
-  final List<Map<String, dynamic>> specialties;
 
-  const AllSpecialtiesScreen({super.key, required this.specialties});
+  const AllSpecialtiesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

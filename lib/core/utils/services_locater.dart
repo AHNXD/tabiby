@@ -8,6 +8,8 @@ import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repositor
 import '../../features/auth/data/repos/login_repo/login_repo.dart';
 import '../../features/auth/data/repos/login_repo/login_repo_ipml.dart';
 import '../../features/auth/data/repos/logout_repo/logout_repo_iplm.dart';
+import '../../features/user_app/home/data/repo/home_repo.dart';
+import '../../features/user_app/home/data/repo/home_repo_iplm.dart';
 import '../../features/user_app/specialties/data/repos/user_repo.dart';
 import '../../features/user_app/specialties/data/repos/user_repo_iplm.dart';
 import '../../features/user_app/user/data/repos/user_repo.dart';
@@ -44,6 +46,8 @@ void setupLocatorServices() {
   getit.registerSingleton<SpecialtiesRepo>(
     SpecialtiesRepoIplm(getit.get<ApiServices>()),
   );
+  //Home
+  getit.registerSingleton<HomeRepo>(HomeRepoIplm(getit.get<ApiServices>()));
 
   //Diagnose
   getit.registerSingleton<DiagnosisRepository>(

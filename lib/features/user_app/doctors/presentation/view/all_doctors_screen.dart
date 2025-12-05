@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/doctors/data/models/doctor_model.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import 'widgets/doctor_card.dart';
 
 class AllDoctorsScreen extends StatelessWidget {
   static const String routeName = "/doctors";
-  final List<Map<String, dynamic>> doctors;
+  final List<DoctorsModel> doctors;
 
   const AllDoctorsScreen({super.key, required this.doctors});
 

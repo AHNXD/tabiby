@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
 
 class CenterCard extends StatelessWidget {
-  final Map<String, dynamic> center;
+  final CentersModel center;
   const CenterCard({super.key, required this.center});
 
   @override
@@ -21,16 +22,20 @@ class CenterCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(center['image'], height: 80, fit: BoxFit.cover),
+          Image.asset(
+            "assets/images/center.webp",
+            height: 80,
+            fit: BoxFit.cover,
+          ),
           const SizedBox(height: 8),
           Text(
-            center['name'],
+            center.name ?? '',
             style: const TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
           Text(
-            center['location'],
+            center.address ?? '',
             style: const TextStyle(fontSize: 12, color: Colors.grey),
             textAlign: TextAlign.center,
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/features/auth/presentation/views/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
+import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
 
@@ -36,11 +37,10 @@ class Routes {
     //user
     HomeScreen.routeName: (context) => HomeScreen(),
     BookingScreen.routeName: (context) => BookingScreen(),
-    AllSpecialtiesScreen.routeName: (context) =>
-        AllSpecialtiesScreen(specialties: []),
-    CenterDetailsScreen.routeName: (context) => CenterDetailsScreen(center: {}),
-    AllCentersScreen.routeName: (context) =>
-        AllCentersScreen(medicalCenters: []),
+    AllSpecialtiesScreen.routeName: (context) => AllSpecialtiesScreen(),
+    CenterDetailsScreen.routeName: (context) =>
+        CenterDetailsScreen(center: CentersModel()),
+    AllCentersScreen.routeName: (context) => AllCentersScreen(centers: []),
     DoctorDetailsScreen.routeName: (context) => DoctorDetailsScreen(
       doctorName: '',
       specialty: '',
