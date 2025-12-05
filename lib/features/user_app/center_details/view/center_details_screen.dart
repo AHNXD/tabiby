@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
 import 'sections/appbar_section.dart';
 import 'sections/header_section.dart';
 import 'sections/about_section.dart';
@@ -7,7 +8,7 @@ import 'sections/clinics_section.dart';
 
 class CenterDetailsScreen extends StatelessWidget {
   static const String routeName = "/center_details";
-  final Map<String, dynamic> center;
+  final CentersModel center;
 
   const CenterDetailsScreen({super.key, required this.center});
 
@@ -22,15 +23,12 @@ class CenterDetailsScreen extends StatelessWidget {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 HeaderSection(
-                  name: center['name'] ?? 'unknown_center'.tr(context),
-                  location: center['location'] ?? 'no_location'.tr(context),
-                  imageUrl: center['image'] ?? '',
-                  rating: center['rating'] ?? 0.0,
+                  name: center.name ?? 'unknown_center'.tr(context),
+                  location: center.address ?? 'no_location'.tr(context),
+                  imageUrl: 'assets/images/center.webp',
                 ),
                 AboutSection(
-                  description:
-                      center['description'] ??
-                      'default_center_description'.tr(context),
+                  description: 'default_center_description'.tr(context),
                 ),
                 const ClinicsSection(),
               ]),

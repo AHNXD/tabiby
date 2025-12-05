@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
 import '../../../../center_details/view/center_details_screen.dart';
 import '../../../../centers/presentation/view/all_centers_screen.dart';
 import '../../../../centers/presentation/view/widgets/center_card.dart';
-import '../widgets/data.dart';
 import '../widgets/section_header.dart';
 
-class ClinicsSection extends StatelessWidget {
-  const ClinicsSection({super.key});
-
+class CentersSection extends StatelessWidget {
+  const CentersSection({super.key, required this.centers});
+  final List<CentersModel> centers;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,8 +19,7 @@ class ClinicsSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    AllCentersScreen(medicalCenters: medicalCenters),
+                builder: (context) => AllCentersScreen(centers: centers),
               ),
             );
           },
@@ -33,14 +32,14 @@ class ClinicsSection extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.none,
-              itemCount: medicalCenters.length,
+              itemCount: centers.length,
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CenterDetailsScreen(center: medicalCenters[index]),
+                          CenterDetailsScreen(center: centers[index]),
                     ),
                   );
                 },
@@ -48,7 +47,7 @@ class ClinicsSection extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: 150,
-                    child: CenterCard(center: medicalCenters[index]),
+                    child: CenterCard(center: centers[index]),
                   ),
                 ),
               ),

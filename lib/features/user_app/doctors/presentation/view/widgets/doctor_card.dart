@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/doctors/data/models/doctor_model.dart';
 
 import '../../../../doctor_details/view/doctor_details_screen.dart';
 
 class DoctorCard extends StatelessWidget {
-  final Map<String, dynamic> doctor;
+  final DoctorsModel doctor;
 
   const DoctorCard({super.key, required this.doctor});
 
@@ -17,11 +18,11 @@ class DoctorCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => DoctorDetailsScreen(
-              doctorName: doctor['name'],
-              specialty: doctor['specialty'],
+              doctorName: doctor.name ?? '',
+              specialty: doctor.specialties!.name ?? '',
               experience: '15 ${"years_of_experience".tr(context)}',
-              imageUrl: doctor['image'],
-              rating: doctor['rating'].toString(),
+              imageUrl: doctor.img ?? 'assets/images/doctor.png',
+              rating: doctor.rate.toString(),
             ),
           ),
         );
@@ -52,42 +53,42 @@ class DoctorCard extends StatelessWidget {
               ),
             ),
             Text(
-              doctor['name'],
+              doctor.name ?? '',
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             Text(
-              doctor['specialty'],
+              doctor.specialties!.name ?? '',
               style: const TextStyle(color: Colors.grey, fontSize: 11),
             ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  doctor['isAvailable']
-                      ? FontAwesomeIcons.circleCheck
-                      : FontAwesomeIcons.circleXmark,
-                  color: doctor['isAvailable']
-                      ? Colors.green
-                      : Colors.redAccent,
-                  size: 13,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  doctor['isAvailable']
-                      ? 'available'.tr(context)
-                      : 'unavailable'.tr(context),
-                  style: TextStyle(
-                    color: doctor['isAvailable']
-                        ? Colors.green
-                        : Colors.redAccent,
-                    fontSize: 10,
-                  ),
-                ),
-                const SizedBox(width: 8),
+                // Icon(
+                //   doctor['isAvailable']
+                //       ? FontAwesomeIcons.circleCheck
+                //       : FontAwesomeIcons.circleXmark,
+                //   color: doctor['isAvailable']
+                //       ? Colors.green
+                //       : Colors.redAccent,
+                //   size: 13,
+                // ),
+                // const SizedBox(width: 4),
+                // Text(
+                //   doctor['isAvailable']
+                //       ? 'available'.tr(context)
+                //       : 'unavailable'.tr(context),
+                //   style: TextStyle(
+                //     color: doctor['isAvailable']
+                //         ? Colors.green
+                //         : Colors.redAccent,
+                //     fontSize: 10,
+                //   ),
+                // ),
+                // const SizedBox(width: 8),
                 const Icon(
                   FontAwesomeIcons.solidStar,
                   color: Colors.amber,
@@ -95,7 +96,7 @@ class DoctorCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '${doctor['rating']}',
+                  doctor.rate.toString(),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 11,

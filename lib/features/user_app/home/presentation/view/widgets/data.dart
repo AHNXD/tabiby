@@ -1,13 +1,4 @@
-final List<Map<String, dynamic>> specialties = [
-  {'icon': 'assets/icons/heart.png', 'name': 'Heart'},
-  {'icon': 'assets/icons/stomach.png', 'name': 'Stomach'},
-  {'icon': 'assets/icons/bones.png', 'name': 'Bones'},
-  {'icon': 'assets/icons/brain.png', 'name': 'Brain'},
-  {'icon': 'assets/icons/brain.png', 'name': 'Brain'},
-  {'icon': 'assets/icons/brain.png', 'name': 'Brain'},
-];
-
-final List<Map<String, dynamic>> doctors = [
+final List<Map<String, dynamic>> doctorsJSON = [
   {
     'image': 'assets/images/doctor1.jpg',
     'name': 'Dr. David Apactchy',
@@ -65,7 +56,7 @@ final List<Map<String, dynamic>> doctors = [
     'rating': 4.8,
   },
 ];
-final List<Map<String, dynamic>> medicalCenters = [
+final List<Map<String, dynamic>> medicalCentersJSON = [
   {
     'name': 'City Care Clinic',
     'image': 'assets/images/center.webp',

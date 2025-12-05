@@ -1,54 +1,57 @@
-// import 'promot_model.dart';
+import '../../../centers/data/models/centers_model.dart';
+import '../../../doctors/data/models/doctor_model.dart';
+import '../../../specialties/data/models/specialties_model.dart';
+import 'promot_model.dart';
 
-// class HomeModel {
-//   List<Promot>? promot;
-//   List<Specialties>? specialties;
-//   List<Doctors>? doctors;
-//   List<Centers>? centers;
+class HomeModel {
+  List<Promot>? promot;
+  List<SpecializationModel>? specialties;
+  List<DoctorsModel>? doctors;
+  List<CentersModel>? centers;
 
-//   HomeModel({this.promot, this.specialties, this.doctors, this.centers});
+  HomeModel({this.promot, this.specialties, this.doctors, this.centers});
 
-//   HomeModel.fromJson(Map<String, dynamic> json) {
-//     if (json['promot'] != null) {
-//       promot = <Promot>[];
-//       json['promot'].forEach((v) {
-//         promot!.add(new Promot.fromJson(v));
-//       });
-//     }
-//     if (json['specialties'] != null) {
-//       specialties = <Specialties>[];
-//       json['specialties'].forEach((v) {
-//         specialties!.add(new Specialties.fromJson(v));
-//       });
-//     }
-//     if (json['doctors'] != null) {
-//       doctors = <Doctors>[];
-//       json['doctors'].forEach((v) {
-//         doctors!.add(new Doctors.fromJson(v));
-//       });
-//     }
-//     if (json['centers'] != null) {
-//       centers = <Centers>[];
-//       json['centers'].forEach((v) {
-//         centers!.add(new Centers.fromJson(v));
-//       });
-//     }
-//   }
+  HomeModel.fromJson(Map<String, dynamic> json) {
+    if (json['promot'] != null) {
+      promot = <Promot>[];
+      json['promot'].forEach((v) {
+        promot!.add(Promot.fromJson(v));
+      });
+    }
+    if (json['specialties'] != null) {
+      specialties = <SpecializationModel>[];
+      json['specialties'].forEach((v) {
+        specialties!.add(SpecializationModel.fromJson(v));
+      });
+    }
+    if (json['doctors'] != null) {
+      doctors = <DoctorsModel>[];
+      json['doctors'].forEach((v) {
+        doctors!.add(DoctorsModel.fromJson(v));
+      });
+    }
+    if (json['centers'] != null) {
+      centers = <CentersModel>[];
+      json['centers'].forEach((v) {
+        centers!.add(CentersModel.fromJson(v));
+      });
+    }
+  }
 
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     if (this.promot != null) {
-//       data['promot'] = this.promot!.map((v) => v.toJson()).toList();
-//     }
-//     if (this.specialties != null) {
-//       data['specialties'] = this.specialties!.map((v) => v.toJson()).toList();
-//     }
-//     if (this.doctors != null) {
-//       data['doctors'] = this.doctors!.map((v) => v.toJson()).toList();
-//     }
-//     if (this.centers != null) {
-//       data['centers'] = this.centers!.map((v) => v.toJson()).toList();
-//     }
-//     return data;
-//   }
-// }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (promot != null) {
+      data['promot'] = promot!.map((v) => v.toJson()).toList();
+    }
+    if (specialties != null) {
+      data['specialties'] = specialties!.map((v) => v.toJson()).toList();
+    }
+    if (doctors != null) {
+      data['doctors'] = doctors!.map((v) => v.toJson()).toList();
+    }
+    if (centers != null) {
+      data['centers'] = centers!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}

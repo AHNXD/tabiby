@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../center_details/view/center_details_screen.dart';
 import 'widgets/center_card.dart';
 
 class AllCentersScreen extends StatelessWidget {
   static const String routeName = "/centers";
-  final List<Map<String, dynamic>> medicalCenters;
+  final List<CentersModel> centers;
 
-  const AllCentersScreen({super.key, required this.medicalCenters});
+  const AllCentersScreen({super.key, required this.centers});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,9 @@ class AllCentersScreen extends StatelessWidget {
             mainAxisSpacing: 10,
             childAspectRatio: 0.8,
           ),
-          itemCount: medicalCenters.length,
+          itemCount: centers.length,
           itemBuilder: (context, index) {
-            final center = medicalCenters[index];
+            final center = centers[index];
             return GestureDetector(
               onTap: () {
                 Navigator.push(

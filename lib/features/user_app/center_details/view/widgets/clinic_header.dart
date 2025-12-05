@@ -5,14 +5,12 @@ class ClinicHeader extends StatelessWidget {
   final String name;
   final String location;
   final String imageUrl;
-  final double rating;
 
   const ClinicHeader({
     super.key,
     required this.name,
     required this.location,
     required this.imageUrl,
-    required this.rating,
   });
 
   @override
@@ -52,20 +50,6 @@ class ClinicHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-
-              Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.amber, size: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    rating.toStringAsFixed(1),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

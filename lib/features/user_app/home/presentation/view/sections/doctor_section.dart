@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/doctors/data/models/doctor_model.dart';
 
 import '../../../../doctors/presentation/view/all_doctors_screen.dart';
-import '../widgets/data.dart';
+
 import '../../../../doctors/presentation/view/widgets/doctor_card.dart';
 import '../widgets/section_header.dart';
 
 class DoctorsSection extends StatelessWidget {
-  const DoctorsSection({super.key});
-
+  const DoctorsSection({super.key, required this.doctors});
+  final List<DoctorsModel>? doctors;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,7 +20,7 @@ class DoctorsSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AllDoctorsScreen(doctors: doctors),
+                builder: (context) => AllDoctorsScreen(doctors: doctors!),
               ),
             );
           },
@@ -33,12 +34,12 @@ class DoctorsSection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.none,
 
-              itemCount: doctors.length,
+              itemCount: doctors!.length,
               itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: 150,
-                  child: DoctorCard(doctor: doctors[index]),
+                  child: DoctorCard(doctor: doctors![index]),
                 ),
               ),
             ),

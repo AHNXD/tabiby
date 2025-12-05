@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../data/models/specialties_model.dart';
+
 class SpecialtyItem extends StatelessWidget {
-  final List<Map<String, dynamic>> Specialties;
+  final List<SpecializationModel> specialties;
   final VoidCallback? onSeeAll;
 
-  const SpecialtyItem({super.key, required this.Specialties, this.onSeeAll});
+  const SpecialtyItem({super.key, required this.specialties, this.onSeeAll});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +15,9 @@ class SpecialtyItem extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
-        itemCount: Specialties.length,
+        itemCount: specialties.length,
         itemBuilder: (context, index) {
-          final Specialty = Specialties[index];
+          final specialty = specialties[index];
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -36,14 +38,18 @@ class SpecialtyItem extends StatelessWidget {
                   ],
                 ),
                 child: Center(
-                  child: Image.asset(Specialty['icon'], width: 32, height: 32),
+                  child: Image.asset(
+                    specialty.img ?? 'assets/icons/appIcon.png',
+                    width: 32,
+                    height: 32,
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
               Expanded(
                 child: Text(
                   overflow: TextOverflow.ellipsis,
-                  Specialty['name'],
+                  specialty.name ?? '',
                   style: TextStyle(color: Colors.grey[700], fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
