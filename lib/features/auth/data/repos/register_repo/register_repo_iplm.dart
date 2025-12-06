@@ -25,11 +25,11 @@ class RegisterRepoIplm implements RegisterRepo {
       if (resp.statusCode == 201 && resp.data['status'] == true) {
         CacheHelper.setString(
           key: 'token',
-          value: resp.data['data']['user']['main_data']['token'],
+          value: resp.data['data']['user']['main_data ']['token'],
         );
         CacheHelper.setString(
           key: 'role',
-          value: resp.data['data']['user']['main_data']['role'].toString(),
+          value: resp.data['data']['user']['main_data ']['role'].toString(),
         );
         UserModel user = UserModel.fromJson(resp.data['data']['user']);
 
@@ -40,6 +40,7 @@ class RegisterRepoIplm implements RegisterRepo {
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
     } catch (e) {
+      print(e.toString());
       return left(ServerFailure(e.toString()));
     }
   }
