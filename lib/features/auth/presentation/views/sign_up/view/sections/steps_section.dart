@@ -6,6 +6,7 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart';
 
+import '../../../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../../../view-model/register_cubit/register_cubit.dart';
 import '../widgets/step1_widget.dart';
 import '../widgets/step2_widget.dart';
@@ -103,7 +104,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
             context,
             "registration_successful".tr(context),
             Colors.green,
-          );
+          );context.read<UserCubit>().getProfile();
           Navigator.pushNamedAndRemoveUntil(
             context,
             HomeScreen.routeName,

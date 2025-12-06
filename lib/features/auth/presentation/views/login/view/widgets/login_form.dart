@@ -7,6 +7,7 @@ import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/main_screen.dart';
 import 'package:tabiby/features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
 
+import '../../../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../../../view-model/login_cubit/login_cubit.dart';
 import 'create_account_text.dart';
 import 'login_inputs.dart';
@@ -52,6 +53,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void _handleSuccess(String role) {
     messages(context, "login_success".tr(context), Colors.green);
+    context.read<UserCubit>().getProfile();
     if (role == "patient") {
       Navigator.pushNamedAndRemoveUntil(
         context,
