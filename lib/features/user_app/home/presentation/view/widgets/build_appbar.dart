@@ -7,12 +7,10 @@ import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit
 class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
   const BuildAppbar({
     super.key,
-    required this.name,
     this.isDoctor = false,
     this.toolbarHeight = kToolbarHeight + 16.0,
   });
   final double toolbarHeight;
-  final String name;
   final bool isDoctor;
 
   @override

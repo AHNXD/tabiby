@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/widgets/custom_appbar.dart';
+import '../../../../core/utils/app_localizations.dart';
 import 'widgets/colored_text_bar.dart';
 import 'widgets/appointment_list.dart';
 import 'widgets/data.dart';
@@ -12,6 +14,10 @@ class UserAppointmentScreen extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        appBar: CustomAppbar(
+          title: 'my_appointments'.tr(context),
+          showBackButton: false,
+        ),
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),

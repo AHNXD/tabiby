@@ -161,5 +161,6 @@
     "logout_confirmation_message":"هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "logout_success":"تم تسجيل الخروج بنجاح!",
     "logging_out":"جاري تسجيل الخروج...",
-    "error":"خطأ"
+    "error":"خطأ",
+    "diagnose":"تشخيص"
 }

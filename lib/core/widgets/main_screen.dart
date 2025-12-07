@@ -5,6 +5,8 @@ import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart
 import 'package:tabiby/features/user_app/user/presentation/view/user_profile.dart';
 import 'package:tabiby/features/user_app/user_appointments/view/appointment_screen.dart';
 
+import '../../features/user_app/diagnose/presentation/views/category_screen.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
   static const String routeName = "/main";
@@ -14,12 +16,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   // List of the actual screens to display in the body
   final List<Widget> _screens = [
-    const UserAppointmentScreen(),
     const HomeScreen(),
+    const UserAppointmentScreen(),
+    const CategoryScreen(),
     const UserProfileScreen(),
   ];
 
@@ -38,14 +41,19 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: 'home'.tr(context),
+          ),
+          BottomNavigationBarItem(
             icon: const Icon(Icons.table_chart_outlined),
             activeIcon: const Icon(Icons.table_chart),
             label: 'my_appointments'.tr(context),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: const Icon(Icons.home),
-            label: 'home'.tr(context),
+            icon: const Icon(Icons.medical_services_outlined),
+            activeIcon: const Icon(Icons.medical_services),
+            label: 'diagnose'.tr(context),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person_outline),

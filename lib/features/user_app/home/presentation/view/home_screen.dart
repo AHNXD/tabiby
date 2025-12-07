@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
-import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/home/presentation/view/sections/specialties_section.dart';
 
 import '../../data/repo/home_repo.dart';
@@ -20,14 +18,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryColors,
-        onPressed: () {
-          Navigator.pushNamed(context, CategoryScreen.routeName);
-        },
-        child: Icon(Icons.medical_information),
-      ),
-      appBar: BuildAppbar(name: "Fulan Al-Fulani"),
+      appBar: BuildAppbar(),
       body: BlocProvider(
         create: (context) => HomeCubit(getit.get<HomeRepo>())..getHome(),
         child: SafeArea(

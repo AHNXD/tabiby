@@ -161,5 +161,6 @@
     "logout_confirmation_message":"Are you sure you want to log out?",
     "logout_success":"Logout Successful!",
     "logging_out":"Logging Out...",
-    "error":"Error"
+    "error":"Error",
+    "diagnose":"Diagnose"
 }

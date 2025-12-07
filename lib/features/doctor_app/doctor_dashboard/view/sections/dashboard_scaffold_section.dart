@@ -9,7 +9,7 @@ class DashboardScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BuildAppbar(name: "Tabibi Doctor", isDoctor: true),
+      appBar: BuildAppbar(isDoctor: true),
       body: SafeArea(child: body),
     );
   }

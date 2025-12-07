@@ -40,7 +40,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: CustomAppbar(title: 'diagnose_category'.tr(context)),
+      appBar: CustomAppbar(
+        title: 'diagnose_category'.tr(context),
+        showBackButton: false,
+      ),
       body: BlocBuilder<DiagnosisCubit, DiagnosisState>(
         builder: (context, state) {
           switch (state.categoryState) {
