@@ -10,7 +10,7 @@ import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_s
 import '../../../../../core/locale/locale_cubit.dart';
 import '../../../../auth/presentation/view-model/logout_cubit/logout_cubit.dart';
 import '../../../privacy_policy/presentation/view/privacy_policy_screen.dart';
-import '../../../terms_and_condition_screen/presentation/view/terms_and_conditions_screen.dart';
+import '../../../terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 import '../widgets/settings_tile.dart';
 import 'settings_header_section.dart';
 

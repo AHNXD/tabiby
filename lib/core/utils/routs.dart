@@ -15,7 +15,7 @@ import '../../features/doctor_app/appointment_details_doctor/view/appointment_de
 import '../../features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
 import '../../features/shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
 import '../../features/shared/settings/view/settings_screen.dart';
-import '../../features/shared/terms_and_condition_screen/presentation/view/terms_and_conditions_screen.dart';
+import '../../features/shared/terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 import '../../features/shared/welcome/view/welcome_screen.dart';
 import '../../features/user_app/add_appointment/view/booking_screen.dart';
 import '../../features/user_app/specialties/presentation/view/all_specialties_screen.dart';

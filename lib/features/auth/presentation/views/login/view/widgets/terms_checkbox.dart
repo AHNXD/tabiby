@@ -4,7 +4,7 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 import '../../../../../../shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
-import '../../../../../../shared/terms_and_condition_screen/presentation/view/terms_and_conditions_screen.dart';
+import '../../../../../../shared/terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 
 class TermsCheckbox extends StatelessWidget {
   final bool agreeToTerms;
@@ -48,12 +48,17 @@ class TermsCheckbox extends StatelessWidget {
             text: TextSpan(
               style: const TextStyle(fontSize: 12, color: AppColors.textColor),
               children: [
-                TextSpan(text: 'read_and_agree_conditions'.tr(context)),
                 TextSpan(
-                  text: 'terms_conditions'.tr(context),
+                  text: 'read_and_agree_conditions'.tr(context),
+                  style: TextStyle(fontFamily: "cocon-next-arabic"),
+                ),
+
+                TextSpan(
+                  text: " ${'terms_conditions'.tr(context)}",
                   style: const TextStyle(
                     color: AppColors.primaryColors,
                     decoration: TextDecoration.underline,
+                    fontFamily: "cocon-next-arabic",
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => Navigator.pushNamed(
@@ -61,12 +66,16 @@ class TermsCheckbox extends StatelessWidget {
                       TermsAndConditionsScreen.routeName,
                     ),
                 ),
-                TextSpan(text: ' ${"and".tr(context)} '),
+                TextSpan(
+                  text: ' ${"and".tr(context)} ',
+                  style: TextStyle(fontFamily: "cocon-next-arabic"),
+                ),
                 TextSpan(
                   text: 'privacy_policy'.tr(context),
                   style: const TextStyle(
                     color: AppColors.primaryColors,
                     decoration: TextDecoration.underline,
+                    fontFamily: "cocon-next-arabic",
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => Navigator.pushNamed(

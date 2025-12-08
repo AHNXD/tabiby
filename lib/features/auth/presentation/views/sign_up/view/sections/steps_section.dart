@@ -163,18 +163,14 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                     addressCtrl: addressCtrl,
                     weightCtrl: weightCtrl,
                     heightCtrl: heightCtrl,
-                    selectedGender: gender, // Pass current value
+                    selectedGender: gender,
                     onGenderChanged: (val) => setState(() => gender = val),
                   ),
                   Step3Widget(
-                    gender: gender ?? 'female'.tr(context),
-                    hasChildren: gender == 'male'.tr(context)
-                        ? false
-                        : hasChildren,
+                    gender: gender ?? 'female',
+                    hasChildren: gender == 'male' ? false : hasChildren,
                     isSmoke: isSmoke,
-                    numberOfChildren: gender == 'male'.tr(context)
-                        ? 0
-                        : numberOfChildren,
+                    numberOfChildren: gender == 'male' ? 0 : numberOfChildren,
                     agreeToTerms: agreeToTerms,
                     selectedDate: selectedBirthDate,
                     isLoading: state is RegisterLoading,
@@ -184,7 +180,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                     onMaritalStatusChanged: (val) =>
                         setState(() => maritalStatus = val),
                     onChildrenChanged: (val) {
-                      if (gender != 'male'.tr(context)) {
+                      if (gender != 'male') {
                         setState(() {
                           hasChildren = val;
                           if (val == false) numberOfChildren = 0;
@@ -192,20 +188,19 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                       }
                     },
                     onIncrement: () {
-                      if (gender != 'male'.tr(context)) {
+                      if (gender != 'male') {
                         setState(() => numberOfChildren++);
                       }
                     },
                     onDecrement: () {
-                      if (gender != 'male'.tr(context) &&
-                          numberOfChildren > 0) {
+                      if (gender != 'male' && numberOfChildren > 0) {
                         setState(() => numberOfChildren--);
                       }
                     },
                     onAgreeToggle: () =>
                         setState(() => agreeToTerms = !agreeToTerms),
                     onSignUp: () => _onSignUpPressed(context),
-                    maritalStatus: 'single'.tr(context),
+                    maritalStatus: 'single',
                   ),
                 ],
               ),

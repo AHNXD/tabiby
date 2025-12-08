@@ -48,7 +48,7 @@ class Step2Widget extends StatelessWidget {
                 const SizedBox(height: 30),
                 CustomDropdownField(
                   hintText: 'gender'.tr(context),
-                  items: ['male'.tr(context), 'female'.tr(context)],
+                  items: ['male', 'female'],
                   value: selectedGender,
                   onChanged: (value) {
                     if (value != null) onGenderChanged(value);
@@ -67,6 +67,7 @@ class Step2Widget extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   validator: (val) =>
                       Validator.validate(val, ValidationState.price, context),
+                  suffixIcon: Icons.monitor_weight_rounded,
                 ),
                 const SizedBox(height: 30),
                 CustomTextField(
@@ -75,6 +76,7 @@ class Step2Widget extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   validator: (val) =>
                       Validator.validate(val, ValidationState.price, context),
+                  suffixIcon: Icons.height,
                 ),
                 const SizedBox(height: 40),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 
@@ -39,7 +40,12 @@ class CustomDropdownField extends StatelessWidget {
         ),
       ),
       items: items
-          .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+          .map<DropdownMenuItem<String>>(
+            (item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(item.tr(context)),
+            ),
+          )
           .toList(),
     );
   }
