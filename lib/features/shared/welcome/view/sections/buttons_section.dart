@@ -16,11 +16,7 @@ class ButtonsSection extends StatelessWidget {
         PrimaryButton(
           text: "login".tr(context),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              LoginScreen.routeName,
-              (Route<dynamic> route) => false,
-            );
+            Navigator.pushNamed(context, LoginScreen.routeName);
           },
         ),
 
@@ -28,11 +24,7 @@ class ButtonsSection extends StatelessWidget {
         SecondryButton(
           text: "sign_up".tr(context),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              SignUpScreen.routeName,
-              (Route<dynamic> route) => false,
-            );
+            Navigator.pushNamed(context, SignUpScreen.routeName);
           },
         ),
       ],

@@ -41,7 +41,7 @@ class ResultScreen extends StatelessWidget {
               return const LoadingView();
             case ViewState.error:
               return ErrorView(
-                message: state.errorMessage,
+                message: state.errorMessage.tr(context),
                 // Give a more helpful retry text
                 onRetry: () => _startOver(context),
               );

@@ -92,7 +92,7 @@ class AllSpecialtiesScreen extends StatelessWidget {
             } else if (state is SpecialtiesError) {
               return CustomErrorWidget(
                 textColor: Colors.black,
-                errorMessage: state.errorMsg,
+                errorMessage: state.errorMsg.tr(context),
                 onRetry: () {
                   context.read<SpecialtiesCubit>().getSpecialties();
                 },

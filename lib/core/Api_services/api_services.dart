@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:tabiby/features/shared/welcome/view/welcome_screen.dart';
 import '../utils/cache_helper.dart';
 import '../utils/constats.dart';
+import 'auth_interceptor.dart';
 import 'urls.dart';
 
 class ApiServices {
@@ -20,16 +22,16 @@ class ApiServices {
         maxWidth: 50,
       ),
     );
-    // _dio.interceptors.add(
-    //   AuthInterceptor(
-    //     onUnauthorized: () {
-    //       navigatorKey.currentState?.pushNamedAndRemoveUntil(
-    //         LoginPage.routeName,
-    //         (route) => false,
-    //       );
-    //     },
-    //   ),
-    // );
+    _dio.interceptors.add(
+      AuthInterceptor(
+        onUnauthorized: () {
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
+            WelcomeScreen.routeName,
+            (route) => false,
+          );
+        },
+      ),
+    );
   }
   Future<String?> _getStoredToken() async {
     return CacheHelper.getData(key: 'token');

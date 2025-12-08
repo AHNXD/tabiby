@@ -3,6 +3,8 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/features/auth/presentation/views/otp/presentation/view/otp_screen.dart';
+import '../../../../../../../core/utils/enums.dart';
+import '../../../../../../../core/utils/validation.dart';
 import '../../../../../../../core/widgets/custome_text_field.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
 
@@ -35,9 +37,11 @@ class ResetPasswordScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 32),
                   CustomTextField(
-                    hintText: "phone".tr(context),
-                    suffixIcon: Icons.phone,
-                    keyboardType: TextInputType.phone,
+                    hintText: "email".tr(context),
+                    suffixIcon: Icons.email,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (val) =>
+                        Validator.validate(val, ValidationState.email, context),
                   ),
                 ],
               ),

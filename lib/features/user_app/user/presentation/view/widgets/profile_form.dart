@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../core/utils/colors.dart';
+import '../../../../../../core/utils/enums.dart';
+import '../../../../../../core/utils/validation.dart';
+import '../../../../../../core/widgets/custome_text_field.dart';
+import '../../../../../auth/presentation/views/sign_up/view/widgets/custom_dropdown_field.dart';
+import '../../../../../auth/presentation/views/sign_up/view/widgets/selectable_circle.dart';
 
 class ProfileForm extends StatelessWidget {
   final TextEditingController fnController;
@@ -12,9 +17,9 @@ class ProfileForm extends StatelessWidget {
   final TextEditingController heightController;
   final TextEditingController weightController;
   final String? maritalStatus;
-  final String? isSmoker;
+  final bool? isSmoke;
+  final ValueChanged<bool?> onSmokeChanged;
   final ValueChanged<String?> onMaritalStatusChanged;
-  final ValueChanged<String?> onIsSmokerChanged;
 
   const ProfileForm({
     super.key,
@@ -26,149 +31,142 @@ class ProfileForm extends StatelessWidget {
     required this.heightController,
     required this.weightController,
     required this.maritalStatus,
-    required this.isSmoker,
+    required this.isSmoke,
+    required this.onSmokeChanged,
     required this.onMaritalStatusChanged,
-    required this.onIsSmokerChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextFormField(
+        CustomTextField(
+          hintText: 'first_name'.tr(context),
           controller: fnController,
-          decoration: InputDecoration(
-            labelText: 'first_name'.tr(context),
-            prefixIcon: const Icon(
-              Icons.person_outline,
-              color: AppColors.primaryColors,
-            ),
-          ),
-          validator: (value) => value == null || value.isEmpty
-              ? 'Please enter your first name'
-              : null,
+          validator: (val) =>
+              Validator.validate(val, ValidationState.normal, context),
         ),
         const SizedBox(height: 16),
-        TextFormField(
+
+        CustomTextField(
+          hintText: 'last_name'.tr(context),
           controller: lnController,
-          decoration: InputDecoration(
-            labelText: 'last_name'.tr(context),
-            prefixIcon: const Icon(
-              Icons.person_outline,
-              color: AppColors.primaryColors,
-            ),
-          ),
-          validator: (value) => value == null || value.isEmpty
-              ? 'Please enter your last name'
-              : null,
+          validator: (val) =>
+              Validator.validate(val, ValidationState.normal, context),
         ),
         const SizedBox(height: 16),
-        TextFormField(
+
+        CustomTextField(
+          hintText: 'email'.tr(context),
           controller: emailController,
-          decoration: InputDecoration(
-            labelText: 'email'.tr(context),
-            prefixIcon: const Icon(
-              Icons.email_outlined,
-              color: AppColors.primaryColors,
-            ),
-          ),
           keyboardType: TextInputType.emailAddress,
-          validator: (value) => value == null || !value.contains('@')
-              ? 'Please enter a valid email'
-              : null,
+          suffixIcon: Icons.email,
+          validator: (val) =>
+              Validator.validate(val, ValidationState.email, context),
         ),
         const SizedBox(height: 16),
-        TextFormField(
+
+        CustomTextField(
+          hintText: 'phone'.tr(context),
           controller: phoneController,
-          decoration: InputDecoration(
-            labelText: 'phone'.tr(context),
-            prefixIcon: const Icon(
-              Icons.phone_outlined,
-              color: AppColors.primaryColors,
-            ),
-          ),
           keyboardType: TextInputType.phone,
+          suffixIcon: Icons.phone,
+          validator: (val) =>
+              Validator.validate(val, ValidationState.phoneNumber, context),
         ),
         const SizedBox(height: 16),
-        TextFormField(
+
+        CustomTextField(
+          hintText: 'address'.tr(context),
           controller: residenceController,
-          decoration: InputDecoration(
-            labelText: 'residence'.tr(context),
-            prefixIcon: const Icon(
-              Icons.home_outlined,
-              color: AppColors.primaryColors,
-            ),
-          ),
+          suffixIcon: Icons.home,
+          validator: (val) =>
+              Validator.validate(val, ValidationState.normal, context),
         ),
         const SizedBox(height: 16),
-        DropdownButtonFormField<String>(
+
+        CustomDropdownField(
+          hintText: 'marital_status'.tr(context),
           value: maritalStatus,
-          decoration: InputDecoration(
-            labelText: 'marital_status'.tr(context),
-            prefixIcon: const Icon(
-              Icons.favorite_border,
-              color: AppColors.primaryColors,
-            ),
-          ),
-          items:
-              [
-                    'single'.tr(context),
-                    'married'.tr(context),
-                    'divorced'.tr(context),
-                    'widowed'.tr(context),
-                  ]
-                  .map(
-                    (label) =>
-                        DropdownMenuItem(value: label, child: Text(label)),
-                  )
-                  .toList(),
+          items: [
+            'single'.tr(context),
+            'married'.tr(context),
+            'divorced'.tr(context),
+            'widowed'.tr(context),
+          ],
           onChanged: onMaritalStatusChanged,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'please_select_marital_status'.tr(context);
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 16),
+
         Row(
           children: [
             Expanded(
-              child: TextFormField(
+              child: CustomTextField(
+                hintText: 'height'.tr(context),
                 controller: heightController,
-                decoration: InputDecoration(
-                  labelText: 'height'.tr(context),
-                  prefixIcon: const Icon(
-                    Icons.height,
-                    color: AppColors.primaryColors,
-                  ),
-                ),
                 keyboardType: TextInputType.number,
+                suffixIcon: Icons.height,
+                validator: (val) =>
+                    Validator.validate(val, ValidationState.price, context),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: TextFormField(
+              child: CustomTextField(
+                hintText: 'weight'.tr(context),
                 controller: weightController,
-                decoration: InputDecoration(
-                  labelText: 'weight'.tr(context),
-                  prefixIcon: const Icon(
-                    Icons.monitor_weight_outlined,
-                    color: AppColors.primaryColors,
-                  ),
-                ),
                 keyboardType: TextInputType.number,
+                suffixIcon: Icons.monitor_weight,
+                validator: (val) =>
+                    Validator.validate(val, ValidationState.price, context),
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        DropdownButtonFormField<String>(
-          value: isSmoker,
-          decoration: InputDecoration(
-            labelText: 'smoker'.tr(context),
-            prefixIcon: Icon(Icons.smoke_free, color: AppColors.primaryColors),
-          ),
-          items: ['yes'.tr(context), 'no'.tr(context)]
-              .map(
-                (label) => DropdownMenuItem(value: label, child: Text(label)),
-              )
-              .toList(),
-          onChanged: onIsSmokerChanged,
+
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 55,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 24,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF6F6F6),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Text(
+                  'are_you_a_smoker'.tr(context),
+                  style: const TextStyle(
+                    color: AppColors.textFieldColor,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            SelectableCircle(
+              icon: Icons.check,
+              isSelected: isSmoke == true,
+              onTap: () => onSmokeChanged(true),
+            ),
+            const SizedBox(width: 10),
+            SelectableCircle(
+              icon: Icons.close,
+              isSelected: isSmoke == false,
+              selectedColor: Colors.red,
+              onTap: () => onSmokeChanged(false),
+            ),
+          ],
         ),
       ],
     );

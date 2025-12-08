@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 import 'package:tabiby/core/utils/functions.dart';
-import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart';
+import 'package:tabiby/core/widgets/main_screen.dart';
 
 import '../../../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../../../view-model/register_cubit/register_cubit.dart';
@@ -23,7 +23,8 @@ class StepsSectionWrapper extends StatefulWidget {
 class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
   final PageController _pageController = PageController();
   int currentStep = 0;
-
+  final GlobalKey<FormState> _step1Key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _step2Key = GlobalKey<FormState>();
   final TextEditingController firstNameCtrl = TextEditingController();
   final TextEditingController lastNameCtrl = TextEditingController();
   final TextEditingController phoneCtrl = TextEditingController();
@@ -64,10 +65,32 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
   }
 
   void goToNext() {
-    if (currentStep < 2) goToStep(currentStep + 1);
+    if (currentStep == 0) {
+      if (_step1Key.currentState!.validate()) {
+        goToStep(currentStep + 1);
+      }
+    } else if (currentStep == 1) {
+      if (_step2Key.currentState!.validate()) {
+        goToStep(currentStep + 1);
+      }
+    }
   }
 
   void _onSignUpPressed(BuildContext context) {
+    if (maritalStatus == null) {
+      messages(context, 'please_select_marital_status'.tr(context), Colors.red);
+      return;
+    }
+
+    if (isSmoke == null) {
+      messages(context, 'please_select_smoking_status'.tr(context), Colors.red);
+      return;
+    }
+
+    if (selectedBirthDate == null) {
+      messages(context, 'select_your_birth'.tr(context), Colors.red);
+      return;
+    }
     if (!agreeToTerms) {
       messages(context, 'please_agree_terms'.tr(context), Colors.red);
       return;
@@ -104,14 +127,15 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
             context,
             "registration_successful".tr(context),
             Colors.green,
-          );context.read<UserCubit>().getProfile();
+          );
+          context.read<UserCubit>().getProfile();
           Navigator.pushNamedAndRemoveUntil(
             context,
-            HomeScreen.routeName,
+            MainScreen.routeName,
             (route) => false,
           );
         } else if (state is RegisterError) {
-          messages(context, state.errorMsg, Colors.red);
+          messages(context, state.errorMsg.tr(context), Colors.red);
         }
       },
       builder: (context, state) {
@@ -124,8 +148,8 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                 controller: _pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  // Pass controllers down
                   Step1Widget(
+                    formKey: _step1Key,
                     onNext: goToNext,
                     firstNameCtrl: firstNameCtrl,
                     lastNameCtrl: lastNameCtrl,
@@ -134,8 +158,9 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                     passwordCtrl: passwordCtrl,
                   ),
                   Step2Widget(
+                    formKey: _step2Key,
                     onNext: goToNext,
-                    housingCtrl: addressCtrl,
+                    addressCtrl: addressCtrl,
                     weightCtrl: weightCtrl,
                     heightCtrl: heightCtrl,
                     selectedGender: gender, // Pass current value
@@ -152,8 +177,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                         : numberOfChildren,
                     agreeToTerms: agreeToTerms,
                     selectedDate: selectedBirthDate,
-                    isLoading:
-                        state is RegisterLoading, // Handle loading state in UI
+                    isLoading: state is RegisterLoading,
                     onDateChanged: (val) =>
                         setState(() => selectedBirthDate = val),
                     onSmokeChanged: (val) => setState(() => isSmoke = val),

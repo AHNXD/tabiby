@@ -1,93 +1,87 @@
-  import 'constats.dart';
+import 'app_localizations.dart';
 import 'enums.dart';
+import 'package:flutter/material.dart';
 
 class Validator {
-  static String? validate(String? text, ValidationState state) {
+  static String? validate(
+    String? text,
+    ValidationState state,
+    BuildContext context,
+  ) {
     if (text == null || text.trim().isEmpty) {
-      return _requiredFieldMessage(state);
+      return _requiredFieldMessage(state, context);
     }
 
     switch (state) {
       case ValidationState.email:
-        return _validateEmail(text);
+        return _validateEmail(text, context);
       case ValidationState.phoneNumber:
-        return _validatePhoneNumber(text);
+        return _validatePhoneNumber(text, context);
       case ValidationState.password:
-        return _validatePassword(text);
+        return _validatePassword(text, context);
       case ValidationState.price:
-        return _validatePrice(text);
+        return _validatePrice(text, context);
       case ValidationState.normal:
     }
     return null;
   }
 
-  static String? _validateEmail(String text) {
+  static String? _validateEmail(String text, BuildContext context) {
     const emailPattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
     final emailRegex = RegExp(emailPattern);
 
     if (!emailRegex.hasMatch(text)) {
-      return lang == 'en'
-          ? "Invalid email format"
-          : "تنسيق البريد الإلكتروني غير صالح";
+      return 'invalid_email_format'.tr(context);
     }
     return null;
   }
 
-  static String? _validatePhoneNumber(String text) {
-    const phonePattern = r'^(\+|\d{1,2})?\s?\(?\d{3}\)?[-\s]\d{3}-\d{4}$';
+  static String? _validatePhoneNumber(String text, BuildContext context) {
+    const phonePattern = r'^09\d{8}$';
     final phoneRegex = RegExp(phonePattern);
 
     if (!phoneRegex.hasMatch(text)) {
-      return lang == 'en'
-          ? "Invalid phone number format"
-          : "تنسيق رقم الهاتف غير صالح";
+      return 'invalid_phone_format_09'.tr(context);
     }
     return null;
   }
 
-  static String? _validatePassword(String text) {
+  static String? _validatePassword(String text, BuildContext context) {
     if (text.length < 8) {
-      return lang == 'en'
-          ? "Password must be at least 8 characters long"
-          : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل";
+      return 'password_min_length_8'.tr(context);
     }
     return null;
   }
 
-  static String? _validatePrice(String text) {
+  static String? _validatePrice(String text, BuildContext context) {
     final price = double.tryParse(text);
 
     if (price == null) {
-      return lang == 'en'
-          ? "Please enter a valid number"
-          : "الرجاء إدخال رقم صحيح";
+      return 'enter_valid_number'.tr(context);
     } else if (price <= 0) {
-      return lang == 'en'
-          ? "Price must be greater than zero"
-          : "الرقم يجب أن يكون أكبر من الصفر";
+      return 'price_must_be_greater_than_zero'.tr(context);
     }
     return null;
   }
 
   static String? validateConfirmPassword(
-      String? confirmPassword, String? originalPassword) {
+    String? confirmPassword,
+    String? originalPassword,
+    BuildContext context,
+  ) {
     if (confirmPassword == null || confirmPassword.trim().isEmpty) {
-      return lang == 'en'
-          ? "Please confirm your password"
-          : "يرجى تأكيد كلمة المرور";
+      return 'please_confirm_password'.tr(context);
     }
     if (confirmPassword != originalPassword) {
-      return lang == 'en'
-          ? "Passwords do not match"
-          : "كلمات المرور غير متطابقة";
+      return 'passwords_do_not_match'.tr(context);
     }
     return null;
   }
 
-  static String? _requiredFieldMessage(ValidationState state) {
-    if (state == ValidationState.price) {
-      return lang == 'en' ? "This field is required" : "هذا الحقل مطلوب";
-    }
-    return lang == 'en' ? "This field is required" : "هذا الحقل مطلوب";
+  static String? _requiredFieldMessage(
+    ValidationState state,
+    BuildContext context,
+  ) {
+    return 'this_field_is_required'.tr(context);
   }
 }

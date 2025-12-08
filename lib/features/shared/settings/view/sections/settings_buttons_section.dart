@@ -114,7 +114,7 @@ class SettingsButtonsSection extends StatelessWidget {
             (Route<dynamic> route) => false,
           );
         } else if (state is LogoutError) {
-          messages(context, state.errorMsg, Colors.red);
+          messages(context, state.errorMsg.tr(context), Colors.red);
         }
       },
       child: BlocBuilder<LogoutCubit, LogoutState>(

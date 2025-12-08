@@ -21,6 +21,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
@@ -40,6 +41,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void onLoginPressed() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
     if (!agreeToTerms) {
       messages(context, 'please_agree_terms'.tr(context), Colors.red);
 
@@ -80,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
         if (state is LoginSuccess) {
           _handleSuccess(state.role);
         } else if (state is LoginError) {
-          _handleError(state.errorMsg);
+          _handleError(state.errorMsg.tr(context));
         }
       },
       child: BlocBuilder<LoginCubit, LoginState>(
@@ -106,6 +110,7 @@ class _LoginFormState extends State<LoginForm> {
               const SizedBox(height: 40),
 
               LoginInputs(
+                formKey: _formKey,
                 phoneController: phoneController,
                 passwordController: passwordController,
                 isLoading: isLoading,
