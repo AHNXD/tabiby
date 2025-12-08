@@ -1,10 +1,13 @@
 // ignore_for_file: strict_top_level_inference
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import '../Api_services/api_services.dart';
 import '../widgets/cutom_dialog.dart';
 import 'constats.dart';
+import 'services_locater.dart';
 
 Future<void> toggleScreenshot() async {
   if (isSecureMode) {
@@ -22,6 +25,19 @@ Future<void> enableScreenshot() async {
 Future<void> disableScreenshot() async {
   await noScreenshot.screenshotOff();
   isSecureMode = true;
+}
+
+void resetApiServicesForNewLanguage(String newLanguageCode) {
+  getit.unregister<ApiServices>();
+
+  getit.registerLazySingleton<ApiServices>(
+    () => ApiServices(getit.get<Dio>(), appLanguage: newLanguageCode),
+  );
+
+  // Note: All Repositories relying on ApiServices will still use the old instance
+  // until they are accessed again if they are registered as Singletons.
+  // In a clean architecture, resetting the Dio interceptor is often cleaner,
+  // but since you made ApiServices hold the language, this is the most direct fix.
 }
 
 //navigators

@@ -8,7 +8,8 @@ import 'urls.dart';
 
 class ApiServices {
   final Dio _dio;
-  ApiServices(this._dio) {
+  final String _appLanguage;
+  ApiServices(this._dio,{required String appLanguage}) :_appLanguage = appLanguage{
     _dio.options.baseUrl = Urls.baseUrl;
     _dio.interceptors.add(
       PrettyDioLogger(
@@ -43,7 +44,7 @@ class ApiServices {
       'Content-Type': 'application/json',
       "Accept": 'application/json',
       "Accept-Charset": "application/json",
-      "Accept-Language": lang,
+      "Accept-Language": _appLanguage,
     };
 
     if (token != null && token.isNotEmpty) {

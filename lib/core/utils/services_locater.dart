@@ -15,6 +15,7 @@ import '../../features/user_app/specialties/data/repos/user_repo_iplm.dart';
 import '../../features/user_app/user/data/repos/user_repo.dart';
 import '../../features/user_app/user/data/repos/user_repo_iplm.dart';
 import '../Api_services/api_services.dart';
+import '../locale/locale_cubit.dart';
 
 final getit = GetIt.instance;
 
@@ -29,8 +30,19 @@ void setupLocatorServices() {
       ),
     ),
   );
+
+  getit.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
   // init API Service
-  getit.registerLazySingleton<ApiServices>(() => ApiServices(getit.get<Dio>()));
+  getit.registerLazySingleton<ApiServices>(() {
+    // Get the LocaleCubit instance
+    final localeCubit = getit.get<LocaleCubit>();
+
+    // Access the current language code from the Cubit's state
+    final currentLangCode = localeCubit.state.locale.languageCode;
+
+    // Pass the language code to the ApiServices constructor
+    return ApiServices(getit.get<Dio>(), appLanguage: currentLangCode);
+  });
 
   // auth singleton
   getit.registerSingleton<RegisterRepo>(
