@@ -4,9 +4,13 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 import 'package:tabiby/features/auth/presentation/views/login/view/login_screen.dart';
+import 'package:tabiby/features/shared/about_us/presentation/view/about_us_screen.dart';
+import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_screen.dart';
 
 import '../../../../../core/locale/locale_cubit.dart';
 import '../../../../auth/presentation/view-model/logout_cubit/logout_cubit.dart';
+import '../../../privacy_policy/presentation/view/privacy_policy_screen.dart';
+import '../../../terms_and_condition_screen/presentation/view/terms_and_conditions_screen.dart';
 import '../widgets/settings_tile.dart';
 import 'settings_header_section.dart';
 
@@ -21,9 +25,10 @@ class SettingsButtonsSection extends StatelessWidget {
             .state
             .locale
             .languageCode;
-        void _setLanguage(String value) async {
+        void setLanguage(String value) async {
           await dialogContext.read<LocaleCubit>().changeLanguage(value);
 
+          // ignore: use_build_context_synchronously
           Navigator.of(dialogContext).pop();
         }
 
@@ -39,11 +44,11 @@ class SettingsButtonsSection extends StatelessWidget {
                   groupValue: currentLanguageCode,
                   onChanged: (String? value) {
                     if (value != null) {
-                      _setLanguage(value);
+                      setLanguage(value);
                     }
                   },
                 ),
-                onTap: () => _setLanguage('ar'),
+                onTap: () => setLanguage('ar'),
               ),
 
               ListTile(
@@ -53,11 +58,11 @@ class SettingsButtonsSection extends StatelessWidget {
                   groupValue: currentLanguageCode,
                   onChanged: (String? value) {
                     if (value != null) {
-                      _setLanguage(value);
+                      setLanguage(value);
                     }
                   },
                 ),
-                onTap: () => _setLanguage('en'),
+                onTap: () => setLanguage('en'),
               ),
             ],
           ),
@@ -137,22 +142,28 @@ class SettingsButtonsSection extends StatelessWidget {
               SettingsTile(
                 icon: Icons.info_outline,
                 title: 'about_us'.tr(context),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, AboutUsScreen.routeName),
               ),
               SettingsTile(
                 icon: Icons.description_outlined,
                 title: 'terms_conditions'.tr(context),
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  TermsAndConditionsScreen.routeName,
+                ),
               ),
               SettingsTile(
                 icon: Icons.privacy_tip_outlined,
                 title: 'privacy_policy'.tr(context),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, PrivacyPolicyScreen.routeName),
               ),
               SettingsTile(
                 icon: Icons.contact_support_outlined,
                 title: 'contact_us'.tr(context),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, ContactUsScreen.routeName),
               ),
 
               const SizedBox(height: 20),

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../../../../shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
+import '../../../../../../shared/terms_and_condition_screen/presentation/view/terms_and_conditions_screen.dart';
+
 class TermsCheckbox extends StatelessWidget {
   final bool agreeToTerms;
   final VoidCallback onToggle;
@@ -52,7 +55,11 @@ class TermsCheckbox extends StatelessWidget {
                     color: AppColors.primaryColors,
                     decoration: TextDecoration.underline,
                   ),
-                  recognizer: TapGestureRecognizer()..onTap = () {},
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => Navigator.pushNamed(
+                      context,
+                      TermsAndConditionsScreen.routeName,
+                    ),
                 ),
                 TextSpan(text: ' ${"and".tr(context)} '),
                 TextSpan(
@@ -61,7 +68,11 @@ class TermsCheckbox extends StatelessWidget {
                     color: AppColors.primaryColors,
                     decoration: TextDecoration.underline,
                   ),
-                  recognizer: TapGestureRecognizer()..onTap = () {},
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => Navigator.pushNamed(
+                      context,
+                      PrivacyPolicyScreen.routeName,
+                    ),
                 ),
               ],
             ),

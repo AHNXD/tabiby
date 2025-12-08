@@ -188,5 +188,94 @@
     "notFound": "The requested resource was not found.",
     "internalServerError": "Internal server error. Please try again later.",
     "validationError": "Invalid input data.",
-    "error_tryAgain": "Oops there was an error, please try again later."
+    "error_tryAgain": "Oops there was an error, please try again later.",
+    "app_title_terms": "Tabiby App Terms of Use",
+    "app_title_privacy": "Tabiby App Privacy Policy",
+    "notice_important": "IMPORTANT NOTICE: Please Read Carefully",
+    "terms_intro": "Welcome to the Tabiby App! These Terms of Use (the \"Terms\") constitute a legally binding agreement between you (\"User\" or \"you\") and Tabiby (\"Company,\" \"we,\" \"us,\" or \"our\") regarding your use of the Tabiby mobile application and all related services (collectively, the \"App\").",
+    "terms_header_1": "1. Acceptance of Terms",
+    "terms_content_1": "By accessing or using the App, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you may not use the App.",
+    
+    "terms_header_2": "2. Eligibility and Account",
+    "terms_content_2a": "You must be at least [Minimum Age, e.g., 18] years old to use the App.",
+    "terms_content_2b": "You are responsible for maintaining the confidentiality of your account login information.",
+
+    "terms_header_3": "3. Use of the App",
+    "terms_content_3a": "You agree to use the App only for lawful purposes.",
+    "terms_content_3b": "Prohibited Activities include: unauthorized access, distributing viruses, or infringing on intellectual property rights.",
+    
+    "terms_header_4": "4. Intellectual Property",
+    "terms_content_4": "All content, features, and functionality of the App (including text, graphics, logos, and software) are the exclusive property of Tabiby and are protected by copyright and other intellectual property laws.",
+    
+    "terms_header_5": "5. Disclaimers and Limitation of Liability",
+    "terms_content_5a": "The App is provided \"as is\" without warranties of any kind.",
+    "terms_content_5b": "We are not liable for any direct, indirect, or incidental damages resulting from your use of the App.",
+    
+    "terms_header_6": "6. Termination",
+    "terms_content_6": "We may terminate or suspend your access to the App immediately, without prior notice or liability, for any reason, including a breach of these Terms.",
+
+    "terms_header_7": "7. Governing Law",
+    "terms_content_7": "These Terms shall be governed by the laws of Tabiby.",
+    
+    "privacy_welcome": "Welcome! Your privacy is very important to us.",
+    "privacy_intro": "This Privacy Policy explains how Tabiby (the \"Company,\" \"we,\" \"us,\" or \"our\") collects, uses, discloses, and protects your information when you use the Tabiby mobile application (the \"App\").",
+    
+    "privacy_header_1": "1. Information We Collect",
+    "privacy_list_1a": "Registration data (name, email, phone number, etc.).",
+    "privacy_list_1b": "Usage data (screens viewed, time spent in the App).",
+
+    "privacy_header_2": "2. How We Use Your Information",
+    "privacy_list_2a": "To provide and maintain the App services.",
+    "privacy_list_2b": "To personalize your experience.",
+    "privacy_list_2c": "To process transactions and manage your account.",
+    "privacy_list_2d": "For research, analytics, and service improvement.",
+    "privacy_list_2e": "To communicate with you (e.g., updates, support).",
+    
+    "privacy_header_3": "3. Sharing Your Information",
+    "privacy_list_3a": "Service providers who perform services on our behalf (e.g., hosting, analytics).",
+    "privacy_list_3b": "When legally required (e.g., to comply with a subpoena or court order).",
+    "privacy_list_3c": "With your explicit consent.",
+    
+    "privacy_header_4": "4. Data Security",
+    "privacy_content_4": "We use administrative, technical, and physical security measures to help protect your personal information. However, no security system is impenetrable, and we cannot guarantee the security of our databases.",
+    
+    "privacy_header_5": "5. Your Choices/Rights",
+    "privacy_list_5a": "You may update your account information at any time.",
+    "privacy_list_5b": "You may opt-out of receiving promotional communications.",
+    
+    "privacy_header_6": "6. Changes to This Policy",
+    "privacy_content_6": "We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy within the App.",
+        
+    "privacy_header_7": "7. Contact Us",
+    "privacy_content_7": "If you have questions about this Policy, please contact us at: tabiby@gmail.com",
+    "privacy_last_updated": "Last Updated: December 8, 2025",
+
+    "app_title_about": "About Tabiby App",
+    "app_title_contact": "Contact Us",
+
+    "about_header_mission": "Our Mission",
+    "about_content_mission": "Our mission is to help you to get your appointments from your home. We strive to deliver an exceptional and reliable experience to every user.",
+    
+    "about_header_team": "The Tabiby Team",
+    "about_content_team": "We are a passionate team of developers, designers, and innovators dedicated to building the future of healthcare. We believe in transparency, innovation, and user-centric design.",
+    
+    "about_header_vision": "Our Vision",
+    "about_content_vision": "We envision Tabiby as the leading healthcare app globally, setting new standards for speed and security and constantly evolving to meet the needs of our growing user base.",
+    
+    "contact_welcome": "Get in Touch!",
+    "contact_intro": "We're here to help. Whether you have questions, feedback, or need support, please reach out to us using one of the methods below.",
+    
+    "contact_sub_support": "Customer Support",
+    "contact_desc_support": "For technical issues, account help, or general inquiries.",
+    "contact_email_support": "support@tabiby.com",
+    
+    "contact_sub_media": "Media & Press",
+    "contact_desc_media": "For press releases, interviews, or partnership opportunities.",
+    "contact_email_media": "media@tabiby.com",
+    
+    "contact_sub_address": "Our Headquarters",
+    "contact_address_line1": "Syria",
+    "contact_address_line2": "Damascus",
+    
+    "contact_call_to_action": "Email Our Support Team"
 }

@@ -7,6 +7,8 @@ import 'package:tabiby/features/auth/presentation/views/sign_up/view/widgets/cus
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
+import '../../../../../../shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
+import '../../../../../../shared/terms_and_condition_screen/presentation/view/terms_and_conditions_screen.dart';
 import 'number_of_children_field.dart';
 import 'selectable_circle.dart';
 
@@ -308,7 +310,11 @@ class _Step3WidgetState extends State<Step3Widget> {
                               color: AppColors.primaryColors,
                               decoration: TextDecoration.underline,
                             ),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.pushNamed(
+                                context,
+                                TermsAndConditionsScreen.routeName,
+                              ),
                           ),
                           TextSpan(text: ' ${"and".tr(context)} '),
                           TextSpan(
@@ -317,7 +323,11 @@ class _Step3WidgetState extends State<Step3Widget> {
                               color: AppColors.primaryColors,
                               decoration: TextDecoration.underline,
                             ),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.pushNamed(
+                                context,
+                                PrivacyPolicyScreen.routeName,
+                              ),
                           ),
                         ],
                       ),
