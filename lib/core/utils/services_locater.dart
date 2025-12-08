@@ -32,17 +32,7 @@ void setupLocatorServices() {
   );
 
   getit.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
-  // init API Service
-  getit.registerLazySingleton<ApiServices>(() {
-    // Get the LocaleCubit instance
-    final localeCubit = getit.get<LocaleCubit>();
-
-    // Access the current language code from the Cubit's state
-    final currentLangCode = localeCubit.state.locale.languageCode;
-
-    // Pass the language code to the ApiServices constructor
-    return ApiServices(getit.get<Dio>(), appLanguage: currentLangCode);
-  });
+  getit.registerLazySingleton<ApiServices>(() => ApiServices(getit.get<Dio>()));
 
   // auth singleton
   getit.registerSingleton<RegisterRepo>(

@@ -8,8 +8,7 @@ import 'urls.dart';
 
 class ApiServices {
   final Dio _dio;
-  final String _appLanguage;
-  ApiServices(this._dio,{required String appLanguage}) :_appLanguage = appLanguage{
+  ApiServices(this._dio) {
     _dio.options.baseUrl = Urls.baseUrl;
     _dio.interceptors.add(
       PrettyDioLogger(
@@ -38,13 +37,22 @@ class ApiServices {
     return CacheHelper.getData(key: 'token');
   }
 
+  String _getLatestLanguageCode() {
+    final cachedLang = CacheHelper.getData(key: "LOCALE");
+
+    return cachedLang?.toString() ?? 'en';
+  }
+
   Future<Map<String, String>> _headers() async {
     final token = await _getStoredToken();
+
+    final String languageCode = _getLatestLanguageCode();
+
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       "Accept": 'application/json',
       "Accept-Charset": "application/json",
-      "Accept-Language": _appLanguage,
+      "Accept-Language": languageCode,
     };
 
     if (token != null && token.isNotEmpty) {

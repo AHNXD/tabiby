@@ -15,13 +15,17 @@ class SettingsButtonsSection extends StatelessWidget {
   void _showLanguageDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        // Get the current language code from the cubit state
+      builder: (BuildContext dialogContext) {
         final currentLanguageCode = context
             .read<LocaleCubit>()
             .state
             .locale
             .languageCode;
+        void _setLanguage(String value) async {
+          await dialogContext.read<LocaleCubit>().changeLanguage(value);
+
+          Navigator.of(dialogContext).pop();
+        }
 
         return AlertDialog(
           title: Text('change_language'.tr(context)),
@@ -35,15 +39,11 @@ class SettingsButtonsSection extends StatelessWidget {
                   groupValue: currentLanguageCode,
                   onChanged: (String? value) {
                     if (value != null) {
-                      context.read<LocaleCubit>().changeLanguage(value);
-                      Navigator.of(context).pop();
+                      _setLanguage(value);
                     }
                   },
                 ),
-                onTap: () {
-                  context.read<LocaleCubit>().changeLanguage('ar');
-                  Navigator.of(context).pop();
-                },
+                onTap: () => _setLanguage('ar'),
               ),
 
               ListTile(
@@ -53,15 +53,11 @@ class SettingsButtonsSection extends StatelessWidget {
                   groupValue: currentLanguageCode,
                   onChanged: (String? value) {
                     if (value != null) {
-                      context.read<LocaleCubit>().changeLanguage(value);
-                      Navigator.of(context).pop();
+                      _setLanguage(value);
                     }
                   },
                 ),
-                onTap: () {
-                  context.read<LocaleCubit>().changeLanguage('en');
-                  Navigator.of(context).pop();
-                },
+                onTap: () => _setLanguage('en'),
               ),
             ],
           ),
