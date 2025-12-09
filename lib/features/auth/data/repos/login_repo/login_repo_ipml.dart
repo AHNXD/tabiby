@@ -16,8 +16,8 @@ class LoginRepoIpml implements LoginRepo {
   Future<Either<Failure, String>> login(String pass, String phone) async {
     try {
       Map<String, dynamic> loginData = {
-        "phone": "\"$phone\"",
-        "password": "\"$pass\"",
+        "phone": phone,
+        "password": pass,
       };
       var resp = await apiServices.post(endPoint: Urls.login, data: loginData);
       if (resp.statusCode == 200 && resp.data['status']) {
