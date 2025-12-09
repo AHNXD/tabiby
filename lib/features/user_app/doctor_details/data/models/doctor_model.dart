@@ -32,12 +32,13 @@ class DoctorsModel {
   }
 }
 
-
 class Doctors {
   int? id;
   String? name;
   String? img;
+  String? bio;
   int? rate;
+  int? yearsOfExperience;
   int? isActive;
   SpecializationModel? specialty;
 
@@ -45,7 +46,9 @@ class Doctors {
     this.id,
     this.name,
     this.img,
+    this.bio,
     this.rate,
+    this.yearsOfExperience,
     this.isActive,
     this.specialty,
   });
@@ -54,7 +57,9 @@ class Doctors {
     id = json['id'];
     name = json['name'];
     img = json['img'];
+    bio = json['bio'];
     rate = json['rate'];
+    yearsOfExperience = json['years_of_experience'];
     isActive = json['is_active'];
     specialty = json['specialty'] != null
         ? SpecializationModel.fromJson(json['specialty'])
@@ -66,7 +71,9 @@ class Doctors {
     data['id'] = id;
     data['name'] = name;
     data['img'] = img;
+    data['bio'] = bio;
     data['rate'] = rate;
+    data['years_of_experience'] = yearsOfExperience;
     data['is_active'] = isActive;
     if (specialty != null) {
       data['specialty'] = specialty!.toJson();
