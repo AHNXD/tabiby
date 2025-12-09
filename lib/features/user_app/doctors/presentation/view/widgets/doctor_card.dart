@@ -6,7 +6,7 @@ import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model
 import '../../../../doctor_details/view/doctor_details_screen.dart';
 
 class DoctorCard extends StatelessWidget {
-  final Doctors doctor; 
+  final Doctors doctor;
 
   const DoctorCard({super.key, required this.doctor});
 
@@ -44,15 +44,14 @@ class DoctorCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipOval(
-              child: 
-              
-             // doctor.img == null?
-              Image.asset(
-                 "assets/images/doctor.png",
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              )
+              child:
+                  // doctor.img == null?
+                  Image.asset(
+                    "assets/images/doctor.png",
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
               // :Image.network(
               //   doctor.img!,
               //   height: 100,
@@ -73,20 +72,43 @@ class DoctorCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Icon(
-                  FontAwesomeIcons.solidStar,
-                  color: Colors.amber,
-                  size: 12,
+                Row(
+                  children: [
+                    Icon(
+                      doctor.isActive == 1
+                          ? Icons.circle
+                          : Icons.circle_outlined,
+                      color: doctor.isActive == 1 ? Colors.green : Colors.red,
+                      size: 12,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      doctor.isActive == 1
+                          ? 'available'.tr(context)
+                          : 'unavailable'.tr(context),
+                      style: const TextStyle(fontSize: 11),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  doctor.rate?.toString() ?? '0',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      FontAwesomeIcons.solidStar,
+                      color: Colors.amber,
+                      size: 12,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      doctor.rate?.toString() ?? '0',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

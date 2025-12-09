@@ -4,7 +4,6 @@ import 'package:tabiby/features/user_app/doctors/data/repos/doctors_repo.dart';
 
 import '../../../doctor_details/data/models/doctor_model.dart';
 
-
 part 'doctor_state.dart';
 
 class DoctorsCubit extends Cubit<DoctorsState> {
@@ -12,9 +11,9 @@ class DoctorsCubit extends Cubit<DoctorsState> {
 
   final DoctorsRepo _doctorsRepo;
 
-  Future getDoctors() async {
+  Future getDoctors(int? centerID, int? specialtyID) async {
     emit(DoctorsLoading());
-    var data = await _doctorsRepo.getDoctors();
+    var data = await _doctorsRepo.getDoctors(centerID, specialtyID);
     data.fold((failure) => emit(DoctorsError(errorMsg: failure.message)), (
       doctors,
     ) {

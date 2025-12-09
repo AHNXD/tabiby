@@ -3,7 +3,7 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/features/user_app/specialties/data/models/specialties_model.dart';
 
 import '../../../../specialties/presentation/view/all_specialties_screen.dart';
-import '../../../../specialties/presentation/view/widgets/category_item.dart';
+import '../../../../specialties/presentation/view/sections/specialty_list_section.dart';
 
 import '../widgets/section_header.dart';
 

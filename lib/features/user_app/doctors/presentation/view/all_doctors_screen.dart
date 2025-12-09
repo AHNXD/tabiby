@@ -16,13 +16,16 @@ class AllDoctorsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int? centerID = args['centerID'];
+    final int? specialtyID = args['specialtyID'];
     return Scaffold(
       appBar: CustomAppbar(title: "all_popular_doctors".tr(context)),
       body: BlocProvider(
         create: (BuildContext context) {
-          return DoctorsCubit(
-            getit.get<DoctorsRepo>(),
-          )..getDoctors();
+          return DoctorsCubit(getit.get<DoctorsRepo>())
+            ..getDoctors(centerID, specialtyID);
         },
         child: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
@@ -40,24 +43,27 @@ class AllDoctorsScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: DoctorCard(doctor: state.doctors.doctors?[index] ?? Doctors()),
+                      child: DoctorCard(
+                        doctor: state.doctors.doctors?[index] ?? Doctors(),
+                      ),
                     );
                   },
                 ),
               );
-            }
-            else if (state is DoctorsError) {
+            } else if (state is DoctorsError) {
               return CustomErrorWidget(
                 textColor: Colors.black,
                 errorMessage: state.errorMsg,
                 onRetry: () {
-                  context.read<DoctorsCubit>().getDoctors();
+                  context.read<DoctorsCubit>().getDoctors(
+                    centerID,
+                    specialtyID,
+                  );
                 },
               );
-            }else {
+            } else {
               return const Center(child: CircularProgressIndicator());
             }
-            
           },
         ),
       ),

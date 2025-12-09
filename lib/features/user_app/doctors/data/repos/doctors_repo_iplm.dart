@@ -12,14 +12,24 @@ class DoctorsRepoIplm implements DoctorsRepo {
   DoctorsRepoIplm(this._apiServices);
 
   @override
-  Future<Either<Failure, DoctorsModel>> getDoctors() async {
+  Future<Either<Failure, DoctorsModel>> getDoctors(
+    int? centerID,
+    int? specialtyID,
+  ) async {
     try {
-      var resp = await _apiServices.get(endPoint: Urls.doctors);
+      String endpoint = Urls.doctors;
+      if (centerID != null && specialtyID != null) {
+        endpoint += "$specialtyID/$centerID";
+      } else if (centerID != null) {
+        endpoint += "/0/$centerID";
+      } else if (specialtyID != null) {
+        endpoint += "/$specialtyID";
+      }
+
+      var resp = await _apiServices.get(endPoint: endpoint);
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
-        DoctorsModel doctors = DoctorsModel.fromJson(
-          resp.data['data'],
-        );
+        DoctorsModel doctors = DoctorsModel.fromJson(resp.data['data']);
 
         return right(doctors);
       }
