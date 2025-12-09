@@ -277,5 +277,10 @@
     "contact_address_line1": "Syria",
     "contact_address_line2": "Damascus",
     
-    "contact_call_to_action": "Email Our Support Team"
+    "contact_call_to_action": "Email Our Support Team",
+
+    "deleting_account": "Deleting Account...",
+    "delete_account": "Delete Account",
+    "account_deleted_success": "Account deleted successfully.",
+    "delete_account_confirmation_message": "Are you sure you want to delete your account? This action cannot be undone."
 }

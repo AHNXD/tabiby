@@ -26,4 +26,12 @@ class UserCubit extends Cubit<UserState> {
       emit(UserSuccess(user: user));
     });
   }
+
+  Future deleteProfile() async {
+    emit(UserLoading());
+    var data = await _userRepo.deleteProfile();
+    data.fold((failure) => emit(UserError(errorMsg: failure.message)), (state) {
+      emit(UserDeleteSuccess());
+    });
+  }
 }

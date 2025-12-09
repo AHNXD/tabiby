@@ -34,7 +34,10 @@ class UserRepoIplm implements UserRepo {
   @override
   Future<Either<Failure, bool>> deleteProfile() async {
     try {
-      var resp = await _apiServices.get(endPoint: Urls.deleteProfile);
+      var resp = await _apiServices.post(
+        endPoint: Urls.deleteProfile,
+        data: {},
+      );
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
         CacheHelper.removeData(key: 'token');

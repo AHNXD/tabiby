@@ -26,3 +26,5 @@ final class UserSuccess extends UserState {
   @override
   List<Object> get props => [user];
 }
+
+final class UserDeleteSuccess extends UserState {}

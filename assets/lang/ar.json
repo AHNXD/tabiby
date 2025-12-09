@@ -281,5 +281,9 @@
     "contact_address_line1": "سوريا",
     "contact_address_line2": "دمشق",
 
-    "contact_call_to_action": "راسل فريق الدعم"
+    "contact_call_to_action": "راسل فريق الدعم",
+    "deleting_account": "جاري حذف الحساب...",
+    "delete_account": "حذف الحساب",
+    "account_deleted_success": "تم حذف الحساب بنجاح.",
+    "delete_account_confirmation_message": "هل أنت متأكد أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء."
 }

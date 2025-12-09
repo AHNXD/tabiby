@@ -24,7 +24,6 @@ Future<void> disableScreenshot() async {
   isSecureMode = true;
 }
 
-
 //navigators
 Route goRoute({required var x}) {
   return PageRouteBuilder(
