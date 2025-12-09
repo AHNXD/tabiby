@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
 import '../../../../core/widgets/custom_appbar.dart';
 import 'sections/affiliated_centers_section.dart';
@@ -10,21 +11,14 @@ import 'widgets/doctor_rating.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   static const String routeName = "/doctor_details";
-  final String doctorName;
-  final String specialty;
-  final String experience;
-  final String imageUrl;
-  final String rating;
+  final Doctors doctor;
   final String biography;
   final List<Map<String, dynamic>> centers;
 
   const DoctorDetailsScreen({
     super.key,
-    required this.doctorName,
-    required this.specialty,
-    required this.experience,
-    required this.imageUrl,
-    required this.rating,
+    required this.doctor,
+
     this.biography =
         'Dr. Moustafa Karam is a distinguished dermatologist with over 15 years of experience in cosmetic and medical dermatology...',
     this.centers = const [
@@ -44,7 +38,7 @@ class DoctorDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppbar(title: "doctor_details".tr(context)),
+      appBar: CustomAppbar(title: "doctor_details".tr(context)),
       body: Column(
         children: [
           Expanded(
@@ -55,14 +49,14 @@ class DoctorDetailsScreen extends StatelessWidget {
                 children: [
                   // Header Section
                   DoctorHeader(
-                    name: doctorName,
-                    specialty: specialty,
-                    experience: experience,
-                    imageUrl: imageUrl,
+                    name: doctor.name ?? '',
+                    specialty: doctor.specialty?.name ?? '',
+                    experience: '${doctor.rate} ${"years_of_experience".tr(context)}',
+                    imageUrl: doctor.img,
                   ),
                   const SizedBox(height: 24),
                   // Rating Section
-                  DoctorRating(rating: rating),
+                  DoctorRating(rating: doctor.rate?.toString() ?? '0'),
                   const SizedBox(height: 24),
                   // Biography Section
                   BiographySection(biography: biography),

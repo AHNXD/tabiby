@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../../../core/widgets/custom_image_widget.dart';
+
 class DoctorHeader extends StatelessWidget {
   final String name;
   final String specialty;
   final String experience;
-  final String imageUrl;
+  final String? imageUrl;
 
   const DoctorHeader({
     super.key,
@@ -19,7 +21,15 @@ class DoctorHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(radius: 45, backgroundImage: AssetImage(imageUrl)),
+        ClipOval(
+          child: CustomImageWidget(
+            imageUrl: imageUrl,
+            placeholderAsset: "assets/images/doctor.png",
+            height: 100,
+            width: 100,
+            fit: BoxFit.cover,
+          ),
+        ),
         const SizedBox(width: 20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

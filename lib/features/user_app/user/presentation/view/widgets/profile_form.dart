@@ -88,12 +88,7 @@ class ProfileForm extends StatelessWidget {
         CustomDropdownField(
           hintText: 'marital_status'.tr(context),
           value: maritalStatus,
-          items: [
-            'single'.tr(context),
-            'married'.tr(context),
-            'divorced'.tr(context),
-            'widowed'.tr(context),
-          ],
+          items: ['single', 'married', 'divorced', 'widowed'],
           onChanged: onMaritalStatusChanged,
           validator: (value) {
             if (value == null || value.isEmpty) {

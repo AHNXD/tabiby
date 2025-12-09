@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
+import '../../../../../../core/widgets/custom_image_widget.dart';
+import '../../../../../../core/widgets/responsive_text.dart';
 import '../../../../doctor_details/view/doctor_details_screen.dart';
 
 class DoctorCard extends StatelessWidget {
@@ -17,13 +19,7 @@ class DoctorCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DoctorDetailsScreen(
-              doctorName: doctor.name ?? '',
-              specialty: doctor.specialty?.name ?? '',
-              experience: '15 ${"years_of_experience".tr(context)}',
-              imageUrl: doctor.img ?? 'assets/images/doctor.png',
-              rating: doctor.rate?.toString() ?? '0',
-            ),
+            builder: (context) => DoctorDetailsScreen(doctor: doctor),
           ),
         );
       },
@@ -33,7 +29,7 @@ class DoctorCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 8,
               spreadRadius: 2,
             ),
@@ -44,31 +40,26 @@ class DoctorCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipOval(
-              child:
-                  // doctor.img == null?
-                  Image.asset(
-                    "assets/images/doctor.png",
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
-              // :Image.network(
-              //   doctor.img!,
-              //   height: 100,
-              //   width: 100,
-              //   fit: BoxFit.cover,
-              // ),
+              child: CustomImageWidget(
+                imageUrl: doctor.img,
+                placeholderAsset: "assets/images/doctor.png",
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
+              ),
             ),
-            Text(
+            ResponsiveText(
               doctor.name ?? '',
-              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              textAlign: TextAlign.center,
             ),
-            Text(
+
+            ResponsiveText(
               doctor.specialty?.name ?? '',
               style: const TextStyle(color: Colors.grey, fontSize: 11),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Row(
@@ -84,11 +75,12 @@ class DoctorCard extends StatelessWidget {
                       size: 12,
                     ),
                     const SizedBox(width: 4),
-                    Text(
+                    ResponsiveText(
                       doctor.isActive == 1
                           ? 'available'.tr(context)
                           : 'unavailable'.tr(context),
                       style: const TextStyle(fontSize: 11),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

@@ -6,6 +6,7 @@ import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.da
 import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
+import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
 import '../../features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
@@ -43,15 +44,10 @@ class Routes {
     BookingScreen.routeName: (context) => BookingScreen(),
     AllSpecialtiesScreen.routeName: (context) => AllSpecialtiesScreen(),
     CenterDetailsScreen.routeName: (context) =>
-    CenterDetailsScreen(center: Centers()),
+        CenterDetailsScreen(center: Centers()),
     AllCentersScreen.routeName: (context) => AllCentersScreen(),
-    DoctorDetailsScreen.routeName: (context) => DoctorDetailsScreen(
-      doctorName: '',
-      specialty: '',
-      experience: '',
-      imageUrl: '',
-      rating: '',
-    ),
+    DoctorDetailsScreen.routeName: (context) =>
+        DoctorDetailsScreen(doctor: Doctors()),
     AllDoctorsScreen.routeName: (context) => AllDoctorsScreen(),
     UserProfileScreen.routeName: (context) => UserProfileScreen(),
     UserAppointmentScreen.routeName: (context) => UserAppointmentScreen(),

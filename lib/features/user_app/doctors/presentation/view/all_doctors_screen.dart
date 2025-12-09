@@ -16,8 +16,12 @@ class AllDoctorsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Object? arguments = ModalRoute.of(context)!.settings.arguments;
+
+    final Map<String, dynamic> args =
+        (arguments != null && arguments is Map<String, dynamic>)
+        ? arguments
+        : {};
     final int? centerID = args['centerID'];
     final int? specialtyID = args['specialtyID'];
     return Scaffold(

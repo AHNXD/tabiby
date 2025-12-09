@@ -1,7 +1,10 @@
 class Urls {
   //base urls
-  static String ip = "10.191.120.1:8000";
+  static String ip = "192.168.1.142:8000";
   static String baseUrl = "http://$ip/api/";
+
+  //assets urls
+  static String assetsBaseUrl = "http://$ip/storage/app/public/";
 
   //auth endpoint
   static String login = "login";
@@ -11,7 +14,11 @@ class Urls {
   static String forgetPassword = "forget-password";
   static String verfiResetPassword = "verify-reset-password";
   static String resendCode = "resend-code";
+
+  //profile endpoint
   static String getProfile = "get_profile";
+  static String updateProfile = "update_profile";
+  static String deleteProfile = "delete_account";
 
   //Specialists endpoint
   static const String specialists = "get_all_specialties";

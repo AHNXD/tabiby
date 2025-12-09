@@ -24,7 +24,7 @@ class CenterDetailsScreen extends StatelessWidget {
               delegate: SliverChildListDelegate([
                 HeaderSection(
                   name: center.name!,
-                  location: center.location ?? "",
+                  address: center.address ?? "",
                   imageUrl: 'assets/images/center.webp',
                 ),
                 AboutSection(

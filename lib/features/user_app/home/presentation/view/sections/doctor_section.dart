@@ -18,15 +18,13 @@ class DoctorsSection extends StatelessWidget {
           onSeeAll: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => AllDoctorsScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => AllDoctorsScreen()),
             );
           },
         ),
         SizedBox(height: 8),
         SizedBox(
-          height: 200,
+          height: 220,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: ListView.builder(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/widgets/responsive_text.dart';
 import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
+
+import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class CenterCard extends StatelessWidget {
   final Centers center;
@@ -22,21 +25,28 @@ class CenterCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            "assets/images/center.webp",
-            height: 80,
-            fit: BoxFit.cover,
+          ClipOval(
+            child: CustomImageWidget(
+              imageUrl: center.img,
+              placeholderAsset: "assets/images/center.webp",
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            ),
           ),
+
           const SizedBox(height: 8),
-          Text(
+          ResponsiveText(
             center.name ?? '',
             style: const TextStyle(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 4),
-          Text(
-            center.location ?? '',
+          ResponsiveText(
+            center.address ?? '',
             style: const TextStyle(fontSize: 12, color: Colors.grey),
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           ),
         ],

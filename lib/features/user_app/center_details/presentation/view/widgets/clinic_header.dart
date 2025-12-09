@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../../../../core/widgets/custom_image_widget.dart';
+
 class ClinicHeader extends StatelessWidget {
   final String name;
-  final String location;
+  final String address;
   final String imageUrl;
 
   const ClinicHeader({
     super.key,
     required this.name,
-    required this.location,
+    required this.address,
     required this.imageUrl,
   });
 
@@ -17,15 +19,16 @@ class ClinicHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: Image.asset(
-            imageUrl,
-            width: 90,
-            height: 90,
+        ClipOval(
+          child: CustomImageWidget(
+            imageUrl: imageUrl,
+            placeholderAsset: "assets/images/center.webp",
+            height: 100,
+            width: 100,
             fit: BoxFit.cover,
           ),
         ),
+
         const SizedBox(width: 16),
 
         Expanded(
@@ -42,7 +45,7 @@ class ClinicHeader extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                location,
+                address,
                 style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.primaryColors,

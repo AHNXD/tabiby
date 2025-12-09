@@ -31,6 +31,7 @@ class MainData {
   String? firstName;
   String? lastName;
   String? phone;
+  String? email;
   String? role;
 
   MainData({
@@ -39,6 +40,7 @@ class MainData {
     this.firstName,
     this.lastName,
     this.phone,
+    this.email,
     this.role,
   });
 
@@ -48,6 +50,7 @@ class MainData {
     firstName = json['first_name'];
     lastName = json['last_name'];
     phone = json['phone'];
+    email = json['email'];
     role = json['role'];
   }
 
@@ -58,6 +61,7 @@ class MainData {
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['phone'] = phone;
+    data['email'] = email;
     data['role'] = role;
     return data;
   }
@@ -72,7 +76,7 @@ class MoreData {
   bool? hasChildren;
   String? numberOfChildren;
   String? birthDate;
-  String? isSmoke;
+  bool? isSmoke;
 
   MoreData({
     this.address,
@@ -96,7 +100,7 @@ class MoreData {
     numberOfChildren = json['number_of_children'].toString();
     birthDate = json['birth_date'];
 
-    isSmoke = json['is_smoke'].toString();
+    isSmoke = json['is_smoke'].toString() == "1";
   }
 
   Map<String, dynamic> toJson() {

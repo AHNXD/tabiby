@@ -3,6 +3,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../../../../../core/utils/cache_helper.dart';
 import '../../../../auth/data/models/user_model.dart';
 import 'user_repo.dart';
 
@@ -31,14 +32,14 @@ class UserRepoIplm implements UserRepo {
   }
 
   @override
-  Future<Either<Failure, UserModel>> deleteProfile() async {
+  Future<Either<Failure, bool>> deleteProfile() async {
     try {
-      var resp = await _apiServices.get(endPoint: Urls.getProfile);
+      var resp = await _apiServices.get(endPoint: Urls.deleteProfile);
 
-      if (resp.statusCode == 201 && resp.data['status'] == true) {
-        UserModel user = UserModel.fromJson(resp.data['data']['user']);
-
-        return right(user);
+      if (resp.statusCode == 200 && resp.data['status'] == true) {
+        CacheHelper.removeData(key: 'token');
+        CacheHelper.removeData(key: 'role');
+        return right(true);
       }
 
       return left(
@@ -50,13 +51,17 @@ class UserRepoIplm implements UserRepo {
   }
 
   @override
-  Future<Either<Failure, UserModel>> updateProfile() async {
+  Future<Either<Failure, UserModel>> updateProfile(
+    Map<String, dynamic> registerData,
+  ) async {
     try {
-      var resp = await _apiServices.get(endPoint: Urls.getProfile);
+      var resp = await _apiServices.post(
+        endPoint: Urls.updateProfile,
+        data: registerData,
+      );
 
-      if (resp.statusCode == 201 && resp.data['status'] == true) {
+      if (resp.statusCode == 200 && resp.data['status'] == true) {
         UserModel user = UserModel.fromJson(resp.data['data']['user']);
-
         return right(user);
       }
 

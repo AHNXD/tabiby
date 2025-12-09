@@ -36,17 +36,17 @@ class CentersModel {
 
 class Centers {
   int? id;
-  String? img;   
+  String? img;
   String? name;
-  String? location;
+  String? address;
 
-  Centers({this.id, this.img, this.name, this.location});
+  Centers({this.id, this.img, this.name, this.address});
 
   Centers.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     img = json['img'];
     name = json['name'];
-    location = json['location'];
+    address = json['address'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,7 +55,7 @@ class Centers {
     data['id'] = id;
     data['img'] = img;
     data['name'] = name;
-    data['location'] = location;
+    data['address'] = address;
 
     return data;
   }

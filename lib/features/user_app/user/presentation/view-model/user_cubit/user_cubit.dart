@@ -18,4 +18,12 @@ class UserCubit extends Cubit<UserState> {
       emit(UserSuccess(user: user));
     });
   }
+
+  Future updateProfile(Map<String, dynamic> registerData) async {
+    emit(UserLoading());
+    var data = await _userRepo.updateProfile(registerData);
+    data.fold((failure) => emit(UserError(errorMsg: failure.message)), (user) {
+      emit(UserSuccess(user: user));
+    });
+  }
 }

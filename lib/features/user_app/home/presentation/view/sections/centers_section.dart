@@ -18,15 +18,13 @@ class CentersSection extends StatelessWidget {
           onSeeAll: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => AllCentersScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => AllCentersScreen()),
             );
           },
         ),
         SizedBox(height: 8),
         SizedBox(
-          height: 170,
+          height: 220,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: ListView.builder(
