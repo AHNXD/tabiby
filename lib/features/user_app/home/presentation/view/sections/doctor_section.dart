@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/features/user_app/doctors/data/models/doctor_model.dart';
-
+import '../../../../doctor_details/data/models/doctor_model.dart';
 import '../../../../doctors/presentation/view/all_doctors_screen.dart';
 
 import '../../../../doctors/presentation/view/widgets/doctor_card.dart';
@@ -9,7 +8,7 @@ import '../widgets/section_header.dart';
 
 class DoctorsSection extends StatelessWidget {
   const DoctorsSection({super.key, required this.doctors});
-  final List<DoctorsModel>? doctors;
+  final List<Doctors>? doctors;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,7 +19,7 @@ class DoctorsSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AllDoctorsScreen(doctors: doctors!),
+                builder: (context) => AllDoctorsScreen(),
               ),
             );
           },

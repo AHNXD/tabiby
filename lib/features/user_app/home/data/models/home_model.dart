@@ -1,13 +1,13 @@
-import '../../../centers/data/models/centers_model.dart';
-import '../../../doctors/data/models/doctor_model.dart';
+import '../../../center_details/data/models/centers_model.dart';
+import '../../../doctor_details/data/models/doctor_model.dart';
 import '../../../specialties/data/models/specialties_model.dart';
 import 'promot_model.dart';
 
 class HomeModel {
   List<Promot>? promot;
   List<SpecializationModel>? specialties;
-  List<DoctorsModel>? doctors;
-  List<CentersModel>? centers;
+  List<Doctors>? doctors;
+  List<Centers>? centers;
 
   HomeModel({this.promot, this.specialties, this.doctors, this.centers});
 
@@ -25,15 +25,15 @@ class HomeModel {
       });
     }
     if (json['doctors'] != null) {
-      doctors = <DoctorsModel>[];
+      doctors = <Doctors>[];
       json['doctors'].forEach((v) {
-        doctors!.add(DoctorsModel.fromJson(v));
+        doctors!.add(Doctors.fromJson(v));
       });
     }
     if (json['centers'] != null) {
-      centers = <CentersModel>[];
+      centers = <Centers>[];
       json['centers'].forEach((v) {
-        centers!.add(CentersModel.fromJson(v));
+        centers!.add(Centers.fromJson(v));
       });
     }
   }

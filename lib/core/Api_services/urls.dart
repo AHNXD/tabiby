@@ -1,6 +1,6 @@
 class Urls {
   //base urls
-  static String ip = "192.168.1.3:8000";
+  static String ip = "192.168.45.169:8000";
   static String baseUrl = "http://$ip/api/";
 
   //auth endpoint
@@ -15,6 +15,12 @@ class Urls {
 
   //Specialists endpoint
   static const String specialists = "get_all_specialties";
+
+  //Doctors endpoint
+  static const String doctors = "get_all_doctors";
+
+  //Centers endpoint
+  static const String centers = "get_all_clinic_centers";
 
   //Home endpoint
   static const String home = "home";

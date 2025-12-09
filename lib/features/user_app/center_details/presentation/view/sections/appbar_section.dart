@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
-import '../../../../../core/widgets/custom_appbar.dart';
+import '../../../../../../core/widgets/custom_appbar.dart';
 
 class AppBarSection extends StatelessWidget implements PreferredSizeWidget {
   const AppBarSection({super.key});

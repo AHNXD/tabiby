@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/features/auth/presentation/views/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
-import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
+import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
 
@@ -15,7 +15,7 @@ import '../../features/shared/settings/view/settings_screen.dart';
 import '../../features/shared/welcome/view/welcome_screen.dart';
 import '../../features/user_app/add_appointment/view/booking_screen.dart';
 import '../../features/user_app/specialties/presentation/view/all_specialties_screen.dart';
-import '../../features/user_app/center_details/view/center_details_screen.dart';
+import '../../features/user_app/center_details/presentation/view/center_details_screen.dart';
 import '../../features/user_app/centers/presentation/view/all_centers_screen.dart';
 import '../../features/user_app/diagnose/presentation/views/result_screen.dart';
 import '../../features/user_app/doctor_details/view/doctor_details_screen.dart';
@@ -39,8 +39,8 @@ class Routes {
     BookingScreen.routeName: (context) => BookingScreen(),
     AllSpecialtiesScreen.routeName: (context) => AllSpecialtiesScreen(),
     CenterDetailsScreen.routeName: (context) =>
-        CenterDetailsScreen(center: CentersModel()),
-    AllCentersScreen.routeName: (context) => AllCentersScreen(centers: []),
+    CenterDetailsScreen(center: Centers()),
+    AllCentersScreen.routeName: (context) => AllCentersScreen(),
     DoctorDetailsScreen.routeName: (context) => DoctorDetailsScreen(
       doctorName: '',
       specialty: '',
@@ -48,7 +48,7 @@ class Routes {
       imageUrl: '',
       rating: '',
     ),
-    AllDoctorsScreen.routeName: (context) => AllDoctorsScreen(doctors: []),
+    AllDoctorsScreen.routeName: (context) => AllDoctorsScreen(),
     UserProfileScreen.routeName: (context) => UserProfileScreen(),
     UserAppointmentScreen.routeName: (context) => UserAppointmentScreen(),
     MainScreen.routeName: (context) => MainScreen(),

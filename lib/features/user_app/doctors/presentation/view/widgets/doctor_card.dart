@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/features/user_app/doctors/data/models/doctor_model.dart';
+import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
 import '../../../../doctor_details/view/doctor_details_screen.dart';
 
 class DoctorCard extends StatelessWidget {
-  final DoctorsModel doctor;
+  final Doctors doctor; 
 
   const DoctorCard({super.key, required this.doctor});
 
@@ -19,22 +19,21 @@ class DoctorCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => DoctorDetailsScreen(
               doctorName: doctor.name ?? '',
-              specialty: doctor.specialties!.name ?? '',
+              specialty: doctor.specialty?.name ?? '',
               experience: '15 ${"years_of_experience".tr(context)}',
               imageUrl: doctor.img ?? 'assets/images/doctor.png',
-              rating: doctor.rate.toString(),
+              rating: doctor.rate?.toString() ?? '0',
             ),
           ),
         );
       },
-
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
+              color: Colors.black.withOpacity(0.3),
               blurRadius: 8,
               spreadRadius: 2,
             ),
@@ -45,12 +44,21 @@ class DoctorCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipOval(
-              child: Image.asset(
-                "assets/images/doctor.png",
+              child: 
+              
+             // doctor.img == null?
+              Image.asset(
+                 "assets/images/doctor.png",
                 height: 100,
                 width: 100,
                 fit: BoxFit.cover,
-              ),
+              )
+              // :Image.network(
+              //   doctor.img!,
+              //   height: 100,
+              //   width: 100,
+              //   fit: BoxFit.cover,
+              // ),
             ),
             Text(
               doctor.name ?? '',
@@ -60,35 +68,13 @@ class DoctorCard extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             Text(
-              doctor.specialties!.name ?? '',
+              doctor.specialty?.name ?? '',
               style: const TextStyle(color: Colors.grey, fontSize: 11),
             ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Icon(
-                //   doctor['isAvailable']
-                //       ? FontAwesomeIcons.circleCheck
-                //       : FontAwesomeIcons.circleXmark,
-                //   color: doctor['isAvailable']
-                //       ? Colors.green
-                //       : Colors.redAccent,
-                //   size: 13,
-                // ),
-                // const SizedBox(width: 4),
-                // Text(
-                //   doctor['isAvailable']
-                //       ? 'available'.tr(context)
-                //       : 'unavailable'.tr(context),
-                //   style: TextStyle(
-                //     color: doctor['isAvailable']
-                //         ? Colors.green
-                //         : Colors.redAccent,
-                //     fontSize: 10,
-                //   ),
-                // ),
-                // const SizedBox(width: 8),
                 const Icon(
                   FontAwesomeIcons.solidStar,
                   color: Colors.amber,
@@ -96,7 +82,7 @@ class DoctorCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  doctor.rate.toString(),
+                  doctor.rate?.toString() ?? '0',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 11,

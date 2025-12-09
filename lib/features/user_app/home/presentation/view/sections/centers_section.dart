@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
-import '../../../../center_details/view/center_details_screen.dart';
+import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
+import '../../../../center_details/presentation/view/center_details_screen.dart';
 import '../../../../centers/presentation/view/all_centers_screen.dart';
 import '../../../../centers/presentation/view/widgets/center_card.dart';
 import '../widgets/section_header.dart';
 
 class CentersSection extends StatelessWidget {
   const CentersSection({super.key, required this.centers});
-  final List<CentersModel> centers;
+  final List<Centers> centers;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,7 +19,7 @@ class CentersSection extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AllCentersScreen(centers: centers),
+                builder: (context) => AllCentersScreen(),
               ),
             );
           },

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tabiby/features/user_app/centers/data/models/centers_model.dart';
+import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 
 class CenterCard extends StatelessWidget {
-  final CentersModel center;
+  final Centers center;
   const CenterCard({super.key, required this.center});
 
   @override
@@ -35,7 +35,7 @@ class CenterCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            center.address ?? '',
+            center.location ?? '',
             style: const TextStyle(fontSize: 12, color: Colors.grey),
             textAlign: TextAlign.center,
           ),

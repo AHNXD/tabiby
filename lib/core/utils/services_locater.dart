@@ -8,6 +8,10 @@ import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repositor
 import '../../features/auth/data/repos/login_repo/login_repo.dart';
 import '../../features/auth/data/repos/login_repo/login_repo_ipml.dart';
 import '../../features/auth/data/repos/logout_repo/logout_repo_iplm.dart';
+import '../../features/user_app/centers/data/repos/centers_repo.dart';
+import '../../features/user_app/centers/data/repos/centers_repo_iplm.dart';
+import '../../features/user_app/doctors/data/repos/doctors_repo.dart';
+import '../../features/user_app/doctors/data/repos/doctors_repo_iplm.dart';
 import '../../features/user_app/home/data/repo/home_repo.dart';
 import '../../features/user_app/home/data/repo/home_repo_iplm.dart';
 import '../../features/user_app/specialties/data/repos/user_repo.dart';
@@ -46,8 +50,19 @@ void setupLocatorServices() {
   getit.registerSingleton<SpecialtiesRepo>(
     SpecialtiesRepoIplm(getit.get<ApiServices>()),
   );
+  //Doctors
+  getit.registerSingleton<DoctorsRepo>(
+    DoctorsRepoIplm(getit.get<ApiServices>()),
+  ); 
+
+  //Centers
+  getit.registerSingleton<CentersRepo>(
+    CentersRepoIplm(getit.get<ApiServices>()),
+  );
+
   //Home
-  getit.registerSingleton<HomeRepo>(HomeRepoIplm(getit.get<ApiServices>()));
+  getit.registerSingleton<HomeRepo>(HomeRepoIplm(getit.get<ApiServices>())
+  );
 
   //Diagnose
   getit.registerSingleton<DiagnosisRepository>(

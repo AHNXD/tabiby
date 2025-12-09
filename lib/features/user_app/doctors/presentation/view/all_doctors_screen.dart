@@ -1,35 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/features/user_app/doctors/data/models/doctor_model.dart';
+import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
+import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
+import '../../../../../core/widgets/custom_error_widget.dart';
+import '../../data/repos/doctors_repo.dart';
+import '../view_model/doctor_cubit.dart';
 import 'widgets/doctor_card.dart';
 
 class AllDoctorsScreen extends StatelessWidget {
   static const String routeName = "/doctors";
-  final List<DoctorsModel> doctors;
 
-  const AllDoctorsScreen({super.key, required this.doctors});
+  const AllDoctorsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(title: "all_popular_doctors".tr(context)),
-
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 0.9,
-          ),
-          itemCount: doctors.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: DoctorCard(doctor: doctors[index]),
-            );
+      body: BlocProvider(
+        create: (BuildContext context) {
+          return DoctorsCubit(
+            getit.get<DoctorsRepo>(),
+          )..getDoctors();
+        },
+        child: BlocBuilder<DoctorsCubit, DoctorsState>(
+          builder: (context, state) {
+            if (state is DoctorsSuccess) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: state.doctors.doctors?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DoctorCard(doctor: state.doctors.doctors?[index] ?? Doctors()),
+                    );
+                  },
+                ),
+              );
+            }
+            else if (state is DoctorsError) {
+              return CustomErrorWidget(
+                textColor: Colors.black,
+                errorMessage: state.errorMsg,
+                onRetry: () {
+                  context.read<DoctorsCubit>().getDoctors();
+                },
+              );
+            }else {
+              return const Center(child: CircularProgressIndicator());
+            }
+            
           },
         ),
       ),
