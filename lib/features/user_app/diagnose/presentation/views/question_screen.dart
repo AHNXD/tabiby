@@ -35,7 +35,7 @@ class QuestionScreen extends StatelessWidget {
               return const LoadingView();
             case ViewState.error:
               return ErrorView(
-                message: state.errorMessage,
+                message: state.errorMessage.tr(context),
                 onRetry: () {
                   // Go back to the previous screen (categories)
                   Navigator.of(context).pop();

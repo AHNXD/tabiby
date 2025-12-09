@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 
@@ -7,6 +8,7 @@ class CustomDropdownField extends StatelessWidget {
   final List<String> items;
   final String? value;
   final ValueChanged<String?> onChanged;
+  final String? Function(String?)? validator;
 
   const CustomDropdownField({
     super.key,
@@ -14,36 +16,36 @@ class CustomDropdownField extends StatelessWidget {
     required this.items,
     required this.onChanged,
     this.value,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       value: value,
+      validator: validator,
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(
-          color: AppColors.textFieldColor,
-          
-        ),
+        hintStyle: const TextStyle(color: AppColors.textFieldColor),
         filled: true,
         fillColor: const Color(0xFFF6F6F6),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: BorderSide.none,
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16.0,
+          horizontal: 24.0,
+        ),
       ),
       items: items
-          .map((item) => DropdownMenuItem(
-                value: item,
-                child: Text(
-                  item,
-
-                ),
-              ))
+          .map<DropdownMenuItem<String>>(
+            (item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(item.tr(context)),
+            ),
+          )
           .toList(),
     );
   }

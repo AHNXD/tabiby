@@ -7,6 +7,8 @@ import 'package:tabiby/features/auth/presentation/views/sign_up/view/widgets/cus
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
+import '../../../../../../shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
+import '../../../../../../shared/terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 import 'number_of_children_field.dart';
 import 'selectable_circle.dart';
 
@@ -70,8 +72,7 @@ class _Step3WidgetState extends State<Step3Widget> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isMale =
-        widget.gender == 'male'.tr(context) || widget.gender == 'Male';
+    final bool isMale = widget.gender == 'male';
 
     return Column(
       children: [
@@ -83,12 +84,7 @@ class _Step3WidgetState extends State<Step3Widget> {
               const SizedBox(height: 30),
               CustomDropdownField(
                 hintText: 'marital_status'.tr(context),
-                items: [
-                  "single".tr(context),
-                  "married".tr(context),
-                  "divorced".tr(context),
-                  "widowed".tr(context),
-                ],
+                items: ["single", "married", "divorced", "widowed"],
                 value: widget.maritalStatus,
                 onChanged: (value) {
                   if (value != null) {
@@ -301,23 +297,37 @@ class _Step3WidgetState extends State<Step3Widget> {
                         children: [
                           TextSpan(
                             text: 'read_and_agree_conditions'.tr(context),
+                            style: TextStyle(fontFamily: 'cocon-next-arabic'),
                           ),
                           TextSpan(
-                            text: 'terms_conditions'.tr(context),
+                            text: " ${'terms_conditions'.tr(context)}",
                             style: const TextStyle(
                               color: AppColors.primaryColors,
                               decoration: TextDecoration.underline,
+                              fontFamily: 'cocon-next-arabic',
                             ),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.pushNamed(
+                                context,
+                                TermsAndConditionsScreen.routeName,
+                              ),
                           ),
-                          TextSpan(text: ' ${"and".tr(context)} '),
+                          TextSpan(
+                            text: ' ${"and".tr(context)} ',
+                            style: TextStyle(fontFamily: 'cocon-next-arabic'),
+                          ),
                           TextSpan(
                             text: 'privacy_policy'.tr(context),
                             style: const TextStyle(
                               color: AppColors.primaryColors,
                               decoration: TextDecoration.underline,
+                              fontFamily: 'cocon-next-arabic',
                             ),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.pushNamed(
+                                context,
+                                PrivacyPolicyScreen.routeName,
+                              ),
                           ),
                         ],
                       ),

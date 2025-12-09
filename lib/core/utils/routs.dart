@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/features/auth/presentation/views/reset_password/presentation/view/reset_password_screen.dart';
+import 'package:tabiby/features/shared/about_us/presentation/view/about_us_screen.dart';
+import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_screen.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
@@ -11,7 +13,9 @@ import '../../features/auth/presentation/views/otp/presentation/view/otp_screen.
 import '../../features/auth/presentation/views/sign_up/view/sign_up_screen.dart';
 import '../../features/doctor_app/appointment_details_doctor/view/appointment_details_screen.dart';
 import '../../features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
+import '../../features/shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
 import '../../features/shared/settings/view/settings_screen.dart';
+import '../../features/shared/terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 import '../../features/shared/welcome/view/welcome_screen.dart';
 import '../../features/user_app/add_appointment/view/booking_screen.dart';
 import '../../features/user_app/specialties/presentation/view/all_specialties_screen.dart';
@@ -62,6 +66,10 @@ class Routes {
     SettingsScreen.routeName: (context) => SettingsScreen(),
     WelcomeScreen.routeName: (context) => WelcomeScreen(),
     SplashScreen.routeName: (context) => SplashScreen(),
+    PrivacyPolicyScreen.routeName: (context) => PrivacyPolicyScreen(),
+    TermsAndConditionsScreen.routeName: (context) => TermsAndConditionsScreen(),
+    ContactUsScreen.routeName: (context) => ContactUsScreen(),
+    AboutUsScreen.routeName: (context) => AboutUsScreen(),
 
     //Diagnosis
     CategoryScreen.routeName: (context) => CategoryScreen(),

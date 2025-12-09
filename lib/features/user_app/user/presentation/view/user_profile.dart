@@ -28,7 +28,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   late TextEditingController _weightController;
 
   String? _maritalStatus;
-  String? _isSmoker;
+  bool? _isSmoke;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _heightController = TextEditingController();
     _weightController = TextEditingController();
     _maritalStatus = null;
-    _isSmoker = null;
+    _isSmoke = null;
   }
 
   @override
@@ -99,10 +99,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 heightController: _heightController,
                 weightController: _weightController,
                 maritalStatus: _maritalStatus,
-                isSmoker: _isSmoker,
+                isSmoke: _isSmoke,
                 onMaritalStatusChanged: (v) =>
                     setState(() => _maritalStatus = v),
-                onIsSmokerChanged: (v) => setState(() => _isSmoker = v),
+                onSmokeChanged: (val) => setState(() => _isSmoke = val),
               ),
               const SizedBox(height: 30),
               PrimaryButton(

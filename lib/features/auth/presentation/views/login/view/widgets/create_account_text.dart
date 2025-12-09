@@ -14,14 +14,22 @@ class CreateAccountText extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: RichText(
         text: TextSpan(
-          style: const TextStyle(fontSize: 14, color: AppColors.textColor),
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColors.textColor,
+            fontFamily: '"cocon-next-arabic"',
+          ),
           children: [
-             TextSpan(text: "dont_have_an_account".tr(context)),
             TextSpan(
-              text: 'create_one'.tr(context),
+              text: "dont_have_an_account".tr(context),
+              style: TextStyle(fontFamily: "cocon-next-arabic"),
+            ),
+            TextSpan(
+              text: " ${'create_one'.tr(context)}",
               style: const TextStyle(
                 color: AppColors.primaryColors,
                 decoration: TextDecoration.underline,
+                fontFamily: "cocon-next-arabic",
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
 import 'package:tabiby/features/user_app/home/presentation/view/sections/specialties_section.dart';
@@ -47,7 +48,7 @@ class HomeScreen extends StatelessWidget {
               } else if (state is HomeError) {
                 return Center(
                   child: CustomErrorWidget(
-                    errorMessage: state.errorMsg,
+                    errorMessage: state.errorMsg.tr(context),
                     onRetry: () {
                       context.read<HomeCubit>().getHome();
                     },

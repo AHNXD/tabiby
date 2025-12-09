@@ -51,7 +51,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               return const LoadingView();
             case ViewState.error:
               return ErrorView(
-                message: state.errorMessage,
+                message: state.errorMessage.tr(context),
                 onRetry: () => context.read<DiagnosisCubit>().fetchCategories(),
               );
             case ViewState.success:

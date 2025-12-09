@@ -19,6 +19,7 @@ import '../../features/user_app/specialties/data/repos/user_repo_iplm.dart';
 import '../../features/user_app/user/data/repos/user_repo.dart';
 import '../../features/user_app/user/data/repos/user_repo_iplm.dart';
 import '../Api_services/api_services.dart';
+import '../locale/locale_cubit.dart';
 
 final getit = GetIt.instance;
 
@@ -33,7 +34,8 @@ void setupLocatorServices() {
       ),
     ),
   );
-  // init API Service
+
+  getit.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
   getit.registerLazySingleton<ApiServices>(() => ApiServices(getit.get<Dio>()));
 
   // auth singleton

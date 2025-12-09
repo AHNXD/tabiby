@@ -4,9 +4,13 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 import 'package:tabiby/features/auth/presentation/views/login/view/login_screen.dart';
+import 'package:tabiby/features/shared/about_us/presentation/view/about_us_screen.dart';
+import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_screen.dart';
 
 import '../../../../../core/locale/locale_cubit.dart';
 import '../../../../auth/presentation/view-model/logout_cubit/logout_cubit.dart';
+import '../../../privacy_policy/presentation/view/privacy_policy_screen.dart';
+import '../../../terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 import '../widgets/settings_tile.dart';
 import 'settings_header_section.dart';
 
@@ -15,13 +19,18 @@ class SettingsButtonsSection extends StatelessWidget {
   void _showLanguageDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        // Get the current language code from the cubit state
+      builder: (BuildContext dialogContext) {
         final currentLanguageCode = context
             .read<LocaleCubit>()
             .state
             .locale
             .languageCode;
+        void setLanguage(String value) async {
+          await dialogContext.read<LocaleCubit>().changeLanguage(value);
+
+          // ignore: use_build_context_synchronously
+          Navigator.of(dialogContext).pop();
+        }
 
         return AlertDialog(
           title: Text('change_language'.tr(context)),
@@ -35,15 +44,11 @@ class SettingsButtonsSection extends StatelessWidget {
                   groupValue: currentLanguageCode,
                   onChanged: (String? value) {
                     if (value != null) {
-                      context.read<LocaleCubit>().changeLanguage(value);
-                      Navigator.of(context).pop();
+                      setLanguage(value);
                     }
                   },
                 ),
-                onTap: () {
-                  context.read<LocaleCubit>().changeLanguage('ar');
-                  Navigator.of(context).pop();
-                },
+                onTap: () => setLanguage('ar'),
               ),
 
               ListTile(
@@ -53,15 +58,11 @@ class SettingsButtonsSection extends StatelessWidget {
                   groupValue: currentLanguageCode,
                   onChanged: (String? value) {
                     if (value != null) {
-                      context.read<LocaleCubit>().changeLanguage(value);
-                      Navigator.of(context).pop();
+                      setLanguage(value);
                     }
                   },
                 ),
-                onTap: () {
-                  context.read<LocaleCubit>().changeLanguage('en');
-                  Navigator.of(context).pop();
-                },
+                onTap: () => setLanguage('en'),
               ),
             ],
           ),
@@ -114,7 +115,7 @@ class SettingsButtonsSection extends StatelessWidget {
             (Route<dynamic> route) => false,
           );
         } else if (state is LogoutError) {
-          messages(context, state.errorMsg, Colors.red);
+          messages(context, state.errorMsg.tr(context), Colors.red);
         }
       },
       child: BlocBuilder<LogoutCubit, LogoutState>(
@@ -141,22 +142,28 @@ class SettingsButtonsSection extends StatelessWidget {
               SettingsTile(
                 icon: Icons.info_outline,
                 title: 'about_us'.tr(context),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, AboutUsScreen.routeName),
               ),
               SettingsTile(
                 icon: Icons.description_outlined,
                 title: 'terms_conditions'.tr(context),
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  TermsAndConditionsScreen.routeName,
+                ),
               ),
               SettingsTile(
                 icon: Icons.privacy_tip_outlined,
                 title: 'privacy_policy'.tr(context),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, PrivacyPolicyScreen.routeName),
               ),
               SettingsTile(
                 icon: Icons.contact_support_outlined,
                 title: 'contact_us'.tr(context),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, ContactUsScreen.routeName),
               ),
 
               const SizedBox(height: 20),

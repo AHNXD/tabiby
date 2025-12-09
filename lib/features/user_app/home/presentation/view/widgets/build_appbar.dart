@@ -50,7 +50,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                           : Icon(Icons.notifications, color: Colors.white),
                     )
                   : state is UserError
-                  ? Text(state.errorMsg, style: TextStyle(color: Colors.white))
+                  ? Text(state.errorMsg.tr(context), style: TextStyle(color: Colors.white))
                   : Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: LinearProgressIndicator(),
