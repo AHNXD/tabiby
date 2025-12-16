@@ -282,5 +282,14 @@
     "deleting_account": "Deleting Account...",
     "delete_account": "Delete Account",
     "account_deleted_success": "Account deleted successfully.",
-    "delete_account_confirmation_message": "Are you sure you want to delete your account? This action cannot be undone."
+    "delete_account_confirmation_message": "Are you sure you want to delete your account? This action cannot be undone.",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "invalid_day": "Invalid day",
+    "free": "Free"
 }

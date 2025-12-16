@@ -41,4 +41,24 @@ class DoctorsRepoIplm implements DoctorsRepo {
       return left(ServerFailure(e.toString()));
     }
   }
+   @override
+     Future<Either<Failure, Doctor>> getDoctor(
+    int? doctorID,
+  ) async {
+    try {
+
+      var resp = await _apiServices.get(endPoint: "${Urls.doctor}/$doctorID");
+
+      if (resp.statusCode == 200 && resp.data['status'] == true) {
+        Doctor doctor = Doctor.fromJson(resp.data['data']);
+        return right(doctor);
+      }
+
+      return left(
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
+      );
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
+    }
+  }
 }

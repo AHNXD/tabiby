@@ -285,5 +285,14 @@
     "deleting_account": "جاري حذف الحساب...",
     "delete_account": "حذف الحساب",
     "account_deleted_success": "تم حذف الحساب بنجاح.",
-    "delete_account_confirmation_message": "هل أنت متأكد أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء."
+    "delete_account_confirmation_message": "هل أنت متأكد أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.",
+    "sunday": "الأحد",
+    "monday": "الاثنين",
+    "tuesday": "الثلاثاء",
+    "wednesday": "الأربعاء",
+    "thursday": "الخميس",
+    "friday": "الجمعة",
+    "saturday": "السبت",
+    "invalid_day": "يوم غير صالح",
+    "free": "مجاني"
 }

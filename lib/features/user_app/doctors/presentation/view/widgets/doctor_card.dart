@@ -5,10 +5,10 @@ import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model
 
 import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../../../../core/widgets/responsive_text.dart';
-import '../../../../doctor_details/view/doctor_details_screen.dart';
+import '../../../../doctor_details/presentation/view/doctor_details_screen.dart';
 
 class DoctorCard extends StatelessWidget {
-  final Doctors doctor;
+  final Doctor doctor;
 
   const DoctorCard({super.key, required this.doctor});
 
@@ -19,7 +19,7 @@ class DoctorCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DoctorDetailsScreen(doctor: doctor),
+            builder: (context) => DoctorDetailsScreen(doctorID: doctor.id!),
           ),
         );
       },

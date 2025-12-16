@@ -5,7 +5,6 @@ import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_s
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
-import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
 import '../../features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
@@ -22,7 +21,7 @@ import '../../features/user_app/specialties/presentation/view/all_specialties_sc
 import '../../features/user_app/center_details/presentation/view/center_details_screen.dart';
 import '../../features/user_app/centers/presentation/view/all_centers_screen.dart';
 import '../../features/user_app/diagnose/presentation/views/result_screen.dart';
-import '../../features/user_app/doctor_details/view/doctor_details_screen.dart';
+import '../../features/user_app/doctor_details/presentation/view/doctor_details_screen.dart';
 import '../../features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../features/user_app/home/presentation/view/home_screen.dart';
 import '../../features/user_app/user/presentation/view/user_profile.dart';
@@ -46,7 +45,7 @@ class Routes {
         CenterDetailsScreen(centerID: 0),
     AllCentersScreen.routeName: (context) => AllCentersScreen(),
     DoctorDetailsScreen.routeName: (context) =>
-        DoctorDetailsScreen(doctor: Doctors()),
+        DoctorDetailsScreen(doctorID: 0),
     AllDoctorsScreen.routeName: (context) => AllDoctorsScreen(),
     UserProfileScreen.routeName: (context) => UserProfileScreen(),
     UserAppointmentScreen.routeName: (context) => UserAppointmentScreen(),

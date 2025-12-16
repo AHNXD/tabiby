@@ -3,7 +3,7 @@ import '../../../specialties/data/models/specialties_model.dart';
 
 class DoctorsModel {
   PageInfo? pageInfo;
-  List<Doctors>? doctors;
+  List<Doctor>? doctors;
 
   DoctorsModel({this.pageInfo, this.doctors});
 
@@ -13,9 +13,9 @@ class DoctorsModel {
         : null;
 
     if (json['doctors'] != null) {
-      doctors = <Doctors>[];
+      doctors = <Doctor>[];
       json['doctors'].forEach((v) {
-        doctors!.add(Doctors.fromJson(v));
+        doctors!.add(Doctor.fromJson(v));
       });
     }
   }
@@ -32,7 +32,7 @@ class DoctorsModel {
   }
 }
 
-class Doctors {
+class Doctor {
   int? id;
   String? name;
   String? img;
@@ -41,8 +41,9 @@ class Doctors {
   int? yearsOfExperience;
   int? isActive;
   SpecializationModel? specialty;
+  List<DoctorCenters>? centers;
 
-  Doctors({
+  Doctor({
     this.id,
     this.name,
     this.img,
@@ -51,9 +52,10 @@ class Doctors {
     this.yearsOfExperience,
     this.isActive,
     this.specialty,
+     this.centers
   });
 
-  Doctors.fromJson(Map<String, dynamic> json) {
+  Doctor.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     img = json['img'];
@@ -64,6 +66,12 @@ class Doctors {
     specialty = json['specialty'] != null
         ? SpecializationModel.fromJson(json['specialty'])
         : null;
+    if (json['centers'] != null) {
+      centers = <DoctorCenters>[];
+      json['centers'].forEach((v) {
+        centers!.add(DoctorCenters.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +86,41 @@ class Doctors {
     if (specialty != null) {
       data['specialty'] = specialty!.toJson();
     }
+    if (centers != null) {
+      data['centers'] = centers!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class DoctorCenters {
+  int? id;
+  String? name;
+  String? price;
+  List<int>? days;
+  String? timeFrom;
+  String? timeTo;
+
+  DoctorCenters(
+      {this.id, this.name, this.price, this.days, this.timeFrom, this.timeTo});
+
+  DoctorCenters.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    price = json['price'];
+    days = json['days'].cast<int>();
+    timeFrom = json['time_from'];
+    timeTo = json['time_to'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['price'] = price;
+    data['days'] = days;
+    data['time_from'] = timeFrom;
+    data['time_to'] = timeTo;
     return data;
   }
 }
