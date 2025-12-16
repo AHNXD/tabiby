@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 
 class ClinicTile extends StatelessWidget {
+  final int centerID;
   final String clinicName;
-  final String specialty;
+  final int clinicID;
 
   const ClinicTile({
     super.key,
+    required this.centerID,
     required this.clinicName,
-    required this.specialty,
+    required this.clinicID,
   });
 
   @override
@@ -22,12 +24,15 @@ class ClinicTile extends StatelessWidget {
           clinicName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(
-          '${"specialty".tr(context)}: $specialty',
-          style: TextStyle(color: Colors.grey[700]),
-        ),
+
         trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            AllDoctorsScreen.routeName,
+            arguments: {'centerID': centerID, 'specialtyID': clinicID},
+          );
+        },
       ),
     );
   }

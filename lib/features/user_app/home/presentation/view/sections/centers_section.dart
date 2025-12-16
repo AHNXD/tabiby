@@ -37,7 +37,7 @@ class CentersSection extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CenterDetailsScreen(center: centers[index]),
+                          CenterDetailsScreen(centerID: centers[index].id!),
                     ),
                   );
                 },

@@ -36,27 +36,57 @@ class CentersModel {
 
 class Centers {
   int? id;
-  String? img;
   String? name;
+  String? img;
   String? address;
+  String? bio;
+  List<Clinics>? clinics;
 
-  Centers({this.id, this.img, this.name, this.address});
+  Centers({this.id, this.name, this.img, this.address, this.bio, this.clinics});
 
   Centers.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    img = json['img'];
     name = json['name'];
+    img = json['img'];
     address = json['address'];
+    bio = json['bio'];
+    if (json['clinics'] != null) {
+      clinics = <Clinics>[];
+      json['clinics'].forEach((v) {
+        clinics!.add(Clinics.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-
     data['id'] = id;
-    data['img'] = img;
     data['name'] = name;
+    data['img'] = img;
     data['address'] = address;
+    data['bio'] = bio;
+    if (clinics != null) {
+      data['clinics'] = clinics!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
+class Clinics {
+  int? id;
+  String? name;
+
+  Clinics({this.id, this.name});
+
+  Clinics.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
     return data;
   }
 }

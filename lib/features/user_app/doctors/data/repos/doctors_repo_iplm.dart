@@ -19,7 +19,7 @@ class DoctorsRepoIplm implements DoctorsRepo {
     try {
       String endpoint = Urls.doctors;
       if (centerID != null && specialtyID != null) {
-        endpoint += "$specialtyID/$centerID";
+        endpoint += "/$specialtyID/$centerID";
       } else if (centerID != null) {
         endpoint += "/0/$centerID";
       } else if (specialtyID != null) {

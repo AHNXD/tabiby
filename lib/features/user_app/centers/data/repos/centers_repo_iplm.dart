@@ -17,11 +17,28 @@ class CentersRepoIplm implements CentersRepo {
       var resp = await _apiServices.get(endPoint: Urls.centers);
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
-        CentersModel centers = CentersModel.fromJson(
-          resp.data['data'],
-        );
+        CentersModel centers = CentersModel.fromJson(resp.data['data']);
 
         return right(centers);
+      }
+
+      return left(
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
+      );
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Centers>> getCenter(int centerID) async {
+    try {
+      var resp = await _apiServices.get(endPoint: "${Urls.center}/$centerID");
+
+      if (resp.statusCode == 200 && resp.data['status'] == true) {
+        Centers center = Centers.fromJson(resp.data['data']['center']);
+
+        return right(center);
       }
 
       return left(

@@ -13,7 +13,6 @@ import 'widgets/center_card.dart';
 class AllCentersScreen extends StatelessWidget {
   static const String routeName = "/centers";
 
-
   const AllCentersScreen({super.key});
 
   @override
@@ -22,9 +21,7 @@ class AllCentersScreen extends StatelessWidget {
       appBar: CustomAppbar(title: "all_popular_centers".tr(context)),
       body: BlocProvider(
         create: (BuildContext context) {
-          return CentersCubit(
-            getit.get<CentersRepo>(),
-          )..getCenters();
+          return CentersCubit(getit.get<CentersRepo>())..getCenters();
         },
         child: BlocBuilder<CentersCubit, CentersState>(
           builder: (context, state) {
@@ -47,19 +44,21 @@ class AllCentersScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                CenterDetailsScreen(center: center!),
+                                CenterDetailsScreen(centerID: center!.id!),
                           ),
                         );
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: CenterCard(center: state.centers.centers?[index] ?? Centers()),
+                        child: CenterCard(
+                          center: state.centers.centers?[index] ?? Centers(),
+                        ),
                       ),
                     );
                   },
                 ),
               );
-            }else if (state is CentersError) {
+            } else if (state is CentersError) {
               return CustomErrorWidget(
                 textColor: Colors.black,
                 errorMessage: state.errorMsg,
@@ -67,9 +66,7 @@ class AllCentersScreen extends StatelessWidget {
                   context.read<CentersCubit>().getCenters();
                 },
               );
-            }
-
-            else {
+            } else {
               return const Center(child: CircularProgressIndicator());
             }
           },

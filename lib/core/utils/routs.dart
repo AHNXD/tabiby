@@ -3,7 +3,6 @@ import 'package:tabiby/features/auth/presentation/views/reset_password/presentat
 import 'package:tabiby/features/shared/about_us/presentation/view/about_us_screen.dart';
 import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_screen.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
-import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
 import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
@@ -44,7 +43,7 @@ class Routes {
     BookingScreen.routeName: (context) => BookingScreen(),
     AllSpecialtiesScreen.routeName: (context) => AllSpecialtiesScreen(),
     CenterDetailsScreen.routeName: (context) =>
-        CenterDetailsScreen(center: Centers()),
+        CenterDetailsScreen(centerID: 0),
     AllCentersScreen.routeName: (context) => AllCentersScreen(),
     DoctorDetailsScreen.routeName: (context) =>
         DoctorDetailsScreen(doctor: Doctors()),
