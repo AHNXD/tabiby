@@ -8,7 +8,7 @@ import '../widgets/section_header.dart';
 
 class DoctorsSection extends StatelessWidget {
   const DoctorsSection({super.key, required this.doctors});
-  final List<Doctors>? doctors;
+  final List<Doctor>? doctors;
   @override
   Widget build(BuildContext context) {
     return Column(

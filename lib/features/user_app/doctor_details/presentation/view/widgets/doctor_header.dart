@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
-import '../../../../../core/widgets/custom_image_widget.dart';
+import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class DoctorHeader extends StatelessWidget {
   final String name;

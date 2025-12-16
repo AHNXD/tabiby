@@ -6,7 +6,7 @@ import 'promot_model.dart';
 class HomeModel {
   List<Promot>? promot;
   List<SpecializationModel>? specialties;
-  List<Doctors>? doctors;
+  List<Doctor>? doctors;
   List<Centers>? centers;
 
   HomeModel({this.promot, this.specialties, this.doctors, this.centers});
@@ -25,9 +25,9 @@ class HomeModel {
       });
     }
     if (json['doctors'] != null) {
-      doctors = <Doctors>[];
+      doctors = <Doctor>[];
       json['doctors'].forEach((v) {
-        doctors!.add(Doctors.fromJson(v));
+        doctors!.add(Doctor.fromJson(v));
       });
     }
     if (json['centers'] != null) {

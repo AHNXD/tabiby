@@ -23,7 +23,7 @@ import '../../features/user_app/specialties/presentation/view/all_specialties_sc
 import '../../features/user_app/center_details/presentation/view/center_details_screen.dart';
 import '../../features/user_app/centers/presentation/view/all_centers_screen.dart';
 import '../../features/user_app/diagnose/presentation/views/result_screen.dart';
-import '../../features/user_app/doctor_details/view/doctor_details_screen.dart';
+import '../../features/user_app/doctor_details/presentation/view/doctor_details_screen.dart';
 import '../../features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../features/user_app/home/presentation/view/home_screen.dart';
 import '../../features/user_app/user/presentation/view/user_profile.dart';

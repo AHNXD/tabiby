@@ -8,4 +8,7 @@ abstract class DoctorsRepo {
     int? centerID,
     int? specialtyID,
   );
+   Future<Either<Failure, Doctor>> getDoctor(
+    int? doctorID
+  );
 }

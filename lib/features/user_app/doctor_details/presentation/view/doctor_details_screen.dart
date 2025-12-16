@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
-import '../../../../core/utils/colors.dart';
-import '../../../../core/widgets/custom_appbar.dart';
+import '../../../../../core/utils/colors.dart';
+import '../../../../../core/widgets/custom_appbar.dart';
 import 'sections/affiliated_centers_section.dart';
 import 'sections/biography_section.dart';
 import 'widgets/booking_button.dart';
@@ -11,7 +11,7 @@ import 'widgets/doctor_header.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   static const String routeName = "/doctor_details";
-  final Doctors doctor;
+  final Doctor doctor;
   final List<Map<String, dynamic>> centers;
 
   const DoctorDetailsScreen({

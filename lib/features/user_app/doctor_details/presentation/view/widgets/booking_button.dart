@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
 
-import '../../../add_appointment/view/booking_screen.dart';
+import '../../../../add_appointment/view/booking_screen.dart';
 
 class BookingButton extends StatelessWidget {
   const BookingButton({super.key});

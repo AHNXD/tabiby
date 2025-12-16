@@ -48,7 +48,7 @@ class AllDoctorsScreen extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DoctorCard(
-                        doctor: state.doctors.doctors?[index] ?? Doctors(),
+                        doctor: state.doctors.doctors?[index] ?? Doctor(),
                       ),
                     );
                   },

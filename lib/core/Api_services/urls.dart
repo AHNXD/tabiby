@@ -1,6 +1,6 @@
 class Urls {
   //base urls
-  static String ip = "192.168.1.142:8000";
+  static String ip = "192.168.173.169:8000";
   static String baseUrl = "http://$ip/api/";
 
   //assets urls
