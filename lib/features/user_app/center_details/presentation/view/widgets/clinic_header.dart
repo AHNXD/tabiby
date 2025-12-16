@@ -6,7 +6,7 @@ import '../../../../../../core/widgets/custom_image_widget.dart';
 class ClinicHeader extends StatelessWidget {
   final String name;
   final String address;
-  final String imageUrl;
+  final String? imageUrl;
 
   const ClinicHeader({
     super.key,

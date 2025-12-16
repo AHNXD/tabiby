@@ -4,7 +4,7 @@ import '../widgets/clinic_header.dart';
 class HeaderSection extends StatelessWidget {
   final String name;
   final String address;
-  final String imageUrl;
+  final String? imageUrl;
 
   const HeaderSection({
     super.key,

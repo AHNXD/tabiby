@@ -39,7 +39,7 @@ class CenterDetailsScreen extends StatelessWidget {
                         HeaderSection(
                           name: center.name ?? "",
                           address: center.address ?? "",
-                          imageUrl: center.img ?? 'assets/images/center.webp',
+                          imageUrl: center.img,
                         ),
                         AboutSection(
                           description:

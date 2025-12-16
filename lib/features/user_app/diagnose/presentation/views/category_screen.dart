@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
-import 'package:tabiby/features/user_app/diagnose/presentation/views/models/error_view.dart';
+import 'package:tabiby/core/widgets/custom_error_widget.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/models/loading_view.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
 import '../view_models/diagnosis_cubit.dart';
@@ -50,8 +50,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
             case ViewState.loading:
               return const LoadingView();
             case ViewState.error:
-              return ErrorView(
-                message: state.errorMessage.tr(context),
+              return CustomErrorWidget(
+                textColor: Colors.black,
+                errorMessage: state.errorMessage.tr(context),
                 onRetry: () => context.read<DiagnosisCubit>().fetchCategories(),
               );
             case ViewState.success:

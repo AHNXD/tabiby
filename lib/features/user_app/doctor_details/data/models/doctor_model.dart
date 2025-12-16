@@ -52,7 +52,7 @@ class Doctor {
     this.yearsOfExperience,
     this.isActive,
     this.specialty,
-     this.centers
+    this.centers,
   });
 
   Doctor.fromJson(Map<String, dynamic> json) {
@@ -61,7 +61,7 @@ class Doctor {
     img = json['img'];
     bio = json['bio'];
     rate = json['rate'];
-    yearsOfExperience = json['years_of_experience'];
+    yearsOfExperience = json['experience_years'];
     isActive = json['is_active'];
     specialty = json['specialty'] != null
         ? SpecializationModel.fromJson(json['specialty'])
@@ -81,7 +81,7 @@ class Doctor {
     data['img'] = img;
     data['bio'] = bio;
     data['rate'] = rate;
-    data['years_of_experience'] = yearsOfExperience;
+    data['experience_years'] = yearsOfExperience;
     data['is_active'] = isActive;
     if (specialty != null) {
       data['specialty'] = specialty!.toJson();
@@ -101,8 +101,14 @@ class DoctorCenters {
   String? timeFrom;
   String? timeTo;
 
-  DoctorCenters(
-      {this.id, this.name, this.price, this.days, this.timeFrom, this.timeTo});
+  DoctorCenters({
+    this.id,
+    this.name,
+    this.price,
+    this.days,
+    this.timeFrom,
+    this.timeTo,
+  });
 
   DoctorCenters.fromJson(Map<String, dynamic> json) {
     id = json['id'];

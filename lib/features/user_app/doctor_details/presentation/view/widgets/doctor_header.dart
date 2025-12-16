@@ -8,7 +8,6 @@ class DoctorHeader extends StatelessWidget {
   final String specialty;
   final String experience;
   final String? imageUrl;
-  final int rate;
 
   const DoctorHeader({
     super.key,
@@ -16,7 +15,6 @@ class DoctorHeader extends StatelessWidget {
     required this.specialty,
     required this.experience,
     required this.imageUrl,
-    required this.rate,
   });
 
   @override
