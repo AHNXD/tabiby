@@ -7,7 +7,7 @@ class AppColors {
   static const Color textTitleAppBarColor = Colors.white;
   static const Color textButtonColors = Colors.black;
   static const Color textFieldColor = Color(0xFF9B9B9B);
-  static const Color primaryColors = Color.fromARGB(255, 83, 158, 132);
+  static const Color primaryColors = Color(0xFF539E84);
   static const Color secColors = Color(0xFF187979);
   static const Color avatarColor = Color(0xffD9D9D9);
   static const Color textColor = Color.fromARGB(255, 132, 132, 132);
