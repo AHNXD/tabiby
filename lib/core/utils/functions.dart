@@ -14,6 +14,28 @@ Future<void> toggleScreenshot() async {
   }
 }
 
+String getDayName(int dayIndex , BuildContext context) {
+  switch (dayIndex) {
+    case 0:
+      return 'sunday'.tr(context);
+    case 1:
+      return 'monday'.tr(context);
+    case 2:
+      return 'tuesday'.tr(context);
+    case 3:
+      return 'wednesday'.tr(context);
+    case 4:
+      return 'thursday'.tr(context);
+    case 5:
+      return 'friday'.tr(context);
+    case 6:
+      return 'saturday'.tr(context);
+    default:
+      return 'invalid_day'.tr(context);
+  }
+}
+
+
 Future<void> enableScreenshot() async {
   await noScreenshot.screenshotOn();
   isSecureMode = false;

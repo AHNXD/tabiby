@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../data/models/doctor_model.dart';
 import '../widgets/center_card.dart';
 
 class AffiliatedCentersSection extends StatelessWidget {
-  final List<Map<String, dynamic>> centers;
+  final List<DoctorCenters> centers;
 
   const AffiliatedCentersSection({super.key, required this.centers});
 
@@ -23,17 +24,16 @@ class AffiliatedCentersSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...centers.map(
-          (center) => Padding(
+        ListView.builder(shrinkWrap: true,itemCount: centers.length ,itemBuilder: (context, index) {
+          final center = centers[index];
+          return Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
             child: CenterCard(
-              centerName: center['centerName'],
-              price: center['price'],
-              availableDays: List<String>.from(center['availableDays']),
+              center: center
             ),
-          ),
-        ),
-      ],
+          );
+        },
+    )],
     );
   }
 }

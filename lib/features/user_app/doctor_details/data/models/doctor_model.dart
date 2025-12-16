@@ -69,7 +69,7 @@ class Doctor {
     if (json['centers'] != null) {
       centers = <DoctorCenters>[];
       json['centers'].forEach((v) {
-        centers!.add(new DoctorCenters.fromJson(v));
+        centers!.add(DoctorCenters.fromJson(v));
       });
     }
   }
@@ -114,7 +114,7 @@ class DoctorCenters {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['price'] = price;

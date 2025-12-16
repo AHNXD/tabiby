@@ -1,27 +1,27 @@
 part of 'doctor_details_cubit.dart';
 
-sealed class DoctorsDetailsState extends Equatable {
-  const DoctorsDetailsState();
+sealed class DoctorDetailsState extends Equatable {
+  const DoctorDetailsState();
 
   @override
   List<Object> get props => [];
 }
 
-final class DoctorsDetailsInitial extends DoctorsDetailsState {}
+final class DoctorDetailsInitial extends DoctorDetailsState {}
 
-final class DoctorsDetailsLoading extends DoctorsDetailsState {}
+final class DoctorDetailsLoading extends DoctorDetailsState {}
 
-final class DoctorsDetailsError extends DoctorsDetailsState {
+final class DoctorDetailsError extends DoctorDetailsState {
   final String errorMsg;
 
-  const DoctorsDetailsError({required this.errorMsg});
+  const DoctorDetailsError({required this.errorMsg});
   @override
   List<Object> get props => [errorMsg];
 }
 
-final class DoctorsDetailsSuccess extends DoctorsDetailsState {
-  final DoctorsModel doctors;
-  const DoctorsDetailsSuccess({required this.doctors});
+final class DoctorDetailsSuccess extends DoctorDetailsState {
+  final Doctor doctor;
+  const DoctorDetailsSuccess({required this.doctor});
   @override
-  List<Object> get props => [doctors];
+  List<Object> get props => [doctor];
 }

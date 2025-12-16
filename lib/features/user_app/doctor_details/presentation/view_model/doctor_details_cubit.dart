@@ -6,18 +6,19 @@ import '../../../doctor_details/data/models/doctor_model.dart';
 
 part 'doctor_details_state.dart';
 
-class DoctorsDetailsCubit extends Cubit<DoctorsDetailsState> {
-  DoctorsDetailsCubit(this._doctorsRepo) : super(DoctorsDetailsInitial());
+class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
+  DoctorDetailsCubit(this._doctorsRepo) : super(DoctorDetailsInitial());
 
   final DoctorsRepo _doctorsRepo;
 
-  Future getDoctors(int? centerID, int? specialtyID) async {
-    emit(DoctorsDetailsLoading());
-    var data = await _doctorsRepo.getDoctors(centerID, specialtyID);
-    data.fold((failure) => emit(DoctorsDetailsError(errorMsg: failure.message)), (
-      doctors,
+  Future getDoctor(int? centerID) async {
+    emit(DoctorDetailsLoading());
+    var data = await _doctorsRepo.getDoctor(centerID);
+    data.fold((failure) => emit(DoctorDetailsError(errorMsg: failure.message)), (
+      doctor,
     ) {
-      emit(DoctorsDetailsSuccess(doctors: doctors));
+      emit(DoctorDetailsSuccess(doctor: doctor));
     });
   }
 }
+  
