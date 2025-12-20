@@ -24,6 +24,7 @@ class SpecialtyWidget extends StatelessWidget {
             width: 64,
             height: 64,
             margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(18),
