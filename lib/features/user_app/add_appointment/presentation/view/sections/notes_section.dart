@@ -5,7 +5,8 @@ import '../widgets/notes_field.dart';
 import '../widgets/section_title.dart';
 
 class NotesSection extends StatelessWidget {
-  const NotesSection({super.key});
+  final TextEditingController noteController;
+  const NotesSection({super.key, required this.noteController});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class NotesSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(title: '3. ${"add_notes".tr(context)}'),
-        NotesField(),
+        NotesField(noteController: noteController),
       ],
     );
   }

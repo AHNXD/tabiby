@@ -291,5 +291,6 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "invalid_day": "Invalid day",
-    "free": "Free"
+    "free": "Free",
+    "sy": "SY"
 }

@@ -7,10 +7,7 @@ import '../../../../../../core/utils/functions.dart';
 class CenterCard extends StatelessWidget {
   final DoctorCenters center;
 
-  const CenterCard({
-    super.key,
-    required this.center,
-  });
+  const CenterCard({super.key, required this.center});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +44,8 @@ class CenterCard extends StatelessWidget {
 
                   if (center.days != null && center.days!.isNotEmpty)
                     Wrap(
-                      spacing: 6.0, 
-                      runSpacing: 6.0, 
+                      spacing: 6.0,
+                      runSpacing: 6.0,
                       children: center.days!.map((dayIndex) {
                         return Container(
                           padding: const EdgeInsets.symmetric(
@@ -75,14 +72,13 @@ class CenterCard extends StatelessWidget {
             ),
             const SizedBox(width: 8),
 
-
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   center.price != null
-                      ? '${center.price}\$'
+                      ? '${center.price} ${"sy".tr(context)}'
                       : 'free'.tr(context),
                   style: const TextStyle(
                     fontSize: 16,

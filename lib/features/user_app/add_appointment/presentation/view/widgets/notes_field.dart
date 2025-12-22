@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 class NotesField extends StatelessWidget {
-  const NotesField({super.key});
-
+  const NotesField({super.key, required this.noteController});
+  final TextEditingController noteController;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       maxLines: 4,
+      controller: noteController,
       decoration: InputDecoration(
         hintText: 'hint_for_center_or_doctor'.tr(context),
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),

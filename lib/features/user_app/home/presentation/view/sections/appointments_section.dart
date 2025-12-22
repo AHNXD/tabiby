@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../core/widgets/secondry_button.dart';
-import '../../../../user_appointments/view/appointment_screen.dart';
+import '../../../../user_appointments/presentation/view/appointment_screen.dart';
 
 class AppointmentsSection extends StatelessWidget {
   const AppointmentsSection({super.key});

@@ -48,6 +48,7 @@ class HomeScreen extends StatelessWidget {
               } else if (state is HomeError) {
                 return Center(
                   child: CustomErrorWidget(
+                    textColor: Colors.black,
                     errorMessage: state.errorMsg.tr(context),
                     onRetry: () {
                       context.read<HomeCubit>().getHome();

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../data/models/appointments_model.dart';
 import 'appointment_item.dart';
 
 class AppointmentList extends StatelessWidget {
-  final List<Map<String, String>> appointments;
+  final List<Appointment> appointments;
 
   const AppointmentList({super.key, required this.appointments});
 
@@ -13,17 +14,7 @@ class AppointmentList extends StatelessWidget {
       itemCount: appointments.length,
       itemBuilder: (context, index) {
         final appt = appointments[index];
-        return AppointmentItem(
-          day: appt['day']!,
-          month: appt['month']!,
-          doctorName: appt['doctorName']!,
-          specialty: appt['specialty']!,
-          time: appt['time']!,
-          rating: appt['rating']!,
-          avatarUrl: appt['avatarUrl']!,
-          doctorNotes: appt['doctorNotes'],
-          prescription: appt['prescription'],
-        );
+        return AppointmentItem(appointment: appt);
       },
     );
   }

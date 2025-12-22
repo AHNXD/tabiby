@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/features/shared/settings/view/settings_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 
 class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -46,11 +47,21 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                       trailing: state.user.mainData!.role == 'doctor'
-                          ? Icon(Icons.logout, color: Colors.white)
+                          ? IconButton(
+                              onPressed: () => Navigator.pushNamed(
+                                context,
+                                SettingsScreen.routeName,
+                              ),
+                              icon: Icon(Icons.settings),
+                              color: Colors.white,
+                            )
                           : Icon(Icons.notifications, color: Colors.white),
                     )
                   : state is UserError
-                  ? Text(state.errorMsg.tr(context), style: TextStyle(color: Colors.white))
+                  ? Text(
+                      state.errorMsg.tr(context),
+                      style: TextStyle(color: Colors.white),
+                    )
                   : Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: LinearProgressIndicator(),

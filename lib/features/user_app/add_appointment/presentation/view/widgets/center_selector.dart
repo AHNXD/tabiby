@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../../../../core/utils/app_localizations.dart';
+import '../../../data/models/centers_appointment_model.dart';
+
 class CenterSelector extends StatelessWidget {
-  final List<Map<String, String>> centers;
-  final int selectedIndex;
+  final List<Centers> centers;
+  final int? selectedId;
   final ValueChanged<int> onSelect;
 
   const CenterSelector({
     super.key,
     required this.centers,
-    required this.selectedIndex,
+    required this.selectedId,
     required this.onSelect,
   });
 
@@ -22,9 +25,13 @@ class CenterSelector extends StatelessWidget {
         itemCount: centers.length,
         itemBuilder: (context, index) {
           final center = centers[index];
-          final isSelected = selectedIndex == index;
+          final isSelected = selectedId == center.id;
           return GestureDetector(
-            onTap: () => onSelect(index),
+            onTap: () {
+              if (center.id != null) {
+                onSelect(center.id!);
+              }
+            },
             child: Card(
               color: isSelected
                   ? AppColors.primaryColors
@@ -37,10 +44,9 @@ class CenterSelector extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      center['name']!,
+                      center.name ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: isSelected ? Colors.white : Colors.black87,
@@ -49,7 +55,7 @@ class CenterSelector extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      center['address']!,
+                      center.address ?? '',
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black54,
                         fontSize: 12,
@@ -57,7 +63,7 @@ class CenterSelector extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      center['price']!,
+                      "${center.price} ${"sy".tr(context)}",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
