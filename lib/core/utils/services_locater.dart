@@ -3,8 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:tabiby/features/auth/data/repos/logout_repo/logout_repo.dart';
 import 'package:tabiby/features/auth/data/repos/register_repo/register_repo.dart';
 import 'package:tabiby/features/auth/data/repos/register_repo/register_repo_iplm.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinment_repo.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinment_repo_iplm.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository_iplm.dart';
+import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments_repo.dart';
 import '../../features/auth/data/repos/login_repo/login_repo.dart';
 import '../../features/auth/data/repos/login_repo/login_repo_ipml.dart';
 import '../../features/auth/data/repos/logout_repo/logout_repo_iplm.dart';
@@ -18,6 +21,7 @@ import '../../features/user_app/specialties/data/repos/user_repo.dart';
 import '../../features/user_app/specialties/data/repos/user_repo_iplm.dart';
 import '../../features/user_app/user/data/repos/user_repo.dart';
 import '../../features/user_app/user/data/repos/user_repo_iplm.dart';
+import '../../features/user_app/user_appointments/data/repos/my_appointments_repo_iplm.dart';
 import '../Api_services/api_services.dart';
 import '../locale/locale_cubit.dart';
 
@@ -55,7 +59,7 @@ void setupLocatorServices() {
   //Doctors
   getit.registerSingleton<DoctorsRepo>(
     DoctorsRepoIplm(getit.get<ApiServices>()),
-  ); 
+  );
 
   //Centers
   getit.registerSingleton<CentersRepo>(
@@ -63,7 +67,14 @@ void setupLocatorServices() {
   );
 
   //Home
-  getit.registerSingleton<HomeRepo>(HomeRepoIplm(getit.get<ApiServices>())
+  getit.registerSingleton<HomeRepo>(HomeRepoIplm(getit.get<ApiServices>()));
+
+  //Appointment
+  getit.registerSingleton<AddAppoinmentRepo>(
+    AddAppoinmentRepoIplm(getit.get<ApiServices>()),
+  );
+  getit.registerSingleton<MyAppointmentsRepo>(
+    MyAppointmentsRepoIplm(getit.get<ApiServices>()),
   );
 
   //Diagnose

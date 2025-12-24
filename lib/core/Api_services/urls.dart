@@ -36,6 +36,14 @@ class Urls {
   //Home endpoint
   static const String home = "8000/api/home";
 
+  //appointments
+  static const getCenters = "8000/api/get_doctor_centers";
+  static const getDays = "8000/api/get_30_days";
+  static const getTimes = "8000/api/get_times_today";
+  static const addAppointment = "8000/api/appointment";
+  static const getAppointments = "8000/api/appointments";
+  static const getMyAppointments = "8000/api/appointments";
+
   //Diagnose endpoints
   static const String categories = "8001/api/v1/categories";
   static String questions(int categoryId) =>

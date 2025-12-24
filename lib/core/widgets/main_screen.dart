@@ -3,7 +3,7 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view/user_profile.dart';
-import 'package:tabiby/features/user_app/user_appointments/view/appointment_screen.dart';
+import 'package:tabiby/features/user_app/user_appointments/presentation/view/appointment_screen.dart';
 
 import '../../features/user_app/diagnose/presentation/views/category_screen.dart';
 

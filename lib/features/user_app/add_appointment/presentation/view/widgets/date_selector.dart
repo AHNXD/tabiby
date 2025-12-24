@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../data/models/days_model.dart';
+
 class DateSelector extends StatelessWidget {
-  final List<Map<String, String>> dates;
-  final int selectedIndex;
-  final ValueChanged<int> onSelect;
+  final List<Days> days;
+  final String? selectedDate;
+  final ValueChanged<String> onSelect;
 
   const DateSelector({
     super.key,
-    required this.dates,
-    required this.selectedIndex,
+    required this.days,
+    required this.selectedDate,
     required this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 70,
+      height: 75,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: dates.length,
+        itemCount: days.length,
         itemBuilder: (context, index) {
-          final date = dates[index];
-          final isSelected = selectedIndex == index;
+          final dayData = days[index];
+          DateTime parsedDate = DateTime.parse(dayData.date!);
+          final isSelected = selectedDate == dayData.date;
+
           return GestureDetector(
-            onTap: () => onSelect(index),
+            onTap: () {
+              if (dayData.date != null) {
+                onSelect(dayData.date!);
+              }
+            },
             child: Container(
-              width: 55,
+              width: 60,
               margin: const EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 color: isSelected
@@ -38,7 +47,7 @@ class DateSelector extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    date['day']!,
+                    DateFormat('E').format(parsedDate),
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.black54,
                       fontWeight: FontWeight.bold,
@@ -46,7 +55,7 @@ class DateSelector extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    date['date']!,
+                    DateFormat('dd').format(parsedDate),
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.black87,
                       fontSize: 18,

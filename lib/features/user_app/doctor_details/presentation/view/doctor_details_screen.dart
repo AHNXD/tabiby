@@ -24,10 +24,9 @@ class DoctorDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppbar(title: "doctor_details".tr(context)),
       body: BlocProvider(
-        create: (BuildContext context) {
-          return DoctorDetailsCubit(getit.get<DoctorsRepo>())
-            ..getDoctor(doctorID);
-        },
+        create: (context) =>
+            DoctorDetailsCubit(getit.get<DoctorsRepo>())..getDoctor(doctorID),
+
         child: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
           builder: (context, state) {
             if (state is DoctorDetailsSuccess) {
@@ -80,7 +79,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const BookingButton(),
+                  BookingButton(doctorID: doctorID),
                 ],
               );
             } else if (state is DoctorDetailsError) {
