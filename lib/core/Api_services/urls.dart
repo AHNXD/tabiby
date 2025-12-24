@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "10.191.120.1";
+  static String ip = "192.168.6.169";
 
   //base urls
   static String baseUrl = "http://$ip:";
