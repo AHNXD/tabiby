@@ -1,19 +1,20 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-
+import '../../../data/models/doctor_appointments_model.dart'; 
 import 'appointment_section.dart';
 import 'empty_state_section.dart';
 
 class AppointmentsListSection extends StatelessWidget {
-  final List<Map<String, dynamic>> appointments;
+  final List<DoctorAppointmentData> appointments; 
 
   const AppointmentsListSection({super.key, required this.appointments});
 
   @override
   Widget build(BuildContext context) {
+
     final groupedAppointments = groupBy(
       appointments,
-      (a) => a['centerName'] as String,
+      (DoctorAppointmentData appointment) => appointment.patientName ?? ' ', 
     );
 
     if (groupedAppointments.isEmpty) return const EmptyStateSection();

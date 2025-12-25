@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
+import '../../../../doctor_appointment/data/models/doctor_appointments_model.dart';
+
 class AppointmentDetailsHeader extends StatelessWidget {
-  final Map<String, dynamic> appointment;
+  final DoctorAppointmentData appointment;
   final Color primaryColor;
 
   const AppointmentDetailsHeader({
@@ -13,7 +15,7 @@ class AppointmentDetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = appointment['status'] as String;
+    final status = appointment.status ?? 'Pending';
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -31,7 +33,7 @@ class AppointmentDetailsHeader extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 36,
-            backgroundImage: AssetImage(appointment['image']),
+           // backgroundImage: AssetImage(appointment.image?? "assets/images/patient_placeholder.png"),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -39,7 +41,7 @@ class AppointmentDetailsHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  appointment['patientName'],
+                  appointment.patientName ?? ' ',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: primaryColor,

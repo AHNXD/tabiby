@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
-import '../../../../core/widgets/custom_appbar.dart';
+import '../../../../../core/widgets/custom_appbar.dart';
+import '../../../doctor_appointment/data/models/doctor_appointments_model.dart';
 import 'sections/bottom_buttons_section.dart';
 import 'sections/patient_info_section.dart';
 import 'sections/scheduled_time_section.dart';
@@ -10,7 +11,7 @@ import 'widgets/end_appointment_dialog.dart';
 
 class AppointmentDetailsDoctor extends StatelessWidget {
   static const String routeName = "/doctor_appointment_details";
-  final Map<String, dynamic> appointment;
+  final DoctorAppointmentData appointment;
   const AppointmentDetailsDoctor({super.key, required this.appointment});
 
   @override
@@ -24,25 +25,20 @@ class AppointmentDetailsDoctor extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🟦 Header Section
               AppointmentDetailsHeader(
                 appointment: appointment,
                 primaryColor: AppColors.primaryColors,
               ),
               const SizedBox(height: 24),
-
-              // 🟩 Patient Info Section
               const PatientInfoSection(),
               const SizedBox(height: 40),
 
-              // 🟨 Scheduled Time Section
               ScheduledTimeSection(appointment: appointment),
             ],
           ),
         ),
       ),
 
-      // 🟥 Bottom Buttons
       bottomNavigationBar: BottomButtonsSection(
         onCancel: () => Navigator.of(context).pop(),
         onEndAppointment: () => _showEndAppointmentDialog(context),

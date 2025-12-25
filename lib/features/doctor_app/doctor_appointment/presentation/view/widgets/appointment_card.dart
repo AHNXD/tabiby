@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-
-import '../../../appointment_details_doctor/view/appointment_details_screen.dart';
+import '../../../data/models/doctor_appointments_model.dart'; 
+import '../../../../appointment_details_doctor/presentaion/view/appointment_details_screen.dart';
 
 class AppointmentCard extends StatelessWidget {
-  final Map<String, dynamic> appointment;
+  
+  final DoctorAppointmentData appointment; 
+  
   const AppointmentCard({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
-    final status = appointment['status'] as String;
+    
+    final status = appointment.status ?? 'Pending';
     final statusColor = status == 'Confirmed' ? Colors.green : Colors.orange;
 
     return InkWell(
@@ -16,6 +19,7 @@ class AppointmentCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
+            
             builder: (_) => AppointmentDetailsDoctor(appointment: appointment),
           ),
         );
@@ -29,7 +33,7 @@ class AppointmentCard extends StatelessWidget {
           border: Border.all(color: Colors.grey.shade200),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.05),
+              color: Colors.grey.withOpacity(0.05),
               spreadRadius: 1,
               blurRadius: 10,
               offset: const Offset(0, 5),
@@ -48,8 +52,9 @@ class AppointmentCard extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             CircleAvatar(
-              backgroundImage: AssetImage(appointment['image']),
+              backgroundImage: NetworkImage("assets/images/patient.jpeg" ), 
               radius: 26,
+              backgroundColor: Colors.grey.shade200,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -57,7 +62,7 @@ class AppointmentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    appointment['patientName'],
+                    appointment.patientName ?? 'Unknown Patient',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 6),
@@ -70,7 +75,7 @@ class AppointmentCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        appointment['time'],
+                        appointment.time ?? '--:--',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -85,12 +90,9 @@ class AppointmentCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: 0.1),
+                      color: statusColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -111,7 +113,6 @@ class AppointmentCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 16),
           ],
         ),
       ),

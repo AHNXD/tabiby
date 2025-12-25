@@ -5,7 +5,7 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/main_screen.dart';
-import 'package:tabiby/features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
+import 'package:tabiby/features/doctor_app/doctor_appointment/presentation/view/doctor_appointment_screen.dart';
 
 import '../../../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../../../view-model/login_cubit/login_cubit.dart';
@@ -67,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
     } else if (role == "doctor") {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        DoctorDashboardScreen.routeName,
+        DoctorAppointmentScreen.routeName,
         (route) => false,
       );
     }

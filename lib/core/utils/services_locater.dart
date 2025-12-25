@@ -11,6 +11,8 @@ import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appoint
 import '../../features/auth/data/repos/login_repo/login_repo.dart';
 import '../../features/auth/data/repos/login_repo/login_repo_ipml.dart';
 import '../../features/auth/data/repos/logout_repo/logout_repo_iplm.dart';
+import '../../features/doctor_app/doctor_appointment/data/repos/doctor_appointment_repo.dart' show DoctorAppointmentsRepo;
+import '../../features/doctor_app/doctor_appointment/data/repos/doctor_appointments_repo_iplm.dart' show DoctorAppointmentRepoIplm;
 import '../../features/user_app/centers/data/repos/centers_repo.dart';
 import '../../features/user_app/centers/data/repos/centers_repo_iplm.dart';
 import '../../features/user_app/doctors/data/repos/doctors_repo.dart';
@@ -75,6 +77,10 @@ void setupLocatorServices() {
   );
   getit.registerSingleton<MyAppointmentsRepo>(
     MyAppointmentsRepoIplm(getit.get<ApiServices>()),
+  );
+  //Doctor Appointments
+  getit.registerSingleton<DoctorAppointmentsRepo>(
+    DoctorAppointmentRepoIplm(getit.get<ApiServices>()),
   );
 
   //Diagnose

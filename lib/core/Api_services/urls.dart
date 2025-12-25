@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "192.168.6.169";
+  static String ip = "192.168.36.169";
 
   //base urls
   static String baseUrl = "http://$ip:";
@@ -44,6 +44,9 @@ class Urls {
   static const getAppointments = "8000/api/appointments";
   static const getMyAppointments = "8000/api/appointments";
 
+  //doctors appointments endpoints
+  static const String doctorAppointments = "8000/api/doctor/appointments";
+  
   //Diagnose endpoints
   static const String categories = "8001/api/v1/categories";
   static String questions(int categoryId) =>

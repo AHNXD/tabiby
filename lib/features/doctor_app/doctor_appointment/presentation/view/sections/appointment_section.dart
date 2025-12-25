@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../../data/models/doctor_appointments_model.dart'; 
+import '../widgets/appointment_card.dart';
 
-import 'appointment_card.dart';
-
-class Appointment extends StatelessWidget {
+class AppointmentSection extends StatelessWidget {
   final String centerName;
-  final List<Map<String, dynamic>> appointments;
+  final List<DoctorAppointmentData> appointments;
 
-  const Appointment({
+  const AppointmentSection({
     super.key,
     required this.centerName,
     required this.appointments,

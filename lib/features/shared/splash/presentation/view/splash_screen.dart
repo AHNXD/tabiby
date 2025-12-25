@@ -5,7 +5,7 @@ import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/cache_helper.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/main_screen.dart';
-import 'package:tabiby/features/doctor_app/doctor_dashboard/view/doctor_dashboard_screen.dart';
+import 'package:tabiby/features/doctor_app/doctor_appointment/presentation/view/doctor_appointment_screen.dart';
 import 'package:tabiby/features/shared/welcome/view/welcome_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
         context.read<UserCubit>().getProfile();
         Navigator.pushReplacementNamed(
           context,
-          DoctorDashboardScreen.routeName,
+          DoctorAppointmentScreen.routeName,
         );
       } else {
         Navigator.pushReplacementNamed(context, WelcomeScreen.routeName);
