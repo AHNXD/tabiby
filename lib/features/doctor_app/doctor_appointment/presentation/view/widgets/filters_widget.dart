@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/core/utils/colors.dart'; 
+import 'package:tabiby/core/utils/colors.dart';
 
 class FiltersWidget extends StatelessWidget {
   final String selectedDate;
@@ -27,16 +27,14 @@ class FiltersWidget extends StatelessWidget {
         horizontal: 12.0,
       ),
 
-
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
-        borderSide: BorderSide.none, 
+        borderSide: BorderSide.none,
       ),
 
-    
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
-        borderSide: BorderSide(color: Colors.grey[300]!), 
+        borderSide: BorderSide(color: Colors.grey[300]!),
       ),
 
       focusedBorder: OutlineInputBorder(
@@ -45,7 +43,6 @@ class FiltersWidget extends StatelessWidget {
         borderSide: BorderSide(color: AppColors.primaryColors, width: 2.0),
       ),
     );
-  
 
     return Row(
       children: [
@@ -60,17 +57,14 @@ class FiltersWidget extends StatelessWidget {
 
             borderRadius: BorderRadius.circular(12.0),
             elevation: 4,
-            items:
-                [
-                      'today'.tr(context),
-                      'tomorrow'.tr(context),
-                      'this_week'.tr(context),
-                    ]
-                    .map(
-                      (label) =>
-                          DropdownMenuItem(value: label, child: Text(label)),
-                    )
-                    .toList(),
+            items: ['today', 'tomorrow', 'this_week']
+                .map(
+                  (label) => DropdownMenuItem(
+                    value: label,
+                    child: Text(label.tr(context)),
+                  ),
+                )
+                .toList(),
             onChanged: onDateChanged,
           ),
         ),
@@ -86,13 +80,11 @@ class FiltersWidget extends StatelessWidget {
 
             borderRadius: BorderRadius.circular(12.0),
             elevation: 4,
-            items:
-                ['all'.tr(context), 'Downtown Medical Center', 'Uptown Clinic']
-                    .map(
-                      (label) =>
-                          DropdownMenuItem(value: label, child: Text(label)),
-                    )
-                    .toList(),
+            items: ['all', 'Downtown Medical Center', 'Uptown Clinic']
+                .map(
+                  (label) => DropdownMenuItem(value: label, child: Text(label)),
+                )
+                .toList(),
             onChanged: onCenterChanged,
           ),
         ),

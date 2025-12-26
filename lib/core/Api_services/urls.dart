@@ -1,55 +1,59 @@
 class Urls {
   //ip
-  static String ip = "192.168.36.169";
+  static String ip = "192.168.1.2";
 
   //base urls
   static String baseUrl = "http://$ip:";
+
+  //ports
+  static String basePort = "8000/api";
+  static String aiPort = "8001/api";
 
   //assets urls
   static String assetsBaseUrl = "http://$ip/storage/app/public/";
 
   //auth endpoint
-  static String login = "8000/api/login";
-  static String logout = "8000/api/logout";
-  static String register = "8000/api/register";
-  static String verifiPhoneNum = "8000/api/verify-account";
-  static String forgetPassword = "8000/api/forget-password";
-  static String verfiResetPassword = "8000/api/verify-reset-password";
-  static String resendCode = "8000/api/resend-code";
+  static String login = "$basePort/login";
+  static String logout = "$basePort/logout";
+  static String register = "$basePort/register";
+  static String verifiPhoneNum = "$basePort/verify-account";
+  static String forgetPassword = "$basePort/forget-password";
+  static String verfiResetPassword = "$basePort/verify-reset-password";
+  static String resendCode = "$basePort/resend-code";
 
   //profile endpoint
-  static String getProfile = "8000/api/get_profile";
-  static String updateProfile = "8000/api/update_profile";
-  static String deleteProfile = "8000/api/delete_account";
+  static String getProfile = "$basePort/get_profile";
+  static String updateProfile = "$basePort/update_profile";
+  static String deleteProfile = "$basePort/delete_account";
 
   //Specialists endpoint
-  static const String specialists = "8000/api/get_all_specialties";
+  static String specialists = "$basePort/get_all_specialties";
 
   //Doctors endpoint
-  static const String doctors = "8000/api/get_all_doctors";
-  static const String doctor = "8000/api/get_doctor";
+  static String doctors = "$basePort/get_all_doctors";
+  static String doctor = "$basePort/get_doctor";
 
   //Centers endpoint
-  static const String centers = "8000/api/get_all_clinic_centers";
-  static const String center = "8000/api/get_clinic_center";
+  static String centers = "$basePort/get_all_clinic_centers";
+  static String center = "$basePort/get_clinic_center";
 
   //Home endpoint
-  static const String home = "8000/api/home";
+  static String home = "$basePort/home";
 
   //appointments
-  static const getCenters = "8000/api/get_doctor_centers";
-  static const getDays = "8000/api/get_30_days";
-  static const getTimes = "8000/api/get_times_today";
-  static const addAppointment = "8000/api/appointment";
-  static const getAppointments = "8000/api/appointments";
-  static const getMyAppointments = "8000/api/appointments";
+  static String getCenters = "$basePort/get_doctor_centers";
+  static String getDays = "$basePort/get_30_days";
+  static String getTimes = "$basePort/get_times_today";
+  static String addAppointment = "$basePort/appointment";
+  static String getAppointments = "$basePort/appointments";
+  static String getMyAppointments = "$basePort/appointments";
 
   //doctors appointments endpoints
-  static const String doctorAppointments = "8000/api/doctor/appointments";
-  
+  static String doctorAppointments = "$basePort/doctor/appointments";
+
   //Diagnose endpoints
-  static const String categories = "8001/api/v1/categories";
+  static String categories = "$aiPort/v1/categories";
   static String questions(int categoryId) =>
-      "8001/api/v1/categories/$categoryId/questions";
-  static const String diagnose = "8001/api/v1/diagnose";
+      "$aiPort/v1/categories/$categoryId/questions";
+  static String diagnose = "$aiPort/v1/diagnose";
 }

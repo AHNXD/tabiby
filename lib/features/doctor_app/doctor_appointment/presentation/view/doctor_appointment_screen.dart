@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../user_app/home/presentation/view/widgets/build_appbar.dart';
@@ -28,25 +27,25 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInitialSetup) {
+      _selectedDateFilter = 'today';
 
-      _selectedDateFilter = 'this_week'.tr(context); 
-      
-      _selectedCenterFilter = 'all'.tr(context);
-      
+      _selectedCenterFilter = 'all';
+
       _isInitialSetup = false;
     }
   }
 
   int? _mapCenterToId(String centerName) {
-    if (centerName == 'all'.tr(context)) return null;
+    if (centerName == 'all') return null;
     return int.tryParse(centerName);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DoctorsAppointmentsCubit(getit.get<DoctorAppointmentsRepo>())
-        ..getDoctorAppointments(null, null),
+      create: (context) =>
+          DoctorsAppointmentsCubit(getit.get<DoctorAppointmentsRepo>())
+            ..getDoctorAppointments(null, null),
       child: Scaffold(
         appBar: BuildAppbar(isDoctor: true),
         body: SafeArea(
@@ -54,7 +53,10 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
             children: [
               Builder(
                 builder: (blocContext) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 16,
+                  ),
                   child: FiltersSection(
                     selectedDate: _selectedDateFilter,
                     selectedCenter: _selectedCenterFilter,
@@ -62,7 +64,9 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
                       if (value != null) {
                         setState(() => _selectedDateFilter = value);
 
-                        blocContext.read<DoctorsAppointmentsCubit>().getDoctorAppointments(
+                        blocContext
+                            .read<DoctorsAppointmentsCubit>()
+                            .getDoctorAppointments(
                               _mapCenterToId(_selectedCenterFilter),
                               value,
                             );
@@ -71,8 +75,10 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
                     onCenterChanged: (value) {
                       if (value != null) {
                         setState(() => _selectedCenterFilter = value);
-                        
-                        blocContext.read<DoctorsAppointmentsCubit>().getDoctorAppointments(
+
+                        blocContext
+                            .read<DoctorsAppointmentsCubit>()
+                            .getDoctorAppointments(
                               _mapCenterToId(value),
                               _selectedDateFilter,
                             );
@@ -83,38 +89,51 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
               ),
 
               Expanded(
-                child: BlocBuilder<DoctorsAppointmentsCubit, DoctorsAppointmentsState>(
-                  builder: (context, state) {
-                    if (state is DoctorsAppointmentSuccess) {
-                      final appointments = state.doctorsAppointment.appointments;
+                child:
+                    BlocBuilder<
+                      DoctorsAppointmentsCubit,
+                      DoctorsAppointmentsState
+                    >(
+                      builder: (context, state) {
+                        if (state is DoctorsAppointmentSuccess) {
+                          final appointments =
+                              state.doctorsAppointment.appointments;
 
-                      return ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        children: [
-                          AppointmentsInfoSection(
-                            appointmentCount: appointments.length,
-                            selectedDate: _selectedDateFilter,
-                          ),
-                          const SizedBox(height: 16),
-                          AppointmentsListSection(appointments: appointments),
-                        ],
-                      );
-                    } else if (state is DoctorsAppointmentError) {
-                      return CustomErrorWidget(
-                        textColor: Colors.black,
-                        errorMessage: state.errorMsg,
-                        onRetry: () {
-                          context.read<DoctorsAppointmentsCubit>().getDoctorAppointments(
-                                _mapCenterToId(_selectedCenterFilter),
-                                _selectedDateFilter,
-                              );
-                        },
-                      );
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ),
+                          return ListView(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                            ),
+                            children: [
+                              AppointmentsInfoSection(
+                                appointmentCount: appointments.length,
+                                selectedDate: _selectedDateFilter,
+                              ),
+                              const SizedBox(height: 16),
+                              AppointmentsListSection(
+                                appointments: appointments,
+                              ),
+                            ],
+                          );
+                        } else if (state is DoctorsAppointmentError) {
+                          return CustomErrorWidget(
+                            textColor: Colors.black,
+                            errorMessage: state.errorMsg,
+                            onRetry: () {
+                              context
+                                  .read<DoctorsAppointmentsCubit>()
+                                  .getDoctorAppointments(
+                                    _mapCenterToId(_selectedCenterFilter),
+                                    _selectedDateFilter,
+                                  );
+                            },
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
               ),
             ],
           ),

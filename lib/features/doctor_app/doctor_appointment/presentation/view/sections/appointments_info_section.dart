@@ -14,11 +14,11 @@ class AppointmentsInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${"you_have".tr(context)} $appointmentCount ${"appointments_for".tr(context)} "$selectedDate".',
+      '${"you_have".tr(context)} $appointmentCount ${"appointments_for".tr(context)} "${selectedDate.tr(context)}".',
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: Colors.grey.shade600,
-            fontWeight: FontWeight.normal,
-          ),
+        color: Colors.grey.shade600,
+        fontWeight: FontWeight.normal,
+      ),
     );
   }
 }
