@@ -18,6 +18,7 @@ class DoctorAppointmentsModel {
 class DoctorAppointmentData {
   int? id;
   String? patientName;
+  String? patientImage;
   String? status;
   String? date;
   String? time;
@@ -25,6 +26,7 @@ class DoctorAppointmentData {
   DoctorAppointmentData({
     this.id,
     this.patientName,
+    this.patientImage,
     this.status,
     this.date,
     this.time,
@@ -33,7 +35,8 @@ class DoctorAppointmentData {
   factory DoctorAppointmentData.fromJson(Map<String, dynamic> json) {
     return DoctorAppointmentData(
       id: json['id'],
-      patientName: json['patient_name'], // Matches Postman key
+      patientName: json['patient_name'],
+      patientImage: json['patient_profile'],
       status: json['status'],
       date: json['date'],
       time: json['time'],
@@ -44,6 +47,7 @@ class DoctorAppointmentData {
     return {
       'id': id,
       'patient_name': patientName,
+      'patient_profile': patientImage,
       'status': status,
       'date': date,
       'time': time,
