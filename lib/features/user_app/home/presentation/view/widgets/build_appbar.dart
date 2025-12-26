@@ -49,7 +49,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                       subtitle: Text(
-                        '${isDoctor ? "dr".tr(context) : ""} ${state.user.mainData!.firstName} ${state.user.mainData!.lastName}',
+                        '${isDoctor ? "dr".tr(context) : ""} ${state.user.mainData!.firstName} ${state.user.mainData!.lastName??""}',
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                       trailing:isDoctor
