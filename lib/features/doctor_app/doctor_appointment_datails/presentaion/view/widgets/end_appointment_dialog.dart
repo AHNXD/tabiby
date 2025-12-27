@@ -52,7 +52,15 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
               ),
             ),
             const SizedBox(height: 8),
-            _buildPrescriptionForm(),
+            TextField(
+              controller: notesController,
+              maxLines: 4,
+              decoration: InputDecoration(
+                hintText: 'Add the medication, dose, and duration'.tr(context),
+                filled: true,
+                fillColor: widget.primaryColor.withValues(alpha: 0.1),
+              ),
+            ),
           ],
         ),
       ),
@@ -80,61 +88,4 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
     );
   }
 
-  Widget _buildPrescriptionForm() {
-    return Column(
-      children: [
-        const SizedBox(height: 4),
-        _buildMedicationRow(),
-        const SizedBox(height: 8),
-        TextButton.icon(
-          icon: Icon(Icons.add_circle_outline, color: widget.primaryColor),
-          label: Text(
-            'add_medication'.tr(context),
-            style: TextStyle(color: widget.primaryColor),
-          ),
-          onPressed: () {
-            setState(() {
-              prescriptions.add({'medication': '', 'dose': '', 'duration': ''});
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMedicationRow() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'medication'.tr(context),
-              hintStyle: TextStyle(color: widget.primaryColor),
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          flex: 2,
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'dose'.tr(context),
-              hintStyle: TextStyle(color: widget.primaryColor),
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          flex: 2,
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'duration'.tr(context),
-              hintStyle: TextStyle(color: widget.primaryColor),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }

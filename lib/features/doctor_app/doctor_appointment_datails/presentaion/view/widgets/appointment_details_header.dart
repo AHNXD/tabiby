@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tabiby/core/utils/app_localizations.dart';
-
-import '../../../../doctor_appointment/data/models/doctor_appointments_model.dart';
+import '../../../data/models/doctor_appointment_details_model.dart';
 
 class AppointmentDetailsHeader extends StatelessWidget {
-  final DoctorAppointmentData appointment;
+  final DoctorAppointmentDetailsModel appointment;
   final Color primaryColor;
 
   const AppointmentDetailsHeader({
@@ -33,7 +31,7 @@ class AppointmentDetailsHeader extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 36,
-           // backgroundImage: AssetImage(appointment.image?? "assets/images/patient_placeholder.png"),
+           backgroundImage: AssetImage("assets/images/patient.jpeg"),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -41,16 +39,11 @@ class AppointmentDetailsHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  appointment.patientName ?? ' ',
+                  appointment.patient?.fullName ?? ' ',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: primaryColor,
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${"patient_id".tr(context)}: 123-456-789',
-                  style: TextStyle(color: primaryColor),
                 ),
                 const SizedBox(height: 6),
                 Container(

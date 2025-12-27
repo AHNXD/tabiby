@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+
+import '../../../data/models/doctor_appointment_details_model.dart';
 import '../widgets/appointment_details_card.dart';
 
 class PatientInfoSection extends StatelessWidget {
-  const PatientInfoSection({super.key});
+  const PatientInfoSection({super.key, required this.appointmentDetails});
 
+  final DoctorAppointmentDetailsModel appointmentDetails;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,7 +23,7 @@ class PatientInfoSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        const AppointmentDetailsCard(),
+         AppointmentDetailsCard(appointmentDetails: appointmentDetails ),
       ],
     );
   }

@@ -56,7 +56,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                     : null,
               ),
 
-              // العنوان المركزي
+        
               Expanded(
                 child: Text(
                   title,

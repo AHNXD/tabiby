@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "10.125.54.169";
+  static String ip = "192.168.36.169";
 
   //base urls
   static String baseUrl = "http://$ip:";
@@ -50,6 +50,9 @@ class Urls {
 
   //doctors appointments endpoints
   static String doctorAppointments = "$basePort/doctor/appointments";
+
+  //doctors appointment details endpoint
+  static String doctorAppointmentDetails = "$basePort/appointment_details";
 
   //Diagnose endpoints
   static String categories = "$aiPort/v1/categories";

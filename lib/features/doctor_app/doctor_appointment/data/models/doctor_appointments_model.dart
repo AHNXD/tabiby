@@ -16,7 +16,7 @@ class DoctorAppointmentsModel {
 
 
 class DoctorAppointmentData {
-  int? id;
+  int id;
   String? patientName;
   String? patientImage;
   String? status;
@@ -24,7 +24,7 @@ class DoctorAppointmentData {
   String? time;
 
   DoctorAppointmentData({
-    this.id,
+    required this.id,
     this.patientName,
     this.patientImage,
     this.status,

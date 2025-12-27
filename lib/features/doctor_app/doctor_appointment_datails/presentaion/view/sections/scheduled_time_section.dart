@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
-
-import '../../../../doctor_appointment/data/models/doctor_appointments_model.dart';
+import 'package:tabiby/features/doctor_app/doctor_appointment_datails/data/models/doctor_appointment_details_model.dart';
 
 class ScheduledTimeSection extends StatelessWidget {
-  final DoctorAppointmentData appointment;
+  final DoctorAppointmentDetailsModel appointment;
   const ScheduledTimeSection({super.key, required this.appointment});
 
   @override
