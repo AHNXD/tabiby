@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/cache_helper.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 import 'package:tabiby/features/auth/presentation/views/login/view/login_screen.dart';
@@ -161,6 +162,7 @@ class SettingsButtonsSection extends StatelessWidget {
                     title: 'change_language'.tr(context),
                     onTap: () => _showLanguageDialog(context),
                   ),
+                  if(CacheHelper.getData(key: "role") == "patient")
                   SettingsTile(
                     icon: Icons.lock_outline,
                     title: 'change_password'.tr(context),
@@ -237,7 +239,7 @@ class SettingsButtonsSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-
+if(CacheHelper.getData(key: "role") == "patient")
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Card(

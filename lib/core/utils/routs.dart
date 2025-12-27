@@ -10,7 +10,7 @@ import '../../features/auth/presentation/views/confirm_password/presentation/vie
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
 import '../../features/auth/presentation/views/otp/presentation/view/otp_screen.dart';
 import '../../features/auth/presentation/views/sign_up/view/sign_up_screen.dart';
-import '../../features/doctor_app/appointment_details_doctor/presentaion/view/appointment_details_screen.dart';
+import '../../features/doctor_app/doctor_appointment_datails/presentaion/view/doctor_appointment_details_screen.dart';
 import '../../features/doctor_app/doctor_appointment/data/models/doctor_appointments_model.dart';
 import '../../features/doctor_app/doctor_appointment/presentation/view/doctor_appointment_screen.dart';
 import '../../features/shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
@@ -53,9 +53,9 @@ class Routes {
     MainScreen.routeName: (context) => MainScreen(),
 
     //doctor
-AppointmentDetailsDoctor.routeName: (context) {
+DoctorAppointmentDetailsScreen.routeName: (context) {
   final args = ModalRoute.of(context)!.settings.arguments as DoctorAppointmentData;
-  return AppointmentDetailsDoctor(appointment: args);
+  return DoctorAppointmentDetailsScreen(id:args.id);
 },
 DoctorAppointmentScreen.routeName: (context) => const DoctorAppointmentScreen(),
 

@@ -5,6 +5,8 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/shared/settings/view/settings_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 
+import '../../../../../../core/widgets/custom_image_widget.dart';
+
 class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
   const BuildAppbar({
     super.key,
@@ -33,20 +35,24 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: state is UserSuccess
                   ? ListTile(
-                      leading: const CircleAvatar(
-                        radius: 24,
-                        child: Icon(Icons.person, size: 36),
-                        // backgroundImage: AssetImage('assets/images/user.png'),
-                      ),
+                      leading: ClipOval(
+            child: CustomImageWidget(
+              imageUrl: state.user.mainData?.image,
+              placeholderAsset:isDoctor ?"assets/images/doctor.png":  "assets/images/patient.jpeg",
+              height: 50,
+              width: 50,
+              fit: BoxFit.cover,
+            ),
+          ),
                       title: Text(
                         'welcome_back'.tr(context),
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                       subtitle: Text(
-                        '${state.user.mainData!.role == 'doctor' ? "dr".tr(context) : ""} ${state.user.mainData!.firstName} ${state.user.mainData!.lastName}',
+                        '${isDoctor ? "dr".tr(context) : ""} ${state.user.mainData!.firstName} ${state.user.mainData!.lastName??""}',
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
-                      trailing: state.user.mainData!.role == 'doctor'
+                      trailing:isDoctor
                           ? IconButton(
                               onPressed: () => Navigator.pushNamed(
                                 context,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tabiby/core/utils/app_localizations.dart';
 
 class DashboardController {
   List<Map<String, dynamic>> filterAppointments({
@@ -12,11 +11,11 @@ class DashboardController {
     final now = DateTime.now();
 
     // Date Filter
-    if (selectedDateFilter == 'today'.tr(context)) {
+    if (selectedDateFilter == 'today') {
       appointments = appointments
           .where((a) => DateUtils.isSameDay(a['date'], now))
           .toList();
-    } else if (selectedDateFilter == 'tomorrow'.tr(context)) {
+    } else if (selectedDateFilter == 'tomorrow') {
       appointments = appointments
           .where(
             (a) => DateUtils.isSameDay(
@@ -25,7 +24,7 @@ class DashboardController {
             ),
           )
           .toList();
-    } else if (selectedDateFilter == 'this_week'.tr(context)) {
+    } else if (selectedDateFilter == 'this_week') {
       final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
       final endOfWeek = startOfWeek.add(const Duration(days: 6));
       appointments = appointments.where((a) {
@@ -36,7 +35,7 @@ class DashboardController {
     }
 
     // Center Filter
-    if (selectedCenterFilter != 'all'.tr(context)) {
+    if (selectedCenterFilter != 'all') {
       appointments = appointments
           .where((a) => a['centerName'] == selectedCenterFilter)
           .toList();

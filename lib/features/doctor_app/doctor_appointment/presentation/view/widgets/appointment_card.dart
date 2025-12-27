@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../data/models/doctor_appointments_model.dart'; 
-import '../../../../appointment_details_doctor/presentaion/view/appointment_details_screen.dart';
+import '../../../../doctor_appointment_datails/presentaion/view/doctor_appointment_details_screen.dart';
 
 class AppointmentCard extends StatelessWidget {
   
@@ -20,7 +21,7 @@ class AppointmentCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             
-            builder: (_) => AppointmentDetailsDoctor(appointment: appointment),
+            builder: (_) => DoctorAppointmentDetailsScreen(id: appointment.id),
           ),
         );
       },
@@ -51,11 +52,15 @@ class AppointmentCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            CircleAvatar(
-              backgroundImage: NetworkImage("assets/images/patient.jpeg" ), 
-              radius: 26,
-              backgroundColor: Colors.grey.shade200,
+         ClipOval(
+            child: CustomImageWidget(
+              imageUrl:appointment.patientImage,
+              placeholderAsset: "assets/images/patient.jpeg",
+              height: 50,
+              width: 50,
+              fit: BoxFit.cover,
             ),
+          ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(

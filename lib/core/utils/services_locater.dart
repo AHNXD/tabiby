@@ -13,6 +13,8 @@ import '../../features/auth/data/repos/login_repo/login_repo_ipml.dart';
 import '../../features/auth/data/repos/logout_repo/logout_repo_iplm.dart';
 import '../../features/doctor_app/doctor_appointment/data/repos/doctor_appointment_repo.dart' show DoctorAppointmentsRepo;
 import '../../features/doctor_app/doctor_appointment/data/repos/doctor_appointments_repo_iplm.dart' show DoctorAppointmentRepoIplm;
+import '../../features/doctor_app/doctor_appointment_datails/data/repos/doctor_appointment_details_repo.dart';
+import '../../features/doctor_app/doctor_appointment_datails/data/repos/doctor_appointments_details_repo_iplm.dart';
 import '../../features/user_app/centers/data/repos/centers_repo.dart';
 import '../../features/user_app/centers/data/repos/centers_repo_iplm.dart';
 import '../../features/user_app/doctors/data/repos/doctors_repo.dart';
@@ -82,6 +84,11 @@ void setupLocatorServices() {
   getit.registerSingleton<DoctorAppointmentsRepo>(
     DoctorAppointmentRepoIplm(getit.get<ApiServices>()),
   );
+
+  //Doctor Appointment Details
+   getit.registerSingleton<DoctorAppointmentDetailsRepo>(
+     DoctorAppointmentDetailsRepoIplm(getit.get<ApiServices>()),
+   );
 
   //Diagnose
   getit.registerSingleton<DiagnosisRepository>(

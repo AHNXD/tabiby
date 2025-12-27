@@ -1,3 +1,5 @@
+import '../../../user_app/add_appointment/data/models/centers_appointment_model.dart';
+
 class UserModel {
   MainData? mainData;
   MoreData? moreData;
@@ -33,6 +35,7 @@ class MainData {
   String? phone;
   String? email;
   String? role;
+  List<Centers>? centers;
 
   MainData({
     this.id,
@@ -42,6 +45,7 @@ class MainData {
     this.phone,
     this.email,
     this.role,
+    this.centers
   });
 
   MainData.fromJson(Map<String, dynamic> json) {
@@ -52,6 +56,13 @@ class MainData {
     phone = json['phone'];
     email = json['email'];
     role = json['role'];
+
+    if (json['centers'] != null) {
+      centers = <Centers>[];
+      json['centers'].forEach((v) {
+        centers!.add(Centers.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -63,6 +74,10 @@ class MainData {
     data['phone'] = phone;
     data['email'] = email;
     data['role'] = role;
+
+    if (centers != null) {
+      data['centers'] = centers!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
