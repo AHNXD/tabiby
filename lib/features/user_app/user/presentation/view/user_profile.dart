@@ -87,11 +87,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         'address': _addressController.text,
         'weight': _weightController.text,
         'height': _heightController.text,
-        'marital_status': _maritalStatus!.toLowerCase(),
+        'marital_status': _maritalStatus?.toLowerCase(),
         'is_smoke': _isSmoke == true ? '1' : '0',
         '_method': 'PUT',
-        'profile_image': _pickedImage,
       };
+
+      if (_pickedImage != null) {
+        registerData['profile_image'] = _pickedImage;
+      }
 
       context.read<UserCubit>().updateProfile(registerData);
     } else {
