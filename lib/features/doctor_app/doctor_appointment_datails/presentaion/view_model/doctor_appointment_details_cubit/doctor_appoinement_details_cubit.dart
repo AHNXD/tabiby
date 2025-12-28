@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/doctor_appointment_details_model.dart';
-import '../../data/repos/doctor_appointment_details_repo.dart';
+import '../../../data/models/doctor_appointment_details_model.dart';
+import '../../../data/repos/doctor_appointment_details_repo.dart';
 
 
 part 'doctor_appointment_details_state.dart';

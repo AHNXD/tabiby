@@ -33,6 +33,32 @@ class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
       return left(ServerFailure(e.toString()));
     }
   }
+  @override
+    Future<Either<Failure, String>> cancelAppointment(
+      int id) async {
+    try {
+      final endpoint = Urls.cancelAppointment;
+
+      var response = await _apiServices.post(
+        endPoint: endpoint,
+        data: {"appointment_id": id},
+      );
+
+      if (response.statusCode == 200) {
+        return right(
+          response.data['message'] ?? 'Appointment cancelled successfully',
+        );
+      }
+
+      return left(
+        ServerFailure(
+          response.data['message'] ?? ErrorHandler.defaultMessage(),
+        ),
+      );
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
+    }
+  }
    
   }
 

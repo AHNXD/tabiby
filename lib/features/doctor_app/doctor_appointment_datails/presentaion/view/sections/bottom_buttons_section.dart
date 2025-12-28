@@ -19,7 +19,6 @@ class BottomButtonsSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0).copyWith(bottom: 28),
       child: Row(
         children: [
-          // Cancel Button
           Expanded(
             child: SecondryButton(
               text: 'cancel'.tr(context),
