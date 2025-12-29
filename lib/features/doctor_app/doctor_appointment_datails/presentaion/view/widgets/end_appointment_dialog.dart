@@ -1,11 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+
+import '../../view_model/end_appointment_cubit/end_appointment_cubit.dart';
 
 class EndAppointmentDialog extends StatefulWidget {
   final Color primaryColor;
+  final int appointmentId;
 
-  const EndAppointmentDialog({super.key, required this.primaryColor});
+  const EndAppointmentDialog({super.key, required this.primaryColor, required this.appointmentId});
 
   @override
   State<EndAppointmentDialog> createState() => _EndAppointmentDialogState();
@@ -13,6 +16,7 @@ class EndAppointmentDialog extends StatefulWidget {
 
 class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
   final TextEditingController notesController = TextEditingController();
+  final TextEditingController prescriptionController = TextEditingController();
   final List<Map<String, String>> prescriptions = [];
 
   @override
@@ -53,14 +57,15 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
             ),
             const SizedBox(height: 8),
             TextField(
-              controller: notesController,
-              maxLines: 4,
-              decoration: InputDecoration(
-                hintText: 'Add the medication, dose, and duration'.tr(context),
-                filled: true,
-                fillColor: widget.primaryColor.withValues(alpha: 0.1),
+                controller: prescriptionController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  hintText: 'Add the medication, dose, and duration'.tr(context),
+                  filled: true,
+                  fillColor: widget.primaryColor.withValues(alpha: 0.1),
+                ),
               ),
-            ),
+
           ],
         ),
       ),
@@ -75,17 +80,24 @@ class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: widget.primaryColor),
           child: Text('submit'.tr(context)),
-          onPressed: () {
-            if (kDebugMode) {
-              print('Notes: ${notesController.text}');
-              print('Prescriptions: $prescriptions');
-            }
+         onPressed: () {
+        context.read<EndAppointmentCubit>().endAppointment(
+        widget.appointmentId,
+        notesController.text,
+        prescriptionController.text,
+      );
 
-            Navigator.of(context).pop();
-          },
+  Navigator.of(context).pop();
+},
         ),
       ],
     );
   }
+@override
+void dispose() {
+  notesController.dispose();
+  prescriptionController.dispose();
+  super.dispose();
+}
 
 }

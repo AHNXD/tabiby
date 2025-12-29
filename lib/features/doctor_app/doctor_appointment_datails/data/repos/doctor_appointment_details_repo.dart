@@ -8,5 +8,6 @@ abstract class DoctorAppointmentDetailsRepo {
     int id
   );
   Future<Either<Failure, String>> cancelAppointment(int appointmentId);
+   Future<Either<Failure, String>> endAppointment(int appointmentId, String note, String prescriptionsNote);
   
 }

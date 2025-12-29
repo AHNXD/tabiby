@@ -57,6 +57,9 @@ class Urls {
   //cancel appointment endpoint
   static String cancelAppointment = "$basePort/appointments/cancel";
 
+  //end appointment endpoint
+  static String endAppointment = "$basePort/doctor/appointments/end";
+
   //Diagnose endpoints
   static String categories = "$aiPort/v1/categories";
   static String questions(int categoryId) =>
