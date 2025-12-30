@@ -16,6 +16,7 @@ class UserAppointmentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 1,
       length: 3,
       child: Scaffold(
         appBar: CustomAppbar(
@@ -34,6 +35,12 @@ class UserAppointmentScreen extends StatelessWidget {
               child: BlocBuilder<MyAppointmentsCubit, MyAppointmentsState>(
                 builder: (context, state) {
                   if (state is MyAppointmentsSuccess) {
+                    Future<void> onRefresh() async {
+                      await context
+                          .read<MyAppointmentsCubit>()
+                          .getMyAppointments();
+                    }
+
                     return Column(
                       children: [
                         const ColoredTextTabBar(),
@@ -42,17 +49,26 @@ class UserAppointmentScreen extends StatelessWidget {
                         Expanded(
                           child: TabBarView(
                             children: [
-                              AppointmentList(
-                                appointments:
-                                    state.myAppointments.finished ?? [],
+                              RefreshIndicator(
+                                onRefresh: onRefresh,
+                                child: AppointmentList(
+                                  appointments:
+                                      state.myAppointments.completed ?? [],
+                                ),
                               ),
-                              AppointmentList(
-                                appointments:
-                                    state.myAppointments.pending ?? [],
+                              RefreshIndicator(
+                                onRefresh: onRefresh,
+                                child: AppointmentList(
+                                  appointments:
+                                      state.myAppointments.pending ?? [],
+                                ),
                               ),
-                              AppointmentList(
-                                appointments:
-                                    state.myAppointments.canceled ?? [],
+                              RefreshIndicator(
+                                onRefresh: onRefresh,
+                                child: AppointmentList(
+                                  appointments:
+                                      state.myAppointments.canceled ?? [],
+                                ),
                               ),
                             ],
                           ),

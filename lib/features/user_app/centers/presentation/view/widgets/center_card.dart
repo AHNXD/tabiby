@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/widgets/responsive_text.dart';
 import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class CenterCard extends StatelessWidget {
@@ -28,7 +29,7 @@ class CenterCard extends StatelessWidget {
           ClipOval(
             child: CustomImageWidget(
               imageUrl: center.img,
-              placeholderAsset: "assets/images/center.webp",
+              placeholderAsset: AssetsData.defaultCenter,
               height: 100,
               width: 100,
               fit: BoxFit.cover,

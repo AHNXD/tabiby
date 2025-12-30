@@ -40,7 +40,7 @@ class Routes {
 
     //user
     HomeScreen.routeName: (context) => HomeScreen(),
-    BookingScreen.routeName: (context) => BookingScreen(doctorID: 0,),
+    BookingScreen.routeName: (context) => BookingScreen(doctorID: 0),
     AllSpecialtiesScreen.routeName: (context) => AllSpecialtiesScreen(),
     CenterDetailsScreen.routeName: (context) =>
         CenterDetailsScreen(centerID: 0),
@@ -53,11 +53,13 @@ class Routes {
     MainScreen.routeName: (context) => MainScreen(),
 
     //doctor
-DoctorAppointmentDetailsScreen.routeName: (context) {
-  final args = ModalRoute.of(context)!.settings.arguments as DoctorAppointmentData;
-  return DoctorAppointmentDetailsScreen(id:args.id);
-},
-DoctorAppointmentScreen.routeName: (context) => const DoctorAppointmentScreen(),
+    DoctorAppointmentDetailsScreen.routeName: (context) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as DoctorAppointmentData;
+      return DoctorAppointmentDetailsScreen(id: args.id, status: "");
+    },
+    DoctorAppointmentScreen.routeName: (context) =>
+        const DoctorAppointmentScreen(),
 
     //shared
     SettingsScreen.routeName: (context) => SettingsScreen(),

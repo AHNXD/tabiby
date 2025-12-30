@@ -6,6 +6,7 @@ class FiltersSection extends StatelessWidget {
   final String selectedCenter;
   final ValueChanged<String?> onDateChanged;
   final ValueChanged<String?> onCenterChanged;
+  final List<dynamic> centers;
 
   const FiltersSection({
     super.key,
@@ -13,6 +14,7 @@ class FiltersSection extends StatelessWidget {
     required this.selectedCenter,
     required this.onDateChanged,
     required this.onCenterChanged,
+    required this.centers,
   });
 
   @override
@@ -22,6 +24,7 @@ class FiltersSection extends StatelessWidget {
       selectedCenter: selectedCenter,
       onDateChanged: onDateChanged,
       onCenterChanged: onCenterChanged,
+      centers: centers,
     );
   }
 }

@@ -34,24 +34,35 @@ class AllDoctorsScreen extends StatelessWidget {
         child: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
             if (state is DoctorsSuccess) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.9,
+              Future<void> onRefresh() async {
+                await context.read<DoctorsCubit>().getDoctors(
+                  centerID,
+                  specialtyID,
+                );
+              }
+
+              return RefreshIndicator(
+                onRefresh: onRefresh,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.9,
+                        ),
+                    itemCount: state.doctors.doctors?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DoctorCard(
+                          doctor: state.doctors.doctors?[index] ?? Doctor(),
+                        ),
+                      );
+                    },
                   ),
-                  itemCount: state.doctors.doctors?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DoctorCard(
-                        doctor: state.doctors.doctors?[index] ?? Doctor(),
-                      ),
-                    );
-                  },
                 ),
               );
             } else if (state is DoctorsError) {

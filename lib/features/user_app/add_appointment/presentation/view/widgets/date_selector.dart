@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../../../../core/utils/app_localizations.dart';
 import '../../../data/models/days_model.dart';
 
 class DateSelector extends StatelessWidget {
@@ -47,7 +48,9 @@ class DateSelector extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    DateFormat('E').format(parsedDate),
+                    DateFormat(
+                      'EEEE',
+                    ).format(parsedDate).toLowerCase().tr(context),
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.black54,
                       fontWeight: FontWeight.bold,

@@ -27,20 +27,29 @@ class AllSpecialtiesScreen extends StatelessWidget {
         child: BlocBuilder<SpecialtiesCubit, SpecialtiesState>(
           builder: (context, state) {
             if (state is SpecialtiesSuccess) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 0.9,
+              Future<void> onRefresh() async {
+                await context.read<SpecialtiesCubit>().getSpecialties();
+              }
+
+              return RefreshIndicator(
+                onRefresh: onRefresh,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: 0.9,
+                        ),
+                    itemCount: state.specialties.specializations?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final specialty =
+                          state.specialties.specializations![index];
+                      return SpecialtyWidget(specialty: specialty);
+                    },
                   ),
-                  itemCount: state.specialties.specializations?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final specialty = state.specialties.specializations![index];
-                    return SpecialtyWidget(specialty: specialty);
-                  },
                 ),
               );
             } else if (state is SpecialtiesError) {

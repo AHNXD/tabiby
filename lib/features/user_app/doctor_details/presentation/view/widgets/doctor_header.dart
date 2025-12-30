@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class DoctorHeader extends StatelessWidget {
@@ -24,7 +25,7 @@ class DoctorHeader extends StatelessWidget {
         ClipOval(
           child: CustomImageWidget(
             imageUrl: imageUrl,
-            placeholderAsset: "assets/images/doctor.png",
+            placeholderAsset: AssetsData.defaultDoctorProfile,
             height: 100,
             width: 100,
             fit: BoxFit.cover,

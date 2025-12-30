@@ -5,6 +5,7 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/shared/settings/view/settings_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -38,7 +39,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                       leading: ClipOval(
             child: CustomImageWidget(
               imageUrl: state.user.mainData?.image,
-              placeholderAsset:isDoctor ?"assets/images/doctor.png":  "assets/images/patient.jpeg",
+              placeholderAsset:isDoctor ?AssetsData.defaultDoctorProfile:  AssetsData.defaultProfileImage,
               height: 50,
               width: 50,
               fit: BoxFit.cover,

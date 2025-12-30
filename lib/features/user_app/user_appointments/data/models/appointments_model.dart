@@ -1,17 +1,17 @@
 import '../../../doctor_details/data/models/doctor_model.dart';
 
 class Appointments {
-  List<Appointment>? finished;
+  List<Appointment>? completed;
   List<Appointment>? pending;
   List<Appointment>? canceled;
 
-  Appointments({this.finished, this.pending, this.canceled});
+  Appointments({this.completed, this.pending, this.canceled});
 
   Appointments.fromJson(Map<String, dynamic> json) {
-    if (json['finished'] != null) {
-      finished = <Appointment>[];
-      json['finished'].forEach((v) {
-        finished!.add(Appointment.fromJson(v));
+    if (json['completed'] != null) {
+      completed = <Appointment>[];
+      json['completed'].forEach((v) {
+        completed!.add(Appointment.fromJson(v));
       });
     }
     if (json['pending'] != null) {
@@ -30,8 +30,8 @@ class Appointments {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (finished != null) {
-      data['finished'] = finished!.map((v) => v.toJson()).toList();
+    if (completed != null) {
+      data['completed'] = completed!.map((v) => v.toJson()).toList();
     }
     if (pending != null) {
       data['pending'] = pending!.map((v) => v.toJson()).toList();

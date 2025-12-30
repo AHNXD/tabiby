@@ -1,34 +1,33 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import '../../../data/models/doctor_appointments_model.dart'; 
-import 'appointment_section.dart';
+import '../../../data/models/doctor_appointments_model.dart';
+import '../widgets/appointment_card.dart';
 import 'empty_state_section.dart';
 
 class AppointmentsListSection extends StatelessWidget {
-  final List<DoctorAppointmentData> appointments; 
-
-  const AppointmentsListSection({super.key, required this.appointments});
+  final List<DoctorAppointmentData> appointments;
+  final Future<void> Function() onRefresh;
+  const AppointmentsListSection({
+    super.key,
+    required this.appointments,
+    required this.onRefresh,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (appointments.isEmpty) return const EmptyStateSection();
 
-    final groupedAppointments = groupBy(
-      appointments,
-      (DoctorAppointmentData appointment) => appointment.patientName ?? ' ', 
-    );
-
-    if (groupedAppointments.isEmpty) return const EmptyStateSection();
-
-    return Column(
-      children: groupedAppointments.entries.map((entry) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 24.0),
-          child: AppointmentSection(
-            centerName: entry.key,
-            appointments: entry.value,
-          ),
-        );
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: appointments.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
+        itemBuilder: (_, index) => AppointmentCard(
+          appointment: appointments[index],
+          onRefresh: onRefresh,
+        ),
+      ),
     );
   }
 }

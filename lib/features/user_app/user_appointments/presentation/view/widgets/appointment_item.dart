@@ -4,6 +4,7 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class AppointmentItem extends StatelessWidget {
@@ -32,7 +33,7 @@ class AppointmentItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
               child: Text(
-                DateFormat('E').format(parsedDate),
+                DateFormat('EEEE').format(parsedDate).toLowerCase().tr(context),
                 style: const TextStyle(
                   fontSize: 18,
                   color: Color(0xFF888888),
@@ -64,7 +65,7 @@ class AppointmentItem extends StatelessWidget {
             ClipOval(
               child: CustomImageWidget(
                 imageUrl: appointment.doctor!.img,
-                placeholderAsset: "assets/images/doctor.png",
+                placeholderAsset: AssetsData.defaultDoctorProfile,
                 height: 100,
                 width: 100,
                 fit: BoxFit.cover,

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../../../../core/widgets/responsive_text.dart';
 import '../../../../doctor_details/presentation/view/doctor_details_screen.dart';
@@ -42,7 +43,7 @@ class DoctorCard extends StatelessWidget {
             ClipOval(
               child: CustomImageWidget(
                 imageUrl: doctor.img,
-                placeholderAsset: "assets/images/doctor.png",
+                placeholderAsset: AssetsData.defaultDoctorProfile,
                 height: 100,
                 width: 100,
                 fit: BoxFit.cover,

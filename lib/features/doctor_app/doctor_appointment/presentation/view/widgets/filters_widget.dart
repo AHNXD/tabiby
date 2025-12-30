@@ -7,6 +7,7 @@ class FiltersWidget extends StatelessWidget {
   final String selectedCenter;
   final ValueChanged<String?> onDateChanged;
   final ValueChanged<String?> onCenterChanged;
+  final List<dynamic> centers;
 
   const FiltersWidget({
     super.key,
@@ -14,6 +15,7 @@ class FiltersWidget extends StatelessWidget {
     required this.selectedCenter,
     required this.onDateChanged,
     required this.onCenterChanged,
+    required this.centers,
   });
 
   @override
@@ -77,14 +79,17 @@ class FiltersWidget extends StatelessWidget {
             ),
             isExpanded: true,
             value: selectedCenter,
-
             borderRadius: BorderRadius.circular(12.0),
             elevation: 4,
-            items: ['all', 'Downtown Medical Center', 'Uptown Clinic']
-                .map(
-                  (label) => DropdownMenuItem(value: label, child: Text(label)),
-                )
-                .toList(),
+            items: [
+              DropdownMenuItem(value: 'all', child: Text('all'.tr(context))),
+              ...centers.map(
+                (center) => DropdownMenuItem(
+                  value: center.id.toString(),
+                  child: Text(center.name ?? ''),
+                ),
+              ),
+            ],
             onChanged: onCenterChanged,
           ),
         ),

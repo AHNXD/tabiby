@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../user_app/home/presentation/view/widgets/build_appbar.dart';
+import '../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../data/repos/doctor_appointment_repo.dart';
 import '../view_model/doctor_appoinements_cubit.dart';
 import 'sections/appointments_info_section.dart';
@@ -35,13 +36,19 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
     }
   }
 
-  int? _mapCenterToId(String centerName) {
-    if (centerName == 'all') return null;
-    return int.tryParse(centerName);
+  int? _mapCenterToId(String centerValue) {
+    if (centerValue == 'all') return null;
+    return int.tryParse(centerValue);
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = context.read<UserCubit>().state;
+    List<dynamic> centersList = [];
+
+    if (userState is UserSuccess) {
+      centersList = userState.user.mainData?.centers ?? [];
+    }
     return BlocProvider(
       create: (context) =>
           DoctorsAppointmentsCubit(getit.get<DoctorAppointmentsRepo>())
@@ -58,6 +65,7 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
                     vertical: 16,
                   ),
                   child: FiltersSection(
+                    centers: centersList,
                     selectedDate: _selectedDateFilter,
                     selectedCenter: _selectedCenterFilter,
                     onDateChanged: (value) {
@@ -98,21 +106,33 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
                         if (state is DoctorsAppointmentSuccess) {
                           final appointments =
                               state.doctorsAppointment.appointments;
+                          Future<void> onRefresh() async {
+                            await context
+                                .read<DoctorsAppointmentsCubit>()
+                                .getDoctorAppointments(
+                                  _mapCenterToId(_selectedCenterFilter),
+                                  _selectedDateFilter,
+                                );
+                          }
 
-                          return ListView(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0,
+                          return RefreshIndicator(
+                            onRefresh: onRefresh,
+                            child: ListView(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0,
+                              ),
+                              children: [
+                                AppointmentsInfoSection(
+                                  appointmentCount: appointments.length,
+                                  selectedDate: _selectedDateFilter,
+                                ),
+                                const SizedBox(height: 16),
+                                AppointmentsListSection(
+                                  appointments: appointments,
+                                  onRefresh: onRefresh,
+                                ),
+                              ],
                             ),
-                            children: [
-                              AppointmentsInfoSection(
-                                appointmentCount: appointments.length,
-                                selectedDate: _selectedDateFilter,
-                              ),
-                              const SizedBox(height: 16),
-                              AppointmentsListSection(
-                                appointments: appointments,
-                              ),
-                            ],
                           );
                         } else if (state is DoctorsAppointmentError) {
                           return CustomErrorWidget(

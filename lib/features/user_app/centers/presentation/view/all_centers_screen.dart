@@ -26,36 +26,44 @@ class AllCentersScreen extends StatelessWidget {
         child: BlocBuilder<CentersCubit, CentersState>(
           builder: (context, state) {
             if (state is CentersSuccess) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.8,
-                  ),
-                  itemCount: state.centers.centers?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final center = state.centers.centers?[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CenterDetailsScreen(centerID: center!.id!),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CenterCard(
-                          center: state.centers.centers?[index] ?? Centers(),
+              Future<void> onRefresh() async {
+                await context.read<CentersCubit>().getCenters();
+              }
+
+              return RefreshIndicator(
+                onRefresh: onRefresh,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.8,
                         ),
-                      ),
-                    );
-                  },
+                    itemCount: state.centers.centers?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final center = state.centers.centers?[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CenterDetailsScreen(centerID: center!.id!),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CenterCard(
+                            center: state.centers.centers?[index] ?? Centers(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               );
             } else if (state is CentersError) {

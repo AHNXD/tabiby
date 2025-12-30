@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
+
 class PatientInfoCard extends StatelessWidget {
   const PatientInfoCard({super.key});
 
@@ -10,7 +12,7 @@ class PatientInfoCard extends StatelessWidget {
       children: [
         const CircleAvatar(
           radius: 35,
-          backgroundImage: AssetImage('assets/images/doctor1.jpg'),
+          backgroundImage: AssetImage(AssetsData.defaultProfileImage),
         ),
         const SizedBox(width: 16),
         Column(
@@ -31,7 +33,7 @@ class PatientInfoCard extends StatelessWidget {
             ),
 
             const SizedBox(height: 4),
-             Text(
+            Text(
               '1 ${"appointment".tr(context)}',
               style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
             ),

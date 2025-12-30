@@ -3,6 +3,8 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../../../../core/utils/assets_data.dart';
+
 class ProfileAvatar extends StatelessWidget {
   final File? pickedImageFile;
   final String? currentImageUrl;
@@ -21,7 +23,7 @@ class ProfileAvatar extends StatelessWidget {
     } else if (currentImageUrl != null && currentImageUrl!.isNotEmpty) {
       return CachedNetworkImageProvider(currentImageUrl!);
     } else {
-      return const AssetImage('assets/images/user.png');
+      return const AssetImage(AssetsData.defaultProfileImage);
     }
   }
 

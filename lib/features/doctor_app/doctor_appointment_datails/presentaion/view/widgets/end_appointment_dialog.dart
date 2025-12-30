@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-
+import '../../../../../../core/utils/functions.dart';
 import '../../view_model/end_appointment_cubit/end_appointment_cubit.dart';
+import '../../view_model/end_appointment_cubit/end_appointment_state.dart';
 
 class EndAppointmentDialog extends StatefulWidget {
   final Color primaryColor;
   final int appointmentId;
 
-  const EndAppointmentDialog({super.key, required this.primaryColor, required this.appointmentId});
+  const EndAppointmentDialog({
+    super.key,
+    required this.primaryColor,
+    required this.appointmentId,
+  });
 
   @override
   State<EndAppointmentDialog> createState() => _EndAppointmentDialogState();
@@ -17,87 +22,110 @@ class EndAppointmentDialog extends StatefulWidget {
 class _EndAppointmentDialogState extends State<EndAppointmentDialog> {
   final TextEditingController notesController = TextEditingController();
   final TextEditingController prescriptionController = TextEditingController();
-  final List<Map<String, String>> prescriptions = [];
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        'complete_appointment'.tr(context),
-        style: TextStyle(color: widget.primaryColor),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'notes'.tr(context),
-              style: TextStyle(
-                color: widget.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: notesController,
-              maxLines: 4,
-              decoration: InputDecoration(
-                hintText: 'hint_add_clinical_notes'.tr(context),
-                filled: true,
-                fillColor: widget.primaryColor.withValues(alpha: 0.1),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'prescription'.tr(context),
-              style: TextStyle(
-                color: widget.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-                controller: prescriptionController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: 'Add the medication, dose, and duration'.tr(context),
-                  filled: true,
-                  fillColor: widget.primaryColor.withValues(alpha: 0.1),
+    return BlocListener<EndAppointmentCubit, EndAppointmentState>(
+      listener: (context, state) {
+        if (state is EndAppointmentSuccess) {
+          messages(context, state.message, Colors.green);
+          Navigator.of(context).pop(true);
+        } else if (state is EndAppointmentFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: AlertDialog(
+        title: Text(
+          'complete_appointment'.tr(context),
+          style: TextStyle(color: widget.primaryColor),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'notes'.tr(context),
+                style: TextStyle(
+                  color: widget.primaryColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          child: Text(
-            'cancel'.tr(context),
-            style: TextStyle(color: widget.primaryColor),
+              const SizedBox(height: 8),
+              TextField(
+                controller: notesController,
+                maxLines: 4,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: 'hint_add_clinical_notes'.tr(context),
+                  filled: true,
+                  fillColor: widget.primaryColor.withOpacity(0.1),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'prescription'.tr(context),
+                style: TextStyle(
+                  color: widget.primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: prescriptionController,
+                maxLines: 4,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: 'add_prescription'.tr(context),
+                  filled: true,
+                  fillColor: widget.primaryColor.withOpacity(0.1),
+                ),
+              ),
+            ],
           ),
-          onPressed: () => Navigator.of(context).pop(),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: widget.primaryColor),
-          child: Text('submit'.tr(context)),
-         onPressed: () {
-        context.read<EndAppointmentCubit>().endAppointment(
-        widget.appointmentId,
-        notesController.text,
-        prescriptionController.text,
-      );
-
-  Navigator.of(context).pop();
-},
-        ),
-      ],
+        actions: [
+          TextButton(
+            child: Text(
+              'cancel'.tr(context),
+              style: TextStyle(color: widget.primaryColor),
+            ),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          BlocBuilder<EndAppointmentCubit, EndAppointmentState>(
+            builder: (context, state) {
+              if (state is EndAppointmentLoading) {
+                return const CircularProgressIndicator();
+              }
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.primaryColor,
+                ),
+                child: Text(
+                  'submit'.tr(context),
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  context.read<EndAppointmentCubit>().endAppointment(
+                    widget.appointmentId,
+                    notesController.text,
+                    prescriptionController.text,
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
-@override
-void dispose() {
-  notesController.dispose();
-  prescriptionController.dispose();
-  super.dispose();
-}
 
+  @override
+  void dispose() {
+    notesController.dispose();
+    prescriptionController.dispose();
+    super.dispose();
+  }
 }

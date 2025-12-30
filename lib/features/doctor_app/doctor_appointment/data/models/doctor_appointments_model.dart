@@ -5,21 +5,21 @@ class DoctorAppointmentsModel {
 
   factory DoctorAppointmentsModel.fromJson(dynamic json) {
     List<DoctorAppointmentData> list = [];
-    
+
     if (json is List) {
       list = json.map((i) => DoctorAppointmentData.fromJson(i)).toList();
     }
-    
+
     return DoctorAppointmentsModel(appointments: list);
   }
 }
-
 
 class DoctorAppointmentData {
   int id;
   String? patientName;
   String? patientImage;
   String? status;
+  String? centerName;
   String? date;
   String? time;
 
@@ -28,6 +28,7 @@ class DoctorAppointmentData {
     this.patientName,
     this.patientImage,
     this.status,
+    this.centerName,
     this.date,
     this.time,
   });
@@ -38,6 +39,7 @@ class DoctorAppointmentData {
       patientName: json['patient_name'],
       patientImage: json['patient_profile'],
       status: json['status'],
+      centerName: json['clinic_center_name'],
       date: json['date'],
       time: json['time'],
     );
@@ -49,6 +51,7 @@ class DoctorAppointmentData {
       'patient_name': patientName,
       'patient_profile': patientImage,
       'status': status,
+      'clinic_center_name': centerName,
       'date': date,
       'time': time,
     };

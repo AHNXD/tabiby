@@ -295,5 +295,8 @@
     "saturday": "السبت",
     "invalid_day": "يوم غير صالح",
     "free": "مجاني",
-    "sy": "ل.س"
+    "sy": "ل.س",
+    "unknown_patient": "مريض غير معروف",
+    "add_prescription": "قم باضافة وصفة طبية",
+    "completed": "منتهٍ"
 }

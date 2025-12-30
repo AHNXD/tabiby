@@ -11,8 +11,7 @@ class ScheduledTimeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "${"scheduled_for".tr(context)} ${appointment.date}, "
-        "${appointment.date}/${appointment.date}/${appointment.date}",
+        "${"scheduled_for".tr(context)} ${appointment.date}",
         style: TextStyle(color: AppColors.primaryColors),
       ),
     );

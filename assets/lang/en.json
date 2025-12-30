@@ -292,5 +292,8 @@
     "saturday": "Saturday",
     "invalid_day": "Invalid day",
     "free": "Free",
-    "sy": "SY"
+    "sy": "SP",
+    "unknown_patient": "Unknown Patient",
+    "add_prescription": "Add Prescription",
+    "completed": "Completed"
 }
