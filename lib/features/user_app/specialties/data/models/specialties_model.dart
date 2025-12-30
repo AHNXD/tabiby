@@ -31,7 +31,8 @@ class SpecializationModel {
   SpecializationModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    img = json['image'];
+    if (json['image'] != null) img = json['image'];
+    if (json['img'] != null) img = json['img'];
   }
 
   Map<String, dynamic> toJson() {
