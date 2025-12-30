@@ -20,8 +20,14 @@ final class CentersError extends CentersState {
 }
 
 final class CentersSuccess extends CentersState {
-  final CentersModel centers;
-  const CentersSuccess({required this.centers});
+  final List<Centers> centers;
+  final bool hasMore;
+  final bool isLoadingMore;
+  const CentersSuccess({
+    required this.centers,
+    required this.hasMore,
+    required this.isLoadingMore,
+  });
   @override
-  List<Object> get props => [centers];
+  List<Object> get props => [centers, hasMore, isLoadingMore];
 }

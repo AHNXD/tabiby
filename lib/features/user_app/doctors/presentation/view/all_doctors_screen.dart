@@ -1,69 +1,110 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 import '../../../../../core/utils/services_locater.dart';
+import '../../../../../core/widgets/buttom_loader.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../data/repos/doctors_repo.dart';
 import '../view_model/doctor_cubit.dart';
 import 'widgets/doctor_card.dart';
 
-class AllDoctorsScreen extends StatelessWidget {
+class AllDoctorsScreen extends StatefulWidget {
   static const String routeName = "/doctors";
 
   const AllDoctorsScreen({super.key});
 
   @override
+  State<AllDoctorsScreen> createState() => _AllDoctorsScreenState();
+}
+
+class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
+  final ScrollController _controller = ScrollController();
+  int? centerID;
+  int? specialtyID;
+  late DoctorsCubit _doctorsCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _doctorsCubit = DoctorsCubit(getit.get<DoctorsRepo>());
+
+    _controller.addListener(() {
+      if (_controller.position.pixels >=
+              _controller.position.maxScrollExtent - 200 &&
+          !_doctorsCubit.isRefreshing) {
+        _doctorsCubit.getDoctors(centerID, specialtyID, loadMore: true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Object? arguments = ModalRoute.of(context)!.settings.arguments;
-
     final Map<String, dynamic> args =
         (arguments != null && arguments is Map<String, dynamic>)
         ? arguments
         : {};
-    final int? centerID = args['centerID'];
-    final int? specialtyID = args['specialtyID'];
+
+    centerID = args['centerID'];
+    specialtyID = args['specialtyID'];
     return Scaffold(
       appBar: CustomAppbar(title: "all_popular_doctors".tr(context)),
       body: BlocProvider(
         create: (BuildContext context) {
-          return DoctorsCubit(getit.get<DoctorsRepo>())
-            ..getDoctors(centerID, specialtyID);
+          return _doctorsCubit..getDoctors(centerID, specialtyID);
         },
         child: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
             if (state is DoctorsSuccess) {
               Future<void> onRefresh() async {
-                await context.read<DoctorsCubit>().getDoctors(
+                await context.read<DoctorsCubit>().refreshDoctors(
                   centerID,
                   specialtyID,
                 );
               }
 
-              return RefreshIndicator(
-                onRefresh: onRefresh,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 0.9,
-                        ),
-                    itemCount: state.doctors.doctors?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DoctorCard(
-                          doctor: state.doctors.doctors?[index] ?? Doctor(),
-                        ),
-                      );
-                    },
+              return Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: RefreshIndicator(
+                      onRefresh: onRefresh,
+                      child: GridView.builder(
+                        controller: _controller,
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: state.doctors.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.9,
+                            ),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DoctorCard(doctor: state.doctors[index]),
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                ),
+
+                  if (state.isLoadingMore)
+                    Positioned(
+                      bottom: 16,
+                      left: 0,
+                      right: 0,
+                      child: BottomLoader(),
+                    ),
+                ],
               );
             } else if (state is DoctorsError) {
               return CustomErrorWidget(

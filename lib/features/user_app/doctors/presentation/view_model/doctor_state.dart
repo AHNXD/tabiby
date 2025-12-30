@@ -20,8 +20,14 @@ final class DoctorsError extends DoctorsState {
 }
 
 final class DoctorsSuccess extends DoctorsState {
-  final DoctorsModel doctors;
-  const DoctorsSuccess({required this.doctors});
+  final List<Doctor> doctors;
+  final bool hasMore;
+  final bool isLoadingMore;
+  const DoctorsSuccess({
+    required this.doctors,
+    required this.hasMore,
+    required this.isLoadingMore,
+  });
   @override
-  List<Object> get props => [doctors];
+  List<Object> get props => [doctors, hasMore, isLoadingMore];
 }

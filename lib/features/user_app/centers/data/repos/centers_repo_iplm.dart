@@ -12,9 +12,11 @@ class CentersRepoIplm implements CentersRepo {
   CentersRepoIplm(this._apiServices);
 
   @override
-  Future<Either<Failure, CentersModel>> getCenters() async {
+  Future<Either<Failure, CentersModel>> getCenters(int page) async {
     try {
-      var resp = await _apiServices.get(endPoint: Urls.centers);
+      String endpoint = Urls.centers;
+      endpoint += "?page=$page";
+      var resp = await _apiServices.get(endPoint: endpoint);
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
         CentersModel centers = CentersModel.fromJson(resp.data['data']);

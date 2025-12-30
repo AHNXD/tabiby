@@ -7,6 +7,7 @@ abstract class DoctorsRepo {
   Future<Either<Failure, DoctorsModel>> getDoctors(
     int? centerID,
     int? specialtyID,
+    int page,
   );
    Future<Either<Failure, Doctor>> getDoctor(
     int? doctorID
