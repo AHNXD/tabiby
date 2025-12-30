@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
@@ -58,9 +61,25 @@ class UserRepoIplm implements UserRepo {
     Map<String, dynamic> registerData,
   ) async {
     try {
+      FormData formData = FormData.fromMap({});
+      for (var entry in registerData.entries) {
+        if (entry.value is File) {
+          File file = entry.value;
+          String fileName = file.path.split('/').last;
+          formData.files.add(
+            MapEntry(
+              entry.key,
+              await MultipartFile.fromFile(file.path, filename: fileName),
+            ),
+          );
+        } else {
+          formData.fields.add(MapEntry(entry.key, entry.value.toString()));
+        }
+      }
+
       var resp = await _apiServices.post(
         endPoint: Urls.updateProfile,
-        data: registerData,
+        data: formData,
       );
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {

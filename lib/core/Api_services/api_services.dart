@@ -49,7 +49,6 @@ class ApiServices {
     final String languageCode = _getLatestLanguageCode();
 
     final Map<String, String> headers = {
-      'Content-Type': 'application/json',
       "Accept": 'application/json',
       "Accept-Charset": "application/json",
       "Accept-Language": languageCode,
@@ -69,6 +68,14 @@ class ApiServices {
     required String endPoint,
     required dynamic data,
   }) async {
+    final Map<String, String> headers = await _headers();
+
+    if (data is! FormData) {
+      headers['Content-Type'] = 'application/json';
+    } else {
+      headers.remove('Content-Type');
+      headers.remove('content-type');
+    }
     return _dio.post(
       endPoint,
       data: data,
@@ -80,6 +87,14 @@ class ApiServices {
     required String endPoint,
     required dynamic data,
   }) async {
+    final Map<String, String> headers = await _headers();
+
+    if (data is! FormData) {
+      headers['Content-Type'] = 'application/json';
+    } else {
+      headers.remove('Content-Type');
+      headers.remove('content-type');
+    }
     return _dio.put(
       endPoint,
       data: data,
