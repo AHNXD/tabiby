@@ -35,10 +35,23 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
 
   @override
   Widget build(BuildContext context) {
+    // Using a transparent background for the dialog itself to let our rounded shape shine
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(24.0),
         child: BlocConsumer<RatingCubit, RatingState>(
           listener: (context, state) {
             if (state is RatingSuccess) {
@@ -60,8 +73,11 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const CircularProgressIndicator(),
-                  const SizedBox(height: 16),
-                  Text("checking".tr(context)),
+                  const SizedBox(height: 20),
+                  Text(
+                    "checking".tr(context),
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                 ],
               );
             }
@@ -71,10 +87,22 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 40),
-                  const SizedBox(height: 10),
-                  Text(state.errorMsg),
+                  Icon(
+                    Icons.error_outline_rounded,
+                    color: Colors.red.shade400,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    state.errorMsg,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
                   TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey.shade600,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     child: Text('close'.tr(context)),
                   ),
@@ -92,9 +120,12 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text("submitting".tr(context)),
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 20),
+                  Text(
+                    "submitting".tr(context),
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                 ],
               );
             }
@@ -118,31 +149,47 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
           Text(
             "your_feedback".tr(context),
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
               color: AppColors.primaryColors,
             ),
           ),
-          const SizedBox(height: 20),
-          _StarDisplay(value: status.rating!.rating ?? 0, size: 40),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
+          // Use the prettier static star display
+          _StarDisplay(value: status.rating!.rating ?? 0, size: 44),
+          const SizedBox(height: 24),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(8),
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200),
             ),
             child: Text(
-              status.rating!.comment ?? "no_comment".tr(context),
-              style: const TextStyle(color: Colors.black87),
+              status.rating!.comment != null &&
+                      status.rating!.comment!.isNotEmpty
+                  ? status.rating!.comment!
+                  : "no_comment".tr(context),
+              style: TextStyle(
+                color: Colors.grey.shade800,
+                fontSize: 15,
+                height: 1.4,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.grey.shade600,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
             onPressed: () => Navigator.pop(context),
-            child: Text('close'.tr(context)),
+            child: Text(
+              'close'.tr(context),
+              style: const TextStyle(fontSize: 16),
+            ),
           ),
         ],
       );
@@ -152,49 +199,91 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
     if (canRate) {
       return Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Text(
-              "rate_experience".tr(context),
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryColors,
+          Text(
+            "rate_experience".tr(context),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryColors,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "tap_stars_to_rate".tr(
+              context,
+            ), // Add this key to your localization
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+          ),
+          const SizedBox(height: 24),
+
+          // NEW Beautiful Star Selector
+          _AnimatedStarRatingSelector(
+            rating: _currentRating,
+            onRatingChanged: (rating) {
+              setState(() => _currentRating = rating);
+            },
+          ),
+
+          // Helper text based on rating
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 24),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: Text(
+                _getRatingLabel(_currentRating, context),
+                key: ValueKey<int>(_currentRating),
+                style: TextStyle(
+                  color: _currentRating > 0
+                      ? AppColors.primaryColors
+                      : Colors.grey.shade400,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 20),
 
-          // Star Selector
-          Center(
-            child: _StarRatingSelector(
-              rating: _currentRating,
-              onRatingChanged: (rating) {
-                setState(() => _currentRating = rating);
-              },
+          // NEW Beautiful Comment Field
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.15),
+                  spreadRadius: 1,
+                  blurRadius: 8,
+                  offset: const Offset(0, 2), // changes position of shadow
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 20),
-
-          // Comment Field
-          TextField(
-            controller: _commentController,
-            maxLines: 3,
-            decoration: InputDecoration(
-              hintText: "write_comment_here".tr(context),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+            child: TextField(
+              controller: _commentController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: "write_comment_here".tr(context),
+                hintStyle: TextStyle(color: Colors.grey.shade400),
+                border: InputBorder.none, // Remove default harsh border
+                contentPadding: const EdgeInsets.all(16),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(
+                    color: AppColors.primaryColors.withOpacity(0.5),
+                    width: 1.5,
+                  ),
+                ),
               ),
-              filled: true,
-              fillColor: Colors.grey.shade50,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
           // Submit Button
           SizedBox(
             width: double.infinity,
+            height: 50,
             child: ElevatedButton(
               onPressed: _currentRating > 0
                   ? () {
@@ -204,17 +293,23 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                         _commentController.text,
                       );
                     }
-                  : null, // Disable if no stars selected
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColors,
+                disabledBackgroundColor: Colors.grey.shade300,
+                elevation: _currentRating > 0 ? 4 : 0,
+                shadowColor: AppColors.primaryColors.withOpacity(0.4),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: Text(
                 'submit'.tr(context),
-                style: const TextStyle(color: Colors.white, fontSize: 16),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -226,26 +321,53 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.block, color: Colors.grey, size: 40),
-        const SizedBox(height: 10),
-        Text("cannot_rate_appointment".tr(context)),
+        Icon(Icons.block_rounded, color: Colors.grey.shade400, size: 50),
+        const SizedBox(height: 16),
+        Text(
+          "cannot_rate_appointment".tr(context),
+          style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+        ),
+        const SizedBox(height: 24),
         TextButton(
+          style: TextButton.styleFrom(foregroundColor: Colors.grey.shade600),
           onPressed: () => Navigator.pop(context),
-          child: Text('close'.tr(context)),
+          child: Text(
+            'close'.tr(context),
+            style: const TextStyle(fontSize: 16),
+          ),
         ),
       ],
     );
+  }
+
+  String _getRatingLabel(int rating, BuildContext context) {
+    switch (rating) {
+      case 1:
+        return "terrible".tr(context);
+      case 2:
+        return "bad".tr(context);
+      case 3:
+        return "average".tr(context);
+      case 4:
+        return "good".tr(context);
+      case 5:
+        return "excellent".tr(context);
+      default:
+        return ""; // Or some instruction like "Tap stars to rate"
+    }
   }
 }
 
 // --- Helper Widgets for Stars ---
 
-// 1. Interactive Star Selector
-class _StarRatingSelector extends StatelessWidget {
+// 1. NEW Animated Interactive Star Selector
+class _AnimatedStarRatingSelector extends StatelessWidget {
   final int rating;
   final Function(int) onRatingChanged;
+  // Warmer gold color
+  final Color starColor = AppColors.primaryColors;
 
-  const _StarRatingSelector({
+  const _AnimatedStarRatingSelector({
     required this.rating,
     required this.onRatingChanged,
   });
@@ -254,26 +376,48 @@ class _StarRatingSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
-        return IconButton(
-          onPressed: () => onRatingChanged(index + 1),
-          icon: Icon(
-            index < rating ? Icons.star : Icons.star_border,
-            color: Colors.amber,
-            size: 32,
+        final isSelected = index < rating;
+        return GestureDetector(
+          onTap: () => onRatingChanged(index + 1),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 350),
+              transitionBuilder: (child, animation) {
+                // Add a bouncy scale transition
+                return ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.elasticOut,
+                  ),
+                  child: child,
+                );
+              },
+              child: Icon(
+                // Use rounded icons for a softer feel
+                isSelected ? Icons.star_rounded : Icons.star_outline_rounded,
+                key: ValueKey<bool>(
+                  isSelected,
+                ), // Important for AnimatedSwitcher
+                color: isSelected ? starColor : Colors.grey.shade300,
+                size: 44,
+              ),
+            ),
           ),
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
         );
       }),
     );
   }
 }
 
-// 2. Static Star Display
+// 2. Static Star Display (Updated with rounded icons)
 class _StarDisplay extends StatelessWidget {
   final int value;
   final double size;
+  final Color starColor = AppColors.primaryColors;
+
   const _StarDisplay({required this.value, this.size = 24});
 
   @override
@@ -282,8 +426,8 @@ class _StarDisplay extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         return Icon(
-          index < value ? Icons.star : Icons.star_border,
-          color: Colors.amber,
+          index < value ? Icons.star_rounded : Icons.star_outline_rounded,
+          color: index < value ? starColor : Colors.grey.shade300,
           size: size,
         );
       }),

@@ -307,5 +307,12 @@
     "no_comment": "No Comment",
     "rate_experience": "Rate Experience",
     "write_comment_here": "Write Comment Here",
-    "cannot_rate_appointment": "Cannot Rate Appointment"
+    "cannot_rate_appointment": "Cannot Rate Appointment",
+    "tap_stars_to_rate": "Tap Stars To Rate",
+    "terrible": "Terrible",
+    "bad": "Bad",
+    "average": "Average",
+    "good": "Good",
+    "excellent": "Excellent"
+
 }

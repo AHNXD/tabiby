@@ -310,5 +310,11 @@
     "no_comment": "لا يوجد تعليق",
     "rate_experience": "قيّم التجربة",
     "write_comment_here": "اكتب تعليقك هنا",
-    "cannot_rate_appointment": "لا يمكن تقييم الموعد"
+    "cannot_rate_appointment": "لا يمكن تقييم الموعد",
+    "tap_stars_to_rate":"اضغط على النجوم للتقييم",
+    "terrible": "سيء جداً",
+    "bad": "سيء",
+    "average": "متوسط",
+    "good": "جيد",
+    "excellent": "ممتاز"
 }
