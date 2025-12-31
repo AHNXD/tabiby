@@ -12,16 +12,16 @@ class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
   DoctorAppointmentDetailsRepoIplm(this._apiServices);
 
   @override
-  Future<Either<Failure, DoctorAppointmentDetailsModel>> getDoctorAppointmentDetails(
-    int id,
-  ) async {
+  Future<Either<Failure, DoctorAppointmentDetailsModel>>
+  getDoctorAppointmentDetails(int id) async {
     try {
-      String endpoint ="${Urls.doctorAppointmentDetails}/$id";
-    
+      String endpoint = "${Urls.doctorAppointmentDetails}/$id";
+
       var resp = await _apiServices.get(endPoint: endpoint);
 
       if (resp.statusCode == 200 && resp.data['appointment'] != null) {
-        DoctorAppointmentDetailsModel doctorsAppointment = DoctorAppointmentDetailsModel.fromJson(resp.data['appointment']);
+        DoctorAppointmentDetailsModel doctorsAppointment =
+            DoctorAppointmentDetailsModel.fromJson(resp.data['appointment']);
 
         return right(doctorsAppointment);
       }
@@ -33,9 +33,9 @@ class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
       return left(ServerFailure(e.toString()));
     }
   }
+
   @override
-    Future<Either<Failure, String>> cancelAppointment(
-      int id) async {
+  Future<Either<Failure, String>> cancelAppointment(int id) async {
     try {
       final endpoint = Urls.cancelAppointment;
 
@@ -61,16 +61,20 @@ class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
   }
 
   @override
-    Future<Either<Failure, String>> endAppointment(
-      int id , String note, String prescriptionsNote) async {
+  Future<Either<Failure, String>> endAppointment(
+    int id,
+    String note,
+    String prescriptionsNote,
+  ) async {
     try {
       final endpoint = Urls.endAppointment;
 
       var response = await _apiServices.post(
         endPoint: endpoint,
-        data: {"appointment_id": id,
-                "note": note,
-                "prescriptions_note": prescriptionsNote
+        data: {
+          "appointment_id": id,
+          "note": note,
+          "prescription_note": prescriptionsNote,
         },
       );
 
@@ -89,6 +93,4 @@ class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
       return left(ServerFailure(e.toString()));
     }
   }
-   
-  }
-
+}
