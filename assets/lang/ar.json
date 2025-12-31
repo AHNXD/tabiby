@@ -301,5 +301,14 @@
     "completed": "منتهٍ",
     "patient_note": "ملاحظات المريض",
     "diagnosis_result":"نسبة التشخيص",
-    "attach_diagnosis_result": "ارفاق نتيجة التشخيص"
+    "attach_diagnosis_result": "ارفاق نتيجة التشخيص",
+    "rate": "تقييم",
+    "rating_submitted_successfully": "تم إرسال التقييم بنجاح",
+    "checking": "جارٍ التحقق...",
+    "submitting": "جارٍ الإرسال...",
+    "your_feedback": "ملاحظاتك",
+    "no_comment": "لا يوجد تعليق",
+    "rate_experience": "قيّم التجربة",
+    "write_comment_here": "اكتب تعليقك هنا",
+    "cannot_rate_appointment": "لا يمكن تقييم الموعد"
 }

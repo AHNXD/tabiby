@@ -67,6 +67,12 @@ class Urls {
   //end appointment endpoint
   static String endAppointment = "$basePort/doctor/appointments/end";
 
+  //rating appointment endpoint
+  static String checkAppointment(int appointmentID) =>
+      "$basePort/patient/appointments/$appointmentID/rating";
+
+  static String addRate = "$basePort/patient/appointments/rate";
+
   //Diagnose endpoints
   static String categories = "$aiPort/v1/categories";
   static String questions(int categoryId) =>

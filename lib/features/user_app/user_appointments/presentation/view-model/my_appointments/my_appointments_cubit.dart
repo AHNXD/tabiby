@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
-import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments_repo.dart';
+import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments/my_appointments_repo.dart';
 
 part 'my_appointments_state.dart';
 

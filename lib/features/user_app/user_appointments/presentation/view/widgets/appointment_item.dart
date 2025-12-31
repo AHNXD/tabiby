@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
+import '../../../data/repos/rating/rating_repo.dart';
+import '../../view-model/rating/rating_cubit.dart';
+import 'rating_dialog.dart';
 
 class AppointmentItem extends StatelessWidget {
   final Appointment appointment;
+  final String status;
 
-  const AppointmentItem({super.key, required this.appointment});
+  const AppointmentItem({
+    super.key,
+    required this.appointment,
+    required this.status,
+  });
+  void _showRatingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocProvider(
+          create: (context) => RatingCubit(getit.get<RatingRepo>()),
+          child: AppointmentRatingDialog(appointmentId: appointment.id!),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +63,24 @@ class AppointmentItem extends StatelessWidget {
               ),
             ),
             Spacer(),
+            if (status == 'completed')
+              TextButton.icon(
+                onPressed: () {
+                  _showRatingDialog(context);
+                },
+                icon: Icon(
+                  Icons.star_rate_rounded,
+                  size: 18,
+                  color: AppColors.primaryColors,
+                ),
+                label: Text(
+                  'rate'.tr(context),
+                  style: TextStyle(
+                    color: AppColors.primaryColors,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             if (appointment.doctorNote != null)
               TextButton(
                 onPressed: () {

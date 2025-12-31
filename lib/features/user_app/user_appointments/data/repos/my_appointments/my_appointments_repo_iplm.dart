@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
-import '../../../../../core/Api_services/api_services.dart';
-import '../../../../../core/Api_services/urls.dart';
-import '../../../../../core/errors/error_handler.dart';
-import '../../../../../core/errors/failuer.dart';
+import '../../../../../../core/Api_services/api_services.dart';
+import '../../../../../../core/Api_services/urls.dart';
+import '../../../../../../core/errors/error_handler.dart';
+import '../../../../../../core/errors/failuer.dart';
 import 'my_appointments_repo.dart';
 
 class MyAppointmentsRepoIplm implements MyAppointmentsRepo {

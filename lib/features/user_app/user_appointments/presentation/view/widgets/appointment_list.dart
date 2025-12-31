@@ -4,8 +4,12 @@ import 'appointment_item.dart';
 
 class AppointmentList extends StatelessWidget {
   final List<Appointment> appointments;
-
-  const AppointmentList({super.key, required this.appointments});
+  final String status;
+  const AppointmentList({
+    super.key,
+    required this.appointments,
+    required this.status,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,7 @@ class AppointmentList extends StatelessWidget {
       itemCount: appointments.length,
       itemBuilder: (context, index) {
         final appt = appointments[index];
-        return AppointmentItem(appointment: appt);
+        return AppointmentItem(appointment: appt, status: status);
       },
     );
   }

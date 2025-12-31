@@ -298,5 +298,14 @@
     "completed": "Completed",
     "patient_note": "Patient Note",
     "diagnosis_result":"Diagnosis Result",
-    "attach_diagnosis_result": "Attach Diagnosis Result"
+    "attach_diagnosis_result": "Attach Diagnosis Result",
+    "rate": "Rate",
+    "rating_submitted_successfully": "Rating Submitted Successfully",
+    "checking":"Checking...",
+    "submitting":"Submitting...",
+    "your_feedback": "Your Feedback",
+    "no_comment": "No Comment",
+    "rate_experience": "Rate Experience",
+    "write_comment_here": "Write Comment Here",
+    "cannot_rate_appointment": "Cannot Rate Appointment"
 }

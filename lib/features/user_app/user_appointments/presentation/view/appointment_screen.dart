@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
-import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments_repo.dart';
-import 'package:tabiby/features/user_app/user_appointments/presentation/view-model/my_appointments_cubit.dart';
+import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments/my_appointments_repo.dart';
+import 'package:tabiby/features/user_app/user_appointments/presentation/view-model/my_appointments/my_appointments_cubit.dart';
 import '../../../../../core/utils/app_localizations.dart';
 import 'widgets/colored_text_bar.dart';
 import 'widgets/appointment_list.dart';
@@ -54,6 +54,7 @@ class UserAppointmentScreen extends StatelessWidget {
                                 child: AppointmentList(
                                   appointments:
                                       state.myAppointments.completed ?? [],
+                                  status: "completed",
                                 ),
                               ),
                               RefreshIndicator(
@@ -61,6 +62,7 @@ class UserAppointmentScreen extends StatelessWidget {
                                 child: AppointmentList(
                                   appointments:
                                       state.myAppointments.pending ?? [],
+                                  status: "pending",
                                 ),
                               ),
                               RefreshIndicator(
@@ -68,6 +70,7 @@ class UserAppointmentScreen extends StatelessWidget {
                                 child: AppointmentList(
                                   appointments:
                                       state.myAppointments.canceled ?? [],
+                                  status: "canceled",
                                 ),
                               ),
                             ],

@@ -47,6 +47,7 @@ class Appointment {
   int? id;
   String? date;
   String? time;
+  String? image;
   Doctor? doctor;
   DoctorNote? doctorNote;
 
@@ -56,6 +57,7 @@ class Appointment {
     id = json['id'];
     date = json['date'];
     time = json['time'];
+    image = json['image'];
     doctor = json['doctor'] != null ? Doctor.fromJson(json['doctor']) : null;
     doctorNote = json['doctor_notes'] != null
         ? DoctorNote.fromJson(json['doctor_notes'])
@@ -67,6 +69,7 @@ class Appointment {
     data['id'] = id;
     data['date'] = date;
     data['time'] = time;
+    data['image'] = image;
     if (doctor != null) {
       data['doctor'] = doctor!.toJson();
     }
