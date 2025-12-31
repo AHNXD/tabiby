@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tabiby/core/notification_services/notification.dart';
+import 'package:tabiby/features/auth/data/repos/reset_password_repo/reset_password_repo.dart';
+import 'package:tabiby/features/auth/presentation/view-model/reset_password_cubit/reset_password_cubit.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'package:tabiby/features/user_app/user/data/repos/user_repo.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
@@ -39,6 +41,10 @@ class Tabiby extends StatelessWidget {
         BlocProvider(create: (context) => LocaleCubit()..getSaveLanguage()),
         BlocProvider(
           create: (context) => DiagnosisCubit(getit.get<DiagnosisRepository>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ResetPasswordCubit(getit.get<ResetPasswordRepo>()),
         ),
         BlocProvider(create: (context) => UserCubit(getit.get<UserRepo>())),
       ],

@@ -316,5 +316,7 @@
     "bad": "سيء",
     "average": "متوسط",
     "good": "جيد",
-    "excellent": "ممتاز"
+    "excellent": "ممتاز",
+    "please_enter_the_full_OTP_code":"الرجاء ادخال رمز التحقق",
+    "invalid_OTP_format":"الرمز غير صحيح"
 }

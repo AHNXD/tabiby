@@ -7,7 +7,6 @@ part 'reset_password_state.dart';
 
 class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   final ResetPasswordRepo _resetPasswordRepo;
-  String password = "";
   ResetPasswordCubit(this._resetPasswordRepo) : super(ResetPasswordInitial());
 
   Future<void> forgetPassword({required String email}) async {
@@ -34,11 +33,16 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     );
   }
 
-  void resetPassword({required int otp, required String password}) async {
+  void resetPassword({
+    required int otp,
+    required String password,
+    required String email,
+  }) async {
     emit(ResetPasswordLoading());
     final result = await _resetPasswordRepo.resetPassword(
       otp: otp,
       password: password,
+      email: email,
     );
     result.fold(
       (failure) => emit(ResetPasswordError(errorMsg: failure.message)),

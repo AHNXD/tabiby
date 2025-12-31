@@ -313,6 +313,7 @@
     "bad": "Bad",
     "average": "Average",
     "good": "Good",
-    "excellent": "Excellent"
-
+    "excellent": "Excellent",
+    "please_enter_the_full_OTP_code":"Please enter the full OTP code",
+    "invalid_OTP_format":"Invalid OTP format"
 }

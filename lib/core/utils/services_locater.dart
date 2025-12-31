@@ -3,6 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:tabiby/features/auth/data/repos/logout_repo/logout_repo.dart';
 import 'package:tabiby/features/auth/data/repos/register_repo/register_repo.dart';
 import 'package:tabiby/features/auth/data/repos/register_repo/register_repo_iplm.dart';
+import 'package:tabiby/features/auth/data/repos/reset_password_repo/reset_password_repo.dart';
+import 'package:tabiby/features/auth/data/repos/reset_password_repo/reset_password_repo_iplm.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinment_repo.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinment_repo_iplm.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository.dart';
@@ -56,6 +58,11 @@ void setupLocatorServices() {
   );
   getit.registerSingleton<LoginRepo>(LoginRepoIpml(getit.get<ApiServices>()));
   getit.registerSingleton<LogoutRepo>(LogoutRepoIplm(getit.get<ApiServices>()));
+
+  //Reset Password
+  getit.registerSingleton<ResetPasswordRepo>(
+    ResetPasswordRepoImpl(getit.get<ApiServices>()),
+  );
 
   //User
   getit.registerSingleton<UserRepo>(UserRepoIplm(getit.get<ApiServices>()));

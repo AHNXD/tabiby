@@ -11,5 +11,6 @@ abstract class ResetPasswordRepo {
   Future<Either<Failure, bool>> resetPassword({
     required int otp,
     required String password,
+    required String email,
   });
 }

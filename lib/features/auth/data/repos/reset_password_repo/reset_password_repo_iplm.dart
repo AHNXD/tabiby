@@ -58,11 +58,12 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
   Future<Either<Failure, bool>> resetPassword({
     required int otp,
     required String password,
+    required String email,
   }) async {
     try {
       final response = await _apiServices.post(
         endPoint: Urls.resetPassword(otp, password),
-        data: {},
+        data: {"email": email},
       );
 
       if (response.statusCode == 200 && response.data["status"] == true) {
