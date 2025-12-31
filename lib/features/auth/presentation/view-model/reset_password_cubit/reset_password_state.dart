@@ -11,13 +11,7 @@ final class ResetPasswordInitial extends ResetPasswordState {}
 
 class ResetPasswordLoading extends ResetPasswordState {}
 
-class ResetPasswordSuccess extends ResetPasswordState {
-  final String phone;
-  const ResetPasswordSuccess({required this.phone});
-
-  @override
-  List<Object> get props => [phone];
-}
+class ForgetPasswordSuccess extends ResetPasswordState {}
 
 class ResetPasswordError extends ResetPasswordState {
   final String errorMsg;
@@ -27,10 +21,4 @@ class ResetPasswordError extends ResetPasswordState {
   List<Object> get props => [errorMsg];
 }
 
-class VerifyResetPasswordSuccess extends ResetPasswordState {
-  final String message;
-
-  const VerifyResetPasswordSuccess({required this.message});
-}
-
-class ResendCodeSuccess extends ResetPasswordState {}
+class VerifyResetPasswordSuccess extends ResetPasswordState {}

@@ -10,28 +10,39 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   String password = "";
   ResetPasswordCubit(this._resetPasswordRepo) : super(ResetPasswordInitial());
 
-  Future<void> resetPassword({required String phone}) async {
+  Future<void> forgetPassword({required String email}) async {
     emit(ResetPasswordLoading());
-    final result = await _resetPasswordRepo.resetPassword(phone: phone);
+    final result = await _resetPasswordRepo.forgetPassword(email: email);
     result.fold(
       (failure) => emit(ResetPasswordError(errorMsg: failure.message)),
-      (phone) => emit(ResetPasswordSuccess(phone: phone)),
+      (phone) => emit(ForgetPasswordSuccess()),
     );
   }
 
-  void verifyResetPassword({
-    required String phone,
-    required String code,
+  void resetPasswordInApp({
+    required String password,
+    required String confirmPassword,
   }) async {
     emit(ResetPasswordLoading());
-    final result = await _resetPasswordRepo.verifyResetPassword(
-      phone: phone,
-      code: code,
+    final result = await _resetPasswordRepo.resetPasswordInApp(
+      password: password,
+      confirmPassword: confirmPassword,
+    );
+    result.fold(
+      (failure) => emit(ResetPasswordError(errorMsg: failure.message)),
+      (message) => emit(VerifyResetPasswordSuccess()),
+    );
+  }
+
+  void resetPassword({required int otp, required String password}) async {
+    emit(ResetPasswordLoading());
+    final result = await _resetPasswordRepo.resetPassword(
+      otp: otp,
       password: password,
     );
     result.fold(
       (failure) => emit(ResetPasswordError(errorMsg: failure.message)),
-      (message) => emit(VerifyResetPasswordSuccess(message: message)),
+      (message) => emit(VerifyResetPasswordSuccess()),
     );
   }
 }

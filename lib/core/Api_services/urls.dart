@@ -26,8 +26,10 @@ class Urls {
 
   //reset password endpoint
   static String forgetPassword = "$basePort/password/forget_password";
-  static String resetPassword(String password, String confirmPassword) =>
+  static String resetPasswordInApp(String password, String confirmPassword) =>
       "$basePort/reset_password_after_auth?password=$password&password_confirmation=$confirmPassword";
+  static String resetPassword(int otp, String password) =>
+      "$basePort/password/reset_password?otp=$otp&password=$password";
 
   //profile endpoint
   static String getProfile = "$basePort/get_profile";

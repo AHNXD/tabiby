@@ -11,15 +11,15 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
 
   ResetPasswordRepoImpl(this._apiServices);
   @override
-  Future<Either<Failure, String>> resetPassword({required String phone}) async {
+  Future<Either<Failure, bool>> forgetPassword({required String email}) async {
     try {
       final resp = await _apiServices.post(
         endPoint: Urls.forgetPassword,
-        data: {"phone": phone},
+        data: {"email": email},
       );
 
-      if (resp.statusCode == 200 && resp.data['success']) {
-        return Right(resp.data['data']['phone']);
+      if (resp.statusCode == 200 && resp.data['status']) {
+        return Right(true);
       } else {
         return Left(
           ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
@@ -31,19 +31,42 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
   }
 
   @override
-  Future<Either<Failure, String>> verifyResetPassword({
-    required String phone,
-    required String code,
+  Future<Either<Failure, bool>> resetPasswordInApp({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    try {
+      final response = await _apiServices.post(
+        endPoint: Urls.resetPasswordInApp(password, confirmPassword),
+        data: {},
+      );
+
+      if (response.statusCode == 200 && response.data["status"] == true) {
+        return Right(true);
+      }
+      return Left(
+        ServerFailure(
+          response.data["message"] ?? ErrorHandler.defaultMessage(),
+        ),
+      );
+    } catch (e) {
+      return Left(ErrorHandler.handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> resetPassword({
+    required int otp,
     required String password,
   }) async {
     try {
       final response = await _apiServices.post(
-        endPoint: Urls.resetPassword(password, password),
-        data: {"phone": phone, "code": code, "password": password},
+        endPoint: Urls.resetPassword(otp, password),
+        data: {},
       );
 
-      if (response.statusCode == 200 && response.data["success"] == true) {
-        return Right(response.data["message"]);
+      if (response.statusCode == 200 && response.data["status"] == true) {
+        return Right(true);
       }
       return Left(
         ServerFailure(
