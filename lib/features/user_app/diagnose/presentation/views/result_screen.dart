@@ -16,6 +16,7 @@ class ResultScreen extends StatelessWidget {
 
   void _startOver(BuildContext context) {
     context.read<DiagnosisCubit>().resetDiagnosis();
+    context.read<DiagnosisCubit>().fetchCategories();
     Navigator.of(context).pop();
     Navigator.of(context).pop();
   }

@@ -112,13 +112,25 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
                                   ),
                                 ],
                                 const SizedBox(height: 16),
+                                if (state.doctorsAppointmentDetails.diagnose !=
+                                        null &&
+                                    state
+                                        .doctorsAppointmentDetails
+                                        .diagnose!
+                                        .isNotEmpty) ...[
+                                  const SizedBox(height: 24),
+                                  _buildDiagnosisCard(
+                                    context,
+                                    state.doctorsAppointmentDetails.diagnose!,
+                                  ),
+                                ],
+                                const SizedBox(height: 16),
                                 PatientInfoSection(
                                   appointmentDetails:
                                       state.doctorsAppointmentDetails,
                                 ),
-                                const SizedBox(height: 24),
 
-                                const SizedBox(height: 40),
+                                const SizedBox(height: 24),
                                 ScheduledTimeSection(
                                   appointment: state.doctorsAppointmentDetails,
                                 ),
@@ -155,6 +167,58 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildDiagnosisCard(BuildContext context, String diagnosis) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.primaryColors.withOpacity(0.3)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.medical_services_outlined,
+                color: AppColors.primaryColors,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                "diagnosis".tr(
+                  context,
+                ), // Ensure this key exists in your lang file
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColors,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            diagnosis,
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.black87,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
