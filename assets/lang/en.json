@@ -295,5 +295,6 @@
     "sy": "SP",
     "unknown_patient": "Unknown Patient",
     "add_prescription": "Add Prescription",
-    "completed": "Completed"
+    "completed": "Completed",
+    "patient_note": "Patient Note"
 }

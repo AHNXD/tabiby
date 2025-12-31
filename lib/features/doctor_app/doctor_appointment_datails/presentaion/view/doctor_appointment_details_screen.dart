@@ -99,11 +99,25 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
                                       ? Colors.orange
                                       : Colors.red,
                                 ),
-                                const SizedBox(height: 24),
+                                const SizedBox(height: 16),
+                                if (state.doctorsAppointmentDetails.note !=
+                                        null &&
+                                    state
+                                        .doctorsAppointmentDetails
+                                        .note!
+                                        .isNotEmpty) ...[
+                                  _buildPatientNoteButton(
+                                    context,
+                                    state.doctorsAppointmentDetails.note!,
+                                  ),
+                                ],
+                                const SizedBox(height: 16),
                                 PatientInfoSection(
                                   appointmentDetails:
                                       state.doctorsAppointmentDetails,
                                 ),
+                                const SizedBox(height: 24),
+
                                 const SizedBox(height: 40),
                                 ScheduledTimeSection(
                                   appointment: state.doctorsAppointmentDetails,
@@ -171,5 +185,92 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
 
       Navigator.of(context).pop();
     }
+  }
+
+  Widget _buildPatientNoteButton(BuildContext context, String note) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ListTile(
+        onTap: () => _showNoteDialog(context, note),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColors.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(Icons.note_alt_outlined, color: AppColors.primaryColors),
+        ),
+        title: Text(
+          "patient_note".tr(context),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+
+  // --- Helper to Show Dialog ---
+  void _showNoteDialog(BuildContext context, String note) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.notes, color: AppColors.primaryColors),
+                  const SizedBox(width: 10),
+                  Text(
+                    "patient_note".tr(context),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryColors,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Text(
+                    note,
+                    style: const TextStyle(fontSize: 16, height: 1.5),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("close".tr(context)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

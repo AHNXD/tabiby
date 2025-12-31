@@ -34,11 +34,7 @@ class ClinicsSection extends StatelessWidget {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            return ClinicTile(
-              centerID: centerID,
-              clinicID: clinics[index].id ?? 0,
-              clinicName: clinics[index].name ?? '',
-            );
+            return ClinicTile(centerID: centerID, clinic: clinics[index]);
           },
         ),
       ],
