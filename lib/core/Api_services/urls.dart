@@ -23,10 +23,11 @@ class Urls {
   static String login = "$basePort/login";
   static String logout = "$basePort/logout";
   static String register = "$basePort/register";
-  static String verifiPhoneNum = "$basePort/verify-account";
-  static String forgetPassword = "$basePort/forget-password";
-  static String verfiResetPassword = "$basePort/verify-reset-password";
-  static String resendCode = "$basePort/resend-code";
+
+  //reset password endpoint
+  static String forgetPassword = "$basePort/password/forget_password";
+  static String resetPassword(String password, String confirmPassword) =>
+      "$basePort/reset_password_after_auth?password=$password&password_confirmation=$confirmPassword";
 
   //profile endpoint
   static String getProfile = "$basePort/get_profile";

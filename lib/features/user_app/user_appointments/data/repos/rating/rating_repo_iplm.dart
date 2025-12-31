@@ -23,7 +23,7 @@ class RatingRepoIplm implements RatingRepo {
         data: {"appointment_id": id, "rating": rate, "comment": comment},
       );
 
-      if (resp.statusCode == 200 && resp.data['status']) {
+      if (resp.statusCode == 201 && resp.data['status']) {
         return right(true);
       }
 

@@ -34,13 +34,4 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
       (message) => emit(VerifyResetPasswordSuccess(message: message)),
     );
   }
-
-  void resendCode({required String phone}) async {
-    final result = await _resetPasswordRepo.resendCode(phone: phone);
-
-    result.fold(
-      (failure) => emit(ResetPasswordError(errorMsg: failure.message)),
-      (message) => emit(ResendCodeSuccess()),
-    );
-  }
 }

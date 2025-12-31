@@ -9,5 +9,5 @@ abstract class ResetPasswordRepo {
     required String code,
     required String password,
   });
-  Future<Either<Failure, void>> resendCode({required String phone});
+
 }
