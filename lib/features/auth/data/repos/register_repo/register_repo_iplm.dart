@@ -17,9 +17,12 @@ class RegisterRepoIplm implements RegisterRepo {
     Map<String, dynamic> registerData,
   ) async {
     try {
+      final fcmToken = await CacheHelper.getData(key: "fcm_token");
+      Map<String, dynamic> finalData = Map.from(registerData);
+      finalData['fcm_token'] = fcmToken;
       var resp = await _apiServices.post(
         endPoint: Urls.register,
-        data: registerData,
+        data: finalData,
       );
 
       if (resp.statusCode == 201 && resp.data['status'] == true) {

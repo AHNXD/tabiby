@@ -15,9 +15,11 @@ class LoginRepoIpml implements LoginRepo {
   @override
   Future<Either<Failure, String>> login(String pass, String phone) async {
     try {
+      final fcmToken = await CacheHelper.getData(key: "fcm_token");
       Map<String, dynamic> loginData = {
         "phone": phone,
         "password": pass,
+        "fcm_token": fcmToken,
       };
       var resp = await apiServices.post(endPoint: Urls.login, data: loginData);
       if (resp.statusCode == 200 && resp.data['status']) {
