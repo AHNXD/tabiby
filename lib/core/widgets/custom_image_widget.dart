@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tabiby/core/Api_services/urls.dart';
 
 class CustomImageWidget extends StatelessWidget {
   final String? imageUrl;
@@ -37,7 +38,7 @@ class CustomImageWidget extends StatelessWidget {
     }
 
     return CachedNetworkImage(
-      imageUrl: imageUrl!,
+      imageUrl: Urls.fixUrl(imageUrl!),
       height: height,
       width: width,
       fit: fit,

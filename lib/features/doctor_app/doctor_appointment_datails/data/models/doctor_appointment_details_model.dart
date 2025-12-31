@@ -67,7 +67,7 @@ class Patient {
   });
 
   Patient.fromJson(Map<String, dynamic> json) {
-    img = json['img'];
+    img = json['image'];
     fullName = json['full_name'];
     gender = json['gender'];
     height = json['height'];
@@ -81,7 +81,7 @@ class Patient {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['img'] = img;
+    data['image'] = img;
     data['full_name'] = fullName;
     data['gender'] = gender;
     data['height'] = height;

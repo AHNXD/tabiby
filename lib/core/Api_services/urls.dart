@@ -2,15 +2,22 @@ class Urls {
   //ip
   static String ip = "192.168.100.205";
 
+  static String fixUrl(String url) {
+    if (url.contains("127.0.0.1")) {
+      return url.replaceAll("127.0.0.1", ip);
+    }
+    if (url.contains("localhost")) {
+      return url.replaceAll("localhost", ip);
+    }
+    return url;
+  }
+
   //base urls
   static String baseUrl = "http://$ip:";
 
   //ports
   static String basePort = "8000/api";
   static String aiPort = "8001/api";
-
-  //assets urls
-  static String assetsBaseUrl = "http://$ip/storage/app/public/";
 
   //auth endpoint
   static String login = "$basePort/login";

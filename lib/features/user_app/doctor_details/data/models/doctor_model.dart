@@ -58,7 +58,7 @@ class Doctor {
   Doctor.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    img = json['img'];
+    img = json['image'];
     bio = json['bio'];
     rate = json['rate'];
     yearsOfExperience = json['experience_years'];
@@ -78,7 +78,7 @@ class Doctor {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
-    data['img'] = img;
+    data['image'] = img;
     data['bio'] = bio;
     data['rate'] = rate;
     data['experience_years'] = yearsOfExperience;
@@ -98,6 +98,7 @@ class DoctorCenters {
   String? name;
   String? price;
   List<int>? days;
+  String? image;
   String? timeFrom;
   String? timeTo;
 
@@ -106,6 +107,7 @@ class DoctorCenters {
     this.name,
     this.price,
     this.days,
+    this.image,
     this.timeFrom,
     this.timeTo,
   });
@@ -115,6 +117,7 @@ class DoctorCenters {
     name = json['name'];
     price = json['price'];
     days = json['days'].cast<int>();
+    image = json['image'];
     timeFrom = json['time_from'];
     timeTo = json['time_to'];
   }
@@ -125,6 +128,7 @@ class DoctorCenters {
     data['name'] = name;
     data['price'] = price;
     data['days'] = days;
+    data['image'] = image;
     data['time_from'] = timeFrom;
     data['time_to'] = timeTo;
     return data;

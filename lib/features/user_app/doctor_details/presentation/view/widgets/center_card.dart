@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
+import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/utils/colors.dart';
 import '../../../../../../core/utils/functions.dart';
+import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class CenterCard extends StatelessWidget {
   final DoctorCenters center;
@@ -23,9 +25,14 @@ class CenterCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              backgroundColor: Color(0xFFE8F3F0),
-              child: Icon(Icons.local_hospital, color: AppColors.primaryColors),
+            ClipOval(
+              child: CustomImageWidget(
+                imageUrl: center.image,
+                placeholderAsset: AssetsData.defaultCenter,
+                height: 50,
+                width: 50,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(width: 16),
 

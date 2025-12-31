@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/Api_services/urls.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 import '../../../../../../core/utils/app_localizations.dart';
@@ -53,7 +54,7 @@ class PromotCard extends StatelessWidget {
                           fit: BoxFit.contain,
                         )
                       : Image.network(
-                          promot.img!,
+                          Urls.fixUrl(promot.img!),
                           width: imageWidth,
                           fit: BoxFit.contain,
                         ),

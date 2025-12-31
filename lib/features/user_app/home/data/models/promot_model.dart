@@ -5,13 +5,13 @@ class Promot {
   Promot({this.img, this.information});
 
   Promot.fromJson(Map<String, dynamic> json) {
-    img = json['img'];
+    img = json['image'];
     information = json['information'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['img'] = img;
+    data['image'] = img;
     data['information'] = information;
     return data;
   }
