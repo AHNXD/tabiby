@@ -48,14 +48,18 @@ class Appointment {
   String? date;
   String? time;
   Doctor? doctor;
+  DoctorNote? doctorNote;
 
-  Appointment({this.id, this.date, this.time, this.doctor});
+  Appointment({this.id, this.date, this.time, this.doctor, this.doctorNote});
 
   Appointment.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     date = json['date'];
     time = json['time'];
     doctor = json['doctor'] != null ? Doctor.fromJson(json['doctor']) : null;
+    doctorNote = json['doctor_notes'] != null
+        ? DoctorNote.fromJson(json['doctor_notes'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +70,29 @@ class Appointment {
     if (doctor != null) {
       data['doctor'] = doctor!.toJson();
     }
+    if (doctorNote != null) {
+      data['doctor_notes'] = doctorNote!.toJson();
+    }
+    return data;
+  }
+}
+
+class DoctorNote {
+  String? note;
+  String? prescription;
+
+  DoctorNote({this.note, this.prescription});
+
+  DoctorNote.fromJson(Map<String, dynamic> json) {
+    note = json['note'];
+    prescription = json['prescription'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['note'] = note;
+    data['prescription'] = prescription;
+
     return data;
   }
 }

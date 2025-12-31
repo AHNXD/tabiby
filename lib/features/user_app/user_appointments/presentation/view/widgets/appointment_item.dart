@@ -42,19 +42,19 @@ class AppointmentItem extends StatelessWidget {
               ),
             ),
             Spacer(),
-            // if (doctorNotes != null || prescription != null)
-            //   TextButton(
-            //     onPressed: () {
-            //       _showDetailsDialog(context);
-            //     },
-            //     child: Text(
-            //       'see_more'.tr(context),
-            //       style: TextStyle(
-            //         color: AppColors.primaryColors,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ),
+            if (appointment.doctorNote != null)
+              TextButton(
+                onPressed: () {
+                  _showDetailsDialog(context);
+                },
+                child: Text(
+                  'see_more'.tr(context),
+                  style: TextStyle(
+                    color: AppColors.primaryColors,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
           ],
         ),
         const SizedBox(height: 16),
@@ -139,97 +139,112 @@ class AppointmentItem extends StatelessWidget {
     );
   }
 
-  // void _showDetailsDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => Dialog(
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-  //       child: Padding(
-  //         padding: const EdgeInsets.all(20.0),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               "details".tr(context),
-  //               style: TextStyle(
-  //                 fontSize: 20,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: AppColors.primaryColors,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 16),
-  //             if (doctorNotes != null)
-  //               _buildDetailSection(
-  //                 icon: Icons.notes_rounded,
-  //                 title: "doctor_notes".tr(context),
-  //                 content: doctorNotes!,
-  //               ),
-  //             if (doctorNotes != null && prescription != null)
-  //               const Padding(
-  //                 padding: EdgeInsets.symmetric(vertical: 12.0),
-  //                 child: Divider(),
-  //               ),
-  //             if (prescription != null)
-  //               _buildDetailSection(
-  //                 icon: Icons.medical_services_rounded,
-  //                 title: 'prescription'.tr(context),
-  //                 content: prescription!,
-  //               ),
-  //             const SizedBox(height: 24),
-  //             Align(
-  //               alignment: Alignment.centerRight,
-  //               child: TextButton(
-  //                 onPressed: () => Navigator.pop(context),
-  //                 style: TextButton.styleFrom(
-  //                   foregroundColor: Colors.white,
-  //                   backgroundColor: AppColors.primaryColors,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(8),
-  //                   ),
-  //                 ),
-  //                 child: Text('close'.tr(context)),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  void _showDetailsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "details".tr(context),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColors,
+                ),
+              ),
+              const SizedBox(height: 16),
 
-  // Widget _buildDetailSection({
-  //   required IconData icon,
-  //   required String title,
-  //   required String content,
-  // }) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Icon(icon, color: Colors.black54, size: 20),
-  //           const SizedBox(width: 8),
-  //           Text(
-  //             title,
-  //             style: const TextStyle(
-  //               fontSize: 16,
-  //               fontWeight: FontWeight.bold,
-  //               color: Colors.black87,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(height: 8),
-  //       Text(
-  //         content,
-  //         style: const TextStyle(
-  //           fontSize: 14,
-  //           color: Colors.black54,
-  //           height: 1.5,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (appointment.doctorNote != null)
+                        _buildDetailSection(
+                          icon: Icons.notes_rounded,
+                          title: "doctor_notes".tr(context),
+                          content: appointment.doctorNote!.note ?? "",
+                        ),
+
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Divider(),
+                      ),
+
+                      if (appointment.doctorNote != null)
+                        _buildDetailSection(
+                          icon: Icons.medical_services_rounded,
+                          title: 'prescription'.tr(context),
+                          content: appointment.doctorNote!.prescription ?? "",
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 3. Fixed Footer (Close Button)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryColors,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text('close'.tr(context)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailSection({
+    required IconData icon,
+    required String title,
+    required String content,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, color: Colors.black54, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          content,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.black54,
+            height: 1.5,
+          ),
+        ),
+      ],
+    );
+  }
 }
