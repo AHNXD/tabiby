@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:tabiby/core/notification_services/notification.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'package:tabiby/features/user_app/user/data/repos/user_repo.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
+import 'package:tabiby/firebase_options.dart';
 import 'core/locale/locale_cubit.dart';
 import 'core/utils/app_localizations.dart';
 import 'core/utils/cache_helper.dart';
@@ -19,10 +22,10 @@ import 'features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setupLocatorServices();
   enableScreenshot();
-  // await FirebaseApi().initNotifications();
+  await FirebaseApi().initNotifications();
   runApp(const Tabiby());
 }
 

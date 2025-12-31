@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../../core/utils/assets_data.dart';
+import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../data/models/doctor_appointment_details_model.dart';
 
 class AppointmentDetailsHeader extends StatelessWidget {
@@ -31,10 +32,16 @@ class AppointmentDetailsHeader extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 36,
-            backgroundImage: AssetImage(AssetsData.defaultProfileImage),
+          ClipOval(
+            child: CustomImageWidget(
+              imageUrl: appointment.patient?.img,
+              placeholderAsset: AssetsData.defaultProfileImage,
+              height: 75,
+              width: 75,
+              fit: BoxFit.cover,
+            ),
           ),
+
           const SizedBox(width: 16),
           Expanded(
             child: Column(
