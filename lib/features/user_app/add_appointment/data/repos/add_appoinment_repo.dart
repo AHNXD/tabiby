@@ -20,5 +20,8 @@ abstract class AddAppoinmentRepo {
     String periodName,
     String period,
     String? note,
+    bool? isEmergency,
+    String? diagnosisName,
+    String? diagnosisRatio,
   );
 }

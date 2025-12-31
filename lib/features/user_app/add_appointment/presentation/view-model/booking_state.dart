@@ -29,6 +29,9 @@ class BookingSuccess extends BookingState {
   final bool isLoadingTimes;
   final bool isBooking;
 
+  final bool includeDiagnosis; // Checkbox state
+  final bool isEmergency;
+
   BookingSuccess({
     required this.centers,
     this.days = const [],
@@ -40,6 +43,8 @@ class BookingSuccess extends BookingState {
     this.isLoadingDays = false,
     this.isLoadingTimes = false,
     this.isBooking = false,
+    this.includeDiagnosis = false,
+    this.isEmergency = false,
   });
 
   BookingSuccess copyWith({
@@ -53,6 +58,8 @@ class BookingSuccess extends BookingState {
     bool? isLoadingDays,
     bool? isLoadingTimes,
     bool? isBooking,
+    bool? includeDiagnosis,
+    bool? isEmergency,
   }) {
     return BookingSuccess(
       centers: centers ?? this.centers,
@@ -65,6 +72,8 @@ class BookingSuccess extends BookingState {
       isLoadingDays: isLoadingDays ?? false,
       isLoadingTimes: isLoadingTimes ?? false,
       isBooking: isBooking ?? false,
+      includeDiagnosis: includeDiagnosis ?? this.includeDiagnosis,
+      isEmergency: isEmergency ?? this.isEmergency,
     );
   }
 }

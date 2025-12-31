@@ -10,8 +10,16 @@ class BookingCubit extends Cubit<BookingState> {
 
   BookingCubit(this._addAppoinmentRepo, this.doctorId)
     : super(BookingInitial());
+  void toggleIncludeDiagnosis(bool value) {
+    if (state is! BookingSuccess) return;
+    emit((state as BookingSuccess).copyWith(includeDiagnosis: value));
+  }
 
-  // 1. Initial Load: Get Centers
+  void toggleIsEmergency(bool value) {
+    if (state is! BookingSuccess) return;
+    emit((state as BookingSuccess).copyWith(isEmergency: value));
+  }
+
   Future<void> fetchCenters() async {
     emit(BookingLoading());
     var result = await _addAppoinmentRepo.getCenters(doctorId);
@@ -21,7 +29,6 @@ class BookingCubit extends Cubit<BookingState> {
     );
   }
 
-  // 2. Select Center -> Fetch Days
   Future<void> selectCenter(int centerId) async {
     if (state is! BookingSuccess) return;
     final currentState = state as BookingSuccess;
@@ -30,7 +37,7 @@ class BookingCubit extends Cubit<BookingState> {
       currentState.copyWith(
         selectedCenterId: centerId,
         isLoadingDays: true,
-        days: [], // Reset days and times
+        days: [],
         times: null,
         selectedDate: null,
         selectedTime: null,
@@ -83,7 +90,13 @@ class BookingCubit extends Cubit<BookingState> {
     );
   }
 
-  Future<void> bookAppointment(String note) async {
+  Future<void> bookAppointment(
+    String note, {
+
+    String? diagnosisName,
+    String? diagnosisRatio,
+    bool isEmergency = false,
+  }) async {
     if (state is! BookingSuccess) return;
     final s = state as BookingSuccess;
 
@@ -101,6 +114,9 @@ class BookingCubit extends Cubit<BookingState> {
       s.selectedPeriodName!,
       s.selectedTime!,
       note,
+      isEmergency,
+      diagnosisName,
+      diagnosisRatio,
     );
 
     result.fold(

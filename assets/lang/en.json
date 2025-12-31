@@ -296,5 +296,7 @@
     "unknown_patient": "Unknown Patient",
     "add_prescription": "Add Prescription",
     "completed": "Completed",
-    "patient_note": "Patient Note"
+    "patient_note": "Patient Note",
+    "diagnosis_result":"Diagnosis Result",
+    "attach_diagnosis_result": "Attach Diagnosis Result"
 }

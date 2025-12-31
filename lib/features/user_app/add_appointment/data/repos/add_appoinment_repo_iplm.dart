@@ -21,12 +21,21 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
     String periodName,
     String period,
     String? note,
+    bool? isEmergency,
+    String? diagnosisName,
+    String? diagnosisRatio,
   ) async {
     try {
       var resp = await _apiServices.post(
         endPoint:
             "${Urls.addAppointment}/$doctorID/$centerID/$date/$periodName",
-        data: {'time': period, 'note': note ?? ""},
+        data: {
+          'time': period,
+          'note': note ?? "",
+          "is_emergency": isEmergency,
+          "diagnosis_name": diagnosisName,
+          "diagnosis_ratio": diagnosisRatio,
+        },
       );
 
       if (resp.statusCode == 201 && resp.data['status'] == true) {

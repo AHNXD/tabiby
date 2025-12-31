@@ -9,6 +9,7 @@ import 'package:tabiby/features/user_app/diagnose/data/models/diagnosis_result_m
 import 'package:tabiby/features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/models/error_view.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/models/loading_view.dart';
+import 'package:tabiby/features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 
 class ResultScreen extends StatelessWidget {
   static const routeName = '/result';
@@ -23,12 +24,7 @@ class ResultScreen extends StatelessWidget {
 
   // Placeholder for the new primary action
   void _findDoctor(BuildContext context, String specialty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(specialty),
-        backgroundColor: AppColors.primaryColors,
-      ),
-    );
+    Navigator.pushNamed(context, AllDoctorsScreen.routeName);
   }
 
   @override

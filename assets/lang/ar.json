@@ -299,5 +299,7 @@
     "unknown_patient": "مريض غير معروف",
     "add_prescription": "قم باضافة وصفة طبية",
     "completed": "منتهٍ",
-    "patient_note": "ملاحظات المريض"
+    "patient_note": "ملاحظات المريض",
+    "diagnosis_result":"نسبة التشخيص",
+    "attach_diagnosis_result": "ارفاق نتيجة التشخيص"
 }
