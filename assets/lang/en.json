@@ -329,5 +329,8 @@
     "SEP": "Sep",
     "OCT": "Oct",
     "NOV": "Nov",
-    "DEC": "Dec"
+    "DEC": "Dec",
+    "morning":"Morning",
+    "afternoon":"Afternoon",
+    "evening":"Evening"
 }

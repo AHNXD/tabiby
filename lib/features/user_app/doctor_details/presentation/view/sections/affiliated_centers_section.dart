@@ -24,16 +24,19 @@ class AffiliatedCentersSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ListView.builder(shrinkWrap: true,itemCount: centers.length ,itemBuilder: (context, index) {
-          final center = centers[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: CenterCard(
-              center: center
-            ),
-          );
-        },
-    )],
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: centers.length,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            final center = centers[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: CenterCard(center: center),
+            );
+          },
+        ),
+      ],
     );
   }
 }

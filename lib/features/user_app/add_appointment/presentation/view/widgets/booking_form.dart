@@ -60,7 +60,7 @@ class _BookingFormState extends State<BookingForm> {
                 onSelect: (int id) =>
                     context.read<BookingCubit>().selectCenter(id),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // 2. Date & Time Selection
               if (state.isLoadingDays)
@@ -80,14 +80,14 @@ class _BookingFormState extends State<BookingForm> {
                     context.read<BookingCubit>().selectTime(time, category);
                   },
                 ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               if (hasDiagnosis) ...[
                 _buildDiagnosisSection(context, state, diagnosisState),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
               ],
-              const SizedBox(height: 24),
+
               NotesSection(noteController: _noteController),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               Center(
                 child: state.isBooking
