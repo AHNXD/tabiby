@@ -18,39 +18,57 @@ class SpecialtyWidget extends StatelessWidget {
         arguments: {'specialtyID': specialty.id},
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          // 1. The Icon Container
           Container(
-            width: 64,
-            height: 64,
-            margin: EdgeInsets.all(8),
-            padding: EdgeInsets.all(8),
+            width: 68,
+            height: 68,
+            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(20), // Soft squircle shape
+              border: Border.all(
+                color: Colors.grey.withOpacity(0.08),
+                width: 1,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 8,
+                  color: Colors.grey.withOpacity(0.1), // Much softer shadow
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                   spreadRadius: 2,
                 ),
               ],
             ),
             child: CustomImageWidget(
               imageUrl: specialty.img,
+              // Assuming this is a local asset path, otherwise ensure it's in AssetsData
               placeholderAsset: 'assets/icons/appIcon.png',
-              height: 32,
-              width: 32,
-              fit: BoxFit.cover,
+              height: 40,
+              width: 40,
+              fit: BoxFit.contain, // Contain usually looks better for icons
             ),
           ),
-          const SizedBox(height: 8),
-          Expanded(
+
+          const SizedBox(height: 6),
+
+          // 2. The Text
+          // Using Flexible to prevent overflow if the name is long
+          SizedBox(
+            width: 80, // Constrain width to keep text centered under icon
             child: Text(
-              overflow: TextOverflow.ellipsis,
               specialty.name ?? '',
-              style: TextStyle(color: Colors.grey[700], fontSize: 14),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey.shade800,
+                fontSize: 12,
+                fontWeight: FontWeight.w600, // Slightly bolder for readability
+                height: 1.2,
+              ),
             ),
           ),
         ],

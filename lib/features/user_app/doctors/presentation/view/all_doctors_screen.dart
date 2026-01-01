@@ -83,9 +83,9 @@ class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.9,
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2,
+                              childAspectRatio: 0.85,
                             ),
                         itemBuilder: (context, index) {
                           return Padding(

@@ -43,29 +43,11 @@ class DoctorDetailsScreen extends StatelessWidget {
                           DoctorHeader(
                             name: doctor.name ?? '',
                             specialty: doctor.specialty?.name ?? '',
-                            experience:
-                                '${doctor.yearsOfExperience ?? 0} ${"years_of_experience".tr(context)}',
+                            isActive: doctor.isActive == 1,
                             imageUrl: doctor.img,
                           ),
                           const SizedBox(height: 24),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 22,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                (doctor.rate ?? 0).toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textColor,
-                                ),
-                              ),
-                            ],
-                          ),
+                          _buildStatsRow(context, doctor),
                           // Rating Section
                           const SizedBox(height: 24),
                           // Biography Section
@@ -95,6 +77,82 @@ class DoctorDetailsScreen extends StatelessWidget {
             }
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildStatsRow(BuildContext context, Doctor doctor) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildStatItem(
+            context,
+            icon: Icons.star_rounded,
+            color: Colors.amber,
+            value: (doctor.rate ?? 0).toString(),
+            label: "rate".tr(context),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildStatItem(
+            context,
+            icon: Icons.work_history_rounded,
+            color: AppColors.primaryColors,
+            value: "${doctor.yearsOfExperience ?? 0}+",
+            label: "years_of_experience".tr(context),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatItem(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required String value,
+    required String label,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textColor,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

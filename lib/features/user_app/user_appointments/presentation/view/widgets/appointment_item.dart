@@ -21,6 +21,7 @@ class AppointmentItem extends StatelessWidget {
     required this.appointment,
     required this.status,
   });
+
   void _showRatingDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -36,145 +37,267 @@ class AppointmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime parsedDate = DateTime.parse(appointment.date!);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.08),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            Text(
-              DateFormat('dd').format(parsedDate),
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryColors,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: Text(
-                DateFormat('EEEE').format(parsedDate).toLowerCase().tr(context),
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Color(0xFF888888),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Spacer(),
-            if (status == 'completed')
-              TextButton.icon(
-                onPressed: () {
-                  _showRatingDialog(context);
-                },
-                icon: Icon(
-                  Icons.star_rate_rounded,
-                  size: 18,
-                  color: AppColors.primaryColors,
-                ),
-                label: Text(
-                  'rate'.tr(context),
-                  style: TextStyle(
-                    color: AppColors.primaryColors,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            if (appointment.doctorNote != null)
-              TextButton(
-                onPressed: () {
-                  _showDetailsDialog(context);
-                },
-                child: Text(
-                  'see_more'.tr(context),
-                  style: TextStyle(
-                    color: AppColors.primaryColors,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(height: 16),
-
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipOval(
-              child: CustomImageWidget(
-                imageUrl: appointment.doctor!.img,
-                placeholderAsset: AssetsData.defaultDoctorProfile,
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    appointment.doctor!.name ?? "",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF333333),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    appointment.doctor!.specialty!.name ?? "",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF888888),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE8F3F0),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      '${"took_it_at".tr(context)} ${appointment.time}',
-                      style: const TextStyle(
-                        color: Color(0xFF79BCA4),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 16),
-
+            // 1. Header: Date Box + Day Name + Action Button
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Date Box
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColors.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        DateFormat('dd').format(parsedDate),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryColors,
+                          height: 1.0,
+                        ),
+                      ),
+                      Text(
+                        DateFormat(
+                          'MMM',
+                        ).format(parsedDate).toUpperCase().tr(context),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryColors.withOpacity(0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 12),
+
                 Text(
-                  appointment.doctor!.rate.toString(),
+                  DateFormat(
+                    'EEEE',
+                  ).format(parsedDate).toLowerCase().tr(context),
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF333333),
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
                   ),
                 ),
-                const SizedBox(width: 4),
-                const Icon(Icons.star, color: Colors.amber, size: 20),
+
+                const Spacer(),
+
+                if (status == 'completed')
+                  _buildActionButton(
+                    context,
+                    label: 'rate'.tr(context),
+                    icon: Icons.star_rate_rounded,
+                    onTap: () => _showRatingDialog(context),
+                  ),
+
+                if (appointment.doctorNote != null) ...[
+                  if (status == 'completed') const SizedBox(width: 8),
+                  _buildActionButton(
+                    context,
+                    label: 'details'.tr(context),
+                    icon: Icons.info_outline_rounded,
+                    onTap: () => _showDetailsDialog(context),
+                    isOutlined: status == 'completed',
+                  ),
+                ],
+              ],
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: Color(0xFFEEEEEE),
+              ),
+            ),
+
+            // 2. Doctor Info Row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Doctor Image
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                  ),
+                  child: ClipOval(
+                    child: CustomImageWidget(
+                      imageUrl: appointment.doctor!.img,
+                      placeholderAsset: AssetsData.defaultDoctorProfile,
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+
+                // Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        appointment.doctor!.name ?? "",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        appointment.doctor!.specialty!.name ?? "",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Time Chip
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.access_time_rounded,
+                              size: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              appointment.time ?? '--:--',
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Rating Star
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.amber.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        color: Colors.amber,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        appointment.doctor!.rate.toString(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber, // Or black87
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        const Divider(color: Color(0xFFE0E0E0), thickness: 1, height: 1),
-      ],
+      ),
+    );
+  }
+
+  // --- Helper: Action Button ---
+  Widget _buildActionButton(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
+    bool isOutlined = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: isOutlined
+              ? Colors.transparent
+              : AppColors.primaryColors.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: isOutlined
+              ? Border.all(color: AppColors.primaryColors.withOpacity(0.3))
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: AppColors.primaryColors),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: AppColors.primaryColors,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -182,7 +305,6 @@ class AppointmentItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        // 1. Transparent background to let the custom shadow shine
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.all(16),
         child: Container(
@@ -201,7 +323,6 @@ class AppointmentItem extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 2. Title (Centered & Styled like Rating Dialog)
               Text(
                 "details".tr(context),
                 textAlign: TextAlign.center,
@@ -212,14 +333,11 @@ class AppointmentItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-
-              // 3. Scrollable Content
               Flexible(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      // Doctor Notes Section
                       if (appointment.doctorNote?.note != null &&
                           appointment.doctorNote!.note!.isNotEmpty)
                         _buildStyledDetailSection(
@@ -233,7 +351,6 @@ class AppointmentItem extends StatelessWidget {
                           appointment.doctorNote!.prescription != null)
                         const SizedBox(height: 16),
 
-                      // Prescription Section
                       if (appointment.doctorNote?.prescription != null &&
                           appointment.doctorNote!.prescription!.isNotEmpty)
                         _buildStyledDetailSection(
@@ -243,7 +360,6 @@ class AppointmentItem extends StatelessWidget {
                           content: appointment.doctorNote!.prescription!,
                         ),
 
-                      // Fallback if empty
                       if ((appointment.doctorNote?.note == null ||
                               appointment.doctorNote!.note!.isEmpty) &&
                           (appointment.doctorNote?.prescription == null ||
@@ -259,10 +375,7 @@ class AppointmentItem extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 24),
-
-              // 4. Big "Close" Button (Matches Submit Button)
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -270,7 +383,7 @@ class AppointmentItem extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColors,
-                    elevation: 0, // Flat or low elevation looks cleaner here
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -292,7 +405,6 @@ class AppointmentItem extends StatelessWidget {
     );
   }
 
-  // Helper widget that matches the "Comment" box style
   Widget _buildStyledDetailSection(
     BuildContext context, {
     required IconData icon,
@@ -310,7 +422,6 @@ class AppointmentItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Row
           Row(
             children: [
               Container(
@@ -335,7 +446,6 @@ class AppointmentItem extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          // Content Text
           Text(
             content,
             style: TextStyle(

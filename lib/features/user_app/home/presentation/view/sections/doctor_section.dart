@@ -24,7 +24,7 @@ class DoctorsSection extends StatelessWidget {
         ),
         SizedBox(height: 8),
         SizedBox(
-          height: 220,
+          height: 230,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: ListView.builder(

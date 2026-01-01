@@ -12,8 +12,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
   const BuildAppbar({
     super.key,
     this.isDoctor = false,
-    this.toolbarHeight =
-        kToolbarHeight + 40.0, // Increased slightly for better spacing
+    this.toolbarHeight = kToolbarHeight + 30.0,
   });
 
   final double toolbarHeight;
@@ -21,24 +20,30 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double topPadding = MediaQuery.of(context).padding.top * 0.75;
+
+    final double totalContainerHeight = toolbarHeight + topPadding;
+
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Container(
-          height: toolbarHeight,
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          height: totalContainerHeight,
+
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 10,
+            top: topPadding,
+          ),
           decoration: BoxDecoration(
-            // 1. The Gradient Upgrade
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
                 AppColors.primaryColors,
-                // Adjust this color to be slightly lighter or darker than primary
                 AppColors.primaryColors.withOpacity(0.8),
-                // Optional: Add a third color like Colors.blueAccent for more pop
               ],
             ),
-            // 2. Soft Shadow for depth
             boxShadow: [
               BoxShadow(
                 color: AppColors.primaryColors.withOpacity(0.3),
@@ -51,7 +56,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               bottomRight: Radius.circular(30),
             ),
           ),
-          child: SafeArea(child: _buildContent(context, state)),
+          child: _buildContent(context, state),
         );
       },
     );
@@ -85,7 +90,6 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 3. Avatar with Border and Shadow
           Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -104,7 +108,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                 placeholderAsset: isDoctor
                     ? AssetsData.defaultDoctorProfile
                     : AssetsData.defaultProfileImage,
-                height: 55, // Slightly larger
+                height: 55,
                 width: 55,
                 fit: BoxFit.cover,
               ),
@@ -112,7 +116,6 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 15),
 
-          // 4. Text Column
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +145,6 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
 
-          // 5. Action Button (Glassmorphism style)
           Container(
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
@@ -151,7 +153,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               onPressed: isDoctor
                   ? () => Navigator.pushNamed(context, SettingsScreen.routeName)
-                  : () {}, // Add patient notification logic here
+                  : () {},
               icon: Icon(
                 isDoctor ? Icons.settings : Icons.notifications_outlined,
                 color: Colors.white,

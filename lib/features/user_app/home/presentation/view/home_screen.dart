@@ -39,19 +39,19 @@ class HomeScreen extends StatelessWidget {
                       vertical: 10,
                     ),
                     children: [
-                      SizedBox(height: 40),
+                      SizedBox(height: 30),
                       PromotSection(
                         promot: state.home.promot?.first ?? Promot(),
                       ),
-                      SizedBox(height: 7),
+                      SizedBox(height: 24),
                       SpecialtiesSection(
                         specialties: state.home.specialties ?? [],
                       ),
-                      SizedBox(height: 24),
+                      SizedBox(height: 8),
                       DoctorsSection(doctors: state.home.doctors ?? []),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                       CentersSection(centers: state.home.centers ?? []),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                     ],
                   ),
                 );

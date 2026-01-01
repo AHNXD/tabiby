@@ -7,9 +7,9 @@ import 'package:tabiby/features/user_app/center_details/presentation/view_model/
 import 'package:tabiby/features/user_app/centers/data/repos/centers_repo.dart';
 import '../../../../../core/utils/services_locater.dart';
 import 'sections/appbar_section.dart';
-import 'sections/header_section.dart';
 import 'sections/about_section.dart';
 import 'sections/clinics_section.dart';
+import 'widgets/clinic_header.dart';
 
 class CenterDetailsScreen extends StatelessWidget {
   static const String routeName = "/center_details";
@@ -36,11 +36,12 @@ class CenterDetailsScreen extends StatelessWidget {
                     ),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
-                        HeaderSection(
+                        ClinicHeader(
                           name: center.name ?? "",
                           address: center.address ?? "",
                           imageUrl: center.img,
                         ),
+                        SizedBox(height: 24),
                         AboutSection(
                           description:
                               center.bio ??
