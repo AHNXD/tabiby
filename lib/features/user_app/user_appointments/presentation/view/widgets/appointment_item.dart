@@ -182,46 +182,78 @@ class AppointmentItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+        // 1. Transparent background to let the custom shadow shine
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 2. Title (Centered & Styled like Rating Dialog)
               Text(
                 "details".tr(context),
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
                   color: AppColors.primaryColors,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
 
+              // 3. Scrollable Content
               Flexible(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (appointment.doctorNote != null)
-                        _buildDetailSection(
-                          icon: Icons.notes_rounded,
+                      // Doctor Notes Section
+                      if (appointment.doctorNote?.note != null &&
+                          appointment.doctorNote!.note!.isNotEmpty)
+                        _buildStyledDetailSection(
+                          context,
+                          icon: Icons.note_alt_rounded,
                           title: "doctor_notes".tr(context),
-                          content: appointment.doctorNote!.note ?? "",
+                          content: appointment.doctorNote!.note!,
                         ),
 
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12.0),
-                        child: Divider(),
-                      ),
+                      if (appointment.doctorNote?.note != null &&
+                          appointment.doctorNote!.prescription != null)
+                        const SizedBox(height: 16),
 
-                      if (appointment.doctorNote != null)
-                        _buildDetailSection(
-                          icon: Icons.medical_services_rounded,
+                      // Prescription Section
+                      if (appointment.doctorNote?.prescription != null &&
+                          appointment.doctorNote!.prescription!.isNotEmpty)
+                        _buildStyledDetailSection(
+                          context,
+                          icon: Icons.medication_rounded,
                           title: 'prescription'.tr(context),
-                          content: appointment.doctorNote!.prescription ?? "",
+                          content: appointment.doctorNote!.prescription!,
+                        ),
+
+                      // Fallback if empty
+                      if ((appointment.doctorNote?.note == null ||
+                              appointment.doctorNote!.note!.isEmpty) &&
+                          (appointment.doctorNote?.prescription == null ||
+                              appointment.doctorNote!.prescription!.isEmpty))
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            "no_details_available".tr(context),
+                            style: TextStyle(color: Colors.grey.shade400),
+                          ),
                         ),
                     ],
                   ),
@@ -230,19 +262,27 @@ class AppointmentItem extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // 3. Fixed Footer (Close Button)
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
+              // 4. Big "Close" Button (Matches Submit Button)
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColors,
+                    elevation: 0, // Flat or low elevation looks cleaner here
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text('close'.tr(context)),
+                  child: Text(
+                    'close'.tr(context),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -252,38 +292,60 @@ class AppointmentItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailSection({
+  // Helper widget that matches the "Comment" box style
+  Widget _buildStyledDetailSection(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String content,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, color: Colors.black54, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Row
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColors.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: AppColors.primaryColors, size: 20),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          content,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.black54,
-            height: 1.5,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          // Content Text
+          Text(
+            content,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey.shade700,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

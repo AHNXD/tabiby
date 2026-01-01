@@ -14,78 +14,97 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = true,
     this.onBackButtonPressed,
     this.actions,
-    this.toolbarHeight = kToolbarHeight + 16.0,
+    this.toolbarHeight = kToolbarHeight + 40.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
-          height: toolbarHeight.toDouble(),
-          decoration: BoxDecoration(
-            color: AppColors.primaryColors,
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40),
-            ),
+    return Container(
+      height: toolbarHeight,
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.primaryColors,
+            AppColors.primaryColors.withOpacity(0.8),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryColors.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 48,
-                child: showBackButton
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed:
-                            onBackButtonPressed ??
-                            () {
-                              if (Navigator.of(context).canPop()) {
-                                Navigator.of(context).pop();
-                              }
-                            },
-                        splashRadius: 24,
-                      )
-                    : null,
-              ),
-
-        
-              Expanded(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.5,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+        ],
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      child: SafeArea(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48.0),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
+            ),
 
-              SizedBox(
-                child: actions != null
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: actions!,
-                      )
-                    : const SizedBox(width: 48),
-              ),
-            ],
-          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (showBackButton)
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                      onPressed:
+                          onBackButtonPressed ??
+                          () {
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                    ),
+                  )
+                else
+                  const SizedBox(width: 40),
+                if (actions != null)
+                  Row(mainAxisSize: MainAxisSize.min, children: actions!)
+                else
+                  const SizedBox(width: 40),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight.toDouble());
+  Size get preferredSize => Size.fromHeight(toolbarHeight);
 }

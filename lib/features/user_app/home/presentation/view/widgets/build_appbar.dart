@@ -12,74 +12,159 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
   const BuildAppbar({
     super.key,
     this.isDoctor = false,
-    this.toolbarHeight = kToolbarHeight + 16.0,
+    this.toolbarHeight =
+        kToolbarHeight + 40.0, // Increased slightly for better spacing
   });
+
   final double toolbarHeight;
   final bool isDoctor;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocBuilder<UserCubit, UserState>(
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(
-              height: toolbarHeight.toDouble(),
-              decoration: BoxDecoration(
-                color: AppColors.primaryColors,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
-                ),
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, state) {
+        return Container(
+          height: toolbarHeight,
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          decoration: BoxDecoration(
+            // 1. The Gradient Upgrade
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primaryColors,
+                // Adjust this color to be slightly lighter or darker than primary
+                AppColors.primaryColors.withOpacity(0.8),
+                // Optional: Add a third color like Colors.blueAccent for more pop
+              ],
+            ),
+            // 2. Soft Shadow for depth
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryColors.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: state is UserSuccess
-                  ? ListTile(
-                      leading: ClipOval(
-            child: CustomImageWidget(
-              imageUrl: state.user.mainData?.image,
-              placeholderAsset:isDoctor ?AssetsData.defaultDoctorProfile:  AssetsData.defaultProfileImage,
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
+            ],
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
             ),
           ),
-                      title: Text(
-                        'welcome_back'.tr(context),
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                      subtitle: Text(
-                        '${isDoctor ? "dr".tr(context) : ""} ${state.user.mainData!.firstName} ${state.user.mainData!.lastName??""}',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                      trailing:isDoctor
-                          ? IconButton(
-                              onPressed: () => Navigator.pushNamed(
-                                context,
-                                SettingsScreen.routeName,
-                              ),
-                              icon: Icon(Icons.settings),
-                              color: Colors.white,
-                            )
-                          : Icon(Icons.notifications, color: Colors.white),
-                    )
-                  : state is UserError
-                  ? Text(
-                      state.errorMsg.tr(context),
-                      style: TextStyle(color: Colors.white),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: LinearProgressIndicator(),
-                    ),
-            ),
-          );
-        },
-      ),
+          child: SafeArea(child: _buildContent(context, state)),
+        );
+      },
     );
   }
 
+  Widget _buildContent(BuildContext context, UserState state) {
+    if (state is UserLoading) {
+      return Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Colors.white.withOpacity(0.8),
+          ),
+        ),
+      );
+    }
+
+    if (state is UserError) {
+      return Center(
+        child: Text(
+          state.errorMsg.tr(context),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }
+
+    if (state is UserSuccess) {
+      final user = state.user.mainData;
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 3. Avatar with Border and Shadow
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: CustomImageWidget(
+                imageUrl: user?.image,
+                placeholderAsset: isDoctor
+                    ? AssetsData.defaultDoctorProfile
+                    : AssetsData.defaultProfileImage,
+                height: 55, // Slightly larger
+                width: 55,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(width: 15),
+
+          // 4. Text Column
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'welcome_back'.tr(context),
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${isDoctor ? "dr".tr(context) : ""} ${user?.firstName} ${user?.lastName ?? ""}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 5. Action Button (Glassmorphism style)
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IconButton(
+              onPressed: isDoctor
+                  ? () => Navigator.pushNamed(context, SettingsScreen.routeName)
+                  : () {}, // Add patient notification logic here
+              icon: Icon(
+                isDoctor ? Icons.settings : Icons.notifications_outlined,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+
   @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight.toDouble());
+  Size get preferredSize => Size.fromHeight(toolbarHeight);
 }

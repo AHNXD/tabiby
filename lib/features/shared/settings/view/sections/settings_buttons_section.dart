@@ -20,6 +20,7 @@ import 'settings_header_section.dart';
 
 class SettingsButtonsSection extends StatelessWidget {
   const SettingsButtonsSection({super.key});
+
   void _showLanguageDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -31,53 +32,80 @@ class SettingsButtonsSection extends StatelessWidget {
             .languageCode;
         void setLanguage(String value) async {
           await dialogContext.read<LocaleCubit>().changeLanguage(value);
-
-          // ignore: use_build_context_synchronously
-          Navigator.of(dialogContext).pop();
+          if (context.mounted) Navigator.of(dialogContext).pop();
         }
 
-        return AlertDialog(
-          title: Text('change_language'.tr(context)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text('العربية'),
-                leading: Radio<String>(
+        // Updated to match your App's styling (Rounded & Shadowed)
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'change_language'.tr(context),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _buildLanguageOption(
+                  context,
+                  title: 'العربية',
                   value: 'ar',
                   groupValue: currentLanguageCode,
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      setLanguage(value);
-                    }
-                  },
+                  onChanged: setLanguage,
                 ),
-                onTap: () => setLanguage('ar'),
-              ),
-
-              ListTile(
-                title: const Text('English'),
-                leading: Radio<String>(
+                _buildLanguageOption(
+                  context,
+                  title: 'English',
                   value: 'en',
                   groupValue: currentLanguageCode,
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      setLanguage(value);
-                    }
-                  },
+                  onChanged: setLanguage,
                 ),
-                onTap: () => setLanguage('en'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('cancel'.tr(context)),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    'cancel'.tr(context),
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context, {
+    required String title,
+    required String value,
+    required String groupValue,
+    required Function(String) onChanged,
+  }) {
+    return RadioListTile<String>(
+      activeColor: Theme.of(context).primaryColor,
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      value: value,
+      groupValue: groupValue,
+      onChanged: (val) => onChanged(val!),
+      contentPadding: EdgeInsets.zero,
     );
   }
 
@@ -125,7 +153,6 @@ class SettingsButtonsSection extends StatelessWidget {
             }
           },
         ),
-
         BlocListener<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserDeleteSuccess) {
@@ -148,13 +175,14 @@ class SettingsButtonsSection extends StatelessWidget {
       child: BlocBuilder<LogoutCubit, LogoutState>(
         builder: (context, logoutState) {
           final bool isLogoutLoading = logoutState is LogoutLoading;
-          // 🔴 Use BlocBuilder for UserCubit to handle delete loading state
           return BlocBuilder<UserCubit, UserState>(
             builder: (context, userState) {
               final bool isDeleteLoading = userState is UserLoading;
               final bool anyLoading = isLogoutLoading || isDeleteLoading;
 
               return ListView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 30),
                 children: <Widget>[
                   SettingsSectionHeader(title: 'account'.tr(context)),
                   SettingsTile(
@@ -162,16 +190,15 @@ class SettingsButtonsSection extends StatelessWidget {
                     title: 'change_language'.tr(context),
                     onTap: () => _showLanguageDialog(context),
                   ),
-                  if(CacheHelper.getData(key: "role") == "patient")
-                  SettingsTile(
-                    icon: Icons.lock_outline,
-                    title: 'change_password'.tr(context),
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      ConfirmPasswordScreen.routeName,
+                  if (CacheHelper.getData(key: "role") == "patient")
+                    SettingsTile(
+                      icon: Icons.lock_outline,
+                      title: 'change_password'.tr(context),
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        ConfirmPasswordScreen.routeName,
+                      ),
                     ),
-                  ),
-
                   SettingsSectionHeader(title: 'about'.tr(context)),
                   SettingsTile(
                     icon: Icons.info_outline,
@@ -201,87 +228,125 @@ class SettingsButtonsSection extends StatelessWidget {
                     onTap: () =>
                         Navigator.pushNamed(context, ContactUsScreen.routeName),
                   ),
+                  const SizedBox(height: 30),
 
-                  const SizedBox(height: 20),
+                  // --- NEW BEAUTIFUL BUTTONS ---
 
-                  // 🔴 LOGOUT BUTTON
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Card(
-                      elevation: 0.5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: ListTile(
-                        leading: isLogoutLoading
-                            ? const SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.red,
-                                ),
-                              )
-                            : const Icon(Icons.logout, color: Colors.red),
-                        title: Text(
-                          isLogoutLoading
-                              ? 'logging_out'.tr(context)
-                              : 'log_out'.tr(context),
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        onTap: anyLoading
-                            ? null
-                            : () => _showLogoutConfirmation(context),
-                      ),
-                    ),
+                  // 1. Logout Button
+                  _buildDestructiveButton(
+                    context,
+                    title: 'log_out'.tr(context),
+                    icon: Icons.logout_rounded,
+                    isLoading: isLogoutLoading,
+                    onTap: anyLoading
+                        ? null
+                        : () => _showLogoutConfirmation(context),
                   ),
-                  const SizedBox(height: 10),
-if(CacheHelper.getData(key: "role") == "patient")
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Card(
-                      elevation: 0.5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: ListTile(
-                        leading: isDeleteLoading
-                            ? const SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.red,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.delete_forever,
-                                color: Colors.red,
-                              ),
-                        title: Text(
-                          isDeleteLoading
-                              ? 'deleting_account'.tr(context)
-                              : 'delete_account'.tr(context),
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        onTap: anyLoading
-                            ? null
-                            : () => _showDeleteAccountConfirmation(context),
-                      ),
+
+                  const SizedBox(height: 16),
+
+                  // 2. Delete Account Button
+                  if (CacheHelper.getData(key: "role") == "patient")
+                    _buildDestructiveButton(
+                      context,
+                      title: 'delete_account'.tr(context),
+                      icon: Icons.delete_forever_rounded,
+                      isLoading: isDeleteLoading,
+                      isFilled:
+                          false, // Outline style for secondary destructive action
+                      onTap: anyLoading
+                          ? null
+                          : () => _showDeleteAccountConfirmation(context),
                     ),
-                  ),
-                  const SizedBox(height: 20),
                 ],
               );
             },
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildDestructiveButton(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback? onTap,
+    required bool isLoading,
+    bool isFilled = true,
+  }) {
+    // Red Color Palette
+    final Color dangerColor = Colors.red.shade400;
+    final Color dangerBg = Colors.red.shade50;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Material(
+        color: isFilled ? dangerBg : Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: isFilled
+              ? BorderSide.none
+              : BorderSide(color: dangerColor.withOpacity(0.3), width: 1.5),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          splashColor: dangerColor.withOpacity(0.1),
+          highlightColor: dangerColor.withOpacity(0.05),
+          child: Container(
+            height: 60,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                // Icon Bubble
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: isFilled ? Colors.white : dangerBg,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: isLoading
+                      ? Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: dangerColor,
+                          ),
+                        )
+                      : Icon(icon, color: dangerColor, size: 20),
+                ),
+                const SizedBox(width: 16),
+
+                // Text
+                Text(
+                  isLoading
+                      ? (icon == Icons.logout_rounded
+                            ? 'logging_out'.tr(context)
+                            : 'deleting_account'.tr(context))
+                      : title,
+                  style: TextStyle(
+                    color: dangerColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+
+                const Spacer(),
+
+                // Trailing Arrow
+                if (!isLoading)
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: dangerColor.withOpacity(0.5),
+                    size: 16,
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -19,37 +19,42 @@ class AppointmentDetailsCard extends StatelessWidget {
             AppointmentDetailRow(
               icon: Icons.person_outline,
               label: 'gender'.tr(context),
-              value: appointmentDetails.patient?.gender?.tr(context)?? " ",
+              value: appointmentDetails.patient?.gender?.tr(context) ?? " ",
             ),
             Divider(height: 1, indent: 16, endIndent: 16),
             AppointmentDetailRow(
               icon: Icons.cake_outlined,
               label: 'age'.tr(context),
-              value: appointmentDetails.patient?.birthDate?? " ",
+              value: appointmentDetails.patient?.birthDate ?? " ",
             ),
             Divider(height: 1, indent: 16, endIndent: 16),
             AppointmentDetailRow(
               icon: Icons.height,
               label: 'height'.tr(context),
-              value: '${appointmentDetails.patient?.height} ${"cm".tr(context)}',
+              value:
+                  '${appointmentDetails.patient?.height} ${"cm".tr(context)}',
             ),
             Divider(height: 1, indent: 16, endIndent: 16),
             AppointmentDetailRow(
               icon: Icons.monitor_weight_outlined,
               label: 'weight',
-              value: '${appointmentDetails.patient?.weight} ${"kg".tr(context)}',
+              value:
+                  '${appointmentDetails.patient?.weight} ${"kg".tr(context)}',
             ),
             Divider(height: 1, indent: 16, endIndent: 16),
             AppointmentDetailRow(
               icon: Icons.smoking_rooms,
               label: 'smoker'.tr(context),
-              value: appointmentDetails.patient?.smoker?.tr(context)?? "no".tr(context),
+              value: appointmentDetails.patient?.smoker == 1
+                  ? "yes".tr(context)
+                  : "no".tr(context),
             ),
             Divider(height: 1, indent: 16, endIndent: 16),
             AppointmentDetailRow(
               icon: Icons.favorite_border,
               label: 'marital_status'.tr(context),
-              value: appointmentDetails.patient?.maritalStatus?.tr(context)?? " ",
+              value:
+                  appointmentDetails.patient?.maritalStatus?.tr(context) ?? " ",
             ),
           ],
         ),

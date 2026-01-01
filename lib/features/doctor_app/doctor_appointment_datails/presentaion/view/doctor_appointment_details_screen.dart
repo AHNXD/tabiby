@@ -256,7 +256,9 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(
+          16,
+        ), // Increased slightly to match theme
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -266,69 +268,150 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
         ],
       ),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         onTap: () => _showNoteDialog(context, note),
         leading: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: AppColors.primaryColors.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(Icons.note_alt_outlined, color: AppColors.primaryColors),
+          child: Icon(
+            Icons.note_alt_rounded, // Switched to rounded for consistency
+            color: AppColors.primaryColors,
+            size: 24,
+          ),
         ),
         title: Text(
           "patient_note".tr(context),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: Colors.grey,
+        trailing: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 14,
+            color: Colors.grey,
+          ),
         ),
       ),
     );
   }
 
-  // --- Helper to Show Dialog ---
+  // --- Helper to Show Dialog (Styled) ---
   void _showNoteDialog(BuildContext context, String note) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+        // 1. Transparent background
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.notes, color: AppColors.primaryColors),
-                  const SizedBox(width: 10),
-                  Text(
-                    "patient_note".tr(context),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryColors,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Text(
-                    note,
-                    style: const TextStyle(fontSize: 16, height: 1.5),
-                  ),
+              // 2. Title
+              Text(
+                "patient_note".tr(context),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryColors,
                 ),
               ),
               const SizedBox(height: 24),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
+
+              // 3. Styled Content Container
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Small Icon Badge
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColors.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Icon(
+                                Icons.format_quote_rounded,
+                                color: AppColors.primaryColors,
+                                size: 18,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            // The actual text
+                            Expanded(
+                              child: Text(
+                                note,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  height: 1.6,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 4. Full Width Button
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("close".tr(context)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryColors,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'close'.tr(context),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],

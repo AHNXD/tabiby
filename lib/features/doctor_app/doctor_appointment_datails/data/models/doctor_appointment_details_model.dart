@@ -1,4 +1,4 @@
-class DoctorAppointmentDetailsModel { 
+class DoctorAppointmentDetailsModel {
   String? status;
   Patient? patient;
   String? note;
@@ -16,16 +16,15 @@ class DoctorAppointmentDetailsModel {
   });
 
   DoctorAppointmentDetailsModel.fromJson(Map<String, dynamic> json) {
-  status = json['status']?.toString();
-  patient = json['patient'] != null
-      ? Patient.fromJson(json['patient'])
-      : null;
-  note = json['note']?.toString();
-  diagnose = json['diagnose']?.toString();
-  date = json['date']?.toString();
-  time = json['time']?.toString();
-}
-
+    status = json['status']?.toString();
+    patient = json['patient'] != null
+        ? Patient.fromJson(json['patient'])
+        : null;
+    note = json['note']?.toString();
+    diagnose = json['diagnose']?.toString();
+    date = json['date']?.toString();
+    time = json['time']?.toString();
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -42,15 +41,15 @@ class DoctorAppointmentDetailsModel {
 }
 
 class Patient {
-  String? img; 
+  String? img;
   String? fullName;
   String? gender;
-  int? height; 
-  int? weight; 
+  int? height;
+  int? weight;
   bool? hasChildren;
   int? numberOfChildren;
   String? birthDate;
-  String? smoker; 
+  int? smoker;
   String? maritalStatus;
 
   Patient({
