@@ -319,5 +319,6 @@
     "excellent": "ممتاز",
     "please_enter_the_full_OTP_code":"الرجاء ادخال رمز التحقق",
     "invalid_OTP_format":"الرمز غير صحيح",
-    "view_doctors": "اظهار الأطباء"
+    "view_doctors": "اظهار الأطباء",
+    "unknown_diagnosis":"مرض غير معروف"
 }

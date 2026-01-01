@@ -2,7 +2,7 @@ class DoctorAppointmentDetailsModel {
   String? status;
   Patient? patient;
   String? note;
-  String? diagnose;
+  Diagnose? diagnose;
   String? date;
   String? time;
 
@@ -21,7 +21,9 @@ class DoctorAppointmentDetailsModel {
         ? Patient.fromJson(json['patient'])
         : null;
     note = json['note']?.toString();
-    diagnose = json['diagnose']?.toString();
+    diagnose = json['diagnosis'] != null
+        ? Diagnose.fromJson(json['diagnosis'])
+        : null;
     date = json['date']?.toString();
     time = json['time']?.toString();
   }
@@ -33,7 +35,7 @@ class DoctorAppointmentDetailsModel {
       data['patient'] = patient!.toJson();
     }
     data['note'] = note;
-    data['diagnose'] = diagnose;
+    data['diagnosis'] = diagnose;
     data['date'] = date;
     data['time'] = time;
     return data;
@@ -90,6 +92,29 @@ class Patient {
     data['birth_date'] = birthDate;
     data['smoker'] = smoker;
     data['marital_status'] = maritalStatus;
+    return data;
+  }
+}
+
+class Diagnose {
+  String? name;
+  int? ratio;
+  bool? isEmergency;
+
+  Diagnose({this.name, this.ratio, this.isEmergency});
+
+  Diagnose.fromJson(Map<String, dynamic> json) {
+    name = json['diagnosis_name'];
+    ratio = json['diagnosis_ratio'];
+    isEmergency = json['is_emergency'] == 1;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['diagnosis_name'] = name;
+    data['diagnosis_ratio'] = ratio;
+    data['is_emergency'] = isEmergency;
+
     return data;
   }
 }

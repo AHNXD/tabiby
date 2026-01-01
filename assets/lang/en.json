@@ -316,5 +316,6 @@
     "excellent": "Excellent",
     "please_enter_the_full_OTP_code":"Please enter the full OTP code",
     "invalid_OTP_format":"Invalid OTP format",
-    "view_doctors": "View Doctors"
+    "view_doctors": "View Doctors",
+    "unknown_diagnosis":"Unknown Diagnosis"
 }

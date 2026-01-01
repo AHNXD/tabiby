@@ -32,7 +32,7 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
         data: {
           'time': period,
           'note': note ?? "",
-          "is_emergency": isEmergency,
+          "is_emergency": isEmergency ?? false ? 1 : 0,
           "diagnosis_name": diagnosisName,
           "diagnosis_ratio": diagnosisRatio,
         },

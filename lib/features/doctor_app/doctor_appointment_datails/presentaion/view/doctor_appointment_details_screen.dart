@@ -17,6 +17,7 @@ import 'sections/patient_info_section.dart';
 import 'sections/scheduled_time_section.dart';
 import 'widgets/appointment_details_header.dart';
 import 'widgets/end_appointment_dialog.dart';
+import '../../data/models/doctor_appointment_details_model.dart';
 
 class DoctorAppointmentDetailsScreen extends StatelessWidget {
   static const String routeName = "/doctor_appointment_details";
@@ -80,6 +81,8 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
                   >(
                     builder: (context, state) {
                       if (state is DoctorAppointmentDetailsSuccess) {
+                        final details = state.doctorsAppointmentDetails;
+
                         return SafeArea(
                           child: SingleChildScrollView(
                             padding: const EdgeInsets.all(20.0),
@@ -87,53 +90,37 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 AppointmentDetailsHeader(
-                                  appointment: state.doctorsAppointmentDetails,
-                                  primaryColor:
-                                      state.doctorsAppointmentDetails.status ==
-                                          "completed"
+                                  appointment: details,
+                                  primaryColor: details.status == "completed"
                                       ? Colors.green
-                                      : state
-                                                .doctorsAppointmentDetails
-                                                .status ==
-                                            "pending"
+                                      : details.status == "pending"
                                       ? Colors.orange
                                       : Colors.red,
                                 ),
                                 const SizedBox(height: 16),
-                                if (state.doctorsAppointmentDetails.note !=
-                                        null &&
-                                    state
-                                        .doctorsAppointmentDetails
-                                        .note!
-                                        .isNotEmpty) ...[
+
+                                // Patient Note Section
+                                if (details.note != null &&
+                                    details.note!.isNotEmpty) ...[
                                   _buildPatientNoteButton(
                                     context,
-                                    state.doctorsAppointmentDetails.note!,
+                                    details.note!,
                                   ),
-                                ],
-                                const SizedBox(height: 16),
-                                if (state.doctorsAppointmentDetails.diagnose !=
-                                        null &&
-                                    state
-                                        .doctorsAppointmentDetails
-                                        .diagnose!
-                                        .isNotEmpty) ...[
                                   const SizedBox(height: 24),
+                                ],
+
+                                // Diagnosis Section (Updated Logic)
+                                if (details.diagnose != null) ...[
                                   _buildDiagnosisCard(
                                     context,
-                                    state.doctorsAppointmentDetails.diagnose!,
+                                    details.diagnose!,
                                   ),
+                                  const SizedBox(height: 16),
                                 ],
-                                const SizedBox(height: 16),
-                                PatientInfoSection(
-                                  appointmentDetails:
-                                      state.doctorsAppointmentDetails,
-                                ),
+                                PatientInfoSection(appointmentDetails: details),
 
                                 const SizedBox(height: 24),
-                                ScheduledTimeSection(
-                                  appointment: state.doctorsAppointmentDetails,
-                                ),
+                                ScheduledTimeSection(appointment: details),
                               ],
                             ),
                           ),
@@ -171,17 +158,31 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDiagnosisCard(BuildContext context, String diagnosis) {
+  Widget _buildDiagnosisCard(BuildContext context, Diagnose diagnosis) {
+    final bool isEmergency = diagnosis.isEmergency ?? false;
+    final int rawRatio = diagnosis.ratio ?? 0;
+
+    final int percentageText = rawRatio.toInt();
+
+    final double progressBarValue = (rawRatio / 100.0).clamp(0.0, 1.0);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primaryColors.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isEmergency
+              ? Colors.red.withOpacity(0.5)
+              : AppColors.primaryColors.withOpacity(0.1),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: isEmergency
+                ? Colors.red.withOpacity(0.05)
+                : Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -192,32 +193,116 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.medical_services_outlined,
-                color: AppColors.primaryColors,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "diagnosis".tr(
-                  context,
-                ), // Ensure this key exists in your lang file
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColors.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.monitor_heart_outlined,
                   color: AppColors.primaryColors,
+                  size: 20,
                 ),
               ),
+              const SizedBox(width: 12),
+              Text(
+                "diagnose".tr(context),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textColor,
+                ),
+              ),
+              const Spacer(),
+              if (isEmergency)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.red.shade100),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        size: 14,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "emergency".tr(context),
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
-          const SizedBox(height: 12),
+
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.0),
+            child: Divider(height: 1),
+          ),
+
           Text(
-            diagnosis,
+            diagnosis.name ?? "unknown_diagnosis",
             style: const TextStyle(
-              fontSize: 15,
-              color: Colors.black87,
-              height: 1.5,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryColors,
+              letterSpacing: 0.5,
             ),
           ),
+
+          const SizedBox(height: 16),
+
+          // Confidence/Ratio Bar
+          if (diagnosis.ratio != null) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "confidence".tr(context),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  "$percentageText%",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryColors,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: LinearProgressIndicator(
+                value: progressBarValue,
+                minHeight: 8,
+                backgroundColor: AppColors.primaryColors.withOpacity(0.1),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  percentageText > 80
+                      ? AppColors.primaryColors
+                      : AppColors.primaryColors.withOpacity(0.7),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -256,9 +341,7 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          16,
-        ), // Increased slightly to match theme
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -277,7 +360,7 @@ class DoctorAppointmentDetailsScreen extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Icon(
-            Icons.note_alt_rounded, // Switched to rounded for consistency
+            Icons.note_alt_rounded,
             color: AppColors.primaryColors,
             size: 24,
           ),

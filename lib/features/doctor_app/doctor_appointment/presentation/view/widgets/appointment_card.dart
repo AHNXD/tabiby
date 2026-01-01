@@ -8,6 +8,7 @@ import '../../../../doctor_appointment_datails/presentaion/view/doctor_appointme
 class AppointmentCard extends StatelessWidget {
   final DoctorAppointmentData appointment;
   final Future<void> Function() onRefresh;
+
   const AppointmentCard({
     super.key,
     required this.appointment,
@@ -16,134 +17,209 @@ class AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine status color
     final status = appointment.status ?? 'pending';
-    final statusColor = status == 'completed'
-        ? Colors.green
-        : status == 'pending'
-        ? Colors.orange
-        : Colors.red;
+    final Color statusColor = _getStatusColor(status);
 
-    return InkWell(
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => DoctorAppointmentDetailsScreen(
-              id: appointment.id,
-              status: status,
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.08),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+            spreadRadius: 2,
           ),
-        );
-
-        onRefresh();
-      },
-      borderRadius: BorderRadius.circular(16.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(color: Colors.grey.shade200),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.05),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Container(
-                width: 6,
-                height: 70,
-                decoration: BoxDecoration(
-                  color: statusColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16.0),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16.0),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => DoctorAppointmentDetailsScreen(
+                  id: appointment.id,
+                  status: status,
                 ),
               ),
-              const SizedBox(width: 12),
-              ClipOval(
-                child: CustomImageWidget(
-                  imageUrl: appointment.patientImage,
-                  placeholderAsset: AssetsData.defaultProfileImage,
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      appointment.patientName ?? 'unknown_patient'.tr(context),
-                      style: Theme.of(context).textTheme.titleMedium,
+            );
+            onRefresh();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  // 1. Colored Status Strip
+                  Container(
+                    width: 4,
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    const SizedBox(height: 6),
-                    Row(
+                  ),
+                  const SizedBox(width: 12),
+
+                  // 2. Patient Image with Border
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.grey.withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: CustomImageWidget(
+                        imageUrl: appointment.patientImage,
+                        placeholderAsset: AssetsData.defaultProfileImage,
+                        height: 52,
+                        width: 52,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+
+                  // 3. Middle Content (Name, Center, Time)
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.access_time_filled,
-                          size: 16,
-                          color: Colors.grey.shade400,
-                        ),
-                        const SizedBox(width: 6),
+                        // Patient Name
                         Text(
-                          appointment.time ?? '--:--',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          appointment.patientName ??
+                              'unknown_patient'.tr(context),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+
+                        // Center Name (with Icon)
+                        if (appointment.centerName != null &&
+                            appointment.centerName!.isNotEmpty)
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.business_rounded,
+                                size: 12,
+                                color: Colors.grey.shade500,
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  appointment.centerName!,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        const SizedBox(height: 4),
+
+                        // Time Row
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.access_time_rounded,
+                              size: 12,
+                              color: Colors.grey.shade500,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              appointment.time ?? '--:--',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Text(
-                      appointment.centerName ?? '',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        status.tr(context),
-                        style: TextStyle(
-                          color: statusColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                  ),
+
+                  // 4. Right Side (Status Badge & Arrow)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      // Status Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: statusColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          status.tr(context),
+                          style: TextStyle(
+                            color: statusColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey.shade400,
-                    ),
-                  ],
-                ),
+
+                      const SizedBox(height: 12),
+
+                      // Arrow Button Container
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return Colors.green;
+      case 'pending':
+        return Colors.orange;
+      case 'cancelled':
+      case 'canceled':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 }
