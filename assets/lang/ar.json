@@ -318,5 +318,6 @@
     "good": "جيد",
     "excellent": "ممتاز",
     "please_enter_the_full_OTP_code":"الرجاء ادخال رمز التحقق",
-    "invalid_OTP_format":"الرمز غير صحيح"
+    "invalid_OTP_format":"الرمز غير صحيح",
+    "view_doctors": "اظهار الأطباء"
 }
