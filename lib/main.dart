@@ -85,7 +85,7 @@ class Tabiby extends StatelessWidget {
                     ),
                   ),
                   fontFamily: "cocon-next-arabic",
-                  scaffoldBackgroundColor: AppColors.backgroundColor,
+                  scaffoldBackgroundColor: AppColors.appBackgroundColor,
                   colorScheme: ColorScheme.fromSeed(
                     seedColor: AppColors.primaryColors,
                   ),

@@ -335,5 +335,12 @@
     "DEC": "ديسمبر",
     "morning":"صباح",
     "afternoon":"بعد الظهر",
-    "evening":"مساء"
+    "evening":"مساء",
+    "answer_all": "أجب على الكل",
+    "progress": "التقدم",
+    "emergency_msg": "تستدعي حالتك زيارة الطبيب فوراً.",
+    "possible_condition": "الحالة المحتملة",
+    "recommended": "موصى به",
+    "no_data_title": "لا توجد بيانات",
+    "no_data_subtitle": "لم نتمكن من العثور على أي معلومات لعرضها هنا."
 }

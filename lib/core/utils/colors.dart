@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color backgroundColor = Colors.white;
+  static const Color appBackgroundColor = Color(0xFFF8F9FB);
   static const Color borderColor = Color(0xFFE0E0E0);
   static const Color lightTextColor = Color.fromARGB(255, 55, 55, 55);
   static const Color textTitleAppBarColor = Colors.white;

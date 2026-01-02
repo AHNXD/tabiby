@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/utils/app_localizations.dart';
 import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
+import '../../../../../core/widgets/no_data.dart';
 import '../../../../user_app/home/presentation/view/widgets/build_appbar.dart';
 import '../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../data/repos/doctor_appointment_repo.dart';
@@ -115,6 +117,12 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
                                 );
                           }
 
+                          if (appointments.isEmpty) {
+                            return NoDataWidget(
+                              title: "no_data_title".tr(context),
+                              subtitle: "no_data_subtitle".tr(context),
+                            );
+                          }
                           return RefreshIndicator(
                             onRefresh: onRefresh,
                             child: ListView(

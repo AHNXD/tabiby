@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/widgets/no_data.dart';
 import 'package:tabiby/features/user_app/specialties/data/repos/user_repo.dart';
 import 'package:tabiby/features/user_app/specialties/presentation/view-model/specialties_cubit.dart';
 
@@ -31,6 +32,12 @@ class AllSpecialtiesScreen extends StatelessWidget {
                 await context.read<SpecialtiesCubit>().getSpecialties();
               }
 
+              if ((state.specialties.specializations ?? []).isEmpty) {
+                return NoDataWidget(
+                  title: "no_data_title".tr(context),
+                  subtitle: "no_data_subtitle".tr(context),
+                );
+              }
               return RefreshIndicator(
                 onRefresh: onRefresh,
                 child: Padding(
@@ -41,7 +48,7 @@ class AllSpecialtiesScreen extends StatelessWidget {
                           crossAxisCount: 3,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 20,
-                          childAspectRatio: 0.9,
+                          childAspectRatio: 0.8,
                         ),
                     itemCount: state.specialties.specializations?.length ?? 0,
                     itemBuilder: (context, index) {

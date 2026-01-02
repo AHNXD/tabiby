@@ -1,6 +1,6 @@
 class DiagnosisResult {
   final bool success;
-  final String? message; // For errors
+  final String? message;
   final ResultData? result;
 
   DiagnosisResult({required this.success, this.message, this.result});
@@ -19,12 +19,14 @@ class DiagnosisResult {
 class ResultData {
   final String name;
   final String specialty;
+  final int specialtyID;
   final bool emergency;
   final double confidence;
 
   ResultData({
     required this.name,
     required this.specialty,
+    required this.specialtyID,
     required this.emergency,
     required this.confidence,
   });
@@ -33,8 +35,9 @@ class ResultData {
     return ResultData(
       name: json['name'],
       specialty: json['specialty'],
+      specialtyID: json['specialty_id'],
       emergency: json['emergency'],
-      confidence: (json['confidence'] as num).toDouble(),
+      confidence: double.tryParse(json['confidence'].toString()) ?? 0.0,
     );
   }
 }

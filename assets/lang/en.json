@@ -332,5 +332,13 @@
     "DEC": "Dec",
     "morning":"Morning",
     "afternoon":"Afternoon",
-    "evening":"Evening"
+    "evening":"Evening",
+    "answer_all": "Answer All",
+    "progress": "Progress",
+    "emergency_msg": "Please visit a doctor immediately.",
+    "possible_condition": "POSSIBLE CONDITION",
+    "recommended": "Recommended",
+    "cnflicting_symptoms": "The symptoms provided are conflicting or insufficient. Please try again.",
+    "no_data_title": "No Data Found",
+    "no_data_subtitle": "We couldn't find any information to show here."
 }

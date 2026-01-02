@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "192.168.1.21";
+  static String ip = "192.168.1.115";
 
   static String fixUrl(String url) {
     if (url.contains("127.0.0.1")) {

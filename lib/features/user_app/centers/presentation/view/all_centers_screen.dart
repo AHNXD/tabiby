@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/widgets/no_data.dart';
 import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/buttom_loader.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
@@ -58,6 +59,12 @@ class _AllCentersScreenState extends State<AllCentersScreen> {
                 await context.read<CentersCubit>().refreshCenters();
               }
 
+              if (state.centers.isEmpty) {
+                return NoDataWidget(
+                  title: "no_data_title".tr(context),
+                  subtitle: "no_data_subtitle".tr(context),
+                );
+              }
               return Stack(
                 children: [
                   Padding(

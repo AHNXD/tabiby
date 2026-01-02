@@ -22,8 +22,8 @@ class SpecialtyWidget extends StatelessWidget {
         children: [
           // 1. The Icon Container
           Container(
-            width: 68,
-            height: 68,
+            width: 80,
+            height: 80,
             margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -46,8 +46,8 @@ class SpecialtyWidget extends StatelessWidget {
               imageUrl: specialty.img,
               // Assuming this is a local asset path, otherwise ensure it's in AssetsData
               placeholderAsset: 'assets/icons/appIcon.png',
-              height: 40,
-              width: 40,
+              height: 60,
+              width: 60,
               fit: BoxFit.contain, // Contain usually looks better for icons
             ),
           ),
@@ -58,6 +58,7 @@ class SpecialtyWidget extends StatelessWidget {
           // Using Flexible to prevent overflow if the name is long
           SizedBox(
             width: 80, // Constrain width to keep text centered under icon
+
             child: Text(
               specialty.name ?? '',
               maxLines: 2,
