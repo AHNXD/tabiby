@@ -13,14 +13,17 @@ class SpecialtyItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 135,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        clipBehavior: Clip.none,
-        itemCount: specialties.length,
-        itemBuilder: (context, index) {
-          final specialty = specialties[index];
-          return SpecialtyWidget(specialty: specialty);
-        },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          clipBehavior: Clip.none,
+          itemCount: specialties.length,
+          itemBuilder: (context, index) {
+            final specialty = specialties[index];
+            return SpecialtyWidget(specialty: specialty);
+          },
+        ),
       ),
     );
   }

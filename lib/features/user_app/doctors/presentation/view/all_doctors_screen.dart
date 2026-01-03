@@ -92,7 +92,7 @@ class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 2,
                               mainAxisSpacing: 2,
-                              childAspectRatio: 0.85,
+                              childAspectRatio: 0.8,
                             ),
                         itemBuilder: (context, index) {
                           return Padding(

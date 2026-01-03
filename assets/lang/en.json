@@ -152,7 +152,7 @@
     "otp":"OTP Code",
     "confirm_password":"Confirm The Password",
     "new_password": "Enter the new password",
-    "reset_password_message":"Enter your number to verify the correctness of the number and receive the verification code",
+    "reset_password_message":"Enter your Email to verify it and receive the verification code",
     "otp_message": "Enter the verification code",
     "confirm_password_message": "Enter and confirm the new password",
     "please_agree_terms": "Please agree to the terms and conditions",
@@ -340,5 +340,6 @@
     "recommended": "Recommended",
     "cnflicting_symptoms": "The symptoms provided are conflicting or insufficient. Please try again.",
     "no_data_title": "No Data Found",
-    "no_data_subtitle": "We couldn't find any information to show here."
+    "no_data_subtitle": "We couldn't find any information to show here.",
+    "please_select_time": "Please Select Time"
 }

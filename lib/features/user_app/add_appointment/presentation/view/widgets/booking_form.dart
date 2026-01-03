@@ -168,7 +168,7 @@ class _BookingFormState extends State<BookingForm> {
               ),
               Expanded(
                 child: Text(
-                  "attach_diagnosis_result".tr(context), // Add to lang
+                  "attach_diagnosis_result".tr(context),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -190,7 +190,9 @@ class _BookingFormState extends State<BookingForm> {
               decoration: BoxDecoration(
                 color: Colors.blue.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.blue.withOpacity(0.2)),
+                border: Border.all(
+                  color: AppColors.primaryColors.withOpacity(0.2),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
