@@ -105,7 +105,7 @@ class Diagnose {
 
   Diagnose.fromJson(Map<String, dynamic> json) {
     name = json['diagnosis_name'];
-    ratio = json['diagnosis_ratio'];
+    ratio = json['diagnosis_ratio'].toInt();
     isEmergency = json['is_emergency'] == 1;
   }
 

@@ -60,7 +60,7 @@ class Doctor {
     name = json['name'];
     img = json['image'];
     bio = json['bio'];
-    rate = json['rate'];
+    rate = json['rate'].toInt();
     yearsOfExperience = json['experience_years'];
     isActive = json['is_active'];
     specialty = json['specialty'] != null

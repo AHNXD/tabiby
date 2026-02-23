@@ -26,11 +26,7 @@ class AboutUsScreen extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 5),
-            Text(
-              'A brief subtitle about your app\'s purpose.',
-              style: TextStyle(fontSize: 16, color: Colors.black54),
-            ),
+
             const Divider(height: 50, color: Colors.grey),
 
             _buildInfoCard(
