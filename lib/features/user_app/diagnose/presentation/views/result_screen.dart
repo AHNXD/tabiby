@@ -17,23 +17,24 @@ class ResultScreen extends StatelessWidget {
 
   void _startOver(BuildContext context) {
     context.read<DiagnosisCubit>().resetDiagnosis();
-    context.read<DiagnosisCubit>().fetchCategories();
-    Navigator.of(context).pop(); // Pop result
-    Navigator.of(context).pop(); // Pop questions
+    Navigator.of(context).pop();
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
   }
 
-  void _findDoctor(BuildContext context, int specialtyID) {
-    Navigator.pushNamed(
-      context,
-      AllDoctorsScreen.routeName,
-      arguments: {"specialtyID": specialtyID, "centerID": null},
-    );
+  void _retry(BuildContext context) {
+    context.read<DiagnosisCubit>().submitDiagnosis();
+  }
+
+  void _findDoctor(BuildContext context) {
+    Navigator.pushNamed(context, AllDoctorsScreen.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB), // Premium light background
+      backgroundColor: const Color(0xFFF8F9FB),
       appBar: CustomAppbar(title: 'result_title'.tr(context)),
       body: BlocBuilder<DiagnosisCubit, DiagnosisState>(
         builder: (context, state) {
@@ -44,23 +45,19 @@ class ResultScreen extends StatelessWidget {
               return CustomErrorWidget(
                 textColor: Colors.black,
                 errorMessage: state.errorMessage.tr(context),
-                onRetry: () => _startOver(context),
+                onRetry: () => _retry(context),
               );
             case ViewState.success:
-              if (state.diagnosisResult == null ||
-                  !state.diagnosisResult!.success) {
-                return _buildNoResult(context, state.diagnosisResult?.message);
+              final DiagnosisResult? result = state.diagnosisResult;
+              if (result == null) {
+                return _buildNoResult(context);
               }
-              //
+
               return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(20.0),
-                child: _buildResultView(
-                  context,
-                  state.diagnosisResult!.result!,
-                ),
+                padding: const EdgeInsets.all(20),
+                child: _buildResultView(context, result),
               );
-            default:
+            case ViewState.idle:
               return const LoadingView();
           }
         },
@@ -68,309 +65,298 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildResultView(BuildContext context, ResultData result) {
-    final confidenceValue = result.confidence / 100;
+  Widget _buildResultView(BuildContext context, DiagnosisResult result) {
+    final Color urgencyColor = _urgencyColor(result.urgency);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (result.emergency) ...[
-          //
+        if (result.isEmergency) ...[
           Container(
-            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.red.withOpacity(0.3)),
+              color: Colors.red.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.warning_amber_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.red,
+                  size: 28,
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'emergency'.tr(context),
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'emergency_msg'.tr(context),
-                        style: TextStyle(
-                          color: Colors.red.shade800,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    'emergency_msg'.tr(context),
+                    style: TextStyle(
+                      color: Colors.red.shade800,
+                      fontWeight: FontWeight.w600,
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
         ],
-
-        // 2. Main Result Card
         Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.08),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'possible_condition'.tr(context),
-                style: TextStyle(
-                  color: Colors.grey.shade500,
-                  fontSize: 14,
-                  letterSpacing: 1.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                result.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textColor,
-                  height: 1.3,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: Divider(height: 1),
-              ),
-
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Confidence Gauge
-                  Expanded(
-                    child: Column(
-                      children: [
-                        _buildCircularIndicator(
-                          context,
-                          confidenceValue,
-                          result.confidence.toStringAsFixed(0),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'confidence'.tr(context),
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: urgencyColor.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      result.urgency,
+                      style: TextStyle(
+                        color: urgencyColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-
-                  Container(width: 1, height: 80, color: Colors.grey.shade200),
-
-                  // Specialty Info
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColors.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.medical_services_rounded,
-                            color: AppColors.primaryColors,
-                            size: 28,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          result.specialty,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: AppColors.textColor,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'recommended'.tr(context),
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
+                  const Spacer(),
+                  Text(
+                    '${'confidence'.tr(context)}: ${result.confidence}',
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 14),
+              Text(
+                'possible_condition'.tr(context),
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                result.conditionName,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textColor,
+                ),
+              ),
+              const SizedBox(height: 14),
+              _InfoRow(
+                icon: Icons.local_hospital_outlined,
+                title: 'recommended_specialty'.tr(context),
+                value: result.specialist,
+              ),
             ],
           ),
         ),
-
-        const SizedBox(height: 32),
-
-        // 3. Actions
-        PrimaryButton(
-          onPressed: () => _findDoctor(context, result.specialtyID),
-          text: '${"find_a".tr(context)} ${result.specialty}',
-        ),
-        const SizedBox(height: 16),
-        SecondryButton(
-          onPressed: () => _startOver(context),
-          text: 'start_new_diagnosis'.tr(context),
-        ),
-
-        const SizedBox(height: 32),
-
-        // 4. Disclaimer
+        const SizedBox(height: 14),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.grey.shade200),
           ),
-          child: Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.info_outline_rounded,
-                color: Colors.grey.shade600,
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'disclaimer_note'.tr(context),
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
-                    height: 1.5,
-                  ),
+              Text(
+                'reasoning'.tr(context),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                result.reasoning,
+                style: TextStyle(color: Colors.grey.shade700, height: 1.6),
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'next_steps'.tr(context),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (result.adviceSteps.isEmpty)
+                Text(
+                  'no_data_subtitle'.tr(context),
+                  style: TextStyle(color: Colors.grey.shade600),
+                )
+              else
+                ...result.adviceSteps.asMap().entries.map(
+                  (entry) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${entry.key + 1}. ',
+                          style: TextStyle(
+                            color: AppColors.primaryColors,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            entry.value,
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        PrimaryButton(
+          onPressed: () => _findDoctor(context),
+          text: 'view_doctors'.tr(context),
+          fontSize: 20,
+        ),
+        const SizedBox(height: 12),
+        SecondryButton(
+          onPressed: () => _startOver(context),
+          text: 'start_new_diagnosis'.tr(context),
         ),
       ],
     );
   }
 
-  Widget _buildCircularIndicator(
-    BuildContext context,
-    double value,
-    String text,
-  ) {
-    return SizedBox(
-      height: 80,
-      width: 80,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          CircularProgressIndicator(
-            value: 1.0,
-            strokeWidth: 8,
-            color: Colors.grey.shade100,
-          ),
-          CircularProgressIndicator(
-            value: value,
-            strokeWidth: 8,
-            strokeCap: StrokeCap.round,
-            color: AppColors.primaryColors,
-          ),
-          Center(
-            child: Text(
-              '$text%',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: AppColors.primaryColors,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNoResult(BuildContext context, String? message) {
+  Widget _buildNoResult(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(28),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
+                color: Colors.red.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.search_off_rounded,
-                size: 48,
-                color: Colors.red.shade400,
+                size: 44,
+                color: Colors.red,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Text(
-              message ?? 'couldnt_get_condition'.tr(context),
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textColor,
-              ),
+              'couldnt_get_condition'.tr(context),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
               'conflicting_symptoms'.tr(context),
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade600,
-                height: 1.5,
-              ),
+              style: TextStyle(color: Colors.grey.shade600, height: 1.5),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 24),
             PrimaryButton(
               onPressed: () => _startOver(context),
               text: 'start_new_diagnosis'.tr(context),
+              fontSize: 20,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Color _urgencyColor(String urgency) {
+    switch (urgency.toUpperCase()) {
+      case 'EMERGENCY':
+      case 'HIGH':
+        return Colors.red;
+      case 'MEDIUM':
+        return Colors.orange;
+      default:
+        return Colors.green;
+    }
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+
+  const _InfoRow({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: AppColors.primaryColors),
+        const SizedBox(width: 8),
+        Text(
+          '$title: ',
+          style: TextStyle(
+            color: Colors.grey.shade700,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.end,
+          ),
+        ),
+      ],
     );
   }
 }

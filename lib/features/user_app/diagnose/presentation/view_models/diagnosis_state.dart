@@ -1,89 +1,71 @@
 import 'package:equatable/equatable.dart';
-import '../../data/models/category_model.dart';
-import '../../data/models/diagnosis_result_model.dart';
-import '../../data/models/question_model.dart';
 
-// Represents the state of a data-fetching view
+import '../../data/models/diagnosis_result_model.dart';
+import '../../data/models/symptom_model.dart';
+
 enum ViewState { idle, loading, success, error }
 
 class DiagnosisState extends Equatable {
-  // State for each process
-  final ViewState categoryState;
-  final ViewState questionState;
+  final ViewState symptomsState;
   final ViewState resultState;
-
-  // Data
-  final List<Category> categories;
-  final List<Question> questions;
+  final List<Symptom> symptoms;
   final DiagnosisResult? diagnosisResult;
   final String errorMessage;
-
-  // Current flow state
-  final int? selectedCategoryId;
-  final Map<int, int> answers; // <QuestionID, Answer (0 or 1)>
+  final String? selectedBodyPartKey;
+  final String? selectedBodyPartLabel;
 
   const DiagnosisState({
-    this.categoryState = ViewState.idle,
-    this.questionState = ViewState.idle,
+    this.symptomsState = ViewState.idle,
     this.resultState = ViewState.idle,
-    this.categories = const [],
-    this.questions = const [],
+    this.symptoms = const [],
     this.diagnosisResult,
     this.errorMessage = '',
-    this.selectedCategoryId,
-    this.answers = const {},
+    this.selectedBodyPartKey,
+    this.selectedBodyPartLabel,
   });
 
-  // Factory for the initial state
   factory DiagnosisState.initial() => const DiagnosisState();
 
-  // The 'copyWith' method is essential for emitting new states
-  // It creates a new instance of the state, updating only the
-  // fields that have changed.
   DiagnosisState copyWith({
-    ViewState? categoryState,
-    ViewState? questionState,
+    ViewState? symptomsState,
     ViewState? resultState,
-    List<Category>? categories,
-    List<Question>? questions,
+    List<Symptom>? symptoms,
     DiagnosisResult? diagnosisResult,
     String? errorMessage,
-    int? selectedCategoryId,
-    Map<int, int>? answers,
-    bool clearDiagnosisResult = false, // Flag to explicitly set result to null
-    bool clearSelectedCategory =
-        false, // Flag to explicitly set category to null
+    String? selectedBodyPartKey,
+    String? selectedBodyPartLabel,
+    bool clearSymptoms = false,
+    bool clearDiagnosisResult = false,
+    bool clearSelectedBodyPart = false,
   }) {
     return DiagnosisState(
-      categoryState: categoryState ?? this.categoryState,
-      questionState: questionState ?? this.questionState,
+      symptomsState: symptomsState ?? this.symptomsState,
       resultState: resultState ?? this.resultState,
-      categories: categories ?? this.categories,
-      questions: questions ?? this.questions,
+      symptoms: clearSymptoms ? const [] : symptoms ?? this.symptoms,
       diagnosisResult: clearDiagnosisResult
           ? null
           : diagnosisResult ?? this.diagnosisResult,
       errorMessage: errorMessage ?? this.errorMessage,
-      selectedCategoryId: clearSelectedCategory
+      selectedBodyPartKey: clearSelectedBodyPart
           ? null
-          : selectedCategoryId ?? this.selectedCategoryId,
-      answers: answers ?? this.answers,
+          : selectedBodyPartKey ?? this.selectedBodyPartKey,
+      selectedBodyPartLabel: clearSelectedBodyPart
+          ? null
+          : selectedBodyPartLabel ?? this.selectedBodyPartLabel,
     );
   }
 
-  // Equatable props
-  // This tells Equatable which fields to compare to check if
-  // the state has actually changed.
+  List<Symptom> get selectedSymptoms =>
+      symptoms.where((symptom) => symptom.isSelected).toList();
+
   @override
   List<Object?> get props => [
-    categoryState,
-    questionState,
+    symptomsState,
     resultState,
-    categories,
-    questions,
+    symptoms,
     diagnosisResult,
     errorMessage,
-    selectedCategoryId,
-    answers,
+    selectedBodyPartKey,
+    selectedBodyPartLabel,
   ];
 }

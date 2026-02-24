@@ -102,14 +102,11 @@ class _BookingFormState extends State<BookingForm> {
 
                             // Only send if checkbox is checked
                             if (state.includeDiagnosis && hasDiagnosis) {
-                              // Adjust these field names based on your DiagnosisResult model
                               diagName =
-                                  diagnosisState.diagnosisResult!.result!.name;
+                                  diagnosisState.diagnosisResult!.conditionName;
                               diagRatio = diagnosisState
                                   .diagnosisResult!
-                                  .result!
-                                  .confidence
-                                  .toString();
+                                  .confidenceWithoutPercent;
                             }
 
                             context.read<BookingCubit>().bookAppointment(
@@ -117,7 +114,12 @@ class _BookingFormState extends State<BookingForm> {
                               diagnosisName: diagName,
                               diagnosisRatio: diagRatio,
                               isEmergency:
-                                  state.isEmergency, // Send emergency flag
+                                  state.isEmergency ||
+                                  (state.includeDiagnosis &&
+                                      (diagnosisState
+                                              .diagnosisResult
+                                              ?.isEmergency ??
+                                          false)),
                             );
                           } else {
                             messages(
@@ -188,10 +190,10 @@ class _BookingFormState extends State<BookingForm> {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.05),
+                color: Colors.blue.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: AppColors.primaryColors.withOpacity(0.2),
+                  color: AppColors.primaryColors.withValues(alpha: 0.2),
                 ),
               ),
               child: Column(
@@ -203,8 +205,7 @@ class _BookingFormState extends State<BookingForm> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    // Adjust field names to match your model
-                    diagnosisState.diagnosisResult?.result?.name ?? '',
+                    diagnosisState.diagnosisResult?.conditionName ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -212,7 +213,7 @@ class _BookingFormState extends State<BookingForm> {
                     ),
                   ),
                   Text(
-                    "${"confidence".tr(context)}: ${diagnosisState.diagnosisResult?.result?.confidence ?? ''}%",
+                    "${"confidence".tr(context)}: ${diagnosisState.diagnosisResult?.confidence ?? ''}",
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ],

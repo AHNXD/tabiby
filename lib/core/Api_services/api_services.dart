@@ -10,6 +10,8 @@ class ApiServices {
   final Dio _dio;
   ApiServices(this._dio) {
     _dio.options.baseUrl = Urls.baseUrl;
+    _dio.options.connectTimeout = const Duration(seconds: 120);
+
     _dio.interceptors.add(
       PrettyDioLogger(
         requestHeader: true,

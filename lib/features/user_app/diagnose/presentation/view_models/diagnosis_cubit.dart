@@ -1,98 +1,146 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'diagnosis_state.dart';
+
 import '../../data/models/diagnosis_request_model.dart';
+import '../../data/models/symptom_model.dart';
 import '../../data/repos/diagnosis_repository.dart';
+import 'diagnosis_state.dart';
 
 export 'diagnosis_state.dart';
 
 class DiagnosisCubit extends Cubit<DiagnosisState> {
   final DiagnosisRepository _repository;
-  String lang = "ar";
+
   DiagnosisCubit(this._repository) : super(DiagnosisState.initial());
 
-  Future<void> fetchCategories() async {
-    emit(state.copyWith(categoryState: ViewState.loading));
-
-    final result = await _repository.getCategories();
-
-    result.fold(
-      (failure) {
-        emit(
-          state.copyWith(
-            categoryState: ViewState.error,
-            errorMessage: failure.message,
-          ),
-        );
-      },
-      (categoriesList) {
-        emit(
-          state.copyWith(
-            categoryState: ViewState.success,
-            categories: categoriesList,
-          ),
-        );
-      },
+  void selectBodyPart({required String partKey, required String partLabel}) {
+    emit(
+      state.copyWith(
+        selectedBodyPartKey: partKey,
+        selectedBodyPartLabel: partLabel,
+        symptomsState: ViewState.idle,
+        resultState: ViewState.idle,
+        clearSymptoms: true,
+        clearDiagnosisResult: true,
+      ),
     );
   }
 
-  Future<void> selectCategory(int categoryId) async {
+  void clearBodyPartSelection() {
     emit(
       state.copyWith(
-        questionState: ViewState.loading,
-        selectedCategoryId: categoryId,
+        clearSelectedBodyPart: true,
+        symptomsState: ViewState.idle,
+        resultState: ViewState.idle,
+        clearSymptoms: true,
+        clearDiagnosisResult: true,
+      ),
+    );
+  }
+
+  Future<void> fetchSymptomsForSelectedPart() async {
+    if (state.selectedBodyPartLabel == null ||
+        state.selectedBodyPartLabel!.trim().isEmpty) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        symptomsState: ViewState.loading,
+        errorMessage: '',
+        clearSymptoms: true,
+        clearDiagnosisResult: true,
       ),
     );
 
-    final result = await _repository.getQuestions(categoryId);
+    final result = await _repository.getSymptoms(state.selectedBodyPartLabel!);
 
     result.fold(
       (failure) {
         emit(
           state.copyWith(
-            questionState: ViewState.error,
+            symptomsState: ViewState.error,
             errorMessage: failure.message,
+            clearSymptoms: true,
           ),
         );
       },
-      (questionsList) {
-        final answers = {for (var q in questionsList) q.id: 0};
-
+      (symptomsList) {
         emit(
           state.copyWith(
-            questionState: ViewState.success,
-            questions: questionsList,
-            answers: answers,
+            symptomsState: ViewState.success,
+            symptoms: symptomsList,
+            resultState: ViewState.idle,
+            errorMessage: '',
           ),
         );
       },
     );
   }
 
-  void answerQuestion(int questionId, bool answer) {
-    // IMPORTANT: We must create a *new* map, not modify the old one,
-    // for Equatable to detect the state change.
-    final newAnswers = Map<int, int>.from(state.answers);
-    newAnswers[questionId] = answer ? 1 : 0;
+  void toggleSymptomSelection(int index, bool value) {
+    if (index < 0 || index >= state.symptoms.length) {
+      return;
+    }
 
-    // Emit the new state with the updated answers map
-    emit(state.copyWith(answers: newAnswers));
+    final List<Symptom> updatedSymptoms = List<Symptom>.from(state.symptoms);
+    final Symptom target = updatedSymptoms[index];
+    updatedSymptoms[index] = target.copyWith(isSelected: value);
+
+    emit(state.copyWith(symptoms: updatedSymptoms));
   }
 
-  Future<void> submitDiagnosis(String lang) async {
-    // Read the category ID from the current state
-    if (state.selectedCategoryId == null) return;
+  void answerQuestion(int symptomIndex, int questionIndex, dynamic answer) {
+    if (symptomIndex < 0 || symptomIndex >= state.symptoms.length) {
+      return;
+    }
 
-    emit(state.copyWith(resultState: ViewState.loading));
+    final List<Symptom> updatedSymptoms = List<Symptom>.from(state.symptoms);
+    final Symptom symptom = updatedSymptoms[symptomIndex];
 
-    // Convert keys to string for the API
-    final apiResponses = state.answers.map(
-      (key, value) => MapEntry(key.toString(), value),
+    if (questionIndex < 0 || questionIndex >= symptom.questions.length) {
+      return;
+    }
+
+    final List<SymptomQuestion> updatedQuestions = List<SymptomQuestion>.from(
+      symptom.questions,
     );
 
-    final request = DiagnosisRequest(
-      lang: lang,
-      categoryId: state.selectedCategoryId!,
-      responses: apiResponses,
+    updatedQuestions[questionIndex] = updatedQuestions[questionIndex].copyWith(
+      answer: answer,
+    );
+
+    updatedSymptoms[symptomIndex] = symptom.copyWith(
+      questions: updatedQuestions,
+    );
+
+    emit(state.copyWith(symptoms: updatedSymptoms));
+  }
+
+  Future<void> submitDiagnosis() async {
+    final List<Symptom> selectedSymptoms = state.selectedSymptoms;
+    if (selectedSymptoms.isEmpty) {
+      emit(
+        state.copyWith(
+          resultState: ViewState.error,
+          errorMessage: 'no_symptom_selected',
+          clearDiagnosisResult: true,
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        resultState: ViewState.loading,
+        errorMessage: '',
+        clearDiagnosisResult: true,
+      ),
+    );
+
+    final DiagnosisRequest request = DiagnosisRequest(
+      selectedSymptoms: selectedSymptoms
+          .map((symptom) => symptom.toSelectedPayload())
+          .toList(),
     );
 
     final result = await _repository.postDiagnosis(request);
@@ -103,6 +151,7 @@ class DiagnosisCubit extends Cubit<DiagnosisState> {
           state.copyWith(
             resultState: ViewState.error,
             errorMessage: failure.message,
+            clearDiagnosisResult: true,
           ),
         );
       },
@@ -111,6 +160,7 @@ class DiagnosisCubit extends Cubit<DiagnosisState> {
           state.copyWith(
             resultState: ViewState.success,
             diagnosisResult: diagnosisResult,
+            errorMessage: '',
           ),
         );
       },

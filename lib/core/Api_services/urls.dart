@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "192.168.1.5";
+  static String ip = "10.190.24.64";
 
   static String fixUrl(String url) {
     if (url.contains("127.0.0.1")) {
@@ -81,4 +81,9 @@ class Urls {
   static String questions(int categoryId) =>
       "$aiPort/v1/categories/$categoryId/questions";
   static String diagnose = "$aiPort/v1/diagnose";
+  static String n8nPort = "5678";
+  static String getSymptomsAutomation =
+      "http://$ip:$n8nPort/webhook-test/get-symptoms";
+  static String diagnoseAutomation =
+      "http://$ip:$n8nPort/webhook-test/diagnose";
 }
