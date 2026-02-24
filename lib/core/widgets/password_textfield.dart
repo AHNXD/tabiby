@@ -27,31 +27,63 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       validator: widget.validator,
       obscureText: !_isPasswordVisible,
       controller: widget.controller,
+      cursorColor: Theme.of(context).primaryColor, // Matches your primary theme
+      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         hintText: widget.hintText,
-        hintStyle: TextStyle(color: AppColors.textFieldColor),
-        filled: true,
-        fillColor: AppColors.textFieldColor.withValues(alpha: 0.1),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          borderSide: BorderSide.none,
+        hintStyle: TextStyle(
+          color: AppColors.textFieldColor.withOpacity(0.6),
+          fontWeight: FontWeight.w400,
         ),
+        filled: true,
+        fillColor: const Color(
+          0xFFFAFAFA,
+        ), // Matches the CustomTextField background
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 16.0,
+          vertical: 18.0, // Matches the breathing room
           horizontal: 24.0,
         ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isPasswordVisible
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
-            color: AppColors.textFieldColor,
+
+        // --- Interactive Borders Matching CustomTextField ---
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: BorderSide(
+            color: Theme.of(context).primaryColor,
+            width: 2.0,
           ),
-          onPressed: () {
-            setState(() {
-              _isPasswordVisible = !_isPasswordVisible;
-            });
-          },
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 2.0),
+        ),
+
+        // --- Aligned Suffix Icon ---
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(
+            right: 8.0,
+          ), // Keeps icon from hitting the curved edge
+          child: IconButton(
+            icon: Icon(
+              _isPasswordVisible
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
+              // Softened the icon slightly so it doesn't overpower the text
+              color: AppColors.textFieldColor.withOpacity(0.8),
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible;
+              });
+            },
+          ),
         ),
       ),
     );

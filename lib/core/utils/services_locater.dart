@@ -9,6 +9,8 @@ import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinme
 import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinment_repo_iplm.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository_iplm.dart';
+import 'package:tabiby/features/user_app/diet/data/repos/diet_repository.dart';
+import 'package:tabiby/features/user_app/diet/data/repos/diet_repository_iplm.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments/my_appointments_repo.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/repos/rating/rating_repo.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/repos/rating/rating_repo_iplm.dart';
@@ -104,6 +106,11 @@ void setupLocatorServices() {
   //Diagnose
   getit.registerSingleton<DiagnosisRepository>(
     DiagnosisRepositoryIplm(getit.get<ApiServices>()),
+  );
+
+  //Diet
+  getit.registerSingleton<DietRepository>(
+    DietRepositoryIplm(getit.get<ApiServices>()),
   );
 
   //Rating

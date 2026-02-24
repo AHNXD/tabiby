@@ -5,6 +5,7 @@ import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_s
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
+import 'package:tabiby/features/user_app/diet/presentation/views/diet_mode_screen.dart';
 
 import '../../features/auth/presentation/views/confirm_password/presentation/view/confirm_password_screen.dart';
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
@@ -74,5 +75,6 @@ class Routes {
     CategoryScreen.routeName: (context) => CategoryScreen(),
     QuestionScreen.routeName: (context) => QuestionScreen(),
     ResultScreen.routeName: (context) => ResultScreen(),
+    DietModeScreen.routeName: (context) => const DietModeScreen(),
   };
 }

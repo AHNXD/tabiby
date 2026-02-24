@@ -20,6 +20,8 @@ import 'core/utils/services_locater.dart';
 import 'core/utils/styles.dart';
 import 'features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 import 'features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart';
+import 'features/user_app/diet/data/repos/diet_repository.dart';
+import 'features/user_app/diet/presentation/view_models/diet_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +43,9 @@ class Tabiby extends StatelessWidget {
         BlocProvider(create: (context) => LocaleCubit()..getSaveLanguage()),
         BlocProvider(
           create: (context) => DiagnosisCubit(getit.get<DiagnosisRepository>()),
+        ),
+        BlocProvider(
+          create: (context) => DietCubit(getit.get<DietRepository>()),
         ),
         BlocProvider(
           create: (context) =>

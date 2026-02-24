@@ -69,6 +69,8 @@ class ApiServices {
   Future<Response> post({
     required String endPoint,
     required dynamic data,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) async {
     final Map<String, String> headers = await _headers();
 
@@ -81,13 +83,19 @@ class ApiServices {
     return _dio.post(
       endPoint,
       data: data,
-      options: Options(headers: await _headers()),
+      options: Options(
+        headers: headers,
+        sendTimeout: sendTimeout,
+        receiveTimeout: receiveTimeout,
+      ),
     );
   }
 
   Future<Response> put({
     required String endPoint,
     required dynamic data,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
   }) async {
     final Map<String, String> headers = await _headers();
 
@@ -100,7 +108,11 @@ class ApiServices {
     return _dio.put(
       endPoint,
       data: data,
-      options: Options(headers: await _headers()),
+      options: Options(
+        headers: headers,
+        sendTimeout: sendTimeout,
+        receiveTimeout: receiveTimeout,
+      ),
     );
   }
 

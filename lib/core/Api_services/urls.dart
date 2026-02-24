@@ -86,4 +86,6 @@ class Urls {
       "http://$ip:$n8nPort/webhook-test/get-symptoms";
   static String diagnoseAutomation =
       "http://$ip:$n8nPort/webhook-test/diagnose";
+  static String generateDietPlanAutomation =
+      "http://$ip:$n8nPort/webhook-test/generate-diet-plan";
 }
