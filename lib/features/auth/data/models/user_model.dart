@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../../user_app/add_appointment/data/models/centers_appointment_model.dart';
 
 class UserModel {
@@ -45,7 +47,7 @@ class MainData {
     this.phone,
     this.email,
     this.role,
-    this.centers
+    this.centers,
   });
 
   MainData.fromJson(Map<String, dynamic> json) {
@@ -92,6 +94,12 @@ class MoreData {
   String? numberOfChildren;
   String? birthDate;
   bool? isSmoke;
+  List<String> chronicDiseases;
+  List<String> permanentMedications;
+  List<String> foodAllergies;
+  List<String> preferredFoods;
+  List<String> dislikedFoods;
+  List<String> digestionIssues;
 
   MoreData({
     this.address,
@@ -103,20 +111,30 @@ class MoreData {
     this.numberOfChildren,
     this.birthDate,
     this.isSmoke,
+    this.chronicDiseases = const <String>[],
+    this.permanentMedications = const <String>[],
+    this.foodAllergies = const <String>[],
+    this.preferredFoods = const <String>[],
+    this.dislikedFoods = const <String>[],
+    this.digestionIssues = const <String>[],
   });
 
-  MoreData.fromJson(Map<String, dynamic> json) {
-    address = json['address'];
-    gender = json['gender'];
-    weight = json['weight'].toString();
-    height = json['height'].toString();
-    maritalStatus = json['marital_status'];
-    hasChildren = json['has_children'];
-    numberOfChildren = json['number_of_children'].toString();
-    birthDate = json['birth_date'];
-
-    isSmoke = json['is_smoke'].toString() == "1";
-  }
+  MoreData.fromJson(Map<String, dynamic> json)
+    : address = json['address']?.toString(),
+      gender = json['gender']?.toString(),
+      weight = json['weight']?.toString(),
+      height = json['height']?.toString(),
+      maritalStatus = json['marital_status']?.toString(),
+      hasChildren = json['has_children'],
+      numberOfChildren = json['number_of_children']?.toString(),
+      birthDate = json['birth_date']?.toString(),
+      isSmoke = json['is_smoke'].toString() == "1" || json['is_smoke'] == true,
+      chronicDiseases = _parseStringList(json['chronic_diseases']),
+      permanentMedications = _parseStringList(json['permanent_medications']),
+      foodAllergies = _parseStringList(json['food_allergies']),
+      preferredFoods = _parseStringList(json['preferred_foods']),
+      dislikedFoods = _parseStringList(json['disliked_foods']),
+      digestionIssues = _parseStringList(json['digestion_issues']);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -128,9 +146,47 @@ class MoreData {
     data['has_children'] = hasChildren;
     data['number_of_children'] = numberOfChildren;
     data['birth_date'] = birthDate;
-
     data['is_smoke'] = isSmoke;
-
+    data['chronic_diseases'] = chronicDiseases;
+    data['permanent_medications'] = permanentMedications;
+    data['food_allergies'] = foodAllergies;
+    data['preferred_foods'] = preferredFoods;
+    data['disliked_foods'] = dislikedFoods;
+    data['digestion_issues'] = digestionIssues;
     return data;
+  }
+
+  static List<String> _parseStringList(dynamic value) {
+    if (value is List) {
+      return value
+          .map((item) => item.toString().trim())
+          .where((item) => item.isNotEmpty)
+          .toList();
+    }
+
+    if (value is String) {
+      final String trimmed = value.trim();
+      if (trimmed.isEmpty) {
+        return const <String>[];
+      }
+
+      try {
+        final dynamic decoded = jsonDecode(trimmed);
+        if (decoded is List) {
+          return decoded
+              .map((item) => item.toString().trim())
+              .where((item) => item.isNotEmpty)
+              .toList();
+        }
+      } catch (_) {}
+
+      return trimmed
+          .split(RegExp(r'[\n,]'))
+          .map((item) => item.trim())
+          .where((item) => item.isNotEmpty)
+          .toList();
+    }
+
+    return const <String>[];
   }
 }

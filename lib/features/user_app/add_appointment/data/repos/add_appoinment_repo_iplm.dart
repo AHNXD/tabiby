@@ -3,6 +3,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../models/booking_request_model.dart';
 import '../models/centers_appointment_model.dart';
 import '../models/days_model.dart';
 import '../models/times_model.dart';
@@ -15,27 +16,13 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
 
   @override
   Future<Either<Failure, bool>> bookAppointment(
-    String doctorID,
-    String centerID,
-    String date,
-    String periodName,
-    String period,
-    String? note,
-    bool? isEmergency,
-    String? diagnosisName,
-    String? diagnosisRatio,
+    AppointmentBookingRequest request,
   ) async {
     try {
       var resp = await _apiServices.post(
         endPoint:
-            "${Urls.addAppointment}/$doctorID/$centerID/$date/$periodName",
-        data: {
-          'time': period,
-          'note': note ?? "",
-          "is_emergency": isEmergency ?? false ? 1 : 0,
-          "diagnosis_name": diagnosisName,
-          "diagnosis_ratio": diagnosisRatio,
-        },
+            "${Urls.addAppointment}/${request.doctorId}/${request.centerId}/${request.date}/${request.periodName}",
+        data: request.toJson(),
       );
 
       if (resp.statusCode == 201 && resp.data['status'] == true) {

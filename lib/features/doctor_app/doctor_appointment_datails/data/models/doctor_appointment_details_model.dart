@@ -1,3 +1,5 @@
+import 'package:tabiby/core/models/medical_record_attachment.dart';
+
 class DoctorAppointmentDetailsModel {
   String? status;
   Patient? patient;
@@ -5,6 +7,8 @@ class DoctorAppointmentDetailsModel {
   Diagnose? diagnose;
   String? date;
   String? time;
+  MedicalRecordAttachment? attachedXray;
+  MedicalRecordAttachment? attachedLabResult;
 
   DoctorAppointmentDetailsModel({
     this.status,
@@ -13,6 +17,8 @@ class DoctorAppointmentDetailsModel {
     this.diagnose,
     this.date,
     this.time,
+    this.attachedXray,
+    this.attachedLabResult,
   });
 
   DoctorAppointmentDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +32,18 @@ class DoctorAppointmentDetailsModel {
         : null;
     date = json['date']?.toString();
     time = json['time']?.toString();
+    attachedXray = _parseAttachment(
+      mapValue: json['attached_xray'] ?? json['xray'],
+      urlValue: json['xray_url'],
+      fallbackTitle: 'X-Ray',
+      fallbackType: 'xray',
+    );
+    attachedLabResult = _parseAttachment(
+      mapValue: json['attached_lab_result'] ?? json['lab_result'],
+      urlValue: json['lab_result_url'],
+      fallbackTitle: 'Lab Result',
+      fallbackType: 'lab_result',
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -35,10 +53,44 @@ class DoctorAppointmentDetailsModel {
       data['patient'] = patient!.toJson();
     }
     data['note'] = note;
-    data['diagnosis'] = diagnose;
+    if (diagnose != null) {
+      data['diagnosis'] = diagnose!.toJson();
+    }
     data['date'] = date;
     data['time'] = time;
+    if (attachedXray != null) {
+      data['attached_xray'] = attachedXray!.toJson();
+    }
+    if (attachedLabResult != null) {
+      data['attached_lab_result'] = attachedLabResult!.toJson();
+    }
     return data;
+  }
+
+  MedicalRecordAttachment? _parseAttachment({
+    required dynamic mapValue,
+    required dynamic urlValue,
+    required String fallbackTitle,
+    required String fallbackType,
+  }) {
+    if (mapValue is Map<String, dynamic>) {
+      return MedicalRecordAttachment.fromJson(
+        mapValue,
+        fallbackTitle: fallbackTitle,
+        fallbackType: fallbackType,
+      );
+    }
+
+    final String? url = urlValue?.toString();
+    if (url == null || url.isEmpty) {
+      return null;
+    }
+
+    return MedicalRecordAttachment.fromUrl(
+      url,
+      fallbackTitle: fallbackTitle,
+      fallbackType: fallbackType,
+    );
   }
 }
 
@@ -71,13 +123,13 @@ class Patient {
     img = json['image'];
     fullName = json['full_name'];
     gender = json['gender'];
-    height = json['height'];
-    weight = json['weight'];
+    height = _toInt(json['height']);
+    weight = _toInt(json['weight']);
     hasChildren = json['has_children'];
-    numberOfChildren = json['number_of_children'];
-    birthDate = json['birth_date'];
-    smoker = json['smoker'];
-    maritalStatus = json['marital_status'];
+    numberOfChildren = _toInt(json['number_of_children']);
+    birthDate = json['birth_date']?.toString();
+    smoker = _toInt(json['smoker']);
+    maritalStatus = json['marital_status']?.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +146,13 @@ class Patient {
     data['marital_status'] = maritalStatus;
     return data;
   }
+
+  static int? _toInt(dynamic value) {
+    if (value is int) {
+      return value;
+    }
+    return int.tryParse('${value ?? ''}');
+  }
 }
 
 class Diagnose {
@@ -104,9 +163,11 @@ class Diagnose {
   Diagnose({this.name, this.ratio, this.isEmergency});
 
   Diagnose.fromJson(Map<String, dynamic> json) {
-    name = json['diagnosis_name'];
-    ratio = json['diagnosis_ratio'].toInt();
-    isEmergency = json['is_emergency'] == 1;
+    name = json['diagnosis_name']?.toString();
+    ratio = json['diagnosis_ratio'] is int
+        ? json['diagnosis_ratio'] as int
+        : int.tryParse('${json['diagnosis_ratio'] ?? ''}');
+    isEmergency = json['is_emergency'] == 1 || json['is_emergency'] == true;
   }
 
   Map<String, dynamic> toJson() {

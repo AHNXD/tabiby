@@ -3,7 +3,6 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/user_app/diet/presentation/views/diet_mode_screen.dart';
 import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart';
-import 'package:tabiby/features/user_app/user/presentation/view/user_profile.dart';
 import 'package:tabiby/features/user_app/user_appointments/presentation/view/appointment_screen.dart';
 
 import '../../features/user_app/diagnose/presentation/views/category_screen.dart';
@@ -17,14 +16,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 2; // Default to Home screen
+  int _selectedIndex = 0; // Default to Home screen
 
   final List<Widget> _screens = [
-    const CategoryScreen(),
-    const DietModeScreen(),
     const HomeScreen(),
     const UserAppointmentScreen(),
-    const UserProfileScreen(),
+    const CategoryScreen(),
+    const DietModeScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -36,7 +34,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       body: IndexedStack(index: _selectedIndex, children: _screens),
 
       bottomNavigationBar: SafeArea(
@@ -50,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
             boxShadow: [
               BoxShadow(
                 // A soft colored glow instead of a harsh black shadow
-                color: AppColors.textButtonColors.withOpacity(0.4),
+                color: AppColors.textButtonColors.withValues(alpha: 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -61,33 +58,27 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               _buildNavItem(
                 0,
-                Icons.medical_services_outlined,
-                Icons.medical_services,
-                'diagnose'.tr(context),
-              ),
-              _buildNavItem(
-                1,
-                Icons.restaurant_menu_outlined,
-                Icons.restaurant_menu,
-                'diet'.tr(context),
-              ),
-              _buildNavItem(
-                2,
                 Icons.home_outlined,
                 Icons.home,
                 'home'.tr(context),
               ),
               _buildNavItem(
-                3,
+                1,
                 Icons.table_chart_outlined,
                 Icons.table_chart,
                 'my_appointments'.tr(context),
               ),
               _buildNavItem(
-                4,
-                Icons.person_outline,
-                Icons.person,
-                'my_profile'.tr(context),
+                2,
+                Icons.medical_services_outlined,
+                Icons.medical_services,
+                'diagnose'.tr(context),
+              ),
+              _buildNavItem(
+                3,
+                Icons.restaurant_menu_outlined,
+                Icons.restaurant_menu,
+                'diet'.tr(context),
               ),
             ],
           ),
@@ -106,7 +97,9 @@ class _MainScreenState extends State<MainScreen> {
 
     // Defines the colors based on selection state
     final activeColor = Colors.white;
-    final inactiveColor = Colors.white.withOpacity(0.5); // Soft faded white
+    final inactiveColor = Colors.white.withValues(
+      alpha: 0.5,
+    ); // Soft faded white
 
     return Expanded(
       child: GestureDetector(

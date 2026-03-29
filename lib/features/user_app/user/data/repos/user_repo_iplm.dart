@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -72,6 +73,8 @@ class UserRepoIplm implements UserRepo {
               await MultipartFile.fromFile(file.path, filename: fileName),
             ),
           );
+        } else if (entry.value is List || entry.value is Map) {
+          formData.fields.add(MapEntry(entry.key, jsonEncode(entry.value)));
         } else {
           formData.fields.add(MapEntry(entry.key, entry.value.toString()));
         }

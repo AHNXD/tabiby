@@ -33,7 +33,7 @@ class ProfileAvatar extends StatelessWidget {
       onTap: onTap,
       child: CircleAvatar(
         radius: 60,
-        backgroundColor: AppColors.primaryColors,
+        backgroundColor: AppColors.avatarColor,
         backgroundImage: _getAvatarImage(),
         child: const Align(
           alignment: Alignment.bottomRight,

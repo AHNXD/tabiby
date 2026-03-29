@@ -1,12 +1,21 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:tabiby/core/Api_services/urls.dart';
+import 'package:tabiby/core/models/medical_record_attachment.dart';
+import 'package:tabiby/core/models/prescription_item.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
+import 'package:tabiby/core/widgets/primary_button.dart';
+import 'package:tabiby/core/widgets/secondry_button.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
 
-import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../data/repos/rating/rating_repo.dart';
 import '../../view-model/rating/rating_cubit.dart';
@@ -36,7 +45,7 @@ class AppointmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime parsedDate = DateTime.parse(appointment.date!);
+    final DateTime parsedDate = DateTime.parse(appointment.date!);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -45,7 +54,7 @@ class AppointmentItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: Colors.grey.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 5),
             spreadRadius: 2,
@@ -56,25 +65,23 @@ class AppointmentItem extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // 1. Header: Date Box + Day Name + Action Button
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Date Box
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColors.withOpacity(0.1),
+                    color: AppColors.primaryColors.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
                     children: [
                       Text(
                         DateFormat('dd').format(parsedDate),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryColors,
@@ -88,15 +95,13 @@ class AppointmentItem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColors.withOpacity(0.8),
+                          color: AppColors.primaryColors.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
                   ),
                 ),
-
                 const SizedBox(width: 12),
-
                 Text(
                   DateFormat(
                     'EEEE',
@@ -107,9 +112,7 @@ class AppointmentItem extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
-
                 const Spacer(),
-
                 if (status == 'completed')
                   _buildActionButton(
                     context,
@@ -117,8 +120,7 @@ class AppointmentItem extends StatelessWidget {
                     icon: Icons.star_rate_rounded,
                     onTap: () => _showRatingDialog(context),
                   ),
-
-                if (appointment.doctorNote != null) ...[
+                if (_hasDetails) ...[
                   if (status == 'completed') const SizedBox(width: 8),
                   _buildActionButton(
                     context,
@@ -130,7 +132,6 @@ class AppointmentItem extends StatelessWidget {
                 ],
               ],
             ),
-
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: Divider(
@@ -139,16 +140,15 @@ class AppointmentItem extends StatelessWidget {
                 color: Color(0xFFEEEEEE),
               ),
             ),
-
-            // 2. Doctor Info Row
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Doctor Image
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                    border: Border.all(
+                      color: Colors.grey.withValues(alpha: 0.2),
+                    ),
                   ),
                   child: ClipOval(
                     child: CustomImageWidget(
@@ -161,8 +161,6 @@ class AppointmentItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 14),
-
-                // Info
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,8 +186,6 @@ class AppointmentItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 8),
-
-                      // Time Chip
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
@@ -222,15 +218,13 @@ class AppointmentItem extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // Rating Star
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.amber.withOpacity(0.1),
+                    color: Colors.amber.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -246,7 +240,7 @@ class AppointmentItem extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: Colors.amber, // Or black87
+                          color: Colors.amber,
                         ),
                       ),
                     ],
@@ -260,7 +254,13 @@ class AppointmentItem extends StatelessWidget {
     );
   }
 
-  // --- Helper: Action Button ---
+  bool get _hasDetails =>
+      (appointment.doctorNote?.note?.isNotEmpty ?? false) ||
+      (appointment.doctorNote?.prescription?.isNotEmpty ?? false) ||
+      appointment.doctorNote!.prescriptionList.isNotEmpty ||
+      appointment.xrayAttachment != null ||
+      appointment.labResultAttachment != null;
+
   Widget _buildActionButton(
     BuildContext context, {
     required String label,
@@ -276,10 +276,12 @@ class AppointmentItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: isOutlined
               ? Colors.transparent
-              : AppColors.primaryColors.withOpacity(0.1),
+              : AppColors.primaryColors.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
           border: isOutlined
-              ? Border.all(color: AppColors.primaryColors.withOpacity(0.3))
+              ? Border.all(
+                  color: AppColors.primaryColors.withValues(alpha: 0.3),
+                )
               : null,
         ),
         child: Row(
@@ -289,7 +291,7 @@ class AppointmentItem extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.primaryColors,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
@@ -313,7 +315,7 @@ class AppointmentItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
@@ -326,7 +328,7 @@ class AppointmentItem extends StatelessWidget {
               Text(
                 "details".tr(context),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: AppColors.primaryColors,
@@ -338,32 +340,24 @@ class AppointmentItem extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      if (appointment.doctorNote?.note != null &&
-                          appointment.doctorNote!.note!.isNotEmpty)
+                      if (appointment.doctorNote?.note?.isNotEmpty ?? false)
                         _buildStyledDetailSection(
                           context,
                           icon: Icons.note_alt_rounded,
                           title: "doctor_notes".tr(context),
                           content: appointment.doctorNote!.note!,
                         ),
-
-                      if (appointment.doctorNote?.note != null &&
-                          appointment.doctorNote!.prescription != null)
+                      if ((appointment.doctorNote?.note?.isNotEmpty ?? false) &&
+                          _hasPrescriptionContent)
                         const SizedBox(height: 16),
-
-                      if (appointment.doctorNote?.prescription != null &&
-                          appointment.doctorNote!.prescription!.isNotEmpty)
-                        _buildStyledDetailSection(
-                          context,
-                          icon: Icons.medication_rounded,
-                          title: 'prescription'.tr(context),
-                          content: appointment.doctorNote!.prescription!,
-                        ),
-
-                      if ((appointment.doctorNote?.note == null ||
-                              appointment.doctorNote!.note!.isEmpty) &&
-                          (appointment.doctorNote?.prescription == null ||
-                              appointment.doctorNote!.prescription!.isEmpty))
+                      if (_hasPrescriptionContent)
+                        _buildPrescriptionSection(context),
+                      if ((appointment.doctorNote?.note?.isNotEmpty ??
+                              false || _hasPrescriptionContent) &&
+                          _hasAttachments)
+                        const SizedBox(height: 16),
+                      if (_hasAttachments) _buildAttachmentsSection(context),
+                      if (!_hasDetails)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           child: Text(
@@ -405,6 +399,334 @@ class AppointmentItem extends StatelessWidget {
     );
   }
 
+  bool get _hasPrescriptionContent =>
+      (appointment.doctorNote?.prescription?.isNotEmpty ?? false) ||
+      appointment.doctorNote!.prescriptionList.isNotEmpty;
+
+  bool get _hasAttachments =>
+      appointment.xrayAttachment != null ||
+      appointment.labResultAttachment != null;
+
+  Widget _buildPrescriptionSection(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.medication_rounded,
+                color: AppColors.primaryColors,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'prescription'.tr(context),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColors,
+                ),
+              ),
+            ],
+          ),
+          if (appointment.doctorNote?.prescription?.isNotEmpty ?? false) ...[
+            const SizedBox(height: 12),
+            Text(
+              appointment.doctorNote!.prescription!,
+              style: TextStyle(color: Colors.grey.shade700, height: 1.4),
+            ),
+          ],
+          if (appointment.doctorNote!.prescriptionList.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: appointment.doctorNote!.prescriptionList.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final PrescriptionItem item =
+                    appointment.doctorNote!.prescriptionList[index];
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.drugName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      _buildMetaLine(
+                        context,
+                        '${"dosage".tr(context)}: ${item.dosage}',
+                      ),
+                      _buildMetaLine(
+                        context,
+                        '${"start_date".tr(context)}: ${item.startDate}',
+                      ),
+                      _buildMetaLine(
+                        context,
+                        '${"end_date".tr(context)}: ${item.endDate}',
+                      ),
+                      _buildMetaLine(
+                        context,
+                        '${"frequency_per_day".tr(context)}: ${item.frequencyPerDay}',
+                      ),
+                      if (item.specialNotes.isNotEmpty)
+                        _buildMetaLine(
+                          context,
+                          '${"special_notes".tr(context)}: ${item.specialNotes}',
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAttachmentsSection(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.attach_file_rounded,
+                color: AppColors.primaryColors,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'attachments'.tr(context),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColors,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (appointment.xrayAttachment != null)
+            _buildAttachmentCard(
+              context,
+              title: 'xray_file'.tr(context),
+              attachment: appointment.xrayAttachment!,
+            ),
+          if (appointment.xrayAttachment != null &&
+              appointment.labResultAttachment != null)
+            const SizedBox(height: 10),
+          if (appointment.labResultAttachment != null)
+            _buildAttachmentCard(
+              context,
+              title: 'lab_file'.tr(context),
+              attachment: appointment.labResultAttachment!,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAttachmentCard(
+    BuildContext context, {
+    required String title,
+    required MedicalRecordAttachment attachment,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CustomImageWidget(
+                  imageUrl: attachment.thumbnailUrl ?? attachment.url,
+                  placeholderAsset: AssetsData.defaultCenter,
+                  height: 58,
+                  width: 58,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      attachment.title,
+                      style: TextStyle(color: Colors.grey.shade700),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 42,
+            child: Row(
+              children: [
+                Expanded(
+                  child: SecondryButton(
+                    fontSize: 16,
+                    text: 'download'.tr(context),
+                    onPressed: () => _downloadAttachment(context, attachment),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: PrimaryButton(
+                    fontSize: 16,
+                    text: 'show'.tr(context),
+                    onPressed: () => _showAttachment(context, attachment),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showAttachment(
+    BuildContext context,
+    MedicalRecordAttachment attachment,
+  ) async {
+    final String? url = attachment.url;
+    if (url == null || url.isEmpty) {
+      messages(context, 'cannot_show_medical_file'.tr(context), Colors.red);
+      return;
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(18),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        attachment.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: CustomImageWidget(
+                    imageUrl: url,
+                    placeholderAsset: AssetsData.defaultCenter,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _downloadAttachment(
+    BuildContext context,
+    MedicalRecordAttachment attachment,
+  ) async {
+    final String? url = attachment.url;
+    if (url == null || url.isEmpty) {
+      messages(context, 'medical_file_download_failed'.tr(context), Colors.red);
+      return;
+    }
+
+    try {
+      final Directory targetDirectory = Directory(
+        '${Directory.systemTemp.path}/tabiby_downloads',
+      );
+      if (!targetDirectory.existsSync()) {
+        targetDirectory.createSync(recursive: true);
+      }
+
+      final String safeTitle = attachment.title
+          .replaceAll(RegExp(r'[^a-zA-Z0-9]+'), '_')
+          .replaceAll(RegExp(r'_+'), '_');
+      final String targetPath =
+          '${targetDirectory.path}/${safeTitle.isEmpty ? 'attachment' : safeTitle}_${attachment.id ?? 0}.jpg';
+
+      await getit.get<Dio>().download(Urls.fixUrl(url), targetPath);
+
+      if (!context.mounted) {
+        return;
+      }
+
+      messages(
+        context,
+        '${"medical_file_downloaded_to".tr(context)} $targetPath',
+        Colors.green,
+        msgTime: 4,
+      );
+    } catch (_) {
+      if (!context.mounted) {
+        return;
+      }
+
+      messages(context, 'medical_file_download_failed'.tr(context), Colors.red);
+    }
+  }
+
   Widget _buildStyledDetailSection(
     BuildContext context, {
     required IconData icon,
@@ -424,23 +746,14 @@ class AppointmentItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColors.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, color: AppColors.primaryColors, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey.shade800,
-                  ),
+              Icon(icon, color: AppColors.primaryColors, size: 20),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColors,
                 ),
               ),
             ],
@@ -450,11 +763,21 @@ class AppointmentItem extends StatelessWidget {
             content,
             style: TextStyle(
               fontSize: 15,
-              color: Colors.grey.shade700,
+              color: Colors.grey.shade800,
               height: 1.5,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMetaLine(BuildContext context, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.grey.shade700, height: 1.4),
       ),
     );
   }

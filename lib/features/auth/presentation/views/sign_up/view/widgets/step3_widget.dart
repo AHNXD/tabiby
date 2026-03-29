@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
@@ -7,8 +6,6 @@ import 'package:tabiby/features/auth/presentation/views/sign_up/view/widgets/cus
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/widgets/secondry_button.dart';
-import '../../../../../../shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
-import '../../../../../../shared/terms_and_condition/presentation/view/terms_and_conditions_screen.dart';
 import 'number_of_children_field.dart';
 import 'selectable_circle.dart';
 
@@ -16,18 +13,15 @@ class Step3Widget extends StatefulWidget {
   final bool? hasChildren;
   final bool? isSmoke;
   final int numberOfChildren;
-  final bool agreeToTerms;
   final String gender;
   final String? maritalStatus;
   final DateTime? selectedDate;
-  final bool isLoading;
 
   final ValueChanged<bool?> onChildrenChanged;
   final ValueChanged<bool?> onSmokeChanged;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
-  final VoidCallback onAgreeToggle;
-  final VoidCallback onSignUp;
+  final VoidCallback onNext;
   final ValueChanged<String> onMaritalStatusChanged;
   final ValueChanged<DateTime> onDateChanged;
 
@@ -36,17 +30,14 @@ class Step3Widget extends StatefulWidget {
     required this.hasChildren,
     required this.isSmoke,
     required this.numberOfChildren,
-    required this.agreeToTerms,
     required this.gender,
     required this.maritalStatus,
     required this.selectedDate,
-    required this.isLoading,
     required this.onChildrenChanged,
     required this.onSmokeChanged,
     required this.onIncrement,
     required this.onDecrement,
-    required this.onAgreeToggle,
-    required this.onSignUp,
+    required this.onNext,
     required this.onMaritalStatusChanged,
     required this.onDateChanged,
   });
@@ -253,101 +244,14 @@ class _Step3WidgetState extends State<Step3Widget> {
             ],
           ),
         ),
-        // --- Bottom Section: Terms & Button ---
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
           child: Column(
             children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: widget.onAgreeToggle,
-                    child: Container(
-                      width: 22,
-                      height: 22,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: widget.agreeToTerms
-                            ? AppColors.primaryColors
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: widget.agreeToTerms
-                              ? AppColors.primaryColors
-                              : AppColors.textColor,
-                          width: 1.5,
-                        ),
-                      ),
-                      child: widget.agreeToTerms
-                          ? const Icon(
-                              Icons.check,
-                              size: 16,
-                              color: Colors.white,
-                            )
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textColor,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'read_and_agree_conditions'.tr(context),
-                            style: TextStyle(fontFamily: 'cocon-next-arabic'),
-                          ),
-                          TextSpan(
-                            text: " ${'terms_conditions'.tr(context)}",
-                            style: const TextStyle(
-                              color: AppColors.primaryColors,
-                              decoration: TextDecoration.underline,
-                              fontFamily: 'cocon-next-arabic',
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.pushNamed(
-                                context,
-                                TermsAndConditionsScreen.routeName,
-                              ),
-                          ),
-                          TextSpan(
-                            text: ' ${"and".tr(context)} ',
-                            style: TextStyle(fontFamily: 'cocon-next-arabic'),
-                          ),
-                          TextSpan(
-                            text: 'privacy_policy'.tr(context),
-                            style: const TextStyle(
-                              color: AppColors.primaryColors,
-                              decoration: TextDecoration.underline,
-                              fontFamily: 'cocon-next-arabic',
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.pushNamed(
-                                context,
-                                PrivacyPolicyScreen.routeName,
-                              ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              SecondryButton(
+                text: 'next'.tr(context),
+                onPressed: widget.onNext,
               ),
-              const SizedBox(height: 15),
-
-              // --- Sign Up Button with Loading State ---
-              widget.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryColors,
-                      ),
-                    )
-                  : SecondryButton(
-                      text: 'sign_up'.tr(context),
-                      onPressed: widget.onSignUp,
-                    ),
               const SizedBox(height: 10),
             ],
           ),

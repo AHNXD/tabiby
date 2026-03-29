@@ -5,8 +5,10 @@ import 'package:tabiby/core/widgets/primary_button.dart';
 import '../../../../add_appointment/presentation/view/booking_screen.dart';
 
 class BookingButton extends StatelessWidget {
-  const BookingButton({super.key, required this.doctorID});
+  const BookingButton({super.key, required this.doctorID, this.specialtyName});
   final int doctorID;
+  final String? specialtyName;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,7 +19,10 @@ class BookingButton extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BookingScreen(doctorID: doctorID),
+              builder: (context) => BookingScreen(
+                doctorID: doctorID,
+                specialtyName: specialtyName,
+              ),
             ),
           );
         },

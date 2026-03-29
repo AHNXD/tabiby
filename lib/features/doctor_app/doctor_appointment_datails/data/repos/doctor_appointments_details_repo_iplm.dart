@@ -4,6 +4,7 @@ import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/doctor_appointment_details_model.dart';
+import '../models/end_appointment_request.dart';
 import 'doctor_appointment_details_repo.dart';
 
 class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
@@ -62,20 +63,14 @@ class DoctorAppointmentDetailsRepoIplm implements DoctorAppointmentDetailsRepo {
 
   @override
   Future<Either<Failure, String>> endAppointment(
-    int id,
-    String note,
-    String prescriptionsNote,
+    EndAppointmentRequest request,
   ) async {
     try {
       final endpoint = Urls.endAppointment;
 
       var response = await _apiServices.post(
         endPoint: endpoint,
-        data: {
-          "appointment_id": id,
-          "note": note,
-          "prescription_note": prescriptionsNote,
-        },
+        data: request.toJson(),
       );
 
       if (response.statusCode == 200) {

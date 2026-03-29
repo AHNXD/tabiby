@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/times_model.dart';
 
 import '../../../../../core/errors/failuer.dart';
@@ -14,14 +15,6 @@ abstract class AddAppoinmentRepo {
     String date,
   );
   Future<Either<Failure, bool>> bookAppointment(
-    String doctorID,
-    String centerID,
-    String date,
-    String periodName,
-    String period,
-    String? note,
-    bool? isEmergency,
-    String? diagnosisName,
-    String? diagnosisRatio,
+    AppointmentBookingRequest request,
   );
 }

@@ -5,18 +5,20 @@ import '../../../../../../../core/utils/colors.dart';
 class ProgressSection extends StatelessWidget {
   final int currentStep;
   final void Function(int) onStepTapped;
+  final int totalSteps;
 
   const ProgressSection({
     super.key,
     required this.currentStep,
     required this.onStepTapped,
+    this.totalSteps = 4,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(3, (index) {
+      children: List.generate(totalSteps, (index) {
         final isActive = index == currentStep;
         return GestureDetector(
           onTap: () => onStepTapped(index),
@@ -32,7 +34,7 @@ class ProgressSection extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
-              if (index < 2)
+              if (index < totalSteps - 1)
                 Container(
                   width: 40,
                   height: 2,

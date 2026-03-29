@@ -11,6 +11,7 @@ import '../../../../view-model/register_cubit/register_cubit.dart';
 import '../widgets/step1_widget.dart';
 import '../widgets/step2_widget.dart';
 import '../widgets/step3_widget.dart';
+import '../widgets/step4_widget.dart';
 import 'progress_section.dart';
 
 class StepsSectionWrapper extends StatefulWidget {
@@ -33,6 +34,13 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
   final TextEditingController addressCtrl = TextEditingController();
   final TextEditingController weightCtrl = TextEditingController();
   final TextEditingController heightCtrl = TextEditingController();
+  final TextEditingController chronicDiseasesCtrl = TextEditingController();
+  final TextEditingController permanentMedicationsCtrl =
+      TextEditingController();
+  final TextEditingController foodAllergiesCtrl = TextEditingController();
+  final TextEditingController preferredFoodsCtrl = TextEditingController();
+  final TextEditingController dislikedFoodsCtrl = TextEditingController();
+  final TextEditingController digestionIssuesCtrl = TextEditingController();
 
   String? gender;
   String? maritalStatus;
@@ -47,10 +55,17 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
     firstNameCtrl.dispose();
     lastNameCtrl.dispose();
     phoneCtrl.dispose();
+    emailCtrl.dispose();
     passwordCtrl.dispose();
     addressCtrl.dispose();
     weightCtrl.dispose();
     heightCtrl.dispose();
+    chronicDiseasesCtrl.dispose();
+    permanentMedicationsCtrl.dispose();
+    foodAllergiesCtrl.dispose();
+    preferredFoodsCtrl.dispose();
+    dislikedFoodsCtrl.dispose();
+    digestionIssuesCtrl.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -73,24 +88,44 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
       if (_step2Key.currentState!.validate()) {
         goToStep(currentStep + 1);
       }
+    } else if (currentStep == 2) {
+      if (_validateStep3(context)) {
+        goToStep(currentStep + 1);
+      }
     }
   }
 
-  void _onSignUpPressed(BuildContext context) {
+  bool _validateStep3(BuildContext context) {
     if (maritalStatus == null) {
       messages(context, 'please_select_marital_status'.tr(context), Colors.red);
-      return;
+      return false;
     }
 
     if (isSmoke == null) {
       messages(context, 'please_select_smoking_status'.tr(context), Colors.red);
-      return;
+      return false;
     }
 
     if (selectedBirthDate == null) {
       messages(context, 'select_your_birth'.tr(context), Colors.red);
+      return false;
+    }
+    return true;
+  }
+
+  List<String> _parseListInput(String rawValue) {
+    return rawValue
+        .split(RegExp(r'[\n,]'))
+        .map((value) => value.trim())
+        .where((value) => value.isNotEmpty)
+        .toList();
+  }
+
+  void _onSignUpPressed(BuildContext context) {
+    if (!_validateStep3(context)) {
       return;
     }
+
     if (!agreeToTerms) {
       messages(context, 'please_agree_terms'.tr(context), Colors.red);
       return;
@@ -113,6 +148,12 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
           ? DateFormat('yyyy-MM-dd').format(selectedBirthDate!)
           : null,
       'is_smoke': isSmoke == true ? '1' : '0',
+      'chronic_diseases': _parseListInput(chronicDiseasesCtrl.text),
+      'permanent_medications': _parseListInput(permanentMedicationsCtrl.text),
+      'food_allergies': _parseListInput(foodAllergiesCtrl.text),
+      'preferred_foods': _parseListInput(preferredFoodsCtrl.text),
+      'disliked_foods': _parseListInput(dislikedFoodsCtrl.text),
+      'digestion_issues': _parseListInput(digestionIssuesCtrl.text),
     };
 
     context.read<RegisterCubit>().register(registerData);
@@ -141,7 +182,11 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
       builder: (context, state) {
         return Column(
           children: [
-            ProgressSection(currentStep: currentStep, onStepTapped: goToStep),
+            ProgressSection(
+              currentStep: currentStep,
+              onStepTapped: goToStep,
+              totalSteps: 4,
+            ),
             const SizedBox(height: 20),
             Expanded(
               child: PageView(
@@ -171,9 +216,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                     hasChildren: gender == 'male' ? false : hasChildren,
                     isSmoke: isSmoke,
                     numberOfChildren: gender == 'male' ? 0 : numberOfChildren,
-                    agreeToTerms: agreeToTerms,
                     selectedDate: selectedBirthDate,
-                    isLoading: state is RegisterLoading,
                     onDateChanged: (val) =>
                         setState(() => selectedBirthDate = val),
                     onSmokeChanged: (val) => setState(() => isSmoke = val),
@@ -197,10 +240,21 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                         setState(() => numberOfChildren--);
                       }
                     },
+                    onNext: goToNext,
+                    maritalStatus: maritalStatus,
+                  ),
+                  Step4Widget(
+                    chronicDiseasesCtrl: chronicDiseasesCtrl,
+                    permanentMedicationsCtrl: permanentMedicationsCtrl,
+                    foodAllergiesCtrl: foodAllergiesCtrl,
+                    preferredFoodsCtrl: preferredFoodsCtrl,
+                    dislikedFoodsCtrl: dislikedFoodsCtrl,
+                    digestionIssuesCtrl: digestionIssuesCtrl,
+                    agreeToTerms: agreeToTerms,
+                    isLoading: state is RegisterLoading,
                     onAgreeToggle: () =>
                         setState(() => agreeToTerms = !agreeToTerms),
                     onSignUp: () => _onSignUpPressed(context),
-                    maritalStatus: 'single',
                   ),
                 ],
               ),

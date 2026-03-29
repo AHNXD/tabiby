@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/models/medical_attachment_item.dart';
 import '../../../../../../core/utils/colors.dart';
 import '../../../../../../core/widgets/primary_button.dart';
 import '../../../../diagnose/presentation/view_models/diagnosis_cubit.dart';
+import '../medical_attachment_picker_screen.dart';
+import '../sections/appointment_details_section.dart';
 import '../../view-model/booking_cubit.dart';
 import '../../view-model/booking_state.dart';
 import '../sections/center_section.dart';
@@ -49,96 +53,192 @@ class _BookingFormState extends State<BookingForm> {
           );
         }
 
-        if (state is BookingSuccess) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. Center Selection
-              CenterSection(
-                centers: state.centers,
-                selectedId: state.selectedCenterId,
-                onSelect: (int id) =>
-                    context.read<BookingCubit>().selectCenter(id),
-              ),
-              const SizedBox(height: 16),
+        final BookingSuccess? bookingState = state is BookingSuccess
+            ? state
+            : state is BookingFailure
+            ? state.previousState
+            : null;
 
-              // 2. Date & Time Selection
-              if (state.isLoadingDays)
-                const Center(child: CircularProgressIndicator())
-              else if (state.days.isNotEmpty)
-                DateTimeSection(
-                  days: state.days,
-                  selectedDate: state.selectedDate,
-                  onSelectDate: (String day) =>
-                      context.read<BookingCubit>().selectDay(day),
-
-                  // Times logic
-                  isLoadingTimes: state.isLoadingTimes,
-                  periods: state.times?.periods,
-                  selectedTimeSlot: state.selectedTime,
-                  onSelectTimeSlot: (time, category) {
-                    context.read<BookingCubit>().selectTime(time, category);
-                  },
-                ),
-              const SizedBox(height: 16),
-              if (hasDiagnosis) ...[
-                _buildDiagnosisSection(context, state, diagnosisState),
-                const SizedBox(height: 16),
-              ],
-
-              NotesSection(noteController: _noteController),
-              const SizedBox(height: 16),
-
-              Center(
-                child: state.isBooking
-                    ? Center(child: CircularProgressIndicator())
-                    : PrimaryButton(
-                        text: 'book_an_appointment'.tr(context),
-                        onPressed: () {
-                          if (state.selectedTime != null) {
-                            // Prepare data
-                            String? diagName;
-                            String? diagRatio;
-
-                            // Only send if checkbox is checked
-                            if (state.includeDiagnosis && hasDiagnosis) {
-                              diagName =
-                                  diagnosisState.diagnosisResult!.conditionName;
-                              diagRatio = diagnosisState
-                                  .diagnosisResult!
-                                  .confidenceWithoutPercent;
-                            }
-
-                            context.read<BookingCubit>().bookAppointment(
-                              _noteController.text,
-                              diagnosisName: diagName,
-                              diagnosisRatio: diagRatio,
-                              isEmergency:
-                                  state.isEmergency ||
-                                  (state.includeDiagnosis &&
-                                      (diagnosisState
-                                              .diagnosisResult
-                                              ?.isEmergency ??
-                                          false)),
-                            );
-                          } else {
-                            messages(
-                              context,
-                              "please_select_time".tr(context),
-                              Colors.orange,
-                            );
-                          }
-                        },
-                      ),
-              ),
-              const SizedBox(height: 16),
-            ],
+        if (bookingState != null) {
+          return _buildBookingContent(
+            context,
+            bookingState,
+            diagnosisState,
+            hasDiagnosis,
           );
         }
 
         return const SizedBox.shrink();
       },
     );
+  }
+
+  Widget _buildBookingContent(
+    BuildContext context,
+    BookingSuccess state,
+    DiagnosisState diagnosisState,
+    bool hasDiagnosis,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CenterSection(
+          centers: state.centers,
+          selectedId: state.selectedCenterId,
+          onSelect: (int id) => context.read<BookingCubit>().selectCenter(id),
+        ),
+        const SizedBox(height: 16),
+        if (state.isLoadingDays)
+          const Center(child: CircularProgressIndicator())
+        else if (state.days.isNotEmpty)
+          DateTimeSection(
+            days: state.days,
+            selectedDate: state.selectedDate,
+            onSelectDate: (String day) =>
+                context.read<BookingCubit>().selectDay(day),
+            isLoadingTimes: state.isLoadingTimes,
+            periods: state.times?.periods,
+            selectedTimeSlot: state.selectedTime,
+            onSelectTimeSlot: (time, category) {
+              context.read<BookingCubit>().selectTime(time, category);
+            },
+          ),
+        const SizedBox(height: 16),
+        AppointmentDetailsSection(
+          departmentType: state.departmentType,
+          availableLabTests: state.availableLabTests,
+          selectedLabTestIds: state.selectedLabTestIds,
+          imageType: state.imageType,
+          onImageTypeChanged: context.read<BookingCubit>().updateImageType,
+          onToggleLabTest: context.read<BookingCubit>().toggleLabTestSelection,
+          selectedXrayAttachment: state.selectedXrayAttachment,
+          selectedLabResultAttachment: state.selectedLabResultAttachment,
+          availableXrayCount: state.availableXrayAttachments.length,
+          availableLabResultCount: state.availableLabResultAttachments.length,
+          onPickXray: () => _openAttachmentPicker(
+            context,
+            title: 'xray_records'.tr(context),
+            type: MedicalAttachmentType.xray,
+            attachments: state.availableXrayAttachments,
+            selectedAttachmentId: state.selectedXrayAttachment?.id,
+            onSelected: context.read<BookingCubit>().selectAttachedXray,
+          ),
+          onPickLabResult: () => _openAttachmentPicker(
+            context,
+            title: 'lab_results'.tr(context),
+            type: MedicalAttachmentType.labResult,
+            attachments: state.availableLabResultAttachments,
+            selectedAttachmentId: state.selectedLabResultAttachment?.id,
+            onSelected: context.read<BookingCubit>().selectAttachedLabResult,
+          ),
+          onClearXray: () =>
+              context.read<BookingCubit>().selectAttachedXray(null),
+          onClearLabResult: () =>
+              context.read<BookingCubit>().selectAttachedLabResult(null),
+        ),
+        const SizedBox(height: 16),
+        if (hasDiagnosis) ...[
+          _buildDiagnosisSection(context, state, diagnosisState),
+          const SizedBox(height: 16),
+        ],
+        NotesSection(noteController: _noteController),
+        const SizedBox(height: 16),
+        Center(
+          child: state.isBooking
+              ? const CircularProgressIndicator()
+              : PrimaryButton(
+                  text: 'book_an_appointment'.tr(context),
+                  onPressed: () => _submitBooking(
+                    context,
+                    state,
+                    diagnosisState,
+                    hasDiagnosis,
+                  ),
+                ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  void _submitBooking(
+    BuildContext context,
+    BookingSuccess state,
+    DiagnosisState diagnosisState,
+    bool hasDiagnosis,
+  ) {
+    if (state.selectedTime == null) {
+      messages(context, "please_select_time".tr(context), Colors.orange);
+      return;
+    }
+
+    final String? detailsValidationMessage = _validateBookingDetails(
+      context,
+      state,
+    );
+    if (detailsValidationMessage != null) {
+      messages(context, detailsValidationMessage, Colors.orange);
+      return;
+    }
+
+    String? diagName;
+    String? diagRatio;
+
+    if (state.includeDiagnosis && hasDiagnosis) {
+      diagName = diagnosisState.diagnosisResult!.conditionName;
+      diagRatio = diagnosisState.diagnosisResult!.confidenceWithoutPercent;
+    }
+
+    context.read<BookingCubit>().bookAppointment(
+      _noteController.text,
+      diagnosisName: diagName,
+      diagnosisRatio: diagRatio,
+      isEmergency:
+          state.isEmergency ||
+          (state.includeDiagnosis &&
+              (diagnosisState.diagnosisResult?.isEmergency ?? false)),
+    );
+  }
+
+  String? _validateBookingDetails(BuildContext context, BookingSuccess state) {
+    if (state.departmentType.requiresImageType &&
+        (state.imageType == null || state.imageType!.trim().isEmpty)) {
+      return 'please_select_image_type'.tr(context);
+    }
+
+    if (state.departmentType.requiresLabTests &&
+        state.selectedLabTestIds.isEmpty) {
+      return 'please_select_lab_test'.tr(context);
+    }
+
+    return null;
+  }
+
+  Future<void> _openAttachmentPicker(
+    BuildContext context, {
+    required String title,
+    required MedicalAttachmentType type,
+    required List<MedicalAttachmentItem> attachments,
+    required int? selectedAttachmentId,
+    required ValueChanged<MedicalAttachmentItem?> onSelected,
+  }) async {
+    final MedicalAttachmentItem? selected = await Navigator.of(context)
+        .push<MedicalAttachmentItem>(
+          MaterialPageRoute(
+            builder: (_) => MedicalAttachmentPickerScreen(
+              title: title,
+              attachments: attachments,
+              type: type,
+              selectedAttachmentId: selectedAttachmentId,
+            ),
+          ),
+        );
+
+    if (!mounted || selected == null) {
+      return;
+    }
+
+    onSelected(selected);
   }
 
   Widget _buildDiagnosisSection(

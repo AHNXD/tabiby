@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
+import 'package:tabiby/features/user_app/medical_files/data/repos/medical_files_repo.dart';
 
 import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
@@ -10,20 +12,34 @@ import 'widgets/booking_form.dart';
 
 class BookingScreen extends StatelessWidget {
   static const String routeName = "/add_appointment";
-  const BookingScreen({super.key, required this.doctorID});
+  const BookingScreen({
+    super.key,
+    required this.doctorID,
+    this.specialtyName,
+    this.availableLabTests,
+  });
   final int doctorID;
+  final String? specialtyName;
+  final List<LabTestOption>? availableLabTests;
 
   @override
   Widget build(BuildContext context) {
+    final BookingDepartmentType departmentType =
+        BookingDepartmentTypeX.fromSpecialtyName(specialtyName);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70),
         child: CustomAppbar(title: "book_appointment".tr(context)),
       ),
       body: BlocProvider(
-        create: (context) =>
-            BookingCubit(getit.get<AddAppoinmentRepo>(), doctorID)
-              ..fetchCenters(),
+        create: (context) => BookingCubit(
+          getit.get<AddAppoinmentRepo>(),
+          getit.get<MedicalFilesRepo>(),
+          doctorID,
+          departmentType: departmentType,
+          availableLabTests: availableLabTests ?? LabTestOption.fallbackOptions,
+        )..fetchCenters(),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: const BookingForm(),

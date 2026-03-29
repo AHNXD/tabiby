@@ -13,7 +13,7 @@ class NotesSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: '3. ${"add_notes".tr(context)}'),
+        SectionTitle(title: '4. ${"add_notes".tr(context)}'),
         NotesField(noteController: noteController),
       ],
     );

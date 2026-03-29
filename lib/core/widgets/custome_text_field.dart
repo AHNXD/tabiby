@@ -34,10 +34,17 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextInputType effectiveKeyboardType =
+        maxLines > 1 &&
+            textInputAction == TextInputAction.newline &&
+            keyboardType == TextInputType.text
+        ? TextInputType.multiline
+        : keyboardType;
+
     return TextFormField(
       validator: validator,
       controller: controller,
-      keyboardType: keyboardType,
+      keyboardType: effectiveKeyboardType,
       maxLines: maxLines,
       readOnly: readOnly,
       obscureText: obscureText,
@@ -52,7 +59,7 @@ class CustomTextField extends StatelessWidget {
         hintText: hintText,
         // Softened the hint text so the actual input stands out more
         hintStyle: TextStyle(
-          color: AppColors.textFieldColor.withOpacity(0.6),
+          color: AppColors.textFieldColor.withValues(alpha: 0.6),
           fontWeight: FontWeight.w400,
         ),
         filled: true,
