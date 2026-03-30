@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
+import 'package:tabiby/features/auth/data/models/user_model.dart';
 import 'package:tabiby/features/user_app/medical_files/presentation/view/show_medical_files_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 
@@ -38,12 +40,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   late TextEditingController _chronicDiseasesController;
   late TextEditingController _permanentMedicationsController;
   late TextEditingController _foodAllergiesController;
-  late TextEditingController _preferredFoodsController;
+  late TextEditingController _favoriteFoodsController;
   late TextEditingController _dislikedFoodsController;
   late TextEditingController _digestionIssuesController;
 
+  String? _gender;
   String? _maritalStatus;
+  String? _bloodType;
+  bool? _hasChildren;
   bool? _isSmoke;
+  int _numberOfChildren = 0;
+  DateTime? _birthDate;
 
   bool _isInitialDataLoaded = false;
   bool _showInformationSection = false;
@@ -52,7 +59,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+      maxWidth: 1600,
+      maxHeight: 1600,
+    );
     if (image != null) {
       setState(() {
         _pickedImage = File(image.path);
@@ -73,11 +85,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _chronicDiseasesController = TextEditingController();
     _permanentMedicationsController = TextEditingController();
     _foodAllergiesController = TextEditingController();
-    _preferredFoodsController = TextEditingController();
+    _favoriteFoodsController = TextEditingController();
     _dislikedFoodsController = TextEditingController();
     _digestionIssuesController = TextEditingController();
+    _gender = null;
     _maritalStatus = null;
+    _bloodType = null;
+    _hasChildren = null;
     _isSmoke = null;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      final UserState currentState = context.read<UserCubit>().state;
+      if (currentState is UserSuccess) {
+        _fillFormWithUser(currentState.user);
+      } else {
+        context.read<UserCubit>().getProfile();
+      }
+    });
   }
 
   @override
@@ -92,7 +120,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _chronicDiseasesController.dispose();
     _permanentMedicationsController.dispose();
     _foodAllergiesController.dispose();
-    _preferredFoodsController.dispose();
+    _favoriteFoodsController.dispose();
     _dislikedFoodsController.dispose();
     _digestionIssuesController.dispose();
     super.dispose();
@@ -106,20 +134,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         'phone': _phoneController.text,
         'email': _emailController.text,
         'address': _addressController.text,
+        'gender': _gender?.toLowerCase(),
         'weight': _weightController.text,
         'height': _heightController.text,
         'marital_status': _maritalStatus?.toLowerCase(),
+        'has_children': _hasChildren == true ? '1' : '0',
+        'number_of_children': _numberOfChildren.toString(),
+        'birth_date': _birthDate == null
+            ? null
+            : DateFormat('yyyy-MM-dd').format(_birthDate!),
         'is_smoke': _isSmoke == true ? '1' : '0',
-        'chronic_diseases': _parseListInput(_chronicDiseasesController.text),
-        'permanent_medications': _parseListInput(
-          _permanentMedicationsController.text,
-        ),
-        'food_allergies': _parseListInput(_foodAllergiesController.text),
-        'preferred_foods': _parseListInput(_preferredFoodsController.text),
-        'disliked_foods': _parseListInput(_dislikedFoodsController.text),
-        'digestion_issues': _parseListInput(_digestionIssuesController.text),
+        'chronic_diseases': _chronicDiseasesController.text.trim(),
+        'permanent_medications': _permanentMedicationsController.text.trim(),
+        'food_allergies': _foodAllergiesController.text.trim(),
+        'favorite_foods': _favoriteFoodsController.text.trim(),
+        'disliked_foods': _dislikedFoodsController.text.trim(),
+        'digestion_issues': _digestionIssuesController.text.trim(),
         '_method': 'PUT',
       };
+
+      if (_bloodType != null && _bloodType!.isNotEmpty) {
+        registerData['blood_type'] = _bloodType;
+      }
 
       if (_pickedImage != null) {
         registerData['profile_image'] = _pickedImage;
@@ -131,21 +167,57 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  List<String> _parseListInput(String value) {
-    return value
-        .split(RegExp(r'[\n,]'))
-        .map((item) => item.trim())
-        .where((item) => item.isNotEmpty)
-        .toList();
+  Future<void> _pickBirthDate() async {
+    final DateTime now = DateTime.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _birthDate ?? DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(now.year, now.month, now.day),
+    );
+
+    if (picked != null) {
+      setState(() => _birthDate = picked);
+    }
   }
 
-  String _stringifyList(List<String> values) {
-    return values.join(', ');
+  void _fillFormWithUser(UserModel user) {
+    if (_isInitialDataLoaded) {
+      return;
+    }
+
+    _fnController.text = user.mainData?.firstName ?? '';
+    _lnController.text = user.mainData?.lastName ?? '';
+    _emailController.text = user.mainData?.email ?? '';
+    _phoneController.text = user.mainData?.phone ?? '';
+    _addressController.text = user.moreData?.address ?? '';
+    _heightController.text = user.moreData?.height?.toString() ?? '';
+    _weightController.text = user.moreData?.weight?.toString() ?? '';
+    _chronicDiseasesController.text = user.moreData?.chronicDiseases ?? '';
+    _permanentMedicationsController.text =
+        user.moreData?.permanentMedications ?? '';
+    _foodAllergiesController.text = user.moreData?.foodAllergies ?? '';
+    _favoriteFoodsController.text = user.moreData?.favoriteFoods ?? '';
+    _dislikedFoodsController.text = user.moreData?.dislikedFoods ?? '';
+    _digestionIssuesController.text = user.moreData?.digestionIssues ?? '';
+
+    setState(() {
+      _gender = user.moreData?.gender;
+      _maritalStatus = user.moreData?.maritalStatus;
+      _bloodType = user.moreData?.bloodType;
+      _hasChildren = user.moreData?.hasChildren;
+      _numberOfChildren =
+          int.tryParse(user.moreData?.numberOfChildren ?? '') ?? 0;
+      _birthDate = DateTime.tryParse(user.moreData?.birthDate ?? '');
+      _isSmoke = user.moreData?.isSmoke;
+      _isInitialDataLoaded = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(
         title: "my_profile".tr(context),
         showBackButton: Navigator.of(context).canPop(),
@@ -163,46 +235,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
       body: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
-          if (state is UserSuccess && !_isInitialDataLoaded) {
-            _fnController.text = state.user.mainData?.firstName ?? '';
-            _lnController.text = state.user.mainData?.lastName ?? '';
-            _emailController.text = state.user.mainData?.email ?? '';
-            _phoneController.text = state.user.mainData?.phone ?? '';
-            _addressController.text = state.user.moreData?.address ?? '';
-            _heightController.text =
-                state.user.moreData?.height?.toString() ?? '';
-            _weightController.text =
-                state.user.moreData?.weight?.toString() ?? '';
-            _chronicDiseasesController.text = _stringifyList(
-              state.user.moreData?.chronicDiseases ?? const <String>[],
-            );
-            _permanentMedicationsController.text = _stringifyList(
-              state.user.moreData?.permanentMedications ?? const <String>[],
-            );
-            _foodAllergiesController.text = _stringifyList(
-              state.user.moreData?.foodAllergies ?? const <String>[],
-            );
-            _preferredFoodsController.text = _stringifyList(
-              state.user.moreData?.preferredFoods ?? const <String>[],
-            );
-            _dislikedFoodsController.text = _stringifyList(
-              state.user.moreData?.dislikedFoods ?? const <String>[],
-            );
-            _digestionIssuesController.text = _stringifyList(
-              state.user.moreData?.digestionIssues ?? const <String>[],
-            );
-
-            setState(() {
-              _maritalStatus = state.user.moreData?.maritalStatus;
-              _isSmoke = state.user.moreData?.isSmoke;
-              _isInitialDataLoaded = true;
-            });
+          if (state is UserSuccess) {
+            _fillFormWithUser(state.user);
           }
         },
         builder: (context, state) {
           if (state is UserSuccess) {
             final String? currentImageUrl = state.user.mainData?.image;
             return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
               child: Form(
                 key: _formKey,
@@ -210,22 +251,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildProfileHeader(state, currentImageUrl),
-                    const SizedBox(height: 24),
-                    Text(
-                      'quick_actions'.tr(context),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         Expanded(
                           child: _ProfileActionCard(
                             icon: Icons.person_outline_rounded,
-                            title: 'user_information'.tr(context),
-                            subtitle: 'update_profile_info'.tr(context),
+                            title: _showInformationSection
+                                ? 'save_changes'.tr(context)
+                                : 'user_information'.tr(context),
+                            subtitle: _showInformationSection
+                                ? 'user_information'.tr(context)
+                                : 'update_profile_info'.tr(context),
+                            accentColor: AppColors.primaryColors,
+                            isActive: _showInformationSection,
                             onTap: () {
                               setState(() {
                                 _showInformationSection =
@@ -234,12 +273,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: _ProfileActionCard(
                             icon: Icons.folder_open_rounded,
                             title: 'medical_files'.tr(context),
-                            subtitle: 'open_saved_medical_files'.tr(context),
+                            subtitle: 'all_files'.tr(context),
+                            accentColor: AppColors.secColors,
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -253,7 +293,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     AnimatedCrossFade(
                       firstChild: _buildCollapsedHint(context),
                       secondChild: Column(
@@ -271,28 +311,57 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             permanentMedicationsController:
                                 _permanentMedicationsController,
                             foodAllergiesController: _foodAllergiesController,
-                            preferredFoodsController: _preferredFoodsController,
+                            favoriteFoodsController: _favoriteFoodsController,
                             dislikedFoodsController: _dislikedFoodsController,
                             digestionIssuesController:
                                 _digestionIssuesController,
+                            gender: _gender,
                             maritalStatus: _maritalStatus,
+                            bloodType: _bloodType,
+                            hasChildren: _hasChildren,
                             isSmoke: _isSmoke,
+                            numberOfChildren: _numberOfChildren,
+                            birthDate: _birthDate,
+                            onGenderChanged: (v) {
+                              setState(() {
+                                _gender = v;
+                                if (v == 'male') {
+                                  _hasChildren = false;
+                                  _numberOfChildren = 0;
+                                }
+                              });
+                            },
                             onMaritalStatusChanged: (v) =>
                                 setState(() => _maritalStatus = v),
+                            onBloodTypeChanged: (v) =>
+                                setState(() => _bloodType = v),
+                            onChildrenChanged: (v) {
+                              setState(() {
+                                _hasChildren = v;
+                                if (v != true) {
+                                  _numberOfChildren = 0;
+                                }
+                              });
+                            },
                             onSmokeChanged: (val) =>
                                 setState(() => _isSmoke = val),
+                            onBirthDateTap: _pickBirthDate,
+                            onIncrementChildren: () =>
+                                setState(() => _numberOfChildren++),
+                            onDecrementChildren: () {
+                              if (_numberOfChildren > 0) {
+                                setState(() => _numberOfChildren--);
+                              }
+                            },
                           ),
-                          const SizedBox(height: 24),
-                          PrimaryButton(
-                            text: "save_changes".tr(context),
-                            onPressed: () => _onSaveChanges(context),
-                          ),
+                          const SizedBox(height: 16),
+                          _buildSavePanel(context),
                         ],
                       ),
                       crossFadeState: _showInformationSection
                           ? CrossFadeState.showSecond
                           : CrossFadeState.showFirst,
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 220),
                     ),
                   ],
                 ),
@@ -325,68 +394,88 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primaryColors, AppColors.secColors],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-        borderRadius: BorderRadius.circular(30),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryColors.withValues(alpha: 0.25),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         children: [
-          ProfileAvatar(
-            pickedImageFile: _pickedImage,
-            currentImageUrl: currentImageUrl,
-            onTap: _pickImage,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            fullName.isEmpty ? 'my_profile'.tr(context) : fullName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            email,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 18),
           Row(
             children: [
+              ProfileAvatar(
+                pickedImageFile: _pickedImage,
+                currentImageUrl: currentImageUrl,
+                onTap: _pickImage,
+              ),
+              const SizedBox(width: 14),
               Expanded(
-                child: _buildHeaderStat(
-                  icon: Icons.phone_outlined,
-                  label: 'phone'.tr(context),
-                  value: phone,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      fullName.isEmpty ? 'my_profile'.tr(context) : fullName,
+                      style: const TextStyle(
+                        color: Color(0xFF1F2C28),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      email.isEmpty ? '--' : email,
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextButton.icon(
+                      onPressed: _pickImage,
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primaryColors,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      icon: const Icon(Icons.camera_alt_outlined, size: 18),
+                      label: Text(
+                        _pickedImage == null
+                            ? 'choose_image'.tr(context)
+                            : 'change_selected_image'.tr(context),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildHeaderStat(
-                  icon: Icons.favorite_outline_rounded,
-                  label: 'are_you_a_smoker'.tr(context),
-                  value: _isSmoke == true
-                      ? 'yes'.tr(context)
-                      : 'no'.tr(context),
-                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _buildCompactInfoChip(
+                icon: Icons.phone_outlined,
+                text: phone.isEmpty ? '--' : phone,
               ),
+              if ((_bloodType ?? '').isNotEmpty)
+                _buildCompactInfoChip(
+                  icon: Icons.bloodtype_outlined,
+                  text: _displayRawValue(_bloodType),
+                ),
+              if ((_gender ?? '').isNotEmpty)
+                _buildCompactInfoChip(
+                  icon: Icons.wc_rounded,
+                  text: _displayTranslatedValue(_gender, context),
+                ),
             ],
           ),
         ],
@@ -394,38 +483,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _buildHeaderStat({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
+  Widget _buildCompactInfoChip({required IconData icon, required String text}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
+        color: const Color(0xFFF8FBFA),
         borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.grey.shade200),
       ),
-      child: Column(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 20),
-          const SizedBox(height: 8),
+          Icon(icon, color: AppColors.primaryColors, size: 16),
+          const SizedBox(width: 8),
           Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.85),
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value.isEmpty ? '--' : value,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            text,
             style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
+              color: Color(0xFF1F2C28),
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -436,36 +512,80 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget _buildCollapsedHint(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
-            width: 46,
-            height: 46,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+              color: AppColors.primaryColors.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(
-              Icons.touch_app_rounded,
-              color: Theme.of(context).primaryColor,
+            child: const Icon(
+              Icons.edit_note_rounded,
+              color: AppColors.primaryColors,
             ),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Text(
-              'tap_user_information_hint'.tr(context),
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              'update_profile_info'.tr(context),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                height: 1.35,
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildSavePanel(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: PrimaryButton(
+        text: "save_changes".tr(context),
+        onPressed: () => _onSaveChanges(context),
+      ),
+    );
+  }
+
+  String _displayRawValue(String? value) {
+    final String normalized = (value ?? '').trim();
+    return normalized;
+  }
+
+  String _displayTranslatedValue(String? value, BuildContext context) {
+    final String normalized = (value ?? '').trim();
+    return normalized.isEmpty ? '' : normalized.tr(context);
   }
 }
 
@@ -474,13 +594,17 @@ class _ProfileActionCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
+    required this.accentColor,
     required this.onTap,
+    this.isActive = false,
   });
 
   final IconData icon;
   final String title;
   final String subtitle;
+  final Color accentColor;
   final VoidCallback onTap;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -488,17 +612,21 @@ class _ProfileActionCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         child: Ink(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.grey.shade200),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: isActive
+                  ? accentColor.withValues(alpha: 0.28)
+                  : Colors.grey.shade200,
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 18,
+                blurRadius: 14,
                 offset: const Offset(0, 8),
               ),
             ],
@@ -506,30 +634,42 @@ class _ProfileActionCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(icon, color: Theme.of(context).primaryColor),
+              Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: accentColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(icon, color: accentColor),
+                  ),
+                  const Spacer(),
+                  Icon(
+                    isActive
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.arrow_forward_rounded,
+                    color: accentColor,
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w700,
+                  color: Color(0xFF1F2C28),
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 subtitle,
                 style: TextStyle(
-                  fontSize: 13,
-                  height: 1.4,
-                  color: Colors.grey.shade600,
+                  fontSize: 12,
+                  height: 1.35,
+                  color: Colors.grey.shade700,
                 ),
               ),
             ],

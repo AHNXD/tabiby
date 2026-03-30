@@ -38,12 +38,13 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
   final TextEditingController permanentMedicationsCtrl =
       TextEditingController();
   final TextEditingController foodAllergiesCtrl = TextEditingController();
-  final TextEditingController preferredFoodsCtrl = TextEditingController();
+  final TextEditingController favoriteFoodsCtrl = TextEditingController();
   final TextEditingController dislikedFoodsCtrl = TextEditingController();
   final TextEditingController digestionIssuesCtrl = TextEditingController();
 
   String? gender;
   String? maritalStatus;
+  String? bloodType;
   bool? hasChildren;
   bool? isSmoke;
   int numberOfChildren = 0;
@@ -63,7 +64,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
     chronicDiseasesCtrl.dispose();
     permanentMedicationsCtrl.dispose();
     foodAllergiesCtrl.dispose();
-    preferredFoodsCtrl.dispose();
+    favoriteFoodsCtrl.dispose();
     dislikedFoodsCtrl.dispose();
     digestionIssuesCtrl.dispose();
     _pageController.dispose();
@@ -113,14 +114,6 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
     return true;
   }
 
-  List<String> _parseListInput(String rawValue) {
-    return rawValue
-        .split(RegExp(r'[\n,]'))
-        .map((value) => value.trim())
-        .where((value) => value.isNotEmpty)
-        .toList();
-  }
-
   void _onSignUpPressed(BuildContext context) {
     if (!_validateStep3(context)) {
       return;
@@ -148,13 +141,17 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
           ? DateFormat('yyyy-MM-dd').format(selectedBirthDate!)
           : null,
       'is_smoke': isSmoke == true ? '1' : '0',
-      'chronic_diseases': _parseListInput(chronicDiseasesCtrl.text),
-      'permanent_medications': _parseListInput(permanentMedicationsCtrl.text),
-      'food_allergies': _parseListInput(foodAllergiesCtrl.text),
-      'preferred_foods': _parseListInput(preferredFoodsCtrl.text),
-      'disliked_foods': _parseListInput(dislikedFoodsCtrl.text),
-      'digestion_issues': _parseListInput(digestionIssuesCtrl.text),
+      'chronic_diseases': chronicDiseasesCtrl.text.trim(),
+      'permanent_medications': permanentMedicationsCtrl.text.trim(),
+      'food_allergies': foodAllergiesCtrl.text.trim(),
+      'favorite_foods': favoriteFoodsCtrl.text.trim(),
+      'disliked_foods': dislikedFoodsCtrl.text.trim(),
+      'digestion_issues': digestionIssuesCtrl.text.trim(),
     };
+
+    if (bloodType != null && bloodType!.isNotEmpty) {
+      registerData['blood_type'] = bloodType;
+    }
 
     context.read<RegisterCubit>().register(registerData);
   }
@@ -209,7 +206,10 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                     weightCtrl: weightCtrl,
                     heightCtrl: heightCtrl,
                     selectedGender: gender,
+                    bloodType: bloodType,
                     onGenderChanged: (val) => setState(() => gender = val),
+                    onBloodTypeChanged: (value) =>
+                        setState(() => bloodType = value),
                   ),
                   Step3Widget(
                     gender: gender ?? 'female',
@@ -247,7 +247,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
                     chronicDiseasesCtrl: chronicDiseasesCtrl,
                     permanentMedicationsCtrl: permanentMedicationsCtrl,
                     foodAllergiesCtrl: foodAllergiesCtrl,
-                    preferredFoodsCtrl: preferredFoodsCtrl,
+                    favoriteFoodsCtrl: favoriteFoodsCtrl,
                     dislikedFoodsCtrl: dislikedFoodsCtrl,
                     digestionIssuesCtrl: digestionIssuesCtrl,
                     agreeToTerms: agreeToTerms,

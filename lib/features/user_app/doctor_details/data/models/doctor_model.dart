@@ -37,6 +37,7 @@ class Doctor {
   String? name;
   String? img;
   String? bio;
+  String? doctorType;
   int? rate;
   int? yearsOfExperience;
   int? isActive;
@@ -48,6 +49,7 @@ class Doctor {
     this.name,
     this.img,
     this.bio,
+    this.doctorType,
     this.rate,
     this.yearsOfExperience,
     this.isActive,
@@ -60,7 +62,8 @@ class Doctor {
     name = json['name'];
     img = json['image'];
     bio = json['bio'];
-    rate = json['rate'].toInt();
+    doctorType = json['doctor_type']?.toString();
+    rate = (json['rate'] as num?)?.toInt();
     yearsOfExperience = json['experience_years'];
     isActive = json['is_active'];
     specialty = json['specialty'] != null
@@ -80,6 +83,7 @@ class Doctor {
     data['name'] = name;
     data['image'] = img;
     data['bio'] = bio;
+    data['doctor_type'] = doctorType;
     data['rate'] = rate;
     data['experience_years'] = yearsOfExperience;
     data['is_active'] = isActive;

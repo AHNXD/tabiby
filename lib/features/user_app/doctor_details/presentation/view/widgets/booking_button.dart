@@ -5,9 +5,9 @@ import 'package:tabiby/core/widgets/primary_button.dart';
 import '../../../../add_appointment/presentation/view/booking_screen.dart';
 
 class BookingButton extends StatelessWidget {
-  const BookingButton({super.key, required this.doctorID, this.specialtyName});
+  const BookingButton({super.key, required this.doctorID, this.doctorType});
   final int doctorID;
-  final String? specialtyName;
+  final String? doctorType;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,8 @@ class BookingButton extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BookingScreen(
-                doctorID: doctorID,
-                specialtyName: specialtyName,
-              ),
+              builder: (context) =>
+                  BookingScreen(doctorID: doctorID, doctorType: doctorType),
             ),
           );
         },

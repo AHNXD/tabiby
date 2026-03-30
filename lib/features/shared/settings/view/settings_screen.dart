@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/features/auth/presentation/view-model/logout_cubit/logout_cubit.dart';
 import '../../../../core/widgets/custom_appbar.dart';
@@ -14,11 +15,11 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(title: "settings".tr(context)),
-
       body: BlocProvider(
         create: (context) => LogoutCubit(getit<LogoutRepo>()),
-        child: SettingsButtonsSection(),
+        child: const SettingsButtonsSection(),
       ),
     );
   }

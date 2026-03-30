@@ -9,6 +9,7 @@ class CustomDropdownField extends StatelessWidget {
   final String? value;
   final ValueChanged<String?> onChanged;
   final String? Function(String?)? validator;
+  final IconData? prefixIcon;
 
   const CustomDropdownField({
     super.key,
@@ -17,12 +18,13 @@ class CustomDropdownField extends StatelessWidget {
     required this.onChanged,
     this.value,
     this.validator,
+    this.prefixIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       validator: validator,
       onChanged: onChanged,
       decoration: InputDecoration(
@@ -30,6 +32,12 @@ class CustomDropdownField extends StatelessWidget {
         hintStyle: const TextStyle(color: AppColors.textFieldColor),
         filled: true,
         fillColor: const Color(0xFFF6F6F6),
+        prefixIcon: prefixIcon != null
+            ? Padding(
+                padding: const EdgeInsets.all(12),
+                child: Icon(prefixIcon, color: AppColors.textFieldColor),
+              )
+            : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: BorderSide.none,

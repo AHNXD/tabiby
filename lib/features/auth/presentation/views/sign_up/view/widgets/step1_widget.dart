@@ -42,15 +42,17 @@ class Step1Widget extends StatelessWidget {
                 CustomTextField(
                   hintText: 'first_name'.tr(context),
                   controller: firstNameCtrl,
+                  suffixIcon: Icons.person_outline_rounded,
                   validator: (val) =>
-                      Validator.validate(val, ValidationState.normal,context),
+                      Validator.validate(val, ValidationState.normal, context),
                 ),
                 const SizedBox(height: 30),
                 CustomTextField(
                   hintText: 'last_name'.tr(context),
                   controller: lastNameCtrl,
+                  suffixIcon: Icons.badge_outlined,
                   validator: (val) =>
-                      Validator.validate(val, ValidationState.normal,context),
+                      Validator.validate(val, ValidationState.normal, context),
                 ),
                 const SizedBox(height: 30),
                 CustomTextField(
@@ -58,8 +60,11 @@ class Step1Widget extends StatelessWidget {
                   suffixIcon: Icons.phone,
                   keyboardType: TextInputType.phone,
                   controller: phoneCtrl,
-                  validator: (val) =>
-                      Validator.validate(val, ValidationState.phoneNumber,context),
+                  validator: (val) => Validator.validate(
+                    val,
+                    ValidationState.phoneNumber,
+                    context,
+                  ),
                 ),
                 const SizedBox(height: 30),
                 CustomTextField(
@@ -67,15 +72,18 @@ class Step1Widget extends StatelessWidget {
                   suffixIcon: Icons.email,
                   controller: emailCtrl,
                   validator: (val) =>
-                      Validator.validate(val, ValidationState.email,context),
+                      Validator.validate(val, ValidationState.email, context),
                 ),
 
                 const SizedBox(height: 30),
                 PasswordTextField(
                   hintText: 'password'.tr(context),
                   controller: passwordCtrl,
-                  validator: (val) =>
-                      Validator.validate(val, ValidationState.password,context),
+                  validator: (val) => Validator.validate(
+                    val,
+                    ValidationState.password,
+                    context,
+                  ),
                 ),
                 const SizedBox(height: 40),
               ],

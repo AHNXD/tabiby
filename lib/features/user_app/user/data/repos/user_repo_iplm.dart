@@ -64,9 +64,13 @@ class UserRepoIplm implements UserRepo {
     try {
       FormData formData = FormData.fromMap({});
       for (var entry in registerData.entries) {
+        if (entry.value == null) {
+          continue;
+        }
+
         if (entry.value is File) {
           File file = entry.value;
-          String fileName = file.path.split('/').last;
+          String fileName = _buildUploadFileName(entry.key, file.path);
           formData.files.add(
             MapEntry(
               entry.key,
@@ -96,5 +100,31 @@ class UserRepoIplm implements UserRepo {
     } catch (e) {
       return left(ServerFailure(e.toString()));
     }
+  }
+
+  String _buildUploadFileName(String fieldName, String path) {
+    final String originalName = path.split('/').last;
+    final String extension = originalName.contains('.')
+        ? originalName.split('.').last.toLowerCase()
+        : '';
+
+    const List<String> allowedExtensions = <String>[
+      'jpg',
+      'jpeg',
+      'png',
+      'webp',
+    ];
+
+    final String safeExtension = allowedExtensions.contains(extension)
+        ? extension
+        : 'jpg';
+
+    if (fieldName == 'profile_image') {
+      return 'profile_image.$safeExtension';
+    }
+
+    return originalName.contains('.')
+        ? originalName
+        : '$fieldName.$safeExtension';
   }
 }

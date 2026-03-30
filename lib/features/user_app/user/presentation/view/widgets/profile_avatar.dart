@@ -29,19 +29,69 @@ class ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: CircleAvatar(
-        radius: 60,
-        backgroundColor: AppColors.avatarColor,
-        backgroundImage: _getAvatarImage(),
-        child: const Align(
-          alignment: Alignment.bottomRight,
-          child: CircleAvatar(
-            radius: 18,
-            backgroundColor: Colors.white,
-            child: Icon(Icons.edit, color: AppColors.primaryColors, size: 20),
-          ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(54),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: 108,
+              height: 108,
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFE8FFF5), Colors.white],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(36),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryColors.withValues(alpha: 0.18),
+                    blurRadius: 22,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(28),
+                  child: Image(image: _getAvatarImage(), fit: BoxFit.cover),
+                ),
+              ),
+            ),
+            PositionedDirectional(
+              end: -6,
+              bottom: -6,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.10),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.camera_alt_rounded,
+                  color: AppColors.primaryColors,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -32,7 +32,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          color: AppColors.textFieldColor.withOpacity(0.6),
+          color: AppColors.textFieldColor.withValues(alpha: 0.6),
           fontWeight: FontWeight.w400,
         ),
         filled: true,
@@ -65,6 +65,14 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           borderSide: const BorderSide(color: Colors.redAccent, width: 2.0),
         ),
 
+        prefixIcon: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Icon(
+            Icons.lock_outline_rounded,
+            color: AppColors.textFieldColor.withValues(alpha: 0.8),
+          ),
+        ),
+
         // --- Aligned Suffix Icon ---
         suffixIcon: Padding(
           padding: const EdgeInsets.only(
@@ -76,7 +84,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                   ? Icons.visibility_outlined
                   : Icons.visibility_off_outlined,
               // Softened the icon slightly so it doesn't overpower the text
-              color: AppColors.textFieldColor.withOpacity(0.8),
+              color: AppColors.textFieldColor.withValues(alpha: 0.8),
             ),
             onPressed: () {
               setState(() {

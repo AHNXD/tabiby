@@ -7,6 +7,18 @@ extension BookingDepartmentTypeX on BookingDepartmentType {
 
   bool get supportsMedicalAttachments => this == BookingDepartmentType.doctor;
 
+  static BookingDepartmentType fromDoctorType(String? doctorType) {
+    switch (doctorType?.trim().toLowerCase()) {
+      case 'radiology':
+        return BookingDepartmentType.radiology;
+      case 'lab':
+        return BookingDepartmentType.laboratory;
+      case 'doctor':
+      default:
+        return BookingDepartmentType.doctor;
+    }
+  }
+
   static BookingDepartmentType fromSpecialtyName(String? specialtyName) {
     final String normalized = specialtyName?.trim().toLowerCase() ?? '';
 

@@ -63,7 +63,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                   ),
                   BookingButton(
                     doctorID: doctorID,
-                    specialtyName: doctor.specialty?.name,
+                    doctorType: doctor.specialty?.name,
                   ),
                 ],
               );

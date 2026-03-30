@@ -13,7 +13,7 @@ class Step4Widget extends StatelessWidget {
     required this.chronicDiseasesCtrl,
     required this.permanentMedicationsCtrl,
     required this.foodAllergiesCtrl,
-    required this.preferredFoodsCtrl,
+    required this.favoriteFoodsCtrl,
     required this.dislikedFoodsCtrl,
     required this.digestionIssuesCtrl,
     required this.agreeToTerms,
@@ -25,7 +25,7 @@ class Step4Widget extends StatelessWidget {
   final TextEditingController chronicDiseasesCtrl;
   final TextEditingController permanentMedicationsCtrl;
   final TextEditingController foodAllergiesCtrl;
-  final TextEditingController preferredFoodsCtrl;
+  final TextEditingController favoriteFoodsCtrl;
   final TextEditingController dislikedFoodsCtrl;
   final TextEditingController digestionIssuesCtrl;
   final bool agreeToTerms;
@@ -37,28 +37,13 @@ class Step4Widget extends StatelessWidget {
     BuildContext context, {
     required String title,
     required TextEditingController controller,
+    required IconData suffixIcon,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomTextField(
-          hintText: title,
-          controller: controller,
-          maxLines: 3,
-          textInputAction: TextInputAction.newline,
-        ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(
-            'list_input_hint'.tr(context),
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textFieldColor,
-            ),
-          ),
-        ),
-      ],
+    return CustomTextField(
+      hintText: title,
+      controller: controller,
+      textInputAction: TextInputAction.next,
+      suffixIcon: suffixIcon,
     );
   }
 
@@ -76,38 +61,102 @@ class Step4Widget extends StatelessWidget {
                 context,
                 title: 'chronic_diseases'.tr(context),
                 controller: chronicDiseasesCtrl,
+                suffixIcon: Icons.health_and_safety_outlined,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               _buildListField(
                 context,
                 title: 'permanent_medications'.tr(context),
                 controller: permanentMedicationsCtrl,
+                suffixIcon: Icons.medication_outlined,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               _buildListField(
                 context,
                 title: 'food_allergies'.tr(context),
                 controller: foodAllergiesCtrl,
+                suffixIcon: Icons.error_outline_rounded,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               _buildListField(
                 context,
-                title: 'preferred_foods'.tr(context),
-                controller: preferredFoodsCtrl,
+                title: 'favorite_foods'.tr(context),
+                controller: favoriteFoodsCtrl,
+                suffixIcon: Icons.favorite_border_rounded,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               _buildListField(
                 context,
                 title: 'disliked_foods'.tr(context),
                 controller: dislikedFoodsCtrl,
+                suffixIcon: Icons.thumb_down_alt_outlined,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               _buildListField(
                 context,
                 title: 'digestion_issues'.tr(context),
                 controller: digestionIssuesCtrl,
+                suffixIcon: Icons.sick_outlined,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primaryColors.withValues(alpha: 0.10),
+                      AppColors.secColors.withValues(alpha: 0.08),
+                    ],
+                    begin: AlignmentDirectional.topStart,
+                    end: AlignmentDirectional.bottomEnd,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: AppColors.primaryColors.withValues(alpha: 0.16),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryColors.withValues(alpha: 0.08),
+                      blurRadius: 16,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColors.withValues(alpha: 0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.info_outline_rounded,
+                        color: AppColors.primaryColors,
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'list_input_hint'.tr(context),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          height: 1.4,
+                          color: AppColors.textColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),

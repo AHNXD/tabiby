@@ -221,6 +221,19 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     _setIfEmpty(_genderController, user.moreData?.gender ?? '');
     _setIfEmpty(_heightController, user.moreData?.height ?? '');
     _setIfEmpty(_weightController, user.moreData?.weight ?? '');
+    _setIfEmpty(
+      _chronicDiseasesController,
+      user.moreData?.chronicDiseases ?? '',
+    );
+    _setIfEmpty(
+      _medicationsController,
+      user.moreData?.permanentMedications ?? '',
+    );
+    _setIfEmpty(_allergiesController, user.moreData?.foodAllergies ?? '');
+    _setIfEmpty(
+      _digestionIssuesController,
+      user.moreData?.digestionIssues ?? '',
+    );
 
     _didPrefillUserData = true;
   }

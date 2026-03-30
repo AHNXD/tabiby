@@ -90,16 +90,17 @@ class MoreData {
   String? weight;
   String? height;
   String? maritalStatus;
+  String? bloodType;
   bool? hasChildren;
   String? numberOfChildren;
   String? birthDate;
   bool? isSmoke;
-  List<String> chronicDiseases;
-  List<String> permanentMedications;
-  List<String> foodAllergies;
-  List<String> preferredFoods;
-  List<String> dislikedFoods;
-  List<String> digestionIssues;
+  String? chronicDiseases;
+  String? permanentMedications;
+  String? foodAllergies;
+  String? favoriteFoods;
+  String? dislikedFoods;
+  String? digestionIssues;
 
   MoreData({
     this.address,
@@ -107,16 +108,17 @@ class MoreData {
     this.weight,
     this.height,
     this.maritalStatus,
+    this.bloodType,
     this.hasChildren,
     this.numberOfChildren,
     this.birthDate,
     this.isSmoke,
-    this.chronicDiseases = const <String>[],
-    this.permanentMedications = const <String>[],
-    this.foodAllergies = const <String>[],
-    this.preferredFoods = const <String>[],
-    this.dislikedFoods = const <String>[],
-    this.digestionIssues = const <String>[],
+    this.chronicDiseases,
+    this.permanentMedications,
+    this.foodAllergies,
+    this.favoriteFoods,
+    this.dislikedFoods,
+    this.digestionIssues,
   });
 
   MoreData.fromJson(Map<String, dynamic> json)
@@ -125,16 +127,21 @@ class MoreData {
       weight = json['weight']?.toString(),
       height = json['height']?.toString(),
       maritalStatus = json['marital_status']?.toString(),
-      hasChildren = json['has_children'],
+      bloodType = json['blood_type']?.toString(),
+      hasChildren = _parseBool(json['has_children']),
       numberOfChildren = json['number_of_children']?.toString(),
       birthDate = json['birth_date']?.toString(),
-      isSmoke = json['is_smoke'].toString() == "1" || json['is_smoke'] == true,
-      chronicDiseases = _parseStringList(json['chronic_diseases']),
-      permanentMedications = _parseStringList(json['permanent_medications']),
-      foodAllergies = _parseStringList(json['food_allergies']),
-      preferredFoods = _parseStringList(json['preferred_foods']),
-      dislikedFoods = _parseStringList(json['disliked_foods']),
-      digestionIssues = _parseStringList(json['digestion_issues']);
+      isSmoke = _parseBool(json['is_smoke']),
+      chronicDiseases = _parseFlexibleString(json['chronic_diseases']),
+      permanentMedications = _parseFlexibleString(
+        json['permanent_medications'],
+      ),
+      foodAllergies = _parseFlexibleString(json['food_allergies']),
+      favoriteFoods = _parseFlexibleString(
+        json['favorite_foods'] ?? json['preferred_foods'],
+      ),
+      dislikedFoods = _parseFlexibleString(json['disliked_foods']),
+      digestionIssues = _parseFlexibleString(json['digestion_issues']);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -143,6 +150,7 @@ class MoreData {
     data['weight'] = weight;
     data['height'] = height;
     data['marital_status'] = maritalStatus;
+    data['blood_type'] = bloodType;
     data['has_children'] = hasChildren;
     data['number_of_children'] = numberOfChildren;
     data['birth_date'] = birthDate;
@@ -150,43 +158,66 @@ class MoreData {
     data['chronic_diseases'] = chronicDiseases;
     data['permanent_medications'] = permanentMedications;
     data['food_allergies'] = foodAllergies;
-    data['preferred_foods'] = preferredFoods;
+    data['favorite_foods'] = favoriteFoods;
     data['disliked_foods'] = dislikedFoods;
     data['digestion_issues'] = digestionIssues;
     return data;
   }
 
-  static List<String> _parseStringList(dynamic value) {
+  static bool? _parseBool(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value is bool) {
+      return value;
+    }
+
+    final String normalized = value.toString().trim().toLowerCase();
+    if (normalized == '1' || normalized == 'true') {
+      return true;
+    }
+    if (normalized == '0' || normalized == 'false') {
+      return false;
+    }
+
+    return null;
+  }
+
+  static String? _parseFlexibleString(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+
     if (value is List) {
-      return value
+      final String joined = value
           .map((item) => item.toString().trim())
           .where((item) => item.isNotEmpty)
-          .toList();
+          .join(', ');
+      return joined.isEmpty ? null : joined;
     }
 
     if (value is String) {
       final String trimmed = value.trim();
       if (trimmed.isEmpty) {
-        return const <String>[];
+        return null;
       }
 
       try {
         final dynamic decoded = jsonDecode(trimmed);
         if (decoded is List) {
-          return decoded
+          final String joined = decoded
               .map((item) => item.toString().trim())
               .where((item) => item.isNotEmpty)
-              .toList();
+              .join(', ');
+          return joined.isEmpty ? null : joined;
         }
       } catch (_) {}
 
-      return trimmed
-          .split(RegExp(r'[\n,]'))
-          .map((item) => item.trim())
-          .where((item) => item.isNotEmpty)
-          .toList();
+      return trimmed;
     }
 
-    return const <String>[];
+    final String fallback = value.toString().trim();
+    return fallback.isEmpty ? null : fallback;
   }
 }

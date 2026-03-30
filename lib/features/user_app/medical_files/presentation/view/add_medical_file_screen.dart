@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/custome_text_field.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
@@ -107,6 +108,7 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: CustomAppbar(title: 'add_medical_file'.tr(context)),
@@ -129,87 +131,113 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
           }
         },
         builder: (BuildContext context, MedicalFilesState state) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'medical_file_form_hint'.tr(context),
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 15,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<MedicalFileType>(
-                    initialValue: _selectedType,
-                    decoration: _inputDecoration(
-                      context,
-                      'select_file_type'.tr(context),
-                    ),
-                    items: MedicalFileType.values
-                        .map(
-                          (MedicalFileType type) =>
-                              DropdownMenuItem<MedicalFileType>(
-                                value: type,
-                                child: Text(type.labelKey.tr(context)),
+          final bool isSubmitting =
+              state.submissionStatus == MedicalFileSubmissionStatus.submitting;
+
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _PageIntroCard(
+                          title: 'add_medical_file'.tr(context),
+                          subtitle: 'medical_file_form_hint'.tr(context),
+                        ),
+                        const SizedBox(height: 18),
+                        _SectionCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _FieldLabel(
+                                icon: Icons.category_rounded,
+                                label: 'select_file_type'.tr(context),
                               ),
-                        )
-                        .toList(),
-                    onChanged: (MedicalFileType? value) {
-                      setState(() {
-                        _selectedType = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    hintText: 'medical_file_title'.tr(context),
-                    controller: _titleController,
-                    validator: (String? value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'medical_file_title_required'.tr(context);
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    hintText: 'medical_file_date'.tr(context),
-                    controller: _dateController,
-                    readOnly: true,
-                    onTap: _pickDate,
-                    validator: (String? value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'please_select_file_date'.tr(context);
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  _ImagePickerCard(
-                    selectedImage: _selectedImage,
-                    onTap: _pickImage,
-                  ),
-                  const SizedBox(height: 28),
-                  Center(
-                    child:
-                        state.submissionStatus ==
-                            MedicalFileSubmissionStatus.submitting
-                        ? const CircularProgressIndicator()
-                        : PrimaryButton(
-                            text: 'save_medical_file'.tr(context),
-                            onPressed: _saveMedicalFile,
-                            fontSize: 22,
+                              const SizedBox(height: 10),
+                              DropdownButtonFormField<MedicalFileType>(
+                                initialValue: _selectedType,
+                                decoration: _inputDecoration(
+                                  context,
+                                  'select_file_type'.tr(context),
+                                ),
+                                items: MedicalFileType.values
+                                    .map(
+                                      (MedicalFileType type) =>
+                                          DropdownMenuItem<MedicalFileType>(
+                                            value: type,
+                                            child: Text(
+                                              type.labelKey.tr(context),
+                                            ),
+                                          ),
+                                    )
+                                    .toList(),
+                                onChanged: (MedicalFileType? value) {
+                                  setState(() {
+                                    _selectedType = value;
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 18),
+                              _FieldLabel(
+                                icon: Icons.drive_file_rename_outline_rounded,
+                                label: 'medical_file_title'.tr(context),
+                              ),
+                              const SizedBox(height: 10),
+                              CustomTextField(
+                                hintText: 'medical_file_title'.tr(context),
+                                controller: _titleController,
+                                validator: (String? value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'medical_file_title_required'.tr(
+                                      context,
+                                    );
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 18),
+                              _FieldLabel(
+                                icon: Icons.calendar_month_rounded,
+                                label: 'medical_file_date'.tr(context),
+                              ),
+                              const SizedBox(height: 10),
+                              CustomTextField(
+                                hintText: 'medical_file_date'.tr(context),
+                                controller: _dateController,
+                                readOnly: true,
+                                suffixIcon: Icons.calendar_today_rounded,
+                                onTap: _pickDate,
+                                validator: (String? value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'please_select_file_date'.tr(
+                                      context,
+                                    );
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
                           ),
+                        ),
+                        const SizedBox(height: 18),
+                        _ImagePickerCard(
+                          selectedImage: _selectedImage,
+                          onTap: _pickImage,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
+              _SubmitSection(
+                isSubmitting: isSubmitting,
+                onPressed: _saveMedicalFile,
+              ),
+            ],
           );
         },
       ),
@@ -244,81 +272,367 @@ class _ImagePickerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool hasImage = selectedImage != null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(22),
-        child: Ink(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'upload_medical_image'.tr(context),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+    return _SectionCard(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Ink(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _FieldLabel(
+                  icon: Icons.cloud_upload_rounded,
+                  label: 'upload_medical_image'.tr(context),
                 ),
-              ),
-              const SizedBox(height: 12),
-              if (hasImage)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(18),
-                  child: Image.file(
-                    selectedImage!,
-                    height: 220,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              else
-                Container(
-                  height: 180,
+                const SizedBox(height: 14),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: hasImage ? 230 : 190,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    ).primaryColor.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: hasImage
+                        ? null
+                        : LinearGradient(
+                            colors: <Color>[
+                              AppColors.primaryColors.withValues(alpha: 0.08),
+                              AppColors.secColors.withValues(alpha: 0.06),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                    border: Border.all(
+                      color: hasImage
+                          ? Colors.transparent
+                          : AppColors.primaryColors.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: hasImage
+                      ? Stack(
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(24),
+                              child: Image.file(
+                                selectedImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              left: 14,
+                              right: 14,
+                              bottom: 14,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withValues(alpha: 0.48),
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        'change_selected_image'.tr(context),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              width: 72,
+                              height: 72,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(22),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: AppColors.primaryColors.withValues(
+                                      alpha: 0.08,
+                                    ),
+                                    blurRadius: 22,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.cloud_upload_outlined,
+                                color: AppColors.primaryColors,
+                                size: 34,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'tap_to_upload_image'.tr(context),
+                              style: const TextStyle(
+                                color: AppColors.primaryColors,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+                const SizedBox(height: 14),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.appBackgroundColor,
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.cloud_upload_outlined,
-                        color: Theme.of(context).primaryColor,
-                        size: 36,
+                        hasImage
+                            ? Icons.photo_library_rounded
+                            : Icons.add_photo_alternate_outlined,
+                        size: 20,
+                        color: AppColors.primaryColors,
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'tap_to_upload_image'.tr(context),
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w700,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          hasImage
+                              ? 'change_selected_image'.tr(context)
+                              : 'choose_image'.tr(context),
+                          style: const TextStyle(
+                            color: AppColors.primaryColors,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 16,
+                        color: AppColors.primaryColors,
                       ),
                     ],
                   ),
                 ),
-              const SizedBox(height: 12),
-              Text(
-                hasImage
-                    ? 'change_selected_image'.tr(context)
-                    : 'choose_image'.tr(context),
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w700,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PageIntroCard extends StatelessWidget {
+  const _PageIntroCard({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FCFA),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.12),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: -24,
+            right: -10,
+            child: Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColors.withValues(alpha: 0.05),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -30,
+            left: -16,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: AppColors.secColors.withValues(alpha: 0.035),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColors.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.folder_copy_rounded,
+                  color: AppColors.primaryColors,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Color(0xFF1F2C28),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionCard extends StatelessWidget {
+  const _SectionCard({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: AppColors.primaryColors.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: AppColors.primaryColors, size: 20),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SubmitSection extends StatelessWidget {
+  const _SubmitSection({required this.isSubmitting, required this.onPressed});
+
+  final bool isSubmitting;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: isSubmitting
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: CircularProgressIndicator(),
+                )
+              : PrimaryButton(
+                  text: 'save_medical_file'.tr(context),
+                  onPressed: onPressed,
+                  fontSize: 20,
+                ),
         ),
       ),
     );

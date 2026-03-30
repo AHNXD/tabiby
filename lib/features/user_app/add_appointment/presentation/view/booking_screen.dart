@@ -15,17 +15,17 @@ class BookingScreen extends StatelessWidget {
   const BookingScreen({
     super.key,
     required this.doctorID,
-    this.specialtyName,
+    this.doctorType,
     this.availableLabTests,
   });
   final int doctorID;
-  final String? specialtyName;
+  final String? doctorType;
   final List<LabTestOption>? availableLabTests;
 
   @override
   Widget build(BuildContext context) {
     final BookingDepartmentType departmentType =
-        BookingDepartmentTypeX.fromSpecialtyName(specialtyName);
+        BookingDepartmentTypeX.fromDoctorType(doctorType);
 
     return Scaffold(
       appBar: PreferredSize(

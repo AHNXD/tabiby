@@ -13,8 +13,6 @@ import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
 import 'package:tabiby/core/widgets/custom_image_widget.dart';
-import 'package:tabiby/core/widgets/primary_button.dart';
-import 'package:tabiby/core/widgets/secondry_button.dart';
 import 'package:tabiby/features/user_app/medical_files/data/models/medical_file_model.dart';
 import 'package:tabiby/features/user_app/medical_files/data/repos/medical_files_repo.dart';
 import 'package:tabiby/features/user_app/medical_files/presentation/view/add_medical_file_screen.dart';
@@ -41,6 +39,7 @@ class _ShowMedicalFilesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: CustomAppbar(title: 'medical_files'.tr(context)),
@@ -62,21 +61,38 @@ class _ShowMedicalFilesView extends StatelessWidget {
             );
           }
 
+          final int xrayCount = state.files
+              .where((MedicalFile file) => file.type == MedicalFileType.xray)
+              .length;
+          final int labCount = state.files
+              .where((MedicalFile file) => file.type == MedicalFileType.lab)
+              .length;
+
           return RefreshIndicator(
             onRefresh: () =>
                 context.read<MedicalFilesCubit>().loadMedicalFiles(),
             child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
               children: <Widget>[
-                _SummaryCard(totalFiles: state.files.length, context: context),
+                _SummaryCard(
+                  totalFiles: state.files.length,
+                  xrayCount: xrayCount,
+                  labCount: labCount,
+                  onAddPressed: () => _openAddScreen(context),
+                ),
                 const SizedBox(height: 18),
-                _FilterChips(
-                  selectedFilter: state.filter,
-                  onChanged: context.read<MedicalFilesCubit>().changeFilter,
+                _FilterCard(
+                  child: _FilterChips(
+                    selectedFilter: state.filter,
+                    onChanged: context.read<MedicalFilesCubit>().changeFilter,
+                  ),
                 ),
                 const SizedBox(height: 18),
                 if (state.filteredFiles.isEmpty)
-                  const _EmptyMedicalFilesState()
+                  _EmptyMedicalFilesState(
+                    onAddPressed: () => _openAddScreen(context),
+                  )
                 else
                   ...state.filteredFiles.map(
                     (MedicalFile file) => Padding(
@@ -96,6 +112,17 @@ class _ShowMedicalFilesView extends StatelessWidget {
     );
   }
 
+  Future<void> _openAddScreen(BuildContext context) async {
+    await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(
+        builder: (_) => BlocProvider.value(
+          value: context.read<MedicalFilesCubit>(),
+          child: const AddMedicalFileScreen(),
+        ),
+      ),
+    );
+  }
+
   Future<void> _showMedicalFile(BuildContext context, MedicalFile file) async {
     final bool hasLocalFile =
         file.localFile != null && file.localFile!.existsSync();
@@ -110,47 +137,82 @@ class _ShowMedicalFilesView extends StatelessWidget {
     await showDialog<void>(
       context: context,
       builder: (BuildContext context) {
+        final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
         return Dialog(
+          backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.all(18),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        file.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              file.title,
+                              style: const TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: <Widget>[
+                                _TypeBadge(type: file.type),
+                                _FileMetaChip(
+                                  icon: Icons.calendar_month_rounded,
+                                  text:
+                                      '${"date".tr(context)}: ${dateFormat.format(file.fileDate)}',
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: hasLocalFile
-                        ? Image.file(file.localFile!, fit: BoxFit.contain)
-                        : CustomImageWidget(
-                            imageUrl: file.remoteFileUrl,
-                            placeholderAsset: AssetsData.defaultCenter,
-                            fit: BoxFit.contain,
-                          ),
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.appBackgroundColor,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: hasLocalFile
+                            ? Image.file(file.localFile!, fit: BoxFit.contain)
+                            : CustomImageWidget(
+                                imageUrl: file.remoteFileUrl,
+                                placeholderAsset: AssetsData.defaultCenter,
+                                fit: BoxFit.contain,
+                              ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -235,70 +297,262 @@ class _ShowMedicalFilesView extends StatelessWidget {
 }
 
 class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({required this.totalFiles, required this.context});
-  Future<void> openAddScreen(BuildContext context) async {
-    await Navigator.of(context).push<bool>(
-      MaterialPageRoute<bool>(
-        builder: (_) => BlocProvider.value(
-          value: context.read<MedicalFilesCubit>(),
-          child: const AddMedicalFileScreen(),
+  const _SummaryCard({
+    required this.totalFiles,
+    required this.xrayCount,
+    required this.labCount,
+    required this.onAddPressed,
+  });
+
+  final int totalFiles;
+  final int xrayCount;
+  final int labCount;
+  final VoidCallback onAddPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FCFA),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.12),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: -30,
+            right: -10,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColors.withValues(alpha: 0.05),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -45,
+            left: -20,
+            child: Container(
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                color: AppColors.secColors.withValues(alpha: 0.035),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'medical_files_overview'.tr(context),
+                          style: TextStyle(
+                            color: AppColors.primaryColors,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '$totalFiles',
+                          style: const TextStyle(
+                            color: Color(0xFF1F2C28),
+                            fontSize: 36,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          'stored_medical_files'.tr(context),
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  _HeaderActionButton(
+                    text: 'add_medical_file'.tr(context),
+                    onPressed: onAddPressed,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'open_saved_medical_files'.tr(context),
+                style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: <Widget>[
+                  _FileCountChip(
+                    icon: Icons.image_search_rounded,
+                    label: 'xray_file'.tr(context),
+                    count: xrayCount,
+                  ),
+                  _FileCountChip(
+                    icon: Icons.science_rounded,
+                    label: 'lab_file'.tr(context),
+                    count: labCount,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderActionButton extends StatelessWidget {
+  const _HeaderActionButton({required this.text, required this.onPressed});
+
+  final String text;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(20),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColors,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Icon(
+                Icons.add_circle_outline_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 120),
+                child: Text(
+                  text,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 2),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.white,
+                size: 14,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  final int totalFiles;
-  final BuildContext context;
+class _FileCountChip extends StatelessWidget {
+  const _FileCountChip({
+    required this.icon,
+    required this.label,
+    required this.count,
+  });
+
+  final IconData icon;
+  final String label;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColors.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(icon, color: AppColors.primaryColors, size: 18),
+          const SizedBox(width: 8),
+          Text(
+            '$count $label',
+            style: const TextStyle(
+              color: AppColors.primaryColors,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterCard extends StatelessWidget {
+  const _FilterCard({required this.child});
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primaryColors,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'medical_files_overview'.tr(context),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '$totalFiles',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 34,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Text(
-                'stored_medical_files'.tr(context),
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.88),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 16,
+            offset: const Offset(0, 10),
           ),
-
-          Flexible(
-            child: PrimaryButton(
-              fontSize: 16,
-              text: 'add_medical_file'.tr(context),
-              onPressed: () => openAddScreen(context),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'open_saved_medical_files'.tr(context),
+            style: TextStyle(
+              color: Colors.grey.shade700,
+              height: 1.5,
+              fontWeight: FontWeight.w500,
             ),
           ),
+          const SizedBox(height: 14),
+          child,
         ],
       ),
     );
@@ -368,22 +622,23 @@ class _MedicalFileCard extends StatelessWidget {
     final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 14,
-            offset: const Offset(0, 8),
+            blurRadius: 16,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _MedicalFilePreview(file: file),
               const SizedBox(width: 14),
@@ -392,13 +647,14 @@ class _MedicalFileCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Expanded(
                           child: Text(
                             file.title,
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
@@ -407,20 +663,21 @@ class _MedicalFileCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      '${"date".tr(context)}: ${dateFormat.format(file.fileDate)}',
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${"added_on".tr(context)}: ${dateFormat.format(file.createdAt)}',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 12,
-                      ),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: <Widget>[
+                        _FileMetaChip(
+                          icon: Icons.calendar_month_rounded,
+                          text:
+                              '${"date".tr(context)}: ${dateFormat.format(file.fileDate)}',
+                        ),
+                        _FileMetaChip(
+                          icon: Icons.schedule_rounded,
+                          text:
+                              '${"added_on".tr(context)}: ${dateFormat.format(file.createdAt)}',
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -428,26 +685,57 @@ class _MedicalFileCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          SizedBox(
-            height: 42,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: SecondryButton(
-                    fontSize: 16,
-                    text: 'download'.tr(context),
-                    onPressed: onDownload,
-                  ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: _ActionButton(
+                  icon: Icons.download_rounded,
+                  text: 'download'.tr(context),
+                  onPressed: onDownload,
+                  isPrimary: false,
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: PrimaryButton(
-                    fontSize: 16,
-                    text: 'show'.tr(context),
-                    onPressed: onShow,
-                  ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _ActionButton(
+                  icon: Icons.remove_red_eye_outlined,
+                  text: 'show'.tr(context),
+                  onPressed: onShow,
                 ),
-              ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FileMetaChip extends StatelessWidget {
+  const _FileMetaChip({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.appBackgroundColor,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(icon, size: 16, color: AppColors.primaryColors),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: TextStyle(
+              color: Colors.grey.shade700,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -466,32 +754,71 @@ class _MedicalFilePreview extends StatelessWidget {
     final File? localFile = file.localFile;
 
     if (localFile != null && localFile.existsSync()) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Image.file(localFile, height: 84, width: 84, fit: BoxFit.cover),
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 14,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.file(
+            localFile,
+            height: 90,
+            width: 90,
+            fit: BoxFit.cover,
+          ),
+        ),
       );
     }
 
     if (file.remoteFileUrl != null && file.remoteFileUrl!.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: CustomImageWidget(
-          imageUrl: file.remoteFileUrl,
-          placeholderAsset: AssetsData.defaultCenter,
-          height: 84,
-          width: 84,
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 14,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: CustomImageWidget(
+            imageUrl: file.remoteFileUrl,
+            placeholderAsset: AssetsData.defaultCenter,
+            height: 90,
+            width: 90,
+          ),
         ),
       );
     }
 
     return Container(
-      height: 84,
-      width: 84,
+      height: 90,
+      width: 90,
       decoration: BoxDecoration(
-        color: file.type == MedicalFileType.xray
-            ? Colors.grey.withValues(alpha: 0.14)
-            : Theme.of(context).primaryColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: file.type == MedicalFileType.xray
+              ? <Color>[
+                  Colors.blueGrey.withValues(alpha: 0.16),
+                  Colors.grey.withValues(alpha: 0.1),
+                ]
+              : <Color>[
+                  AppColors.primaryColors.withValues(alpha: 0.16),
+                  AppColors.secColors.withValues(alpha: 0.08),
+                ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Icon(
         file.type == MedicalFileType.xray
@@ -536,7 +863,9 @@ class _TypeBadge extends StatelessWidget {
 }
 
 class _EmptyMedicalFilesState extends StatelessWidget {
-  const _EmptyMedicalFilesState();
+  const _EmptyMedicalFilesState({required this.onAddPressed});
+
+  final VoidCallback onAddPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -544,15 +873,30 @@ class _EmptyMedicalFilesState extends StatelessWidget {
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(color: Colors.grey.shade200),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 16,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         children: <Widget>[
-          Icon(
-            Icons.folder_open_rounded,
-            size: 40,
-            color: Theme.of(context).primaryColor,
+          Container(
+            width: 84,
+            height: 84,
+            decoration: BoxDecoration(
+              color: AppColors.primaryColors.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: const Icon(
+              Icons.folder_open_rounded,
+              size: 42,
+              color: AppColors.primaryColors,
+            ),
           ),
           const SizedBox(height: 14),
           Text(
@@ -566,7 +910,72 @@ class _EmptyMedicalFilesState extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey.shade600, height: 1.5),
           ),
+          const SizedBox(height: 20),
+          _ActionButton(
+            icon: Icons.add_circle_outline_rounded,
+            text: 'add_medical_file'.tr(context),
+            onPressed: onAddPressed,
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.icon,
+    required this.text,
+    required this.onPressed,
+    this.isPrimary = true,
+  });
+
+  final IconData icon;
+  final String text;
+  final VoidCallback onPressed;
+  final bool isPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color foregroundColor = isPrimary
+        ? Colors.white
+        : AppColors.primaryColors;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(18),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          decoration: BoxDecoration(
+            color: isPrimary ? AppColors.primaryColors : Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            border: isPrimary
+                ? null
+                : Border.all(
+                    color: AppColors.primaryColors.withValues(alpha: 0.3),
+                  ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(icon, color: foregroundColor, size: 19),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: foregroundColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

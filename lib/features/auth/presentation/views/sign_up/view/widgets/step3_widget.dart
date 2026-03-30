@@ -75,6 +75,7 @@ class _Step3WidgetState extends State<Step3Widget> {
               const SizedBox(height: 30),
               CustomDropdownField(
                 hintText: 'marital_status'.tr(context),
+                prefixIcon: Icons.people_outline_rounded,
                 items: ["single", "married", "divorced", "widowed"],
                 value: widget.maritalStatus,
                 onChanged: (value) {
@@ -103,12 +104,21 @@ class _Step3WidgetState extends State<Step3Widget> {
                             color: const Color(0xFFF6F6F6),
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: Text(
-                            'have_children'.tr(context),
-                            style: const TextStyle(
-                              color: AppColors.textFieldColor,
-                              fontSize: 16,
-                            ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.child_care_outlined,
+                                color: AppColors.textFieldColor,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'have_children'.tr(context),
+                                style: const TextStyle(
+                                  color: AppColors.textFieldColor,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -150,12 +160,21 @@ class _Step3WidgetState extends State<Step3Widget> {
                             color: const Color(0xFFF6F6F6),
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: Text(
-                            'number_of_children'.tr(context),
-                            style: const TextStyle(
-                              color: AppColors.textFieldColor,
-                              fontSize: 16,
-                            ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.family_restroom_outlined,
+                                color: AppColors.textFieldColor,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'number_of_children'.tr(context),
+                                style: const TextStyle(
+                                  color: AppColors.textFieldColor,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -184,12 +203,21 @@ class _Step3WidgetState extends State<Step3Widget> {
                         color: const Color(0xFFF6F6F6),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text(
-                        'are_you_a_smoker'.tr(context),
-                        style: const TextStyle(
-                          color: AppColors.textFieldColor,
-                          fontSize: 16,
-                        ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.smoking_rooms_outlined,
+                            color: AppColors.textFieldColor,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'are_you_a_smoker'.tr(context),
+                            style: const TextStyle(
+                              color: AppColors.textFieldColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -223,21 +251,29 @@ class _Step3WidgetState extends State<Step3Widget> {
                     color: const Color(0xFFF6F6F6),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.selectedDate == null
-                          ? 'select_your_birth'.tr(context)
-                          : DateFormat(
-                              'dd-MM-yyyy',
-                            ).format(widget.selectedDate!),
-                      style: TextStyle(
-                        color: widget.selectedDate == null
-                            ? AppColors.textFieldColor
-                            : Colors.black87,
-                        fontSize: 16,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.cake_outlined,
+                        color: AppColors.textFieldColor,
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          widget.selectedDate == null
+                              ? 'select_your_birth'.tr(context)
+                              : DateFormat(
+                                  'dd-MM-yyyy',
+                                ).format(widget.selectedDate!),
+                          style: TextStyle(
+                            color: widget.selectedDate == null
+                                ? AppColors.textFieldColor
+                                : Colors.black87,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
