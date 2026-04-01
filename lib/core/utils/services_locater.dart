@@ -92,7 +92,9 @@ void setupLocatorServices() {
   getit.registerSingleton<AddAppoinmentRepo>(
     AddAppoinmentRepoIplm(getit.get<ApiServices>()),
   );
-  getit.registerSingleton<MedicalFilesRepo>(MedicalFilesRepoIplm());
+  getit.registerSingleton<MedicalFilesRepo>(
+    MedicalFilesRepoIplm(getit.get<ApiServices>()),
+  );
   getit.registerSingleton<MyAppointmentsRepo>(
     MyAppointmentsRepoIplm(getit.get<ApiServices>()),
   );

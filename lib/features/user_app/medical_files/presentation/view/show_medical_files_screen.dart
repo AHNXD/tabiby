@@ -61,8 +61,10 @@ class _ShowMedicalFilesView extends StatelessWidget {
             );
           }
 
-          final int xrayCount = state.files
-              .where((MedicalFile file) => file.type == MedicalFileType.xray)
+          final int radiologyCount = state.files
+              .where(
+                (MedicalFile file) => file.type == MedicalFileType.radiology,
+              )
               .length;
           final int labCount = state.files
               .where((MedicalFile file) => file.type == MedicalFileType.lab)
@@ -77,7 +79,7 @@ class _ShowMedicalFilesView extends StatelessWidget {
               children: <Widget>[
                 _SummaryCard(
                   totalFiles: state.files.length,
-                  xrayCount: xrayCount,
+                  radiologyCount: radiologyCount,
                   labCount: labCount,
                   onAddPressed: () => _openAddScreen(context),
                 ),
@@ -124,10 +126,8 @@ class _ShowMedicalFilesView extends StatelessWidget {
   }
 
   Future<void> _showMedicalFile(BuildContext context, MedicalFile file) async {
-    final bool hasLocalFile =
-        file.localFile != null && file.localFile!.existsSync();
-    final bool hasRemoteFile =
-        file.remoteFileUrl != null && file.remoteFileUrl!.isNotEmpty;
+    final bool hasLocalFile = file.hasLocalFile;
+    final bool hasRemoteFile = file.hasRemoteFile;
 
     if (!hasLocalFile && !hasRemoteFile) {
       messages(context, 'cannot_show_medical_file'.tr(context), Colors.red);
@@ -173,6 +173,11 @@ class _ShowMedicalFilesView extends StatelessWidget {
                               runSpacing: 8,
                               children: <Widget>[
                                 _TypeBadge(type: file.type),
+                                if (file.resolvedSourceLabel.isNotEmpty)
+                                  _FileMetaChip(
+                                    icon: Icons.verified_outlined,
+                                    text: file.resolvedSourceLabel,
+                                  ),
                                 _FileMetaChip(
                                   icon: Icons.calendar_month_rounded,
                                   text:
@@ -198,16 +203,7 @@ class _ShowMedicalFilesView extends StatelessWidget {
                         color: AppColors.appBackgroundColor,
                         borderRadius: BorderRadius.circular(24),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(24),
-                        child: hasLocalFile
-                            ? Image.file(file.localFile!, fit: BoxFit.contain)
-                            : CustomImageWidget(
-                                imageUrl: file.remoteFileUrl,
-                                placeholderAsset: AssetsData.defaultCenter,
-                                fit: BoxFit.contain,
-                              ),
-                      ),
+                      child: _DialogFilePreview(file: file),
                     ),
                   ),
                 ),
@@ -269,7 +265,9 @@ class _ShowMedicalFilesView extends StatelessWidget {
         .replaceAll(RegExp(r'[^a-zA-Z0-9]+'), '_')
         .replaceAll(RegExp(r'_+'), '_');
 
-    final String fileType = file.type == MedicalFileType.xray ? 'xray' : 'lab';
+    final String fileType = file.type == MedicalFileType.radiology
+        ? 'radiology'
+        : 'lab';
     final String extension = _resolveFileExtension(file);
 
     return '${normalizedTitle.isEmpty ? fileType : normalizedTitle}_${file.id}$extension';
@@ -292,6 +290,11 @@ class _ShowMedicalFilesView extends StatelessWidget {
       }
     }
 
+    final String? apiFilePath = file.filePath;
+    if (apiFilePath != null && apiFilePath.contains('.')) {
+      return '.${apiFilePath.split('.').last}';
+    }
+
     return '.jpg';
   }
 }
@@ -299,20 +302,19 @@ class _ShowMedicalFilesView extends StatelessWidget {
 class _SummaryCard extends StatelessWidget {
   const _SummaryCard({
     required this.totalFiles,
-    required this.xrayCount,
+    required this.radiologyCount,
     required this.labCount,
     required this.onAddPressed,
   });
 
   final int totalFiles;
-  final int xrayCount;
+  final int radiologyCount;
   final int labCount;
   final VoidCallback onAddPressed;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFFF8FCFA),
         borderRadius: BorderRadius.circular(28),
@@ -353,74 +355,77 @@ class _SummaryCard extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'medical_files_overview'.tr(context),
-                          style: TextStyle(
-                            color: AppColors.primaryColors,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'medical_files_overview'.tr(context),
+                            style: TextStyle(
+                              color: AppColors.primaryColors,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '$totalFiles',
-                          style: const TextStyle(
-                            color: Color(0xFF1F2C28),
-                            fontSize: 36,
-                            fontWeight: FontWeight.w800,
+                          const SizedBox(height: 8),
+                          Text(
+                            '$totalFiles',
+                            style: const TextStyle(
+                              color: Color(0xFF1F2C28),
+                              fontSize: 36,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'stored_medical_files'.tr(context),
-                          style: TextStyle(
-                            color: Colors.grey.shade700,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                          Text(
+                            'stored_medical_files'.tr(context),
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  _HeaderActionButton(
-                    text: 'add_medical_file'.tr(context),
-                    onPressed: onAddPressed,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Text(
-                'open_saved_medical_files'.tr(context),
-                style: TextStyle(color: Colors.grey.shade700, height: 1.45),
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: <Widget>[
-                  _FileCountChip(
-                    icon: Icons.image_search_rounded,
-                    label: 'xray_file'.tr(context),
-                    count: xrayCount,
-                  ),
-                  _FileCountChip(
-                    icon: Icons.science_rounded,
-                    label: 'lab_file'.tr(context),
-                    count: labCount,
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 12),
+                    _HeaderActionButton(
+                      text: 'add_medical_file'.tr(context),
+                      onPressed: onAddPressed,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  'open_saved_medical_files'.tr(context),
+                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: <Widget>[
+                    _FileCountChip(
+                      icon: Icons.image_search_rounded,
+                      label: 'radiology_file'.tr(context),
+                      count: radiologyCount,
+                    ),
+                    _FileCountChip(
+                      icon: Icons.science_rounded,
+                      label: 'lab_file'.tr(context),
+                      count: labCount,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -667,16 +672,22 @@ class _MedicalFileCard extends StatelessWidget {
                       spacing: 8,
                       runSpacing: 8,
                       children: <Widget>[
+                        if (file.resolvedSourceLabel.isNotEmpty)
+                          _FileMetaChip(
+                            icon: Icons.verified_outlined,
+                            text: file.resolvedSourceLabel,
+                          ),
                         _FileMetaChip(
                           icon: Icons.calendar_month_rounded,
                           text:
                               '${"date".tr(context)}: ${dateFormat.format(file.fileDate)}',
                         ),
-                        _FileMetaChip(
-                          icon: Icons.schedule_rounded,
-                          text:
-                              '${"added_on".tr(context)}: ${dateFormat.format(file.createdAt)}',
-                        ),
+                        if (file.createdAt != null)
+                          _FileMetaChip(
+                            icon: Icons.schedule_rounded,
+                            text:
+                                '${"added_on".tr(context)}: ${dateFormat.format(file.createdAt!)}',
+                          ),
                       ],
                     ),
                   ],
@@ -753,7 +764,7 @@ class _MedicalFilePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final File? localFile = file.localFile;
 
-    if (localFile != null && localFile.existsSync()) {
+    if (localFile != null && localFile.existsSync() && file.isImage) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -777,7 +788,7 @@ class _MedicalFilePreview extends StatelessWidget {
       );
     }
 
-    if (file.remoteFileUrl != null && file.remoteFileUrl!.isNotEmpty) {
+    if (file.hasRemoteFile && file.isImage) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -806,7 +817,7 @@ class _MedicalFilePreview extends StatelessWidget {
       width: 90,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: file.type == MedicalFileType.xray
+          colors: file.type == MedicalFileType.radiology
               ? <Color>[
                   Colors.blueGrey.withValues(alpha: 0.16),
                   Colors.grey.withValues(alpha: 0.1),
@@ -821,13 +832,82 @@ class _MedicalFilePreview extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Icon(
-        file.type == MedicalFileType.xray
-            ? Icons.image_outlined
+        file.type == MedicalFileType.radiology
+            ? (file.isPdf
+                  ? Icons.picture_as_pdf_outlined
+                  : Icons.image_outlined)
             : Icons.description_outlined,
-        color: file.type == MedicalFileType.xray
+        color: file.type == MedicalFileType.radiology
             ? Colors.grey.shade700
             : Theme.of(context).primaryColor,
         size: 34,
+      ),
+    );
+  }
+}
+
+class _DialogFilePreview extends StatelessWidget {
+  const _DialogFilePreview({required this.file});
+
+  final MedicalFile file;
+
+  @override
+  Widget build(BuildContext context) {
+    if (file.hasLocalFile && file.isImage) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Image.file(file.localFile!, fit: BoxFit.contain),
+      );
+    }
+
+    if (file.hasRemoteFile && file.isImage) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: CustomImageWidget(
+          imageUrl: file.remoteFileUrl,
+          placeholderAsset: AssetsData.defaultCenter,
+          fit: BoxFit.contain,
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 92,
+            height: 92,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Icon(
+              file.isPdf
+                  ? Icons.picture_as_pdf_rounded
+                  : Icons.insert_drive_file_rounded,
+              color: file.isPdf
+                  ? const Color(0xFFD65555)
+                  : AppColors.primaryColors,
+              size: 46,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            file.title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            file.isPdf
+                ? 'pdf_preview_not_available'.tr(context)
+                : 'cannot_show_medical_file'.tr(context),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey.shade700, height: 1.5),
+          ),
+        ],
       ),
     );
   }
@@ -840,12 +920,12 @@ class _TypeBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isXray = type == MedicalFileType.xray;
+    final bool isRadiology = type == MedicalFileType.radiology;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: isXray
+        color: isRadiology
             ? Colors.grey.withValues(alpha: 0.14)
             : Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(999),
@@ -853,7 +933,9 @@ class _TypeBadge extends StatelessWidget {
       child: Text(
         type.labelKey.tr(context),
         style: TextStyle(
-          color: isXray ? Colors.grey.shade800 : Theme.of(context).primaryColor,
+          color: isRadiology
+              ? Colors.grey.shade800
+              : Theme.of(context).primaryColor,
           fontWeight: FontWeight.w700,
           fontSize: 12,
         ),

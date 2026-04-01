@@ -1,15 +1,14 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/custome_text_field.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
-import 'package:tabiby/core/widgets/primary_button.dart';
 import 'package:tabiby/features/user_app/medical_files/data/models/medical_file_model.dart';
 import 'package:tabiby/features/user_app/medical_files/presentation/view_model/medical_files_cubit.dart';
 
@@ -23,14 +22,21 @@ class AddMedicalFileScreen extends StatefulWidget {
 }
 
 class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
+  static const int _maxFileSizeInBytes = 5 * 1024 * 1024;
+  static const Set<String> _allowedExtensions = <String>{
+    'jpg',
+    'jpeg',
+    'png',
+    'pdf',
+  };
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
 
   MedicalFileType? _selectedType;
   DateTime? _selectedDate;
-  File? _selectedImage;
+  File? _selectedFile;
 
   @override
   void dispose() {
@@ -58,14 +64,44 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
     });
   }
 
-  Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image == null) {
+  Future<void> _pickFile() async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: _allowedExtensions.toList(),
+    );
+
+    final String? selectedPath = result?.files.single.path;
+    if (selectedPath == null) {
+      return;
+    }
+
+    final File selectedFile = File(selectedPath);
+    final String extension = _fileExtension(selectedFile);
+    final int fileSize = await selectedFile.length();
+
+    if (!_allowedExtensions.contains(extension)) {
+      if (!mounted) {
+        return;
+      }
+      messages(
+        context,
+        'unsupported_medical_file_type'.tr(context),
+        Colors.orange,
+      );
+      return;
+    }
+
+    if (fileSize > _maxFileSizeInBytes) {
+      if (!mounted) {
+        return;
+      }
+      messages(context, 'medical_file_too_large'.tr(context), Colors.orange);
       return;
     }
 
     setState(() {
-      _selectedImage = File(image.path);
+      _selectedFile = selectedFile;
     });
   }
 
@@ -86,10 +122,10 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
       return;
     }
 
-    if (_selectedImage == null) {
+    if (_selectedFile == null) {
       messages(
         context,
-        'please_upload_medical_image'.tr(context),
+        'please_upload_medical_file'.tr(context),
         Colors.orange,
       );
       return;
@@ -100,7 +136,7 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
         title: _titleController.text,
         type: _selectedType!,
         fileDate: _selectedDate!,
-        imageFile: _selectedImage!,
+        file: _selectedFile!,
       ),
     );
   }
@@ -224,9 +260,9 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
                           ),
                         ),
                         const SizedBox(height: 18),
-                        _ImagePickerCard(
-                          selectedImage: _selectedImage,
-                          onTap: _pickImage,
+                        _FilePickerCard(
+                          selectedFile: _selectedFile,
+                          onTap: _pickFile,
                         ),
                       ],
                     ),
@@ -258,19 +294,37 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
         borderRadius: BorderRadius.circular(20),
         borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(color: Colors.red, width: 1.5),
+      ),
     );
+  }
+
+  String _fileExtension(File file) {
+    final String lowerPath = file.path.toLowerCase();
+    if (!lowerPath.contains('.')) {
+      return '';
+    }
+    return lowerPath.split('.').last;
   }
 }
 
-class _ImagePickerCard extends StatelessWidget {
-  const _ImagePickerCard({required this.selectedImage, required this.onTap});
+class _FilePickerCard extends StatelessWidget {
+  const _FilePickerCard({required this.selectedFile, required this.onTap});
 
-  final File? selectedImage;
+  final File? selectedFile;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final bool hasImage = selectedImage != null;
+    final bool hasFile = selectedFile != null;
+    final bool isImage = _isImageFile(selectedFile);
+    final String? fileName = selectedFile?.path.split('/').last;
 
     return _SectionCard(
       child: Material(
@@ -285,16 +339,16 @@ class _ImagePickerCard extends StatelessWidget {
               children: <Widget>[
                 _FieldLabel(
                   icon: Icons.cloud_upload_rounded,
-                  label: 'upload_medical_image'.tr(context),
+                  label: 'upload_medical_file'.tr(context),
                 ),
                 const SizedBox(height: 14),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  height: hasImage ? 230 : 190,
+                  height: hasFile ? 230 : 190,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    gradient: hasImage
+                    gradient: hasFile
                         ? null
                         : LinearGradient(
                             colors: <Color>[
@@ -305,22 +359,67 @@ class _ImagePickerCard extends StatelessWidget {
                             end: Alignment.bottomRight,
                           ),
                     border: Border.all(
-                      color: hasImage
+                      color: hasFile
                           ? Colors.transparent
                           : AppColors.primaryColors.withValues(alpha: 0.2),
                     ),
                   ),
-                  child: hasImage
+                  child: hasFile
                       ? Stack(
                           fit: StackFit.expand,
                           children: <Widget>[
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Image.file(
-                                selectedImage!,
-                                fit: BoxFit.cover,
+                            if (isImage)
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(24),
+                                child: Image.file(
+                                  selectedFile!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            else
+                              Container(
+                                padding: const EdgeInsets.all(24),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      width: 84,
+                                      height: 84,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      child: const Icon(
+                                        Icons.picture_as_pdf_rounded,
+                                        color: Color(0xFFD65555),
+                                        size: 40,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    Text(
+                                      fileName ??
+                                          'selected_medical_file'.tr(context),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'pdf_file_selected'.tr(context),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
                             Positioned(
                               left: 14,
                               right: 14,
@@ -344,7 +443,7 @@ class _ImagePickerCard extends StatelessWidget {
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        'change_selected_image'.tr(context),
+                                        'change_selected_file'.tr(context),
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
@@ -384,7 +483,7 @@ class _ImagePickerCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'tap_to_upload_image'.tr(context),
+                              'tap_to_upload_file'.tr(context),
                               style: const TextStyle(
                                 color: AppColors.primaryColors,
                                 fontWeight: FontWeight.w700,
@@ -407,18 +506,20 @@ class _ImagePickerCard extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        hasImage
-                            ? Icons.photo_library_rounded
-                            : Icons.add_photo_alternate_outlined,
+                        hasFile
+                            ? (isImage
+                                  ? Icons.photo_library_rounded
+                                  : Icons.attach_file_rounded)
+                            : Icons.upload_file_rounded,
                         size: 20,
                         color: AppColors.primaryColors,
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          hasImage
-                              ? 'change_selected_image'.tr(context)
-                              : 'choose_image'.tr(context),
+                          hasFile
+                              ? 'change_selected_file'.tr(context)
+                              : 'choose_file'.tr(context),
                           style: const TextStyle(
                             color: AppColors.primaryColors,
                             fontWeight: FontWeight.w700,
@@ -439,6 +540,17 @@ class _ImagePickerCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _isImageFile(File? file) {
+    if (file == null) {
+      return false;
+    }
+
+    final String lowerPath = file.path.toLowerCase();
+    return lowerPath.endsWith('.jpg') ||
+        lowerPath.endsWith('.jpeg') ||
+        lowerPath.endsWith('.png');
   }
 }
 
@@ -618,21 +730,40 @@ class _SubmitSection extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 20,
-              offset: const Offset(0, -4),
+              offset: const Offset(0, 10),
             ),
           ],
         ),
-        child: Center(
-          child: isSubmitting
-              ? const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: CircularProgressIndicator(),
-                )
-              : PrimaryButton(
-                  text: 'save_medical_file'.tr(context),
-                  onPressed: onPressed,
-                  fontSize: 20,
-                ),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: isSubmitting ? () {} : onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryColors,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              minimumSize: const Size.fromHeight(55),
+              elevation: 5,
+            ),
+            child: isSubmitting
+                ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.6,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : Text(
+                    'save_medical_file'.tr(context),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
         ),
       ),
     );

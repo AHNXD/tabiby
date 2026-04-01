@@ -17,6 +17,7 @@ dependencies:
   date_format: ^2.0.9
   dio: ^5.7.0
   equatable: ^2.0.5
+  file_picker: ^10.3.2
   firebase_core: ^4.1.1
   firebase_messaging: ^16.0.2
   flutter:

@@ -42,11 +42,13 @@ class MedicalAttachmentItem {
     return MedicalAttachmentItem(
       id: file.id,
       title: file.title,
-      subtitle: file.type == MedicalFileType.xray ? 'xray_file' : 'lab_file',
-      thumbnailUrl: file.remoteFileUrl,
+      subtitle: file.type == MedicalFileType.radiology
+          ? 'radiology_file'
+          : 'lab_file',
+      thumbnailUrl: file.isImage ? file.remoteFileUrl : null,
       fileUrl: file.localFilePath ?? file.remoteFileUrl,
       recordedAt: file.fileDate.toIso8601String(),
-      type: file.type == MedicalFileType.xray
+      type: file.type == MedicalFileType.radiology
           ? MedicalAttachmentType.xray
           : MedicalAttachmentType.labResult,
     );

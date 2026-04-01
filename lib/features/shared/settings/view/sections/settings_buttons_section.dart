@@ -419,7 +419,6 @@ class _SettingsHeroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFFF8FCFA),
         borderRadius: BorderRadius.circular(28),
@@ -460,73 +459,78 @@ class _SettingsHeroCard extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColors.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.settings_rounded,
-                      color: AppColors.primaryColors,
-                      size: 30,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(
-                        color: AppColors.primaryColors.withValues(alpha: 0.16),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColors.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Icon(
+                        Icons.settings_rounded,
+                        color: AppColors.primaryColors,
+                        size: 30,
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const Icon(
-                          Icons.language_rounded,
-                          color: AppColors.primaryColors,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          languageLabel,
-                          style: const TextStyle(
-                            color: AppColors.primaryColors,
-                            fontWeight: FontWeight.w700,
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          color: AppColors.primaryColors.withValues(
+                            alpha: 0.16,
                           ),
                         ),
-                      ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.language_rounded,
+                            color: AppColors.primaryColors,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            languageLabel,
+                            style: const TextStyle(
+                              color: AppColors.primaryColors,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Text(
-                'settings'.tr(context),
-                style: const TextStyle(
-                  color: Color(0xFF1F2C28),
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'settings_intro_subtitle'.tr(context),
-                style: TextStyle(color: Colors.grey.shade700, height: 1.45),
-              ),
-            ],
+                const SizedBox(height: 18),
+                Text(
+                  'settings'.tr(context),
+                  style: const TextStyle(
+                    color: Color(0xFF1F2C28),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'settings_intro_subtitle'.tr(context),
+                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -44,22 +44,37 @@ class MedicalFilesCubit extends Cubit<MedicalFilesState> {
     );
 
     final result = await _medicalFilesRepo.addMedicalFile(request);
-    result.fold(
-      (failure) => emit(
+    await result.fold(
+      (failure) async => emit(
         state.copyWith(
           submissionStatus: MedicalFileSubmissionStatus.failure,
           errorMessage: failure.message,
         ),
       ),
-      (_) {
-        final List<MedicalFile> files = _medicalFilesRepo
-            .getCachedMedicalFiles();
-        emit(
-          state.copyWith(
-            status: MedicalFilesStatus.success,
-            files: files,
-            submissionStatus: MedicalFileSubmissionStatus.success,
-            errorMessage: '',
+      (uploadedFile) async {
+        final filesResult = await _medicalFilesRepo.getMedicalFiles();
+        filesResult.fold(
+          (_) {
+            final List<MedicalFile> files = _mergeUploadedFile(
+              state.files,
+              uploadedFile,
+            );
+            emit(
+              state.copyWith(
+                status: MedicalFilesStatus.success,
+                files: files,
+                submissionStatus: MedicalFileSubmissionStatus.success,
+                errorMessage: '',
+              ),
+            );
+          },
+          (files) => emit(
+            state.copyWith(
+              status: MedicalFilesStatus.success,
+              files: files,
+              submissionStatus: MedicalFileSubmissionStatus.success,
+              errorMessage: '',
+            ),
           ),
         );
       },
@@ -73,5 +88,20 @@ class MedicalFilesCubit extends Cubit<MedicalFilesState> {
         errorMessage: '',
       ),
     );
+  }
+
+  List<MedicalFile> _mergeUploadedFile(
+    List<MedicalFile> currentFiles,
+    MedicalFile uploadedFile,
+  ) {
+    final List<MedicalFile> updatedFiles = List<MedicalFile>.from(currentFiles);
+    updatedFiles.removeWhere((MedicalFile file) => file.id == uploadedFile.id);
+    updatedFiles.insert(0, uploadedFile);
+    updatedFiles.sort((MedicalFile first, MedicalFile second) {
+      final DateTime firstDate = first.createdAt ?? first.fileDate;
+      final DateTime secondDate = second.createdAt ?? second.fileDate;
+      return secondDate.compareTo(firstDate);
+    });
+    return updatedFiles;
   }
 }
