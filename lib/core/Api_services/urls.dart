@@ -55,6 +55,7 @@ class Urls {
   static String getDays = "$basePort/get_30_days";
   static String getTimes = "$basePort/get_times_today";
   static String addAppointment = "$basePort/appointment";
+  static String labTests = "$basePort/lab-tests";
   static String getAppointments = "$basePort/appointments";
   static String getMyAppointments = "$basePort/appointments";
 

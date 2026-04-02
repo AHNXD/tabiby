@@ -18,7 +18,7 @@ class CenterSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 125, // Slightly increased height for better spacing
+      height: 144,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -28,139 +28,185 @@ class CenterSelector extends StatelessWidget {
           final center = centers[index];
           final isSelected = selectedId == center.id;
 
-          return GestureDetector(
-            onTap: () {
-              if (center.id != null) {
-                onSelect(center.id!);
-              }
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: 260,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                // White background for unselected, very light primary tint for selected
-                color: isSelected
-                    ? AppColors.primaryColors.withOpacity(0.05)
-                    : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isSelected
-                      ? AppColors.primaryColors
-                      : Colors.grey.shade200,
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isSelected
-                        ? AppColors.primaryColors.withOpacity(0.15)
-                        : Colors.black.withOpacity(0.03),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 1. Header Row: Name + Checkbox
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          center.name ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isSelected
-                                ? AppColors.primaryColors
-                                : Colors.black87,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Custom Checkbox Circle
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isSelected
-                              ? AppColors.primaryColors
-                              : Colors.transparent,
-                          border: Border.all(
-                            color: isSelected
-                                ? AppColors.primaryColors
-                                : Colors.grey.shade300,
-                            width: 2,
-                          ),
-                        ),
-                        child: isSelected
-                            ? const Icon(
-                                Icons.check,
-                                size: 14,
-                                color: Colors.white,
-                              )
-                            : null,
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  // 2. Address with Icon
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on_rounded,
-                        size: 14,
-                        color: Colors.grey.shade500,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          center.address ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const Spacer(),
-
-                  // 3. Price Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(24),
+              onTap: () {
+                if (center.id != null) {
+                  onSelect(center.id!);
+                }
+              },
+              child: Ink(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 280),
+                  width: 272,
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                        isSelected
+                            ? AppColors.primaryColors.withValues(alpha: 0.16)
+                            : Colors.white,
+                        isSelected
+                            ? const Color(0xFFF2FAF6)
+                            : const Color(0xFFFCFDFC),
+                      ],
                     ),
-                    decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
                       color: isSelected
-                          ? AppColors.primaryColors
-                          : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(8),
+                          ? AppColors.primaryColors.withValues(alpha: 0.55)
+                          : const Color(0xFFE7ECE9),
+                      width: isSelected ? 1.8 : 1.2,
                     ),
-                    child: Text(
-                      "${center.price} ${"sy".tr(context)}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: isSelected ? Colors.white : Colors.black87,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: isSelected
+                            ? AppColors.primaryColors.withValues(alpha: 0.16)
+                            : Colors.black.withValues(alpha: 0.04),
+                        blurRadius: isSelected ? 18 : 12,
+                        offset: const Offset(0, 8),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppColors.primaryColors
+                                  : const Color(0xFFF1F4F2),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: Icon(
+                              Icons.local_hospital_outlined,
+                              color: isSelected
+                                  ? Colors.white
+                                  : AppColors.primaryColors,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  center.name ?? '',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    color: isSelected
+                                        ? const Color(0xFF21493B)
+                                        : Colors.black87,
+                                    fontSize: 16,
+                                    height: 1.2,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.location_on_rounded,
+                                      size: 15,
+                                      color: Colors.grey.shade500,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: Text(
+                                        center.address ?? '',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 220),
+                            width: 26,
+                            height: 26,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isSelected
+                                  ? AppColors.primaryColors
+                                  : Colors.white,
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppColors.primaryColors
+                                    : Colors.grey.shade300,
+                                width: 1.8,
+                              ),
+                            ),
+                            child: Icon(
+                              isSelected
+                                  ? Icons.check_rounded
+                                  : Icons.add_rounded,
+                              size: 16,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 7,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppColors.primaryColors
+                                  : const Color(0xFFF3F5F4),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Text(
+                              "${center.price} ${"sy".tr(context)}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 13,
+                                color: isSelected
+                                    ? Colors.white
+                                    : const Color(0xFF32463E),
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 220),
+                            opacity: isSelected ? 1 : 0,
+                            child: Icon(
+                              Icons.verified_rounded,
+                              size: 18,
+                              color: AppColors.primaryColors,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           );

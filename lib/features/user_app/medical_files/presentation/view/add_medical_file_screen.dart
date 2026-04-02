@@ -564,7 +564,6 @@ class _PageIntroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: const Color(0xFFF8FCFA),
         borderRadius: BorderRadius.circular(28),
@@ -583,7 +582,7 @@ class _PageIntroCard extends StatelessWidget {
         children: <Widget>[
           Positioned(
             top: -24,
-            right: -10,
+            right: 10,
             child: Container(
               width: 96,
               height: 96,
@@ -595,7 +594,7 @@ class _PageIntroCard extends StatelessWidget {
           ),
           Positioned(
             bottom: -30,
-            left: -16,
+            left: 16,
             child: Container(
               width: 120,
               height: 120,
@@ -605,46 +604,49 @@ class _PageIntroCard extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            children: <Widget>[
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColors.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(20),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColors.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.folder_copy_rounded,
+                    color: AppColors.primaryColors,
+                    size: 30,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.folder_copy_rounded,
-                  color: AppColors.primaryColors,
-                  size: 30,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Color(0xFF1F2C28),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          color: Color(0xFF1F2C28),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                        height: 1.5,
+                      const SizedBox(height: 8),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          color: Colors.grey.shade700,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

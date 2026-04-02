@@ -333,7 +333,7 @@ class _SummaryCard extends StatelessWidget {
         children: <Widget>[
           Positioned(
             top: -30,
-            right: -10,
+            right: 10,
             child: Container(
               width: 120,
               height: 120,
@@ -345,7 +345,7 @@ class _SummaryCard extends StatelessWidget {
           ),
           Positioned(
             bottom: -45,
-            left: -20,
+            left: 20,
             child: Container(
               width: 140,
               height: 140,

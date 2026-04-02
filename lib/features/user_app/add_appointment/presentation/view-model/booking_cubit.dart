@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
+import 'package:tabiby/features/user_app/add_appointment/data/models/days_model.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/medical_attachment_item.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/repos/add_appoinment_repo.dart';
 import 'package:tabiby/features/user_app/medical_files/data/models/medical_file_model.dart';
@@ -7,12 +8,10 @@ import 'package:tabiby/features/user_app/medical_files/data/repos/medical_files_
 
 import 'booking_state.dart';
 
-// booking_cubit.dart
 class BookingCubit extends Cubit<BookingState> {
   final AddAppoinmentRepo _addAppoinmentRepo;
   final int doctorId;
   final BookingDepartmentType departmentType;
-  final List<LabTestOption> availableLabTests;
   final MedicalFilesRepo _medicalFilesRepo;
 
   BookingCubit(
@@ -20,26 +19,11 @@ class BookingCubit extends Cubit<BookingState> {
     this._medicalFilesRepo,
     this.doctorId, {
     required this.departmentType,
-    this.availableLabTests = LabTestOption.fallbackOptions,
   }) : super(BookingInitial());
 
-  void toggleIncludeDiagnosis(bool value) {
+  void updateMedicalImageType(int? value) {
     if (state is! BookingSuccess) return;
-    emit((state as BookingSuccess).copyWith(includeDiagnosis: value));
-  }
-
-  void toggleIsEmergency(bool value) {
-    if (state is! BookingSuccess) return;
-    emit((state as BookingSuccess).copyWith(isEmergency: value));
-  }
-
-  void updateImageType(String? value) {
-    if (state is! BookingSuccess) return;
-    emit(
-      (state as BookingSuccess).copyWith(
-        imageType: value == null || value.trim().isEmpty ? null : value,
-      ),
-    );
+    emit((state as BookingSuccess).copyWith(selectedMedicalImageTypeId: value));
   }
 
   void toggleLabTestSelection(int labTestId) {
@@ -58,67 +42,101 @@ class BookingCubit extends Cubit<BookingState> {
     emit(currentState.copyWith(selectedLabTestIds: selectedIds));
   }
 
-  void selectAttachedXray(MedicalAttachmentItem? attachment) {
-    if (state is! BookingSuccess) return;
-    emit(
-      (state as BookingSuccess).copyWith(selectedXrayAttachment: attachment),
-    );
-  }
-
-  void selectAttachedLabResult(MedicalAttachmentItem? attachment) {
+  void updateSelectedMedicalAttachments(
+    List<MedicalAttachmentItem> attachments,
+  ) {
     if (state is! BookingSuccess) return;
     emit(
       (state as BookingSuccess).copyWith(
-        selectedLabResultAttachment: attachment,
+        selectedMedicalAttachments: attachments,
       ),
     );
   }
 
   Future<void> fetchCenters() async {
     emit(BookingLoading());
-    var result = await _addAppoinmentRepo.getCenters(doctorId);
-    final (
-      List<MedicalAttachmentItem> xrayAttachments,
-      List<MedicalAttachmentItem> labResultAttachments,
-    ) = await _loadMedicalAttachments();
 
-    result.fold(
-      (failure) => emit(BookingFailure(failure.message)),
-      (centers) => emit(
-        BookingSuccess(
-          centers: centers,
-          departmentType: departmentType,
-          availableLabTests: availableLabTests,
-          availableXrayAttachments: xrayAttachments,
-          availableLabResultAttachments: labResultAttachments,
-        ),
-      ),
+    final centersResult = await _addAppoinmentRepo.getCenters(doctorId);
+
+    await centersResult.fold(
+      (failure) async => emit(BookingFailure(failure.message)),
+      (centers) async {
+        final List<MedicalAttachmentItem> attachments =
+            departmentType.supportsMedicalAttachments
+            ? await _loadMedicalAttachments()
+            : const <MedicalAttachmentItem>[];
+
+        final List<LabTestOption> labTests;
+        if (departmentType.requiresLabTests) {
+          final labTestsResult = await _addAppoinmentRepo.getLabTests();
+          final List<LabTestOption>? fetchedLabTests = labTestsResult.fold((
+            failure,
+          ) {
+            emit(BookingFailure(failure.message));
+            return null;
+          }, (tests) => tests);
+          if (fetchedLabTests == null) {
+            return;
+          }
+          labTests = fetchedLabTests;
+        } else {
+          labTests = const <LabTestOption>[];
+        }
+
+        final List<MedicalImageTypeOption> medicalImageTypes;
+        if (departmentType.requiresImageType) {
+          final medicalImageTypesResult = await _addAppoinmentRepo
+              .getMedicalImageTypes();
+          final List<MedicalImageTypeOption>? fetchedMedicalImageTypes =
+              medicalImageTypesResult.fold((failure) {
+                emit(BookingFailure(failure.message));
+                return null;
+              }, (types) => types);
+          if (fetchedMedicalImageTypes == null) {
+            return;
+          }
+          medicalImageTypes = fetchedMedicalImageTypes;
+        } else {
+          medicalImageTypes = const <MedicalImageTypeOption>[];
+        }
+
+        emit(
+          BookingSuccess(
+            centers: centers,
+            departmentType: departmentType,
+            availableLabTests: labTests,
+            availableMedicalImageTypes: medicalImageTypes,
+            availableMedicalAttachments: attachments,
+          ),
+        );
+      },
     );
   }
 
   Future<void> selectCenter(int centerId) async {
     if (state is! BookingSuccess) return;
-    final currentState = state as BookingSuccess;
+    final BookingSuccess currentState = state as BookingSuccess;
 
     emit(
       currentState.copyWith(
         selectedCenterId: centerId,
         isLoadingDays: true,
-        days: [],
+        days: <Days>[],
         times: null,
         selectedDate: null,
         selectedTime: null,
+        selectedPeriodName: null,
       ),
     );
 
-    var result = await _addAppoinmentRepo.getDays(doctorId, centerId);
+    final result = await _addAppoinmentRepo.getDays(doctorId, centerId);
     result.fold(
       (failure) => _emitFailure(
         failure.message,
         currentState.copyWith(
           isLoadingDays: false,
           selectedCenterId: centerId,
-          days: const [],
+          days: const <Days>[],
           times: null,
           selectedDate: null,
           selectedTime: null,
@@ -131,10 +149,9 @@ class BookingCubit extends Cubit<BookingState> {
     );
   }
 
-  // 3. Select Day -> Fetch Times
   Future<void> selectDay(String date) async {
     if (state is! BookingSuccess) return;
-    final currentState = state as BookingSuccess;
+    final BookingSuccess currentState = state as BookingSuccess;
 
     emit(
       currentState.copyWith(
@@ -142,10 +159,11 @@ class BookingCubit extends Cubit<BookingState> {
         isLoadingTimes: true,
         times: null,
         selectedTime: null,
+        selectedPeriodName: null,
       ),
     );
 
-    var result = await _addAppoinmentRepo.getTimes(
+    final result = await _addAppoinmentRepo.getTimes(
       doctorId,
       currentState.selectedCenterId,
       date,
@@ -177,19 +195,14 @@ class BookingCubit extends Cubit<BookingState> {
     );
   }
 
-  Future<void> bookAppointment(
-    String note, {
-
-    String? diagnosisName,
-    String? diagnosisRatio,
-    bool isEmergency = false,
-  }) async {
+  Future<void> bookAppointment(String note) async {
     if (state is! BookingSuccess) return;
-    final s = state as BookingSuccess;
+    final BookingSuccess s = state as BookingSuccess;
 
     if (s.selectedCenterId == null ||
         s.selectedDate == null ||
-        s.selectedTime == null) {
+        s.selectedTime == null ||
+        s.selectedPeriodName == null) {
       return;
     }
 
@@ -199,28 +212,33 @@ class BookingCubit extends Cubit<BookingState> {
       centerId: s.selectedCenterId.toString(),
       date: s.selectedDate!,
       periodName: s.selectedPeriodName!,
-      period: s.selectedTime!,
+      time: s.selectedTime!,
+      type: s.departmentType,
       note: note,
-      isEmergency: isEmergency,
-      diagnosisName: diagnosisName,
-      diagnosisRatio: diagnosisRatio,
-      imageType: s.departmentType.requiresImageType ? s.imageType : null,
-      labTestsIds: s.departmentType.requiresLabTests
+      attachedMedicalRecords: s.departmentType.supportsMedicalAttachments
+          ? s.selectedMedicalAttachments
+                .map(
+                  (MedicalAttachmentItem item) =>
+                      AppointmentMedicalRecordAttachment(
+                        recordSource: item.recordSource,
+                        recordId: item.id,
+                      ),
+                )
+                .toList()
+          : const <AppointmentMedicalRecordAttachment>[],
+      labTests: s.departmentType.requiresLabTests
           ? s.selectedLabTestIds
           : const <int>[],
-      attachedXrayId: s.departmentType.supportsMedicalAttachments
-          ? s.selectedXrayAttachment?.id
-          : null,
-      attachedLabResultId: s.departmentType.supportsMedicalAttachments
-          ? s.selectedLabResultAttachment?.id
+      typeOfMedicalImageId: s.departmentType.requiresImageType
+          ? s.selectedMedicalImageTypeId
           : null,
     );
 
-    var result = await _addAppoinmentRepo.bookAppointment(request);
+    final result = await _addAppoinmentRepo.bookAppointment(request);
 
     result.fold(
       (failure) => _emitFailure(failure.message, s.copyWith(isBooking: false)),
-      (success) => emit(AppointmentBookedSuccessfully()),
+      (_) => emit(AppointmentBookedSuccessfully()),
     );
   }
 
@@ -229,26 +247,13 @@ class BookingCubit extends Cubit<BookingState> {
     emit(fallbackState);
   }
 
-  Future<(List<MedicalAttachmentItem>, List<MedicalAttachmentItem>)>
-  _loadMedicalAttachments() async {
+  Future<List<MedicalAttachmentItem>> _loadMedicalAttachments() async {
     final result = await _medicalFilesRepo.getMedicalFiles();
 
     return result.fold(
-      (_) => (const <MedicalAttachmentItem>[], const <MedicalAttachmentItem>[]),
-      (List<MedicalFile> files) {
-        final List<MedicalAttachmentItem> attachments = files
-            .map(MedicalAttachmentItem.fromMedicalFile)
-            .toList();
-
-        return (
-          attachments
-              .where((item) => item.type == MedicalAttachmentType.xray)
-              .toList(),
-          attachments
-              .where((item) => item.type == MedicalAttachmentType.labResult)
-              .toList(),
-        );
-      },
+      (_) => const <MedicalAttachmentItem>[],
+      (List<MedicalFile> files) =>
+          files.map(MedicalAttachmentItem.fromMedicalFile).toList(),
     );
   }
 }

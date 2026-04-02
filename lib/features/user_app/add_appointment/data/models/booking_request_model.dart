@@ -7,11 +7,23 @@ extension BookingDepartmentTypeX on BookingDepartmentType {
 
   bool get supportsMedicalAttachments => this == BookingDepartmentType.doctor;
 
+  String get apiValue {
+    switch (this) {
+      case BookingDepartmentType.doctor:
+        return 'doctor';
+      case BookingDepartmentType.radiology:
+        return 'radiology';
+      case BookingDepartmentType.laboratory:
+        return 'lab';
+    }
+  }
+
   static BookingDepartmentType fromDoctorType(String? doctorType) {
     switch (doctorType?.trim().toLowerCase()) {
       case 'radiology':
         return BookingDepartmentType.radiology;
       case 'lab':
+      case 'laboratory':
         return BookingDepartmentType.laboratory;
       case 'doctor':
       default:
@@ -50,8 +62,8 @@ class LabTestOption {
 
   factory LabTestOption.fromJson(Map<String, dynamic> json) {
     return LabTestOption(
-      id: json['id'] ?? 0,
-      name: json['name']?.toString() ?? '',
+      id: _asInt(json['id']),
+      name: json['name']?.toString().trim() ?? '',
     );
   }
 
@@ -69,62 +81,94 @@ class LabTestOption {
   ];
 }
 
+class MedicalImageTypeOption {
+  final int id;
+  final String name;
+
+  const MedicalImageTypeOption({required this.id, required this.name});
+
+  factory MedicalImageTypeOption.fromJson(Map<String, dynamic> json) {
+    return MedicalImageTypeOption(
+      id: _asInt(json['id']),
+      name: json['name']?.toString().trim() ?? '',
+    );
+  }
+}
+
+class AppointmentMedicalRecordAttachment {
+  final String recordSource;
+  final int recordId;
+
+  const AppointmentMedicalRecordAttachment({
+    required this.recordSource,
+    required this.recordId,
+  });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'record_source': recordSource,
+      'record_id': recordId,
+    };
+  }
+}
+
 class AppointmentBookingRequest {
   final String doctorId;
   final String centerId;
   final String date;
   final String periodName;
-  final String period;
-  final String note;
-  final bool isEmergency;
-  final String? diagnosisName;
-  final String? diagnosisRatio;
-  final String? imageType;
-  final List<int> labTestsIds;
-  final int? attachedXrayId;
-  final int? attachedLabResultId;
+  final String time;
+  final BookingDepartmentType type;
+  final String? note;
+  final List<AppointmentMedicalRecordAttachment> attachedMedicalRecords;
+  final List<int> labTests;
+  final int? typeOfMedicalImageId;
 
   const AppointmentBookingRequest({
     required this.doctorId,
     required this.centerId,
     required this.date,
     required this.periodName,
-    required this.period,
-    required this.note,
-    required this.isEmergency,
-    this.diagnosisName,
-    this.diagnosisRatio,
-    this.imageType,
-    this.labTestsIds = const <int>[],
-    this.attachedXrayId,
-    this.attachedLabResultId,
+    required this.time,
+    required this.type,
+    this.note,
+    this.attachedMedicalRecords = const <AppointmentMedicalRecordAttachment>[],
+    this.labTests = const <int>[],
+    this.typeOfMedicalImageId,
   });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'time': period,
-      'note': note,
-      'is_emergency': isEmergency ? 1 : 0,
-      'diagnosis_name': diagnosisName,
-      'diagnosis_ratio': diagnosisRatio,
+      'type': type.apiValue,
+      'time': time,
     };
 
-    if (imageType != null && imageType!.trim().isNotEmpty) {
-      data['image_type'] = imageType;
+    if (note != null && note!.trim().isNotEmpty) {
+      data['note'] = note!.trim();
     }
 
-    if (labTestsIds.isNotEmpty) {
-      data['lab_tests_ids'] = labTestsIds;
+    if (type.supportsMedicalAttachments && attachedMedicalRecords.isNotEmpty) {
+      data['attached_medical_records'] = attachedMedicalRecords
+          .map((AppointmentMedicalRecordAttachment item) => item.toJson())
+          .toList();
     }
 
-    if (attachedXrayId != null) {
-      data['attached_xray_id'] = attachedXrayId;
+    if (type.requiresLabTests) {
+      data['lab_tests'] = labTests;
     }
 
-    if (attachedLabResultId != null) {
-      data['attached_lab_result_id'] = attachedLabResultId;
+    if (type.requiresImageType && typeOfMedicalImageId != null) {
+      data['type_of_medical_image_id'] = typeOfMedicalImageId;
     }
 
     return data;
   }
+}
+
+int _asInt(dynamic value) {
+  if (value is int) {
+    return value;
+  }
+
+  return int.tryParse(value?.toString() ?? '') ?? 0;
 }

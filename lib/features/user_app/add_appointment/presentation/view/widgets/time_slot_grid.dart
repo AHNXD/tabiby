@@ -53,45 +53,60 @@ class TimeSlotGrid extends StatelessWidget {
     List<TimeSlot> slots,
     String categoryKey,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 18),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FBF9),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFFE4ECE8)),
+      ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Critical for section title
-        children: [
-          // Section Title
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
+            padding: const EdgeInsets.only(bottom: 14),
             child: Row(
-              children: [
-                Icon(
-                  _getIconForCategory(categoryKey),
-                  size: 16,
-                  color: Colors.grey.shade600,
+              children: <Widget>[
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColors.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    _getIconForCategory(categoryKey),
+                    size: 18,
+                    color: AppColors.primaryColors,
+                  ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Text(
                   label,
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF21352D),
                   ),
                 ),
               ],
             ),
           ),
-
-          // Time Chips
-          Wrap(
-            spacing: 12.0, // Horizontal space between chips
-            runSpacing: 12.0, // Vertical space between lines
-            alignment:
-                WrapAlignment.start, // Forces items to start from left edge
-            children: slots.map((slot) {
-              final isSelected = selectedSlot == slot.time;
-              return _buildTimeChip(slot.time!, isSelected, categoryKey);
-            }).toList(),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List<Widget>.generate(slots.length, (int index) {
+                final TimeSlot slot = slots[index];
+                final bool isSelected = selectedSlot == slot.time;
+                return Padding(
+                  padding: EdgeInsetsDirectional.only(
+                    end: index == slots.length - 1 ? 0 : 10,
+                  ),
+                  child: _buildTimeChip(slot.time!, isSelected, categoryKey),
+                );
+              }),
+            ),
           ),
         ],
       ),
@@ -101,38 +116,41 @@ class TimeSlotGrid extends StatelessWidget {
   Widget _buildTimeChip(String time, bool isSelected, String categoryKey) {
     return InkWell(
       onTap: () => onSelect(time, categoryKey),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryColors : Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[
+              isSelected ? AppColors.primaryColors : Colors.white,
+              isSelected ? const Color(0xFF3F7F69) : const Color(0xFFFDFEFE),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primaryColors : Colors.grey.shade300,
+            color: isSelected
+                ? AppColors.primaryColors
+                : const Color(0xFFDCE5E0),
             width: 1.5,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primaryColors.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: isSelected
+                  ? AppColors.primaryColors.withValues(alpha: 0.24)
+                  : Colors.black.withValues(alpha: 0.03),
+              blurRadius: isSelected ? 14 : 8,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
         child: Text(
           time,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black87,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
             fontSize: 14,
           ),
         ),

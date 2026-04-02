@@ -25,48 +25,39 @@ class BookingSuccess extends BookingState {
   final TimesModel? times;
   final BookingDepartmentType departmentType;
   final List<LabTestOption> availableLabTests;
-  final List<MedicalAttachmentItem> availableXrayAttachments;
-  final List<MedicalAttachmentItem> availableLabResultAttachments;
+  final List<MedicalImageTypeOption> availableMedicalImageTypes;
+  final List<MedicalAttachmentItem> availableMedicalAttachments;
 
   final int? selectedCenterId;
   final String? selectedDate;
   final String? selectedTime;
-
   final String? selectedPeriodName;
-  final String? imageType;
+  final int? selectedMedicalImageTypeId;
   final List<int> selectedLabTestIds;
-  final MedicalAttachmentItem? selectedXrayAttachment;
-  final MedicalAttachmentItem? selectedLabResultAttachment;
+  final List<MedicalAttachmentItem> selectedMedicalAttachments;
 
-  // Flags to show loading for specific sectsions
   final bool isLoadingDays;
   final bool isLoadingTimes;
   final bool isBooking;
 
-  final bool includeDiagnosis; // Checkbox state
-  final bool isEmergency;
-
   BookingSuccess({
     required this.centers,
     required this.departmentType,
-    required this.availableLabTests,
-    this.availableXrayAttachments = const [],
-    this.availableLabResultAttachments = const [],
-    this.days = const [],
+    this.availableLabTests = const <LabTestOption>[],
+    this.availableMedicalImageTypes = const <MedicalImageTypeOption>[],
+    this.availableMedicalAttachments = const <MedicalAttachmentItem>[],
+    this.days = const <Days>[],
     this.times,
     this.selectedCenterId,
     this.selectedDate,
     this.selectedTime,
     this.selectedPeriodName,
-    this.imageType,
+    this.selectedMedicalImageTypeId,
     this.selectedLabTestIds = const <int>[],
-    this.selectedXrayAttachment,
-    this.selectedLabResultAttachment,
+    this.selectedMedicalAttachments = const <MedicalAttachmentItem>[],
     this.isLoadingDays = false,
     this.isLoadingTimes = false,
     this.isBooking = false,
-    this.includeDiagnosis = false,
-    this.isEmergency = false,
   });
 
   BookingSuccess copyWith({
@@ -74,31 +65,28 @@ class BookingSuccess extends BookingState {
     List<Days>? days,
     BookingDepartmentType? departmentType,
     List<LabTestOption>? availableLabTests,
-    List<MedicalAttachmentItem>? availableXrayAttachments,
-    List<MedicalAttachmentItem>? availableLabResultAttachments,
+    List<MedicalImageTypeOption>? availableMedicalImageTypes,
+    List<MedicalAttachmentItem>? availableMedicalAttachments,
     Object? times = _unset,
     Object? selectedCenterId = _unset,
     Object? selectedDate = _unset,
     Object? selectedTime = _unset,
     Object? selectedPeriodName = _unset,
-    Object? imageType = _unset,
+    Object? selectedMedicalImageTypeId = _unset,
     List<int>? selectedLabTestIds,
-    Object? selectedXrayAttachment = _unset,
-    Object? selectedLabResultAttachment = _unset,
+    List<MedicalAttachmentItem>? selectedMedicalAttachments,
     bool? isLoadingDays,
     bool? isLoadingTimes,
     bool? isBooking,
-    bool? includeDiagnosis,
-    bool? isEmergency,
   }) {
     return BookingSuccess(
       centers: centers ?? this.centers,
       departmentType: departmentType ?? this.departmentType,
       availableLabTests: availableLabTests ?? this.availableLabTests,
-      availableXrayAttachments:
-          availableXrayAttachments ?? this.availableXrayAttachments,
-      availableLabResultAttachments:
-          availableLabResultAttachments ?? this.availableLabResultAttachments,
+      availableMedicalImageTypes:
+          availableMedicalImageTypes ?? this.availableMedicalImageTypes,
+      availableMedicalAttachments:
+          availableMedicalAttachments ?? this.availableMedicalAttachments,
       days: days ?? this.days,
       times: identical(times, _unset) ? this.times : times as TimesModel?,
       selectedCenterId: identical(selectedCenterId, _unset)
@@ -113,22 +101,15 @@ class BookingSuccess extends BookingState {
       selectedPeriodName: identical(selectedPeriodName, _unset)
           ? this.selectedPeriodName
           : selectedPeriodName as String?,
-      imageType: identical(imageType, _unset)
-          ? this.imageType
-          : imageType as String?,
+      selectedMedicalImageTypeId: identical(selectedMedicalImageTypeId, _unset)
+          ? this.selectedMedicalImageTypeId
+          : selectedMedicalImageTypeId as int?,
       selectedLabTestIds: selectedLabTestIds ?? this.selectedLabTestIds,
-      selectedXrayAttachment: identical(selectedXrayAttachment, _unset)
-          ? this.selectedXrayAttachment
-          : selectedXrayAttachment as MedicalAttachmentItem?,
-      selectedLabResultAttachment:
-          identical(selectedLabResultAttachment, _unset)
-          ? this.selectedLabResultAttachment
-          : selectedLabResultAttachment as MedicalAttachmentItem?,
+      selectedMedicalAttachments:
+          selectedMedicalAttachments ?? this.selectedMedicalAttachments,
       isLoadingDays: isLoadingDays ?? this.isLoadingDays,
       isLoadingTimes: isLoadingTimes ?? this.isLoadingTimes,
       isBooking: isBooking ?? this.isBooking,
-      includeDiagnosis: includeDiagnosis ?? this.includeDiagnosis,
-      isEmergency: isEmergency ?? this.isEmergency,
     );
   }
 }

@@ -14,6 +14,8 @@ abstract class AddAppoinmentRepo {
     int? centerID,
     String date,
   );
+  Future<Either<Failure, List<LabTestOption>>> getLabTests();
+  Future<Either<Failure, List<MedicalImageTypeOption>>> getMedicalImageTypes();
   Future<Either<Failure, bool>> bookAppointment(
     AppointmentBookingRequest request,
   );

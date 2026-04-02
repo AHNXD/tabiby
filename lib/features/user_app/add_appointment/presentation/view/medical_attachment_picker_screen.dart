@@ -1,48 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/custom_image_widget.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/medical_attachment_item.dart';
 
-class MedicalAttachmentPickerScreen extends StatelessWidget {
+class MedicalAttachmentPickerScreen extends StatefulWidget {
   const MedicalAttachmentPickerScreen({
     super.key,
     required this.title,
     required this.attachments,
-    required this.type,
-    this.selectedAttachmentId,
+    required this.selectedAttachmentKeys,
   });
 
   final String title;
   final List<MedicalAttachmentItem> attachments;
-  final MedicalAttachmentType type;
-  final int? selectedAttachmentId;
+  final Set<String> selectedAttachmentKeys;
+
+  @override
+  State<MedicalAttachmentPickerScreen> createState() =>
+      _MedicalAttachmentPickerScreenState();
+}
+
+class _MedicalAttachmentPickerScreenState
+    extends State<MedicalAttachmentPickerScreen> {
+  late final Set<String> _selectedAttachmentKeys;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedAttachmentKeys = Set<String>.from(widget.selectedAttachmentKeys);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
-        child: CustomAppbar(title: title),
+        child: CustomAppbar(title: widget.title),
       ),
-      body: attachments.isEmpty
-          ? _EmptyAttachmentState(type: type)
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: attachments.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (BuildContext context, int index) {
-                final MedicalAttachmentItem attachment = attachments[index];
-                final bool isSelected = attachment.id == selectedAttachmentId;
-                return _AttachmentCard(
-                  attachment: attachment,
-                  isSelected: isSelected,
-                  onTap: () => Navigator.pop(context, attachment),
-                );
-              },
+      body: widget.attachments.isEmpty
+          ? const _EmptyAttachmentState()
+          : Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: widget.attachments.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    itemBuilder: (BuildContext context, int index) {
+                      final MedicalAttachmentItem attachment =
+                          widget.attachments[index];
+                      final bool isSelected = _selectedAttachmentKeys.contains(
+                        attachment.selectionKey,
+                      );
+                      return _AttachmentCard(
+                        attachment: attachment,
+                        isSelected: isSelected,
+                        onTap: () => _toggleAttachment(attachment.selectionKey),
+                      );
+                    },
+                  ),
+                ),
+                SafeArea(
+                  top: false,
+                  minimum: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _saveSelection,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColors,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        minimumSize: const Size.fromHeight(54),
+                      ),
+                      child: Text(
+                        'apply_selected_records'.tr(context),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
     );
+  }
+
+  void _saveSelection() {
+    final List<MedicalAttachmentItem> selectedAttachments = widget.attachments
+        .where(
+          (MedicalAttachmentItem item) =>
+              _selectedAttachmentKeys.contains(item.selectionKey),
+        )
+        .toList();
+    Navigator.of(context).pop(selectedAttachments);
+  }
+
+  void _toggleAttachment(String selectionKey) {
+    setState(() {
+      if (_selectedAttachmentKeys.contains(selectionKey)) {
+        _selectedAttachmentKeys.remove(selectionKey);
+      } else {
+        _selectedAttachmentKeys.add(selectionKey);
+      }
+    });
   }
 }
 
@@ -106,6 +174,18 @@ class _AttachmentCard extends StatelessWidget {
                         style: TextStyle(color: Colors.grey.shade700),
                       ),
                     ],
+                    if (attachment.sourceLabel != null &&
+                        attachment.sourceLabel!.trim().isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 6),
+                      Text(
+                        attachment.sourceLabel!,
+                        style: TextStyle(
+                          color: Colors.grey.shade500,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                     if (attachment.recordedAt != null &&
                         attachment.recordedAt!.trim().isNotEmpty) ...<Widget>[
                       const SizedBox(height: 8),
@@ -125,11 +205,11 @@ class _AttachmentCard extends StatelessWidget {
               Icon(
                 isSelected
                     ? Icons.check_circle_rounded
-                    : Icons.arrow_forward_ios_rounded,
+                    : Icons.radio_button_unchecked_rounded,
                 color: isSelected
                     ? Theme.of(context).primaryColor
                     : Colors.grey.shade400,
-                size: isSelected ? 26 : 18,
+                size: 24,
               ),
             ],
           ),
@@ -159,19 +239,21 @@ class _AttachmentPreview extends StatelessWidget {
       );
     }
 
-    final bool isXray = attachment.type == MedicalAttachmentType.xray;
+    final bool isRadiology = attachment.type == MedicalAttachmentType.radiology;
     return Container(
       height: 72,
       width: 72,
       decoration: BoxDecoration(
-        color: isXray
+        color: isRadiology
             ? Theme.of(context).primaryColor.withValues(alpha: 0.08)
             : Colors.orange.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Icon(
-        isXray ? Icons.image_outlined : Icons.description_outlined,
-        color: isXray ? Theme.of(context).primaryColor : Colors.orange.shade700,
+        isRadiology ? Icons.image_outlined : Icons.description_outlined,
+        color: isRadiology
+            ? Theme.of(context).primaryColor
+            : Colors.orange.shade700,
         size: 34,
       ),
     );
@@ -179,21 +261,15 @@ class _AttachmentPreview extends StatelessWidget {
 }
 
 class _EmptyAttachmentState extends StatelessWidget {
-  const _EmptyAttachmentState({required this.type});
-
-  final MedicalAttachmentType type;
+  const _EmptyAttachmentState();
 
   @override
   Widget build(BuildContext context) {
-    final String message = type == MedicalAttachmentType.xray
-        ? 'no_xray_records_available'.tr(context)
-        : 'no_lab_results_available'.tr(context);
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          message,
+          'no_medical_records_available'.tr(context),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.grey.shade600,

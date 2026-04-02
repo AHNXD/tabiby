@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
 import 'package:tabiby/features/user_app/medical_files/data/repos/medical_files_repo.dart';
 
@@ -38,11 +39,24 @@ class BookingScreen extends StatelessWidget {
           getit.get<MedicalFilesRepo>(),
           doctorID,
           departmentType: departmentType,
-          availableLabTests: availableLabTests ?? LabTestOption.fallbackOptions,
         )..fetchCenters(),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: const BookingForm(),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                AppColors.primaryColors.withValues(alpha: 0.12),
+                AppColors.appBackgroundColor,
+                Colors.white,
+              ],
+              stops: const <double>[0, 0.28, 1],
+            ),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 28),
+            child: const BookingForm(),
+          ),
         ),
       ),
     );

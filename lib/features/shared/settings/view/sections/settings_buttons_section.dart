@@ -436,7 +436,7 @@ class _SettingsHeroCard extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Positioned(
-            right: -18,
+            right: 18,
             top: -22,
             child: Container(
               width: 110,
@@ -449,7 +449,7 @@ class _SettingsHeroCard extends StatelessWidget {
           ),
           Positioned(
             left: -24,
-            bottom: -36,
+            bottom: 36,
             child: Container(
               width: 130,
               height: 130,

@@ -4,9 +4,8 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/medical_attachment_item.dart';
-import '../../../../../../core/utils/colors.dart';
+
 import '../../../../../../core/widgets/primary_button.dart';
-import '../../../../diagnose/presentation/view_models/diagnosis_cubit.dart';
 import '../medical_attachment_picker_screen.dart';
 import '../sections/appointment_details_section.dart';
 import '../../view-model/booking_cubit.dart';
@@ -33,8 +32,6 @@ class _BookingFormState extends State<BookingForm> {
 
   @override
   Widget build(BuildContext context) {
-    final diagnosisState = context.read<DiagnosisCubit>().state;
-    final hasDiagnosis = diagnosisState.diagnosisResult != null;
     return BlocConsumer<BookingCubit, BookingState>(
       listener: (context, state) {
         if (state is AppointmentBookedSuccessfully) {
@@ -60,12 +57,7 @@ class _BookingFormState extends State<BookingForm> {
             : null;
 
         if (bookingState != null) {
-          return _buildBookingContent(
-            context,
-            bookingState,
-            diagnosisState,
-            hasDiagnosis,
-          );
+          return _buildBookingContent(context, bookingState);
         }
 
         return const SizedBox.shrink();
@@ -73,102 +65,102 @@ class _BookingFormState extends State<BookingForm> {
     );
   }
 
-  Widget _buildBookingContent(
-    BuildContext context,
-    BookingSuccess state,
-    DiagnosisState diagnosisState,
-    bool hasDiagnosis,
-  ) {
+  Widget _buildBookingContent(BuildContext context, BookingSuccess state) {
+    final bool showDateTimeStep = state.selectedCenterId != null;
+    final bool showDetailsStep = state.selectedTime != null;
+    final bool detailsStepCompleted = _hasCompletedDetailsStep(state);
+    final bool showNotesStep = showDetailsStep && detailsStepCompleted;
+    final int currentStep = _resolveCurrentStep(state);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CenterSection(
-          centers: state.centers,
-          selectedId: state.selectedCenterId,
-          onSelect: (int id) => context.read<BookingCubit>().selectCenter(id),
+      children: <Widget>[
+        _BookingProgressHeader(currentStep: currentStep),
+        const SizedBox(height: 18),
+        _StepCard(
+          child: CenterSection(
+            centers: state.centers,
+            selectedId: state.selectedCenterId,
+            onSelect: (int id) => context.read<BookingCubit>().selectCenter(id),
+          ),
         ),
-        const SizedBox(height: 16),
-        if (state.isLoadingDays)
-          const Center(child: CircularProgressIndicator())
-        else if (state.days.isNotEmpty)
-          DateTimeSection(
-            days: state.days,
-            selectedDate: state.selectedDate,
-            onSelectDate: (String day) =>
-                context.read<BookingCubit>().selectDay(day),
-            isLoadingTimes: state.isLoadingTimes,
-            periods: state.times?.periods,
-            selectedTimeSlot: state.selectedTime,
-            onSelectTimeSlot: (time, category) {
-              context.read<BookingCubit>().selectTime(time, category);
-            },
+        if (showDateTimeStep) ...<Widget>[
+          const SizedBox(height: 16),
+          _StepCard(
+            child: state.isLoadingDays
+                ? const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : state.days.isNotEmpty
+                ? DateTimeSection(
+                    days: state.days,
+                    selectedDate: state.selectedDate,
+                    onSelectDate: (String day) =>
+                        context.read<BookingCubit>().selectDay(day),
+                    isLoadingTimes: state.isLoadingTimes,
+                    periods: state.times?.periods,
+                    selectedTimeSlot: state.selectedTime,
+                    onSelectTimeSlot: (time, category) {
+                      context.read<BookingCubit>().selectTime(time, category);
+                    },
+                  )
+                : const SizedBox.shrink(),
           ),
-        const SizedBox(height: 16),
-        AppointmentDetailsSection(
-          departmentType: state.departmentType,
-          availableLabTests: state.availableLabTests,
-          selectedLabTestIds: state.selectedLabTestIds,
-          imageType: state.imageType,
-          onImageTypeChanged: context.read<BookingCubit>().updateImageType,
-          onToggleLabTest: context.read<BookingCubit>().toggleLabTestSelection,
-          selectedXrayAttachment: state.selectedXrayAttachment,
-          selectedLabResultAttachment: state.selectedLabResultAttachment,
-          availableXrayCount: state.availableXrayAttachments.length,
-          availableLabResultCount: state.availableLabResultAttachments.length,
-          onPickXray: () => _openAttachmentPicker(
-            context,
-            title: 'xray_records'.tr(context),
-            type: MedicalAttachmentType.xray,
-            attachments: state.availableXrayAttachments,
-            selectedAttachmentId: state.selectedXrayAttachment?.id,
-            onSelected: context.read<BookingCubit>().selectAttachedXray,
+        ],
+        if (showDetailsStep) ...<Widget>[
+          const SizedBox(height: 16),
+          _StepCard(
+            child: AppointmentDetailsSection(
+              departmentType: state.departmentType,
+              availableLabTests: state.availableLabTests,
+              selectedLabTestIds: state.selectedLabTestIds,
+              availableMedicalImageTypes: state.availableMedicalImageTypes,
+              selectedMedicalImageTypeId: state.selectedMedicalImageTypeId,
+              onMedicalImageTypeChanged: context
+                  .read<BookingCubit>()
+                  .updateMedicalImageType,
+              onToggleLabTest: context
+                  .read<BookingCubit>()
+                  .toggleLabTestSelection,
+              selectedMedicalAttachments: state.selectedMedicalAttachments,
+              availableMedicalAttachments: state.availableMedicalAttachments,
+              onPickMedicalRecords: () => _openAttachmentPicker(
+                context,
+                attachments: state.availableMedicalAttachments,
+                selectedAttachments: state.selectedMedicalAttachments,
+              ),
+              onClearMedicalRecords: () =>
+                  context.read<BookingCubit>().updateSelectedMedicalAttachments(
+                    const <MedicalAttachmentItem>[],
+                  ),
+            ),
           ),
-          onPickLabResult: () => _openAttachmentPicker(
-            context,
-            title: 'lab_results'.tr(context),
-            type: MedicalAttachmentType.labResult,
-            attachments: state.availableLabResultAttachments,
-            selectedAttachmentId: state.selectedLabResultAttachment?.id,
-            onSelected: context.read<BookingCubit>().selectAttachedLabResult,
+        ],
+        if (showNotesStep) ...<Widget>[
+          const SizedBox(height: 16),
+          _StepCard(child: NotesSection(noteController: _noteController)),
+          const SizedBox(height: 16),
+          Center(
+            child: state.isBooking
+                ? const CircularProgressIndicator()
+                : SizedBox(
+                    width: double.infinity,
+                    child: PrimaryButton(
+                      text: 'book_an_appointment'.tr(context),
+                      onPressed: () => _submitBooking(context, state),
+                    ),
+                  ),
           ),
-          onClearXray: () =>
-              context.read<BookingCubit>().selectAttachedXray(null),
-          onClearLabResult: () =>
-              context.read<BookingCubit>().selectAttachedLabResult(null),
-        ),
-        const SizedBox(height: 16),
-        if (hasDiagnosis) ...[
-          _buildDiagnosisSection(context, state, diagnosisState),
           const SizedBox(height: 16),
         ],
-        NotesSection(noteController: _noteController),
-        const SizedBox(height: 16),
-        Center(
-          child: state.isBooking
-              ? const CircularProgressIndicator()
-              : PrimaryButton(
-                  text: 'book_an_appointment'.tr(context),
-                  onPressed: () => _submitBooking(
-                    context,
-                    state,
-                    diagnosisState,
-                    hasDiagnosis,
-                  ),
-                ),
-        ),
-        const SizedBox(height: 16),
       ],
     );
   }
 
-  void _submitBooking(
-    BuildContext context,
-    BookingSuccess state,
-    DiagnosisState diagnosisState,
-    bool hasDiagnosis,
-  ) {
+  void _submitBooking(BuildContext context, BookingSuccess state) {
     if (state.selectedTime == null) {
-      messages(context, "please_select_time".tr(context), Colors.orange);
+      messages(context, 'please_select_time'.tr(context), Colors.orange);
       return;
     }
 
@@ -181,28 +173,12 @@ class _BookingFormState extends State<BookingForm> {
       return;
     }
 
-    String? diagName;
-    String? diagRatio;
-
-    if (state.includeDiagnosis && hasDiagnosis) {
-      diagName = diagnosisState.diagnosisResult!.conditionName;
-      diagRatio = diagnosisState.diagnosisResult!.confidenceWithoutPercent;
-    }
-
-    context.read<BookingCubit>().bookAppointment(
-      _noteController.text,
-      diagnosisName: diagName,
-      diagnosisRatio: diagRatio,
-      isEmergency:
-          state.isEmergency ||
-          (state.includeDiagnosis &&
-              (diagnosisState.diagnosisResult?.isEmergency ?? false)),
-    );
+    context.read<BookingCubit>().bookAppointment(_noteController.text);
   }
 
   String? _validateBookingDetails(BuildContext context, BookingSuccess state) {
     if (state.departmentType.requiresImageType &&
-        (state.imageType == null || state.imageType!.trim().isEmpty)) {
+        state.selectedMedicalImageTypeId == null) {
       return 'please_select_image_type'.tr(context);
     }
 
@@ -214,22 +190,49 @@ class _BookingFormState extends State<BookingForm> {
     return null;
   }
 
+  bool _hasCompletedDetailsStep(BookingSuccess state) {
+    if (state.departmentType.requiresImageType) {
+      return state.selectedMedicalImageTypeId != null;
+    }
+
+    if (state.departmentType.requiresLabTests) {
+      return state.selectedLabTestIds.isNotEmpty;
+    }
+
+    return true;
+  }
+
+  int _resolveCurrentStep(BookingSuccess state) {
+    if (state.selectedCenterId == null) {
+      return 1;
+    }
+
+    if (state.selectedTime == null) {
+      return 2;
+    }
+
+    if (!_hasCompletedDetailsStep(state)) {
+      return 3;
+    }
+
+    return 4;
+  }
+
   Future<void> _openAttachmentPicker(
     BuildContext context, {
-    required String title,
-    required MedicalAttachmentType type,
     required List<MedicalAttachmentItem> attachments,
-    required int? selectedAttachmentId,
-    required ValueChanged<MedicalAttachmentItem?> onSelected,
+    required List<MedicalAttachmentItem> selectedAttachments,
   }) async {
-    final MedicalAttachmentItem? selected = await Navigator.of(context)
-        .push<MedicalAttachmentItem>(
+    final BookingCubit bookingCubit = context.read<BookingCubit>();
+    final List<MedicalAttachmentItem>? selected = await Navigator.of(context)
+        .push<List<MedicalAttachmentItem>>(
           MaterialPageRoute(
             builder: (_) => MedicalAttachmentPickerScreen(
-              title: title,
+              title: 'pick_medical_records'.tr(context),
               attachments: attachments,
-              type: type,
-              selectedAttachmentId: selectedAttachmentId,
+              selectedAttachmentKeys: selectedAttachments
+                  .map((MedicalAttachmentItem item) => item.selectionKey)
+                  .toSet(),
             ),
           ),
         );
@@ -238,90 +241,145 @@ class _BookingFormState extends State<BookingForm> {
       return;
     }
 
-    onSelected(selected);
+    bookingCubit.updateSelectedMedicalAttachments(selected);
   }
+}
 
-  Widget _buildDiagnosisSection(
-    BuildContext context,
-    BookingSuccess bookingState,
-    DiagnosisState diagnosisState,
-  ) {
+class _BookingProgressHeader extends StatelessWidget {
+  const _BookingProgressHeader({required this.currentStep});
+
+  final int currentStep;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFF539E84).withValues(alpha: 0.14),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // A. Toggle to Include
+        children: <Widget>[
           Row(
-            children: [
-              Checkbox(
-                value: bookingState.includeDiagnosis,
-                activeColor: Theme.of(context).primaryColor,
-                onChanged: (val) {
-                  context.read<BookingCubit>().toggleIncludeDiagnosis(
-                    val ?? false,
-                  );
-                },
+            children: <Widget>[
+              Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF539E84).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '$currentStep',
+                  style: const TextStyle(
+                    color: Color(0xFF3F7F69),
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  "attach_diagnosis_result".tr(context),
+                  _stepLabel(context, currentStep),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF21352D),
                   ),
+                ),
+              ),
+              Text(
+                '$currentStep/4',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF6E8078),
                 ),
               ),
             ],
           ),
-
-          // B. Show Details & Emergency ONLY if included
-          if (bookingState.includeDiagnosis) ...[
-            const Divider(),
-            const SizedBox(height: 8),
-
-            // Diagnosis Info Card
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blue.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.primaryColors.withValues(alpha: 0.2),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "diagnosis_result".tr(context),
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    diagnosisState.diagnosisResult?.conditionName ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryColors,
+          const SizedBox(height: 10),
+          Row(
+            children: List<Widget>.generate(4, (int index) {
+              final int stepNumber = index + 1;
+              final bool isActive = stepNumber <= currentStep;
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.only(end: index == 3 ? 0 : 6),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? const Color(0xFF539E84)
+                          : const Color(0xFFE2ECE7),
+                      borderRadius: BorderRadius.circular(999),
                     ),
                   ),
-                  Text(
-                    "${"confidence".tr(context)}: ${diagnosisState.diagnosisResult?.confidence ?? ''}",
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              );
+            }),
+          ),
         ],
       ),
+    );
+  }
+
+  String _stepLabel(BuildContext context, int step) {
+    switch (step) {
+      case 1:
+        return 'select_a_center'.tr(context);
+      case 2:
+        return 'select_date_and_time'.tr(context);
+      case 3:
+        return 'appointment_details'.tr(context);
+      case 4:
+        return 'add_notes'.tr(context);
+      default:
+        return '';
+    }
+  }
+}
+
+class _StepCard extends StatelessWidget {
+  const _StepCard({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 240),
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFFE4ECE8)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: child,
     );
   }
 }

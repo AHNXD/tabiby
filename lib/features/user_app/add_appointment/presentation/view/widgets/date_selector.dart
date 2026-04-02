@@ -20,7 +20,7 @@ class DateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 90,
+      height: 104,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -41,43 +41,49 @@ class DateSelector extends StatelessWidget {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                width: 65,
+                width: 76,
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryColors : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      isSelected
+                          ? AppColors.primaryColors
+                          : const Color(0xFFFFFFFF),
+                      isSelected
+                          ? const Color(0xFF3F7F69)
+                          : const Color(0xFFF8FAF9),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(22),
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primaryColors
-                        : Colors.grey.shade200,
+                        : const Color(0xFFE7ECE9),
                     width: 1.5,
                   ),
-                  boxShadow: isSelected
-                      ? [
-                          BoxShadow(
-                            color: AppColors.primaryColors.withOpacity(0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ]
-                      : [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.03),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: isSelected
+                          ? AppColors.primaryColors.withValues(alpha: 0.24)
+                          : Colors.black.withValues(alpha: 0.04),
+                      blurRadius: isSelected ? 16 : 10,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // 1. Month (e.g., Jan)
+                  children: <Widget>[
                     Text(
                       DateFormat(
                         'MMM',
                       ).format(parsedDate).toUpperCase().tr(context),
                       style: TextStyle(
                         color: isSelected
-                            ? Colors.white.withOpacity(0.8)
+                            ? Colors.white.withValues(alpha: 0.8)
                             : Colors.grey.shade500,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
@@ -85,29 +91,39 @@ class DateSelector extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
 
-                    // 2. Day Number (e.g., 12)
                     Text(
                       DateFormat('dd').format(parsedDate),
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black87,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
                         height: 1.0,
                       ),
                     ),
 
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
 
-                    Text(
-                      DateFormat(
-                        'EEEE',
-                      ).format(parsedDate).toLowerCase().tr(context),
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.grey.shade600,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                    SizedBox(
+                      width: double.infinity,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          DateFormat(
+                            'EEEE',
+                          ).format(parsedDate).toLowerCase().tr(context),
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.grey.shade600,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                            height: 1,
+                          ),
+                        ),
                       ),
                     ),
                   ],

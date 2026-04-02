@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+
 import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
@@ -19,35 +20,37 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
     AppointmentBookingRequest request,
   ) async {
     try {
-      var resp = await _apiServices.post(
+      final resp = await _apiServices.post(
         endPoint:
-            "${Urls.addAppointment}/${request.doctorId}/${request.centerId}/${request.date}/${request.periodName}",
+            '${Urls.addAppointment}/${request.doctorId}/${request.centerId}/${request.date}/${request.periodName}',
         data: request.toJson(),
       );
 
-      if (resp.statusCode == 201 && resp.data['status'] == true) {
+      if (resp.statusCode != null &&
+          resp.statusCode! >= 200 &&
+          resp.statusCode! < 300 &&
+          resp.data['status'] == true) {
         return right(true);
       }
 
       return left(
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
-    } catch (e) {
-      return left(ServerFailure(e.toString()));
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
     }
   }
 
   @override
   Future<Either<Failure, List<Centers>>> getCenters(int? doctorID) async {
     try {
-      var resp = await _apiServices.get(
-        endPoint: "${Urls.getCenters}/$doctorID",
+      final resp = await _apiServices.get(
+        endPoint: '${Urls.getCenters}/$doctorID',
       );
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
-        CentersAppointmentModel centers = CentersAppointmentModel.fromJson(
-          resp.data['data'],
-        );
+        final CentersAppointmentModel centers =
+            CentersAppointmentModel.fromJson(resp.data['data']);
 
         return right(centers.centers ?? []);
       }
@@ -55,8 +58,8 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
       return left(
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
-    } catch (e) {
-      return left(ServerFailure(e.toString()));
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
     }
   }
 
@@ -66,12 +69,12 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
     int? centerID,
   ) async {
     try {
-      var resp = await _apiServices.get(
-        endPoint: "${Urls.getDays}/$doctorID/$centerID",
+      final resp = await _apiServices.get(
+        endPoint: '${Urls.getDays}/$doctorID/$centerID',
       );
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
-        DaysModel days = DaysModel.fromJson(resp.data['data']['days']);
+        final DaysModel days = DaysModel.fromJson(resp.data['data']['days']);
 
         return right(days.days ?? []);
       }
@@ -79,8 +82,58 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
       return left(
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
-    } catch (e) {
-      return left(ServerFailure(e.toString()));
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LabTestOption>>> getLabTests() async {
+    try {
+      final resp = await _apiServices.get(endPoint: Urls.labTests);
+
+      if (resp.statusCode == 200 &&
+          resp.data['status'] == true &&
+          resp.data['data'] is List<dynamic>) {
+        final List<LabTestOption> tests = (resp.data['data'] as List<dynamic>)
+            .whereType<Map<String, dynamic>>()
+            .map(LabTestOption.fromJson)
+            .toList();
+
+        return right(tests);
+      }
+
+      return left(
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
+      );
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MedicalImageTypeOption>>>
+  getMedicalImageTypes() async {
+    try {
+      final resp = await _apiServices.get(endPoint: Urls.medicalImageTypes);
+
+      if (resp.statusCode == 200 &&
+          resp.data['status'] == true &&
+          resp.data['data'] is List<dynamic>) {
+        final List<MedicalImageTypeOption> types =
+            (resp.data['data'] as List<dynamic>)
+                .whereType<Map<String, dynamic>>()
+                .map(MedicalImageTypeOption.fromJson)
+                .toList();
+
+        return right(types);
+      }
+
+      return left(
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
+      );
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
     }
   }
 
@@ -91,21 +144,20 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
     String date,
   ) async {
     try {
-      var resp = await _apiServices.get(
-        endPoint: "${Urls.getTimes}/$doctorID/$centerID/$date",
+      final resp = await _apiServices.get(
+        endPoint: '${Urls.getTimes}/$doctorID/$centerID/$date',
       );
 
       if (resp.statusCode == 200) {
-        TimesModel times = TimesModel.fromJson(resp.data);
-
+        final TimesModel times = TimesModel.fromJson(resp.data);
         return right(times);
       }
 
       return left(
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
-    } catch (e) {
-      return left(ServerFailure(e.toString()));
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
     }
   }
 }
