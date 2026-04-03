@@ -854,19 +854,37 @@ class _DialogFilePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (file.hasLocalFile && file.isImage) {
-      return ClipRRect(
+      return InkWell(
+        onTap: () => _openZoomableMedicalImageViewer(context, file),
         borderRadius: BorderRadius.circular(24),
-        child: Image.file(file.localFile!, fit: BoxFit.contain),
+        child: Stack(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.file(file.localFile!, fit: BoxFit.contain),
+            ),
+            const Positioned(top: 12, right: 12, child: _ExpandHintBadge()),
+          ],
+        ),
       );
     }
 
     if (file.hasRemoteFile && file.isImage) {
-      return ClipRRect(
+      return InkWell(
+        onTap: () => _openZoomableMedicalImageViewer(context, file),
         borderRadius: BorderRadius.circular(24),
-        child: CustomImageWidget(
-          imageUrl: file.remoteFileUrl,
-          placeholderAsset: AssetsData.defaultCenter,
-          fit: BoxFit.contain,
+        child: Stack(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: CustomImageWidget(
+                imageUrl: file.remoteFileUrl,
+                placeholderAsset: AssetsData.defaultCenter,
+                fit: BoxFit.contain,
+              ),
+            ),
+            const Positioned(top: 12, right: 12, child: _ExpandHintBadge()),
+          ],
         ),
       );
     }
@@ -911,6 +929,91 @@ class _DialogFilePreview extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ExpandHintBadge extends StatelessWidget {
+  const _ExpandHintBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.58),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Icon(Icons.open_in_full_rounded, size: 16, color: Colors.white),
+          const SizedBox(width: 6),
+          Text(
+            'zoom'.tr(context),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Future<void> _openZoomableMedicalImageViewer(
+  BuildContext context,
+  MedicalFile file,
+) async {
+  await Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) {
+        return Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            title: Text(
+              file.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          body: SafeArea(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                  child: Text(
+                    'medical_image_zoom_hint'.tr(context),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ),
+                Expanded(
+                  child: InteractiveViewer(
+                    minScale: 1,
+                    maxScale: 5,
+                    panEnabled: true,
+                    child: Center(
+                      child: file.hasLocalFile
+                          ? Image.file(file.localFile!, fit: BoxFit.contain)
+                          : CustomImageWidget(
+                              imageUrl: file.remoteFileUrl,
+                              placeholderAsset: AssetsData.defaultCenter,
+                              fit: BoxFit.contain,
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
 }
 
 class _TypeBadge extends StatelessWidget {

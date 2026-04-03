@@ -4,6 +4,10 @@ class MedicalRecordAttachment {
   final String? url;
   final String? thumbnailUrl;
   final String? type;
+  final String? recordSource;
+  final String? recordDate;
+  final String? sourceLabel;
+  final String? filePath;
 
   const MedicalRecordAttachment({
     this.id,
@@ -11,6 +15,10 @@ class MedicalRecordAttachment {
     this.url,
     this.thumbnailUrl,
     this.type,
+    this.recordSource,
+    this.recordDate,
+    this.sourceLabel,
+    this.filePath,
   });
 
   factory MedicalRecordAttachment.fromJson(
@@ -35,6 +43,10 @@ class MedicalRecordAttachment {
           json['image']?.toString() ??
           json['preview_url']?.toString(),
       type: json['type']?.toString() ?? fallbackType,
+      recordSource: json['record_source']?.toString(),
+      recordDate: json['record_date']?.toString(),
+      sourceLabel: json['source_label']?.toString(),
+      filePath: json['file_path']?.toString(),
     );
   }
 
@@ -50,6 +62,7 @@ class MedicalRecordAttachment {
       url: url,
       thumbnailUrl: url,
       type: fallbackType,
+      filePath: url,
     );
   }
 
@@ -60,6 +73,10 @@ class MedicalRecordAttachment {
       'url': url,
       'thumbnail_url': thumbnailUrl,
       'type': type,
+      'record_source': recordSource,
+      'record_date': recordDate,
+      'source_label': sourceLabel,
+      'file_path': filePath,
     };
   }
 }

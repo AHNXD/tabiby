@@ -16,9 +16,12 @@ class PatientInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<MedicalRecordAttachment> attachedRecords =
+        appointmentDetails.visibleMedicalRecords;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Text(
           "patient_information".tr(context),
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -28,8 +31,7 @@ class PatientInfoSection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         AppointmentDetailsCard(appointmentDetails: appointmentDetails),
-        if (appointmentDetails.attachedXray != null ||
-            appointmentDetails.attachedLabResult != null) ...[
+        if (attachedRecords.isNotEmpty) ...<Widget>[
           const SizedBox(height: 16),
           Text(
             'attached_medical_records'.tr(context),
@@ -39,19 +41,14 @@ class PatientInfoSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          if (appointmentDetails.attachedXray != null)
-            _AttachmentCard(
-              title: 'attached_xray'.tr(context),
-              attachment: appointmentDetails.attachedXray!,
-            ),
-          if (appointmentDetails.attachedXray != null &&
-              appointmentDetails.attachedLabResult != null)
-            const SizedBox(height: 12),
-          if (appointmentDetails.attachedLabResult != null)
-            _AttachmentCard(
-              title: 'attached_lab_result'.tr(context),
-              attachment: appointmentDetails.attachedLabResult!,
-            ),
+          ...List<Widget>.generate(attachedRecords.length, (int index) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: index == attachedRecords.length - 1 ? 0 : 12,
+              ),
+              child: _AttachmentCard(attachment: attachedRecords[index]),
+            );
+          }),
         ],
       ],
     );
@@ -59,9 +56,8 @@ class PatientInfoSection extends StatelessWidget {
 }
 
 class _AttachmentCard extends StatelessWidget {
-  const _AttachmentCard({required this.title, required this.attachment});
+  const _AttachmentCard({required this.attachment});
 
-  final String title;
   final MedicalRecordAttachment attachment;
 
   @override
@@ -73,7 +69,7 @@ class _AttachmentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
@@ -90,25 +86,43 @@ class _AttachmentCard extends StatelessWidget {
             color: AppColors.primaryColors.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            title == 'attached_xray'.tr(context)
-                ? Icons.image_outlined
-                : Icons.science_outlined,
-            color: AppColors.primaryColors,
-            size: 24,
-          ),
+          child: Icon(_iconForType(), color: AppColors.primaryColors, size: 24),
         ),
         title: Text(
-          title,
+          attachment.title,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            attachment.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.grey.shade700),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                _typeLabel(context),
+                style: TextStyle(
+                  color: Colors.grey.shade800,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if ((attachment.recordDate ?? '').isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    attachment.recordDate!,
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
+                ),
+              if ((attachment.sourceLabel ?? '').isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    attachment.sourceLabel!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
+                ),
+            ],
           ),
         ),
         trailing: FilledButton.icon(
@@ -135,47 +149,80 @@ class _AttachmentCard extends StatelessWidget {
       return;
     }
 
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: const EdgeInsets.all(18),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        attachment.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.black,
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              title: Text(
+                attachment.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                    child: Text(
+                      'medical_image_zoom_hint'.tr(context),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ),
+                  Expanded(
+                    child: InteractiveViewer(
+                      minScale: 1,
+                      maxScale: 5,
+                      panEnabled: true,
+                      child: Center(
+                        child: CustomImageWidget(
+                          imageUrl: url,
+                          placeholderAsset: AssetsData.defaultCenter,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: CustomImageWidget(
-                    imageUrl: url,
-                    placeholderAsset: AssetsData.defaultCenter,
-                    fit: BoxFit.contain,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
+  }
+
+  IconData _iconForType() {
+    switch (attachment.type?.toLowerCase()) {
+      case 'lab':
+      case 'lab_result':
+        return Icons.science_outlined;
+      case 'radiology':
+      case 'xray':
+      case 'radiology_result':
+        return Icons.image_outlined;
+      default:
+        return Icons.insert_drive_file_outlined;
+    }
+  }
+
+  String _typeLabel(BuildContext context) {
+    switch (attachment.type?.toLowerCase()) {
+      case 'lab':
+      case 'lab_result':
+        return 'attached_lab_result'.tr(context);
+      case 'radiology':
+      case 'xray':
+      case 'radiology_result':
+        return 'attached_xray'.tr(context);
+      default:
+        return 'attached_medical_records'.tr(context);
+    }
   }
 }

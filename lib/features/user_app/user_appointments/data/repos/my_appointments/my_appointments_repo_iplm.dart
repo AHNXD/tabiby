@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:tabiby/features/user_app/user_appointments/data/models/appointment_details_model.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
 import '../../../../../../core/Api_services/api_services.dart';
 import '../../../../../../core/Api_services/urls.dart';
@@ -30,5 +31,45 @@ class MyAppointmentsRepoIplm implements MyAppointmentsRepo {
     } catch (e) {
       return left(ServerFailure(e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, AppointmentDetailsModel>> getAppointmentDetails(
+    int appointmentId,
+  ) async {
+    try {
+      final dynamic resp = await _apiServices.get(
+        endPoint: '${Urls.doctorAppointmentDetails}/$appointmentId',
+      );
+
+      final Map<String, dynamic>? appointmentJson = _extractAppointment(
+        resp.data,
+      );
+
+      if (resp.statusCode == 200 && appointmentJson != null) {
+        return right(AppointmentDetailsModel.fromJson(appointmentJson));
+      }
+
+      return left(
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
+      );
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
+    }
+  }
+
+  Map<String, dynamic>? _extractAppointment(dynamic responseData) {
+    if (responseData is Map<String, dynamic>) {
+      if (responseData['data'] is Map<String, dynamic> &&
+          responseData['data']['appointment'] is Map<String, dynamic>) {
+        return responseData['data']['appointment'] as Map<String, dynamic>;
+      }
+
+      if (responseData['appointment'] is Map<String, dynamic>) {
+        return responseData['appointment'] as Map<String, dynamic>;
+      }
+    }
+
+    return null;
   }
 }
