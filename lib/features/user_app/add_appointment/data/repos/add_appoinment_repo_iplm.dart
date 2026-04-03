@@ -88,9 +88,11 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
   }
 
   @override
-  Future<Either<Failure, List<LabTestOption>>> getLabTests() async {
+  Future<Either<Failure, List<LabTestOption>>> getLabTests(int centerId) async {
     try {
-      final resp = await _apiServices.get(endPoint: Urls.labTests);
+      final resp = await _apiServices.get(
+        endPoint: Urls.labTestsByCenter(centerId),
+      );
 
       if (resp.statusCode == 200 &&
           resp.data['status'] == true &&
@@ -112,10 +114,13 @@ class AddAppoinmentRepoIplm implements AddAppoinmentRepo {
   }
 
   @override
-  Future<Either<Failure, List<MedicalImageTypeOption>>>
-  getMedicalImageTypes() async {
+  Future<Either<Failure, List<MedicalImageTypeOption>>> getMedicalImageTypes(
+    int centerId,
+  ) async {
     try {
-      final resp = await _apiServices.get(endPoint: Urls.medicalImageTypes);
+      final resp = await _apiServices.get(
+        endPoint: Urls.medicalImageTypesByCenter(centerId),
+      );
 
       if (resp.statusCode == 200 &&
           resp.data['status'] == true &&

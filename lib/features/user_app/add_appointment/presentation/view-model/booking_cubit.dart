@@ -66,46 +66,10 @@ class BookingCubit extends Cubit<BookingState> {
             ? await _loadMedicalAttachments()
             : const <MedicalAttachmentItem>[];
 
-        final List<LabTestOption> labTests;
-        if (departmentType.requiresLabTests) {
-          final labTestsResult = await _addAppoinmentRepo.getLabTests();
-          final List<LabTestOption>? fetchedLabTests = labTestsResult.fold((
-            failure,
-          ) {
-            emit(BookingFailure(failure.message));
-            return null;
-          }, (tests) => tests);
-          if (fetchedLabTests == null) {
-            return;
-          }
-          labTests = fetchedLabTests;
-        } else {
-          labTests = const <LabTestOption>[];
-        }
-
-        final List<MedicalImageTypeOption> medicalImageTypes;
-        if (departmentType.requiresImageType) {
-          final medicalImageTypesResult = await _addAppoinmentRepo
-              .getMedicalImageTypes();
-          final List<MedicalImageTypeOption>? fetchedMedicalImageTypes =
-              medicalImageTypesResult.fold((failure) {
-                emit(BookingFailure(failure.message));
-                return null;
-              }, (types) => types);
-          if (fetchedMedicalImageTypes == null) {
-            return;
-          }
-          medicalImageTypes = fetchedMedicalImageTypes;
-        } else {
-          medicalImageTypes = const <MedicalImageTypeOption>[];
-        }
-
         emit(
           BookingSuccess(
             centers: centers,
             departmentType: departmentType,
-            availableLabTests: labTests,
-            availableMedicalImageTypes: medicalImageTypes,
             availableMedicalAttachments: attachments,
           ),
         );
@@ -126,12 +90,16 @@ class BookingCubit extends Cubit<BookingState> {
         selectedDate: null,
         selectedTime: null,
         selectedPeriodName: null,
+        selectedMedicalImageTypeId: null,
+        selectedLabTestIds: const <int>[],
+        availableLabTests: const <LabTestOption>[],
+        availableMedicalImageTypes: const <MedicalImageTypeOption>[],
       ),
     );
 
     final result = await _addAppoinmentRepo.getDays(doctorId, centerId);
-    result.fold(
-      (failure) => _emitFailure(
+    await result.fold(
+      (failure) async => _emitFailure(
         failure.message,
         currentState.copyWith(
           isLoadingDays: false,
@@ -141,11 +109,39 @@ class BookingCubit extends Cubit<BookingState> {
           selectedDate: null,
           selectedTime: null,
           selectedPeriodName: null,
+          selectedMedicalImageTypeId: null,
+          selectedLabTestIds: const <int>[],
+          availableLabTests: const <LabTestOption>[],
+          availableMedicalImageTypes: const <MedicalImageTypeOption>[],
         ),
       ),
-      (days) => emit(
-        (state as BookingSuccess).copyWith(days: days, isLoadingDays: false),
-      ),
+      (days) async {
+        final BookingSuccess baseState = (state as BookingSuccess).copyWith(
+          days: days,
+          isLoadingDays: false,
+        );
+
+        final List<LabTestOption>? labTests = await _loadLabTestsForCenter(
+          centerId,
+          baseState,
+        );
+        if (labTests == null) {
+          return;
+        }
+
+        final List<MedicalImageTypeOption>? medicalImageTypes =
+            await _loadMedicalImageTypesForCenter(centerId, baseState);
+        if (medicalImageTypes == null) {
+          return;
+        }
+
+        emit(
+          baseState.copyWith(
+            availableLabTests: labTests,
+            availableMedicalImageTypes: medicalImageTypes,
+          ),
+        );
+      },
     );
   }
 
@@ -255,5 +251,47 @@ class BookingCubit extends Cubit<BookingState> {
       (List<MedicalFile> files) =>
           files.map(MedicalAttachmentItem.fromMedicalFile).toList(),
     );
+  }
+
+  Future<List<LabTestOption>?> _loadLabTestsForCenter(
+    int centerId,
+    BookingSuccess fallbackState,
+  ) async {
+    if (!departmentType.requiresLabTests) {
+      return const <LabTestOption>[];
+    }
+
+    final result = await _addAppoinmentRepo.getLabTests(centerId);
+    return result.fold((failure) {
+      _emitFailure(
+        failure.message,
+        fallbackState.copyWith(
+          availableLabTests: const <LabTestOption>[],
+          selectedLabTestIds: const <int>[],
+        ),
+      );
+      return null;
+    }, (tests) => tests);
+  }
+
+  Future<List<MedicalImageTypeOption>?> _loadMedicalImageTypesForCenter(
+    int centerId,
+    BookingSuccess fallbackState,
+  ) async {
+    if (!departmentType.requiresImageType) {
+      return const <MedicalImageTypeOption>[];
+    }
+
+    final result = await _addAppoinmentRepo.getMedicalImageTypes(centerId);
+    return result.fold((failure) {
+      _emitFailure(
+        failure.message,
+        fallbackState.copyWith(
+          availableMedicalImageTypes: const <MedicalImageTypeOption>[],
+          selectedMedicalImageTypeId: null,
+        ),
+      );
+      return null;
+    }, (types) => types);
   }
 }

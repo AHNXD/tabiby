@@ -63,6 +63,11 @@ class AppointmentDetailsSection extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8),
             child: _ChoiceTile(
               title: item.name,
+              priceLabel: _buildPriceLabel(
+                context,
+                selectedCenterPrice: item.selectedCenterPrice,
+                fallbackPrice: item.price,
+              ),
               isSelected: isSelected,
               leading: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
@@ -103,6 +108,8 @@ class AppointmentDetailsSection extends StatelessWidget {
   }
 
   Widget _buildLabFields(BuildContext context) {
+    final double? selectedLabTestsTotal = _selectedLabTestsTotal();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -118,11 +125,23 @@ class AppointmentDetailsSection extends StatelessWidget {
             final bool isSelected = selectedLabTestIds.contains(test.id);
             return _LabTestChip(
               label: test.name,
+              priceLabel: _buildPriceLabel(
+                context,
+                selectedCenterPrice: test.selectedCenterPrice,
+                fallbackPrice: test.price,
+              ),
               isSelected: isSelected,
               onTap: () => onToggleLabTest(test.id),
             );
           }).toList(),
         ),
+        if (selectedLabTestsTotal != null) ...<Widget>[
+          const SizedBox(height: 12),
+          _SelectionTotalCard(
+            label: 'selected_lab_tests_total'.tr(context),
+            value: _formatPrice(context, price: selectedLabTestsTotal)!,
+          ),
+        ],
         if (availableLabTests.isEmpty)
           _EmptySelectionCard(label: 'please_select_lab_test'.tr(context)),
         const SizedBox(height: 14),
@@ -163,6 +182,47 @@ class AppointmentDetailsSection extends StatelessWidget {
       ],
     );
   }
+
+  String? _buildPriceLabel(
+    BuildContext context, {
+    required double? selectedCenterPrice,
+    required double? fallbackPrice,
+  }) {
+    return _formatPrice(context, price: selectedCenterPrice ?? fallbackPrice);
+  }
+
+  String? _formatPrice(BuildContext context, {required double? price}) {
+    if (price == null) {
+      return null;
+    }
+
+    final String formattedPrice = price == price.roundToDouble()
+        ? price.toStringAsFixed(0)
+        : price.toStringAsFixed(2);
+
+    return '$formattedPrice ${"sy".tr(context)}';
+  }
+
+  double? _selectedLabTestsTotal() {
+    double total = 0;
+    bool hasPricedSelection = false;
+
+    for (final LabTestOption test in availableLabTests) {
+      if (!selectedLabTestIds.contains(test.id)) {
+        continue;
+      }
+
+      final double? price = test.selectedCenterPrice ?? test.price;
+      if (price == null) {
+        continue;
+      }
+
+      total += price;
+      hasPricedSelection = true;
+    }
+
+    return hasPricedSelection ? total : null;
+  }
 }
 
 class _ChoiceTile extends StatelessWidget {
@@ -171,12 +231,14 @@ class _ChoiceTile extends StatelessWidget {
     required this.leading,
     required this.isSelected,
     required this.onTap,
+    this.priceLabel,
   });
 
   final String title;
   final Widget leading;
   final bool isSelected;
   final VoidCallback onTap;
+  final String? priceLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -204,17 +266,51 @@ class _ChoiceTile extends StatelessWidget {
             children: <Widget>[
               if (!isRtl) ...<Widget>[leading, const SizedBox(width: 12)],
               Expanded(
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: isRtl ? TextAlign.right : TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-                    color: isSelected
-                        ? const Color(0xFF21493B)
-                        : Colors.black87,
-                  ),
+                child: Column(
+                  crossAxisAlignment: isRtl
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: isRtl ? TextAlign.right : TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w600,
+                        color: isSelected
+                            ? const Color(0xFF21493B)
+                            : Colors.black87,
+                      ),
+                    ),
+                    if (priceLabel != null) ...<Widget>[
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.primaryColors.withValues(alpha: 0.14)
+                              : const Color(0xFFEFF5F1),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          priceLabel!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: isSelected
+                                ? const Color(0xFF21493B)
+                                : const Color(0xFF45685A),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
               if (isRtl) ...<Widget>[const SizedBox(width: 12), leading],
@@ -231,11 +327,13 @@ class _LabTestChip extends StatelessWidget {
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.priceLabel,
   });
 
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final String? priceLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -292,12 +390,33 @@ class _LabTestChip extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: isSelected ? Colors.white : const Color(0xFF31453D),
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: isSelected
+                          ? Colors.white
+                          : const Color(0xFF31453D),
+                    ),
+                  ),
+                  if (priceLabel != null) ...<Widget>[
+                    const SizedBox(height: 2),
+                    Text(
+                      priceLabel!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                        color: isSelected
+                            ? Colors.white.withValues(alpha: 0.92)
+                            : const Color(0xFF5C746B),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ],
           ),
@@ -328,6 +447,48 @@ class _EmptySelectionCard extends StatelessWidget {
           color: Colors.grey.shade600,
           fontWeight: FontWeight.w500,
         ),
+      ),
+    );
+  }
+}
+
+class _SelectionTotalCard extends StatelessWidget {
+  const _SelectionTotalCard({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColors.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF21493B),
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF21493B),
+            ),
+          ),
+        ],
       ),
     );
   }

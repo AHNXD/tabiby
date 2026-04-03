@@ -27,6 +27,11 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+# `file_picker` only needs DKImagePickerController/DKPhotoGallery when using
+# FileType.image/video/media on iOS. This app uses FileType.custom for document
+# uploads, so disabling media support avoids a fragile git-based pod download.
+Pod::PICKER_MEDIA = false
+
 target 'Runner' do
   use_frameworks!
 

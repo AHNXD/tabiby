@@ -430,6 +430,7 @@
     "please_select_time": "الرجاء تحديد وقت",
     "please_select_image_type": "الرجاء اختيار نوع الصورة",
     "please_select_lab_test": "الرجاء اختيار تحليل واحد على الأقل",
+    "selected_lab_tests_total": "الإجمالي النهائي للتحاليل المحددة",
     "radiology_booking_hint": "اختر نوع الصورة المطلوبة لهذا الموعد في قسم الأشعة.",
     "select_image_type": "اختر نوع الصورة",
     "laboratory_booking_hint": "اختر تحليلاً واحداً أو أكثر لهذا الموعد في المختبر.",

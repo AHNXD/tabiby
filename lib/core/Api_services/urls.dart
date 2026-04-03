@@ -56,11 +56,15 @@ class Urls {
   static String getTimes = "$basePort/get_times_today";
   static String addAppointment = "$basePort/appointment";
   static String labTests = "$basePort/lab-tests";
+  static String labTestsByCenter(int centerId) =>
+      "$labTests?center_id=$centerId";
   static String getAppointments = "$basePort/appointments";
   static String getMyAppointments = "$basePort/appointments";
 
   //medical files
   static String medicalImageTypes = "$basePort/medical-image-types";
+  static String medicalImageTypesByCenter(int centerId) =>
+      "$medicalImageTypes?center_id=$centerId";
   static String uploadPatientMedicalRecord =
       "$basePort/patient/medical_record/stroe";
   static String patientUploadedMedicalRecords =

@@ -428,6 +428,7 @@
     "please_select_time": "Please Select Time",
     "please_select_image_type": "Please select an image type",
     "please_select_lab_test": "Please select at least one lab test",
+    "selected_lab_tests_total": "Selected lab tests total",
     "radiology_booking_hint": "Choose the imaging study required for this radiology appointment.",
     "select_image_type": "Select image type",
     "laboratory_booking_hint": "Select one or more lab tests for this laboratory booking.",

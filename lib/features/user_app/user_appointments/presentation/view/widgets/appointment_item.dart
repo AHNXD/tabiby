@@ -257,7 +257,7 @@ class AppointmentItem extends StatelessWidget {
   bool get _hasDetails =>
       (appointment.doctorNote?.note?.isNotEmpty ?? false) ||
       (appointment.doctorNote?.prescription?.isNotEmpty ?? false) ||
-      appointment.doctorNote!.prescriptionList.isNotEmpty ||
+      (appointment.doctorNote?.prescriptionList.isNotEmpty ?? false) ||
       appointment.xrayAttachment != null ||
       appointment.labResultAttachment != null;
 
@@ -401,7 +401,7 @@ class AppointmentItem extends StatelessWidget {
 
   bool get _hasPrescriptionContent =>
       (appointment.doctorNote?.prescription?.isNotEmpty ?? false) ||
-      appointment.doctorNote!.prescriptionList.isNotEmpty;
+      (appointment.doctorNote?.prescriptionList.isNotEmpty ?? false);
 
   bool get _hasAttachments =>
       appointment.xrayAttachment != null ||

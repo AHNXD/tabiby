@@ -57,18 +57,36 @@ extension BookingDepartmentTypeX on BookingDepartmentType {
 class LabTestOption {
   final int id;
   final String name;
+  final double? price;
+  final double? selectedCenterPrice;
+  final int? centerId;
 
-  const LabTestOption({required this.id, required this.name});
+  const LabTestOption({
+    required this.id,
+    required this.name,
+    this.price,
+    this.selectedCenterPrice,
+    this.centerId,
+  });
 
   factory LabTestOption.fromJson(Map<String, dynamic> json) {
     return LabTestOption(
       id: _asInt(json['id']),
       name: json['name']?.toString().trim() ?? '',
+      price: _asNullableDouble(json['price']),
+      selectedCenterPrice: _asNullableDouble(json['selected_center_price']),
+      centerId: _asNullableInt(json['center_id']),
     );
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{'id': id, 'name': name};
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'price': price,
+      'selected_center_price': selectedCenterPrice,
+      'center_id': centerId,
+    };
   }
 
   static const List<LabTestOption> fallbackOptions = <LabTestOption>[
@@ -84,14 +102,36 @@ class LabTestOption {
 class MedicalImageTypeOption {
   final int id;
   final String name;
+  final double? price;
+  final double? selectedCenterPrice;
+  final int? centerId;
 
-  const MedicalImageTypeOption({required this.id, required this.name});
+  const MedicalImageTypeOption({
+    required this.id,
+    required this.name,
+    this.price,
+    this.selectedCenterPrice,
+    this.centerId,
+  });
 
   factory MedicalImageTypeOption.fromJson(Map<String, dynamic> json) {
     return MedicalImageTypeOption(
       id: _asInt(json['id']),
       name: json['name']?.toString().trim() ?? '',
+      price: _asNullableDouble(json['price']),
+      selectedCenterPrice: _asNullableDouble(json['selected_center_price']),
+      centerId: _asNullableInt(json['center_id']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'price': price,
+      'selected_center_price': selectedCenterPrice,
+      'center_id': centerId,
+    };
   }
 }
 
@@ -171,4 +211,28 @@ int _asInt(dynamic value) {
   }
 
   return int.tryParse(value?.toString() ?? '') ?? 0;
+}
+
+int? _asNullableInt(dynamic value) {
+  if (value == null) {
+    return null;
+  }
+
+  if (value is int) {
+    return value;
+  }
+
+  return int.tryParse(value.toString());
+}
+
+double? _asNullableDouble(dynamic value) {
+  if (value == null) {
+    return null;
+  }
+
+  if (value is num) {
+    return value.toDouble();
+  }
+
+  return double.tryParse(value.toString());
 }
