@@ -14,12 +14,13 @@ class BiographySection extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -29,29 +30,54 @@ class BiographySection extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColors.withOpacity(0.1),
-                  shape: BoxShape.circle,
+                  color: AppColors.primaryColors.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(
                   Icons.person_outline_rounded,
                   color: AppColors.primaryColors,
-                  size: 20,
+                  size: 22,
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                'biography'.tr(context),
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textColor,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'biography'.tr(context),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF1F2C28),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'doctor_details'.tr(context),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.primaryColors.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(999),
+            ),
+          ),
+          const SizedBox(height: 14),
           Text(
             biography,
             style: TextStyle(

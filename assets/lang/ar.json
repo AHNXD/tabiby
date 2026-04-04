@@ -252,6 +252,8 @@
     "of": "من",
     "get_diagnosis": "احصل على التشخيص",
     "no_symptom_selected": "يرجى تحديد عرض واحد على الأقل.",
+    "booking_send_diagnosis_result":"إرسال نتيجة التشخيص الذكي",
+    "booking_send_diagnosis_result_subtitle":"شارك آخر ملخص تشخيص ذكي مع الطبيب أثناء حجز الموعد.",
     "select_answer": "يرجى الإجابة على جميع الأسئلة",
     "result_title": "نتيجتك",
     "emergency": "حالة طارئة: يرجى طلب العناية الطبية فوراً!",

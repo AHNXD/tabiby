@@ -53,6 +53,11 @@ class BookingCubit extends Cubit<BookingState> {
     );
   }
 
+  void updateSendDiagnosisResult(bool value) {
+    if (state is! BookingSuccess) return;
+    emit((state as BookingSuccess).copyWith(sendDiagnosisResult: value));
+  }
+
   Future<void> fetchCenters() async {
     emit(BookingLoading());
 
@@ -191,7 +196,13 @@ class BookingCubit extends Cubit<BookingState> {
     );
   }
 
-  Future<void> bookAppointment(String note) async {
+  Future<void> bookAppointment(
+    String note, {
+    Map<String, dynamic>? diagnosis,
+    double? diagnosisRatio,
+    String? diagnosisName,
+    bool? isEmergency,
+  }) async {
     if (state is! BookingSuccess) return;
     final BookingSuccess s = state as BookingSuccess;
 
@@ -228,6 +239,10 @@ class BookingCubit extends Cubit<BookingState> {
       typeOfMedicalImageId: s.departmentType.requiresImageType
           ? s.selectedMedicalImageTypeId
           : null,
+      diagnosis: s.sendDiagnosisResult ? diagnosis : null,
+      diagnosisRatio: s.sendDiagnosisResult ? diagnosisRatio : null,
+      diagnosisName: s.sendDiagnosisResult ? diagnosisName : null,
+      isEmergency: s.sendDiagnosisResult ? isEmergency : null,
     );
 
     final result = await _addAppoinmentRepo.bookAppointment(request);

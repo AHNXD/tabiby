@@ -14,56 +14,55 @@ class CenterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        // Premium shadow to match other tiles
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.12)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Top Section: Image, Name, Price, Time
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Center Image
                 Container(
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.primaryColors.withOpacity(0.2),
-                      width: 1.5,
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primaryColors.withValues(alpha: 0.14),
+                        AppColors.secColors.withValues(alpha: 0.08),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: ClipOval(
+                  padding: const EdgeInsets.all(4),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
                     child: CustomImageWidget(
                       imageUrl: center.image,
                       placeholderAsset: AssetsData.defaultCenter,
-                      height: 56,
-                      width: 56,
+                      height: 58,
+                      width: 58,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 const SizedBox(width: 14),
 
-                // 2. Info Column
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name & Price Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,24 +71,25 @@ class CenterCard extends StatelessWidget {
                             child: Text(
                               center.name ?? '',
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: AppColors.textColor,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 17,
+                                color: Color(0xFF1F2C28),
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          // Price Badge
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryColors.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(20),
+                              color: AppColors.primaryColors.withValues(
+                                alpha: 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
                               center.price != null
@@ -106,8 +106,6 @@ class CenterCard extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 8),
-
-                      // Time Row with Icon
                       Row(
                         children: [
                           Icon(
@@ -126,6 +124,14 @@ class CenterCard extends StatelessWidget {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "view_doctors".tr(context),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -136,7 +142,6 @@ class CenterCard extends StatelessWidget {
             const Divider(height: 1, thickness: 0.5, color: Color(0xFFEEEEEE)),
             const SizedBox(height: 12),
 
-            // Bottom Section: Days Chips
             if (center.days != null && center.days!.isNotEmpty)
               SizedBox(
                 width: double.infinity,
@@ -150,18 +155,19 @@ class CenterCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        // Branded background instead of plain grey
-                        color: AppColors.primaryColors.withOpacity(0.06),
-                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.primaryColors.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: AppColors.primaryColors.withOpacity(0.15),
+                          color: AppColors.primaryColors.withValues(
+                            alpha: 0.15,
+                          ),
                         ),
                       ),
                       child: Text(
                         getDayName(dayIndex, context),
                         style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.primaryColors.withOpacity(0.9),
+                          color: AppColors.primaryColors.withValues(alpha: 0.9),
                           fontWeight: FontWeight.w600,
                         ),
                       ),

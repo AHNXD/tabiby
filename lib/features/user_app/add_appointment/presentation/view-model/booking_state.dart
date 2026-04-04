@@ -35,6 +35,7 @@ class BookingSuccess extends BookingState {
   final int? selectedMedicalImageTypeId;
   final List<int> selectedLabTestIds;
   final List<MedicalAttachmentItem> selectedMedicalAttachments;
+  final bool sendDiagnosisResult;
 
   final bool isLoadingDays;
   final bool isLoadingTimes;
@@ -55,6 +56,7 @@ class BookingSuccess extends BookingState {
     this.selectedMedicalImageTypeId,
     this.selectedLabTestIds = const <int>[],
     this.selectedMedicalAttachments = const <MedicalAttachmentItem>[],
+    this.sendDiagnosisResult = false,
     this.isLoadingDays = false,
     this.isLoadingTimes = false,
     this.isBooking = false,
@@ -75,6 +77,7 @@ class BookingSuccess extends BookingState {
     Object? selectedMedicalImageTypeId = _unset,
     List<int>? selectedLabTestIds,
     List<MedicalAttachmentItem>? selectedMedicalAttachments,
+    bool? sendDiagnosisResult,
     bool? isLoadingDays,
     bool? isLoadingTimes,
     bool? isBooking,
@@ -107,6 +110,7 @@ class BookingSuccess extends BookingState {
       selectedLabTestIds: selectedLabTestIds ?? this.selectedLabTestIds,
       selectedMedicalAttachments:
           selectedMedicalAttachments ?? this.selectedMedicalAttachments,
+      sendDiagnosisResult: sendDiagnosisResult ?? this.sendDiagnosisResult,
       isLoadingDays: isLoadingDays ?? this.isLoadingDays,
       isLoadingTimes: isLoadingTimes ?? this.isLoadingTimes,
       isBooking: isBooking ?? this.isBooking,

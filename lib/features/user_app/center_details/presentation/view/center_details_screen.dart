@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
 import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 import 'package:tabiby/features/user_app/center_details/presentation/view_model/center_cubit.dart';
@@ -19,6 +20,7 @@ class CenterDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: AppBarSection(),
       body: BlocProvider(
         create: (context) =>
@@ -28,6 +30,7 @@ class CenterDetailsScreen extends StatelessWidget {
             if (state is CenterSuccess) {
               Centers center = state.center;
               return CustomScrollView(
+                physics: const BouncingScrollPhysics(),
                 slivers: <Widget>[
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
@@ -40,13 +43,15 @@ class CenterDetailsScreen extends StatelessWidget {
                           name: center.name ?? "",
                           address: center.address ?? "",
                           imageUrl: center.img,
+                          clinicCount: center.clinics?.length ?? 0,
                         ),
-                        SizedBox(height: 24),
+                        const SizedBox(height: 20),
                         AboutSection(
                           description:
                               center.bio ??
                               'default_center_description'.tr(context),
                         ),
+                        const SizedBox(height: 20),
                         ClinicsSection(
                           centerID: center.id ?? 0,
                           clinics: center.clinics ?? const [],
@@ -65,7 +70,11 @@ class CenterDetailsScreen extends StatelessWidget {
                 },
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColors,
+                ),
+              );
             }
           },
         ),

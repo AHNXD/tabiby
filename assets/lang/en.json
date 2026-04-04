@@ -252,6 +252,8 @@
     "of": "Of",
     "get_diagnosis":"Get Diagnosis",
     "no_symptom_selected":"Please select at least one symptom.",
+    "booking_send_diagnosis_result":"Send AI diagnosis result",
+    "booking_send_diagnosis_result_subtitle":"Share the latest AI diagnosis summary with the doctor during booking.",
     "select_answer":"Please answer all questions",
     "result_title": "Your Result",
     "emergency":"EMERGENCY: Please seek medical attention immediately!",

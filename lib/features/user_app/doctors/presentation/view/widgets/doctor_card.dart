@@ -23,7 +23,7 @@ class DoctorCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10, // Reduced blur slightly for sharper look
+            blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: 2,
           ),
@@ -44,18 +44,14 @@ class DoctorCard extends StatelessWidget {
           },
           child: Stack(
             children: [
-              // 1. Main Content
               Padding(
-                // Reduced padding to prevent overflow
                 padding: const EdgeInsets.fromLTRB(8, 24, 8, 12),
                 child: SizedBox(
-                  width: double.infinity, // Forces alignment to center
+                  width: double.infinity,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment
-                        .spaceBetween, // Distributes space evenly
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Image
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -70,14 +66,12 @@ class DoctorCard extends StatelessWidget {
                           child: CustomImageWidget(
                             imageUrl: doctor.img,
                             placeholderAsset: AssetsData.defaultDoctorProfile,
-                            height: 75, // Slightly smaller to fix overflow
+                            height: 75,
                             width: 75,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
-
-                      // Texts Column (Wrapped in Flexible to prevent overflow)
                       Flexible(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -87,7 +81,7 @@ class DoctorCard extends StatelessWidget {
                               doctor.name ?? '',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13, // Slightly smaller font
+                                fontSize: 13,
                                 color: Colors.black87,
                               ),
                               maxLines: 1,
@@ -109,10 +103,7 @@ class DoctorCard extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 8),
-
-                      // Status Chip
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -155,11 +146,9 @@ class DoctorCard extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // 2. Floating Rating Badge
               Positioned(
                 top: 8,
-                right: 8, // Changed to 8 to pull it closer to corner
+                right: 8,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 6,

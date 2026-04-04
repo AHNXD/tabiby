@@ -4,6 +4,8 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/booking_request_model.dart';
 import 'package:tabiby/features/user_app/add_appointment/data/models/medical_attachment_item.dart';
+import 'package:tabiby/features/user_app/diagnose/data/models/diagnosis_result_model.dart';
+import 'package:tabiby/features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart';
 
 import '../../../../../../core/widgets/primary_button.dart';
 import '../medical_attachment_picker_screen.dart';
@@ -66,6 +68,13 @@ class _BookingFormState extends State<BookingForm> {
   }
 
   Widget _buildBookingContent(BuildContext context, BookingSuccess state) {
+    final DiagnosisResult? diagnosisResult = context
+        .watch<DiagnosisCubit>()
+        .state
+        .diagnosisResult;
+    final bool canSendDiagnosisResult =
+        state.departmentType == BookingDepartmentType.doctor &&
+        diagnosisResult != null;
     final bool showDateTimeStep = state.selectedCenterId != null;
     final bool showDetailsStep = state.selectedTime != null;
     final bool detailsStepCompleted = _hasCompletedDetailsStep(state);
@@ -139,7 +148,17 @@ class _BookingFormState extends State<BookingForm> {
         ],
         if (showNotesStep) ...<Widget>[
           const SizedBox(height: 16),
-          _StepCard(child: NotesSection(noteController: _noteController)),
+          _StepCard(
+            child: NotesSection(
+              noteController: _noteController,
+              showDiagnosisOption: canSendDiagnosisResult,
+              sendDiagnosisResult: state.sendDiagnosisResult,
+              diagnosisResult: diagnosisResult,
+              onToggleSendDiagnosis: context
+                  .read<BookingCubit>()
+                  .updateSendDiagnosisResult,
+            ),
+          ),
           const SizedBox(height: 16),
           Center(
             child: state.isBooking
@@ -159,6 +178,10 @@ class _BookingFormState extends State<BookingForm> {
   }
 
   void _submitBooking(BuildContext context, BookingSuccess state) {
+    final DiagnosisResult? diagnosisResult = context
+        .read<DiagnosisCubit>()
+        .state
+        .diagnosisResult;
     if (state.selectedTime == null) {
       messages(context, 'please_select_time'.tr(context), Colors.orange);
       return;
@@ -173,7 +196,19 @@ class _BookingFormState extends State<BookingForm> {
       return;
     }
 
-    context.read<BookingCubit>().bookAppointment(_noteController.text);
+    context.read<BookingCubit>().bookAppointment(
+      _noteController.text,
+      diagnosis: diagnosisResult == null
+          ? null
+          : <String, dynamic>{
+              'condition_name': diagnosisResult.conditionName,
+              'confidence': diagnosisResult.confidence,
+              'specialist': diagnosisResult.specialist,
+            },
+      diagnosisRatio: _parseDiagnosisRatio(diagnosisResult),
+      diagnosisName: diagnosisResult?.conditionName,
+      isEmergency: diagnosisResult?.isEmergency,
+    );
   }
 
   String? _validateBookingDetails(BuildContext context, BookingSuccess state) {
@@ -188,6 +223,14 @@ class _BookingFormState extends State<BookingForm> {
     }
 
     return null;
+  }
+
+  double? _parseDiagnosisRatio(DiagnosisResult? diagnosisResult) {
+    if (diagnosisResult == null) {
+      return null;
+    }
+
+    return double.tryParse(diagnosisResult.confidenceWithoutPercent);
   }
 
   bool _hasCompletedDetailsStep(BookingSuccess state) {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../data/models/centers_model.dart' show Clinics;
-import 'package:tabiby/core/utils/colors.dart'; // Ensure you import your colors
 
 class ClinicTile extends StatelessWidget {
   final int centerID;
@@ -15,24 +15,12 @@ class ClinicTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
+      margin: const EdgeInsets.only(bottom: 14),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(24),
           onTap: () {
             Navigator.pushNamed(
               context,
@@ -40,43 +28,94 @@ class ClinicTile extends StatelessWidget {
               arguments: {'centerID': centerID, 'specialtyID': clinic.id},
             );
           },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
+          child: Ink(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: Colors.grey.shade200),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 14,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
             child: Row(
               children: [
-                // 1. Image with border and shadow
-                ClipOval(
-                  child: CustomImageWidget(
-                    imageUrl: clinic.image,
-                    placeholderAsset: AssetsData.appIcon,
-                    height: 56,
-                    width: 56,
-                    fit: BoxFit.cover,
+                Container(
+                  width: 64,
+                  height: 64,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primaryColors.withValues(alpha: 0.14),
+                        AppColors.secColors.withValues(alpha: 0.08),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: CustomImageWidget(
+                      imageUrl: clinic.image,
+                      placeholderAsset: AssetsData.appIcon,
+                      height: 56,
+                      width: 56,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
 
-                const SizedBox(width: 16),
+                const SizedBox(width: 14),
 
-                // 2. Title Section
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColors.withValues(
+                            alpha: 0.08,
+                          ),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          "view_doctors".tr(context),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.primaryColors,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Text(
                         clinic.name ?? '',
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black87,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 17,
+                          color: Color(0xFF1F2C28),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         "view_doctors".tr(context),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                          height: 1.35,
+                        ),
                       ),
                     ],
                   ),
@@ -84,13 +123,12 @@ class ClinicTile extends StatelessWidget {
 
                 const SizedBox(width: 8),
 
-                // 3. Forward Arrow Button (Glassmorphism style)
                 Container(
-                  width: 36,
-                  height: 36,
+                  width: 42,
+                  height: 42,
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColors.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.primaryColors.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.arrow_forward_ios_rounded,

@@ -22,6 +22,7 @@ class DoctorDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(title: "doctor_details".tr(context)),
       body: BlocProvider(
         create: (context) =>
@@ -34,36 +35,36 @@ class DoctorDetailsScreen extends StatelessWidget {
               return Column(
                 children: [
                   Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Header Section
-                          DoctorHeader(
-                            name: doctor.name ?? '',
-                            specialty: doctor.specialty?.name ?? '',
-                            isActive: doctor.isActive == 1,
-                            imageUrl: doctor.img,
-                          ),
-                          const SizedBox(height: 24),
-                          _buildStatsRow(context, doctor),
-                          // Rating Section
-                          const SizedBox(height: 24),
-                          // Biography Section
-                          BiographySection(biography: doctor.bio ?? ""),
-                          const SizedBox(height: 24),
-                          // Affiliated Centers Section
-                          AffiliatedCentersSection(
-                            centers: doctor.centers ?? [],
-                          ),
-                        ],
-                      ),
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
+                      children: [
+                        DoctorHeader(
+                          name: doctor.name ?? '',
+                          specialty: doctor.specialty?.name ?? '',
+                          isActive: doctor.isActive == 1,
+                          imageUrl: doctor.img,
+                          centerCount: doctor.centers?.length ?? 0,
+                        ),
+                        const SizedBox(height: 18),
+                        _DoctorHighlightsRow(doctor: doctor),
+                        const SizedBox(height: 20),
+                        BiographySection(biography: doctor.bio ?? ""),
+                        const SizedBox(height: 20),
+                        AffiliatedCentersSection(centers: doctor.centers ?? []),
+                        const SizedBox(height: 12),
+                      ],
                     ),
                   ),
-                  BookingButton(
-                    doctorID: doctorID,
-                    doctorType: doctor.doctorType,
+                  SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
+                      child: BookingButton(
+                        doctorID: doctorID,
+                        doctorType: doctor.doctorType,
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -76,20 +77,30 @@ class DoctorDetailsScreen extends StatelessWidget {
                 },
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColors,
+                ),
+              );
             }
           },
         ),
       ),
     );
   }
+}
 
-  Widget _buildStatsRow(BuildContext context, Doctor doctor) {
+class _DoctorHighlightsRow extends StatelessWidget {
+  const _DoctorHighlightsRow({required this.doctor});
+
+  final Doctor doctor;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          child: _buildStatItem(
-            context,
+          child: _DoctorStatCard(
             icon: Icons.star_rounded,
             color: Colors.amber,
             value: (doctor.rate ?? 0).toString(),
@@ -98,8 +109,7 @@ class DoctorDetailsScreen extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _buildStatItem(
-            context,
+          child: _DoctorStatCard(
             icon: Icons.work_history_rounded,
             color: AppColors.primaryColors,
             value: "${doctor.yearsOfExperience ?? 0}+",
@@ -109,49 +119,63 @@ class DoctorDetailsScreen extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildStatItem(
-    BuildContext context, {
+class _DoctorStatCard extends StatelessWidget {
+  const _DoctorStatCard({
     required IconData icon,
     required Color color,
     required String value,
     required String label,
-  }) {
+  }) : _icon = icon,
+       _color = color,
+       _value = value,
+       _label = label;
+
+  final IconData _icon;
+  final Color _color;
+  final String _value;
+  final String _label;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
+              color: _color.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: color, size: 24),
+            child: Icon(_icon, color: _color, size: 24),
           ),
           const SizedBox(height: 8),
           Text(
-            value,
+            _value,
             style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textColor,
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF1F2C28),
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            label,
+            _label,
             style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
             textAlign: TextAlign.center,
           ),

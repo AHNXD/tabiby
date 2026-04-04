@@ -3,13 +3,12 @@ import 'package:tabiby/core/widgets/responsive_text.dart';
 import 'package:tabiby/features/user_app/center_details/data/models/centers_model.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
-import '../../../../../../core/utils/colors.dart'; // Ensure colors are imported
+import '../../../../../../core/utils/colors.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 
 class CenterCard extends StatelessWidget {
   final Centers center;
 
-  // Optional: Add a tap handler if you plan to navigate to details
   final VoidCallback? onTap;
 
   const CenterCard({super.key, required this.center, this.onTap});
@@ -34,18 +33,15 @@ class CenterCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: onTap, // Hook up navigation here later
+          onTap: onTap,
           child: Padding(
-            // Balanced padding to prevent overflow
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
             child: SizedBox(
-              width: double.infinity, // Forces content to center horizontally
+              width: double.infinity,
               child: Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.center, // Centers vertically
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 1. Image with Depth and Border
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -65,21 +61,17 @@ class CenterCard extends StatelessWidget {
                       child: CustomImageWidget(
                         imageUrl: center.img,
                         placeholderAsset: AssetsData.defaultCenter,
-                        height: 85, // Adjusted size to fit grid nicely
+                        height: 85,
                         width: 85,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 12),
-
-                  // 2. Text Content (Flexible to prevent overflow)
                   Flexible(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Name
                         ResponsiveText(
                           center.name ?? '',
                           style: const TextStyle(
@@ -91,10 +83,7 @@ class CenterCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                         ),
-
                         const SizedBox(height: 6),
-
-                        // Address with small icon
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,

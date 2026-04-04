@@ -163,6 +163,10 @@ class AppointmentBookingRequest {
   final List<AppointmentMedicalRecordAttachment> attachedMedicalRecords;
   final List<int> labTests;
   final int? typeOfMedicalImageId;
+  final Map<String, dynamic>? diagnosis;
+  final double? diagnosisRatio;
+  final String? diagnosisName;
+  final bool? isEmergency;
 
   const AppointmentBookingRequest({
     required this.doctorId,
@@ -175,6 +179,10 @@ class AppointmentBookingRequest {
     this.attachedMedicalRecords = const <AppointmentMedicalRecordAttachment>[],
     this.labTests = const <int>[],
     this.typeOfMedicalImageId,
+    this.diagnosis,
+    this.diagnosisRatio,
+    this.diagnosisName,
+    this.isEmergency,
   });
 
   Map<String, dynamic> toJson() {
@@ -199,6 +207,22 @@ class AppointmentBookingRequest {
 
     if (type.requiresImageType && typeOfMedicalImageId != null) {
       data['type_of_medical_image_id'] = typeOfMedicalImageId;
+    }
+
+    if (diagnosis != null && diagnosis!.isNotEmpty) {
+      data['diagnosis'] = diagnosis;
+    }
+
+    if (diagnosisRatio != null) {
+      data['diagnosis_ratio'] = diagnosisRatio;
+    }
+
+    if (diagnosisName != null && diagnosisName!.trim().isNotEmpty) {
+      data['diagnosis_name'] = diagnosisName!.trim();
+    }
+
+    if (isEmergency != null) {
+      data['is_emergency'] = isEmergency;
     }
 
     return data;

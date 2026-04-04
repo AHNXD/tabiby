@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
 
 import '../../../../add_appointment/presentation/view/booking_screen.dart';
@@ -11,8 +12,17 @@ class BookingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryColors.withValues(alpha: 0.2),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
       child: PrimaryButton(
         text: 'book_an_appointment'.tr(context),
         onPressed: () {
