@@ -1,43 +1,58 @@
 part of 'diet_cubit.dart';
 
-enum DietViewState { idle, loading, success, error }
+enum DietAsyncStatus { initial, loading, success, error }
 
 class DietState extends Equatable {
   const DietState({
-    this.viewState = DietViewState.idle,
+    this.submitStatus = DietAsyncStatus.initial,
+    this.historyStatus = DietAsyncStatus.initial,
+    this.planStatus = DietAsyncStatus.initial,
     this.plan,
     this.currentRequest,
     this.history = const [],
+    this.historyMeta = const DietPlansMeta(page: 1, limit: 10, total: 0),
     this.errorMessage = '',
     this.infoMessage = '',
   });
 
-  final DietViewState viewState;
+  final DietAsyncStatus submitStatus;
+  final DietAsyncStatus historyStatus;
+  final DietAsyncStatus planStatus;
   final DietPlanResponse? plan;
   final DietRequestData? currentRequest;
   final List<DietPlanHistoryItem> history;
+  final DietPlansMeta historyMeta;
   final String errorMessage;
   final String infoMessage;
 
-  bool get isLoading => viewState == DietViewState.loading;
+  bool get isLoading => isGenerating;
+  bool get isGenerating => submitStatus == DietAsyncStatus.loading;
+  bool get isLoadingHistory => historyStatus == DietAsyncStatus.loading;
+  bool get isLoadingPlan => planStatus == DietAsyncStatus.loading;
 
   DietState copyWith({
-    DietViewState? viewState,
+    DietAsyncStatus? submitStatus,
+    DietAsyncStatus? historyStatus,
+    DietAsyncStatus? planStatus,
     DietPlanResponse? plan,
     DietRequestData? currentRequest,
     List<DietPlanHistoryItem>? history,
+    DietPlansMeta? historyMeta,
     String? errorMessage,
     String? infoMessage,
     bool clearPlan = false,
     bool clearCurrentRequest = false,
   }) {
     return DietState(
-      viewState: viewState ?? this.viewState,
+      submitStatus: submitStatus ?? this.submitStatus,
+      historyStatus: historyStatus ?? this.historyStatus,
+      planStatus: planStatus ?? this.planStatus,
       plan: clearPlan ? null : plan ?? this.plan,
       currentRequest: clearCurrentRequest
           ? null
           : currentRequest ?? this.currentRequest,
       history: history ?? this.history,
+      historyMeta: historyMeta ?? this.historyMeta,
       errorMessage: errorMessage ?? this.errorMessage,
       infoMessage: infoMessage ?? this.infoMessage,
     );
@@ -45,10 +60,13 @@ class DietState extends Equatable {
 
   @override
   List<Object?> get props => [
-    viewState,
+    submitStatus,
+    historyStatus,
+    planStatus,
     plan,
     currentRequest,
     history,
+    historyMeta,
     errorMessage,
     infoMessage,
   ];

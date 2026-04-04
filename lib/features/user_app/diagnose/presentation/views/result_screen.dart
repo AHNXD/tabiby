@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/view_models/diagnosis_cubit.dart';
@@ -31,7 +32,7 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(title: 'result_title'.tr(context)),
       body: BlocBuilder<DiagnosisCubit, DiagnosisState>(
         builder: (context, state) {
@@ -52,12 +53,15 @@ class ResultScreen extends StatelessWidget {
                 );
               }
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: DiagnosisResultContent(
-                  result: result,
-                  onFindDoctor: () => _findDoctor(context),
-                  onStartOver: () => _startOver(context),
+              return SafeArea(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(20),
+                  child: DiagnosisResultContent(
+                    result: result,
+                    onFindDoctor: () => _findDoctor(context),
+                    onStartOver: () => _startOver(context),
+                  ),
                 ),
               );
             case ViewState.idle:

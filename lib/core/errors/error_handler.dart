@@ -79,7 +79,7 @@ class ErrorHandler {
   }
 
   static String _handleValidationErrors(dynamic data) {
-    final errors = (data is Map<String, dynamic>) ? data['message'] : null;
+    final errors = (data is Map<String, dynamic>) ? data['errors'] : null;
     if (errors is! Map<String, dynamic>) {
       return validationError;
     }

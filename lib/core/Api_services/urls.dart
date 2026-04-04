@@ -101,4 +101,7 @@ class Urls {
       "http://$ip:$n8nPort/webhook-test/diagnose";
   static String generateDietPlanAutomation =
       "http://$ip:$n8nPort/webhook-test/generate-diet-plan";
+  static String nutritionPlans = "$basePort/nutrition-plans";
+  static String latestNutritionPlan = "$nutritionPlans/latest";
+  static String nutritionPlanById(String id) => "$nutritionPlans/$id";
 }

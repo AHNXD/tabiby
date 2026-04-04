@@ -31,7 +31,7 @@ class QuestionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(title: 'questions_title'.tr(context)),
       body: BlocBuilder<DiagnosisCubit, DiagnosisState>(
         builder: (context, state) {
@@ -48,69 +48,66 @@ class QuestionScreen extends StatelessWidget {
               );
             case ViewState.success:
               if (state.symptoms.isEmpty) {
-                return NoDataWidget(
-                  title: 'no_data_title'.tr(context),
-                  subtitle: 'no_symptom'.tr(context),
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: NoDataWidget(
+                      title: 'no_data_title'.tr(context),
+                      subtitle: 'no_symptom'.tr(context),
+                    ),
+                  ),
                 );
               }
 
               return Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: AppColors.primaryColors,
+                  Expanded(
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+                          sliver: SliverToBoxAdapter(
+                            child: QuestionIntroCard(
+                              bodyPartLabel: localizedBodyPartLabel(
+                                context,
+                                partKey: state.selectedBodyPartKey,
+                                fallbackLabel: state.selectedBodyPartLabel,
+                              ),
+                              selectedCount: state.selectedSymptoms.length,
+                              totalCount: state.symptoms.length,
+                            ),
+                          ),
                         ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            localizedBodyPartLabel(
-                              context,
-                              partKey: state.selectedBodyPartKey,
-                              fallbackLabel: state.selectedBodyPartLabel,
-                            ),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey.shade700,
-                            ),
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                          sliver: SliverList.separated(
+                            itemCount: state.symptoms.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              return SymptomCard(
+                                symptom: state.symptoms[index],
+                                symptomIndex: index,
+                              );
+                            },
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
-                      itemCount: state.symptoms.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        return SymptomCard(
-                          symptom: state.symptoms[index],
-                          symptomIndex: index,
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.06),
-                          blurRadius: 10,
-                          offset: const Offset(0, -4),
-                        ),
-                      ],
-                    ),
-                    child: SafeArea(
-                      child: PrimaryButton(
-                        text: 'get_diagnosis'.tr(context),
-                        fontSize: 20,
-                        onPressed: () => _submit(context, state),
-                      ),
+                  QuestionSubmitBar(
+                    selectedCount: state.selectedSymptoms.length,
+                    child: PrimaryButton(
+                      text: 'get_diagnosis'.tr(context),
+                      fontSize: 20,
+                      onPressed: () => _submit(context, state),
                     ),
                   ),
                 ],

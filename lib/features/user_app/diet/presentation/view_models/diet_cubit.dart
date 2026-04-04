@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tabiby/core/utils/cache_helper.dart';
 
 import '../../data/models/diet_plan_history_item.dart';
 import '../../data/models/diet_plan_response.dart';
 import '../../data/models/diet_request_data.dart';
+import '../../data/models/paginated_diet_plans_result.dart';
 import '../../data/repos/diet_repository.dart';
 
 part 'diet_state.dart';
@@ -18,13 +16,10 @@ class DietCubit extends Cubit<DietState> {
 
   final DietRepository _dietRepository;
 
-  static const String _historyCacheKey = 'diet_plan_history_v1';
-  static const int _maxHistoryItems = 20;
-
   Future<void> generateDietPlan(DietRequestData request) async {
     emit(
       state.copyWith(
-        viewState: DietViewState.loading,
+        submitStatus: DietAsyncStatus.loading,
         currentRequest: request,
         errorMessage: '',
         infoMessage: 'diet_generation_takes_time',
@@ -37,32 +32,22 @@ class DietCubit extends Cubit<DietState> {
       (failure) async {
         emit(
           state.copyWith(
-            viewState: DietViewState.error,
+            submitStatus: DietAsyncStatus.error,
             errorMessage: failure.message,
             infoMessage: '',
           ),
         );
       },
-      (plan) async {
-        final newItem = DietPlanHistoryItem(
-          id: DateTime.now().microsecondsSinceEpoch.toString(),
-          createdAt: DateTime.now(),
-          request: request,
-          plan: plan,
-        );
-
-        final updatedHistory = [
-          newItem,
-          ...state.history,
-        ].take(_maxHistoryItems).toList();
-
-        await _persistHistory(updatedHistory);
+      (item) async {
+        final updatedHistory = _upsertHistoryItem(item);
 
         emit(
           state.copyWith(
-            viewState: DietViewState.success,
-            plan: plan,
-            currentRequest: request,
+            submitStatus: DietAsyncStatus.success,
+            historyStatus: DietAsyncStatus.success,
+            planStatus: DietAsyncStatus.success,
+            plan: item.plan,
+            currentRequest: item.request,
             history: updatedHistory,
             errorMessage: '',
             infoMessage: '',
@@ -73,48 +58,104 @@ class DietCubit extends Cubit<DietState> {
   }
 
   Future<void> loadHistory() async {
-    try {
-      final raw = CacheHelper.getData(key: _historyCacheKey);
-      if (raw is! String || raw.trim().isEmpty) {
-        return;
-      }
+    emit(
+      state.copyWith(historyStatus: DietAsyncStatus.loading, errorMessage: ''),
+    );
 
-      final decoded = jsonDecode(raw);
-      if (decoded is! List) {
-        return;
-      }
+    final result = await _dietRepository.getDietPlans();
 
-      final history = decoded
-          .whereType<Map>()
-          .map(
-            (item) =>
-                DietPlanHistoryItem.fromJson(Map<String, dynamic>.from(item)),
-          )
-          .toList();
-
-      if (history.isEmpty) {
-        return;
-      }
-
-      emit(
-        state.copyWith(
-          history: history,
-          plan: state.plan ?? history.first.plan,
-          currentRequest: state.currentRequest ?? history.first.request,
-        ),
-      );
-    } catch (_) {}
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            historyStatus: DietAsyncStatus.error,
+            errorMessage: failure.message,
+          ),
+        );
+      },
+      (historyResult) {
+        emit(
+          state.copyWith(
+            historyStatus: DietAsyncStatus.success,
+            history: historyResult.items,
+            historyMeta: historyResult.meta,
+            errorMessage: '',
+          ),
+        );
+      },
+    );
   }
 
-  void openHistoryItem(DietPlanHistoryItem item) {
+  Future<bool> openHistoryItem(DietPlanHistoryItem item) async {
     emit(
       state.copyWith(
-        viewState: DietViewState.success,
-        plan: item.plan,
-        currentRequest: item.request,
+        planStatus: DietAsyncStatus.loading,
         errorMessage: '',
         infoMessage: '',
       ),
+    );
+
+    final result = await _dietRepository.getDietPlanById(item.id);
+
+    return result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            planStatus: DietAsyncStatus.error,
+            errorMessage: failure.message,
+          ),
+        );
+        return false;
+      },
+      (savedItem) {
+        emit(
+          state.copyWith(
+            planStatus: DietAsyncStatus.success,
+            plan: savedItem.plan,
+            currentRequest: savedItem.request,
+            history: _upsertHistoryItem(savedItem),
+            errorMessage: '',
+          ),
+        );
+        return true;
+      },
+    );
+  }
+
+  Future<bool> openLatestPlan() async {
+    emit(
+      state.copyWith(
+        planStatus: DietAsyncStatus.loading,
+        errorMessage: '',
+        infoMessage: '',
+      ),
+    );
+
+    final result = await _dietRepository.getLatestDietPlan();
+
+    return result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            planStatus: DietAsyncStatus.error,
+            errorMessage: failure.message,
+          ),
+        );
+        return false;
+      },
+      (item) {
+        emit(
+          state.copyWith(
+            planStatus: DietAsyncStatus.success,
+            historyStatus: DietAsyncStatus.success,
+            plan: item.plan,
+            currentRequest: item.request,
+            history: _upsertHistoryItem(item),
+            errorMessage: '',
+          ),
+        );
+        return true;
+      },
     );
   }
 
@@ -129,7 +170,8 @@ class DietCubit extends Cubit<DietState> {
   void reset() {
     emit(
       state.copyWith(
-        viewState: DietViewState.idle,
+        submitStatus: DietAsyncStatus.initial,
+        planStatus: DietAsyncStatus.initial,
         errorMessage: '',
         infoMessage: '',
         clearPlan: true,
@@ -138,8 +180,11 @@ class DietCubit extends Cubit<DietState> {
     );
   }
 
-  Future<void> _persistHistory(List<DietPlanHistoryItem> history) async {
-    final encoded = jsonEncode(history.map((e) => e.toJson()).toList());
-    await CacheHelper.setString(key: _historyCacheKey, value: encoded);
+  List<DietPlanHistoryItem> _upsertHistoryItem(DietPlanHistoryItem item) {
+    final updatedHistory = List<DietPlanHistoryItem>.from(state.history)
+      ..removeWhere((existingItem) => existingItem.id == item.id)
+      ..insert(0, item);
+
+    return updatedHistory;
   }
 }

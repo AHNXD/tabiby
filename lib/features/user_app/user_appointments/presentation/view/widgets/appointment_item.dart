@@ -5,23 +5,23 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
+import 'package:tabiby/core/widgets/custom_image_widget.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
+import 'package:tabiby/features/user_app/user_appointments/data/repos/rating/rating_repo.dart';
+import 'package:tabiby/features/user_app/user_appointments/presentation/view-model/rating/rating_cubit.dart';
+import 'package:tabiby/features/user_app/user_appointments/presentation/view/appointment_details_screen.dart';
 
-import '../../../../../../core/widgets/custom_image_widget.dart';
-import '../../../data/repos/rating/rating_repo.dart';
-import '../appointment_details_screen.dart';
-import '../../view-model/rating/rating_cubit.dart';
 import 'rating_dialog.dart';
 
 class AppointmentItem extends StatelessWidget {
-  final Appointment appointment;
-  final String status;
-
   const AppointmentItem({
     super.key,
     required this.appointment,
     required this.status,
   });
+
+  final Appointment appointment;
+  final String status;
 
   void _showRatingDialog(BuildContext context) {
     showDialog(
@@ -51,207 +51,166 @@ class AppointmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime parsedDate = DateTime.parse(appointment.date!);
+    final DateTime? parsedDate = _parseDate(appointment.date);
+    final Color accentColor = _statusColor();
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: <BoxShadow>[
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-            spreadRadius: 2,
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColors.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        DateFormat('dd').format(parsedDate),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColors,
-                          height: 1.0,
-                        ),
-                      ),
-                      Text(
-                        DateFormat(
-                          'MMM',
-                        ).format(parsedDate).toUpperCase().tr(context),
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColors.withValues(alpha: 0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  DateFormat(
-                    'EEEE',
-                  ).format(parsedDate).toLowerCase().tr(context),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                const Spacer(),
-                if (status == 'completed') ...<Widget>[
-                  _buildActionButton(
-                    context,
-                    label: 'rate'.tr(context),
-                    icon: Icons.star_rate_rounded,
-                    onTap: () => _showRatingDialog(context),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                if (appointment.id != null)
-                  _buildActionButton(
-                    context,
-                    label: 'details'.tr(context),
-                    icon: Icons.info_outline_rounded,
-                    onTap: () => _openDetailsScreen(context),
-                    isOutlined: status == 'completed',
-                  ),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Divider(
-                height: 1,
-                thickness: 0.5,
-                color: Color(0xFFEEEEEE),
-              ),
-            ),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.grey.withValues(alpha: 0.2),
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: CustomImageWidget(
-                      imageUrl: appointment.doctor?.img,
-                      placeholderAsset: AssetsData.defaultDoctorProfile,
-                      height: 60,
-                      width: 60,
-                      fit: BoxFit.cover,
+              children: [
+                _DateTile(parsedDate: parsedDate, accentColor: accentColor),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _weekdayLabel(context, parsedDate),
+                          style: const TextStyle(
+                            color: Color(0xFF1F2C28),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _fullDateLabel(parsedDate),
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        appointment.doctor?.name ?? "",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                _StatusChip(
+                  label: status.tr(context),
+                  accentColor: accentColor,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7FAF8),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.primaryColors.withValues(alpha: 0.08),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.primaryColors.withValues(alpha: 0.15),
+                        width: 2,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        appointment.doctor?.specialty?.name ?? "",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey.shade600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    ),
+                    child: ClipOval(
+                      child: CustomImageWidget(
+                        imageUrl: appointment.doctor?.img,
+                        placeholderAsset: AssetsData.defaultDoctorProfile,
+                        height: 68,
+                        width: 68,
+                        fit: BoxFit.cover,
                       ),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          appointment.doctor?.name ?? "--",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xFF1F2C28),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(6),
+                        const SizedBox(height: 4),
+                        Text(
+                          appointment.doctor?.specialty?.name ?? "--",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                              Icons.access_time_rounded,
-                              size: 12,
-                              color: Colors.grey.shade600,
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _InfoChip(
+                              icon: Icons.access_time_rounded,
+                              label: appointment.time ?? '--:--',
+                              accentColor: AppColors.primaryColors,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              appointment.time ?? '--:--',
-                              style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            _InfoChip(
+                              icon: Icons.star_rounded,
+                              label:
+                                  appointment.doctor?.rate?.toString() ?? '--',
+                              accentColor: const Color(0xFFE7A423),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                if (appointment.id != null)
+                  _ActionButton(
+                    label: 'details'.tr(context),
+                    icon: Icons.arrow_outward_rounded,
+                    onTap: () => _openDetailsScreen(context),
+                    filled: true,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                if (status == 'completed')
+                  _ActionButton(
+                    label: 'rate'.tr(context),
+                    icon: Icons.star_rate_rounded,
+                    onTap: () => _showRatingDialog(context),
+                    filled: false,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.star_rounded,
-                        color: Colors.amber,
-                        size: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        appointment.doctor?.rate.toString() ?? '--',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ],
@@ -260,40 +219,221 @@ class AppointmentItem extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    required VoidCallback onTap,
-    bool isOutlined = false,
-  }) {
+  DateTime? _parseDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+    try {
+      return DateTime.parse(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _weekdayLabel(BuildContext context, DateTime? parsedDate) {
+    if (parsedDate == null) {
+      return '--';
+    }
+    return DateFormat('EEEE').format(parsedDate).toLowerCase().tr(context);
+  }
+
+  String _fullDateLabel(DateTime? parsedDate) {
+    if (parsedDate == null) {
+      return '--';
+    }
+    return DateFormat('dd MMM yyyy').format(parsedDate);
+  }
+
+  Color _statusColor() {
+    switch (status) {
+      case 'completed':
+        return AppColors.primaryColors;
+      case 'canceled':
+        return const Color(0xFFE56B6F);
+      default:
+        return const Color(0xFFE7A423);
+    }
+  }
+}
+
+class _DateTile extends StatelessWidget {
+  const _DateTile({required this.parsedDate, required this.accentColor});
+
+  final DateTime? parsedDate;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 70,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      decoration: BoxDecoration(
+        color: accentColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        children: [
+          Text(
+            parsedDate == null ? '--' : DateFormat('dd').format(parsedDate!),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: accentColor,
+              height: 1,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            parsedDate == null
+                ? '--'
+                : DateFormat('MMM').format(parsedDate!).toUpperCase(),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: accentColor.withValues(alpha: 0.9),
+              letterSpacing: 0.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  const _StatusChip({required this.label, required this.accentColor});
+
+  final String label;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: accentColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: accentColor,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: accentColor,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  const _InfoChip({
+    required this.icon,
+    required this.label,
+    required this.accentColor,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 15, color: accentColor),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey.shade800,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+    required this.filled,
+  });
+
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: isOutlined
-              ? Colors.transparent
-              : AppColors.primaryColors.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(8),
-          border: isOutlined
-              ? Border.all(
-                  color: AppColors.primaryColors.withValues(alpha: 0.3),
-                )
+          color: filled
+              ? AppColors.primaryColors
+              : AppColors.primaryColors.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(16),
+          border: filled
+              ? null
+              : Border.all(
+                  color: AppColors.primaryColors.withValues(alpha: 0.18),
+                ),
+          boxShadow: filled
+              ? [
+                  BoxShadow(
+                    color: AppColors.primaryColors.withValues(alpha: 0.2),
+                    blurRadius: 14,
+                    offset: const Offset(0, 8),
+                  ),
+                ]
               : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(icon, size: 14, color: AppColors.primaryColors),
-            const SizedBox(width: 4),
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: filled ? Colors.white : AppColors.primaryColors,
+            ),
+            const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(
-                color: AppColors.primaryColors,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+              style: TextStyle(
+                color: filled ? Colors.white : AppColors.primaryColors,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
               ),
             ),
           ],

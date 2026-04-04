@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
@@ -58,7 +59,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         .toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(
         title: 'diagnose_category'.tr(context),
         showBackButton: false,
@@ -69,30 +70,41 @@ class _CategoryScreenState extends State<CategoryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const CategoryInstructionCard(),
-              const SizedBox(height: 10),
-              CategorySideToggle(
-                currentSide: _currentSide,
-                onSideChanged: (side) {
-                  setState(() {
-                    _currentSide = side;
-                  });
-                },
-              ),
-              const SizedBox(height: 12),
               Expanded(
-                child: CategoryBodyPartsGrid(
-                  parts: visibleParts,
-                  selectedPartKey: _selectedPartKey,
-                  onPartTap: _selectPart,
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: CategoryHeroCard(selectedPart: selected),
+                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child: CategorySideToggle(
+                        currentSide: _currentSide,
+                        onSideChanged: (side) {
+                          setState(() {
+                            _currentSide = side;
+                          });
+                        },
+                      ),
+                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    CategoryBodyPartsGrid(
+                      parts: visibleParts,
+                      selectedPartKey: _selectedPartKey,
+                      onPartTap: _selectPart,
+                    ),
+                  ],
                 ),
               ),
-              CategorySelectedPartBanner(selectedPart: selected),
-              const SizedBox(height: 12),
-              PrimaryButton(
-                text: 'next'.tr(context),
-                onPressed: _openSymptomsStep,
-                fontSize: 20,
+              const SizedBox(height: 14),
+              SafeArea(
+                top: false,
+                child: PrimaryButton(
+                  text: 'next'.tr(context),
+                  onPressed: _openSymptomsStep,
+                  fontSize: 20,
+                ),
               ),
             ],
           ),

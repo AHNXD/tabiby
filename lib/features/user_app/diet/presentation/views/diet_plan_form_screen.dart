@@ -324,9 +324,9 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
         ),
         BlocListener<DietCubit, DietState>(
           listenWhen: (previous, current) =>
-              previous.viewState != current.viewState,
+              previous.submitStatus != current.submitStatus,
           listener: (context, state) {
-            if (state.viewState == DietViewState.loading) {
+            if (state.submitStatus == DietAsyncStatus.loading) {
               messages(
                 context,
                 'diet_form_loading_toast'.tr(context),
@@ -335,11 +335,11 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
               );
             }
 
-            if (state.viewState == DietViewState.error) {
+            if (state.submitStatus == DietAsyncStatus.error) {
               messages(context, state.errorMessage.tr(context), Colors.red);
             }
 
-            if (state.viewState == DietViewState.success &&
+            if (state.submitStatus == DietAsyncStatus.success &&
                 state.plan != null) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const DietResultScreen()),
@@ -361,162 +361,215 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  if (state.isLoading)
+                  if (state.isGenerating)
                     DietFormLoadingBanner(
                       text: 'diet_form_loading_banner'.tr(context),
                     ),
-                  DietFormSectionTitle(
-                    title: 'diet_form_section_basic'.tr(context),
+                  DietFormIntroCard(
+                    title: widget.isSpecialist
+                        ? 'diet_form_title_advanced'.tr(context)
+                        : 'diet_form_title_basic'.tr(context),
+                    subtitle: widget.isSpecialist
+                        ? 'diet_mode_advanced_subtitle'.tr(context)
+                        : 'diet_mode_basic_subtitle'.tr(context),
+                    icon: widget.isSpecialist
+                        ? Icons.medical_services_outlined
+                        : Icons.person_outline_rounded,
                   ),
-                  DietLabeledCustomField(
-                    controller: _nameController,
-                    label: 'diet_form_name'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _ageController,
-                    label: 'diet_form_age'.tr(context),
-                    keyboardType: TextInputType.number,
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _genderController,
-                    label: 'diet_form_gender'.tr(context),
-                    validator: _required,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DietLabeledCustomField(
-                          controller: _heightController,
-                          label: 'diet_form_height_cm'.tr(context),
+                  DietFormSectionCard(
+                    child: Column(
+                      children: [
+                        DietFormSectionTitle(
+                          title: 'diet_form_section_basic'.tr(context),
+                          icon: Icons.badge_outlined,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _nameController,
+                          label: 'diet_form_name'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _ageController,
+                          label: 'diet_form_age'.tr(context),
                           keyboardType: TextInputType.number,
                           validator: _required,
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: DietLabeledCustomField(
-                          controller: _weightController,
-                          label: 'diet_form_weight_kg'.tr(context),
-                          keyboardType: TextInputType.number,
+                        DietLabeledCustomField(
+                          controller: _genderController,
+                          label: 'diet_form_gender'.tr(context),
                           validator: _required,
                         ),
-                      ),
-                    ],
-                  ),
-                  DietLabeledCustomField(
-                    controller: _jobNatureController,
-                    label: 'diet_form_job_nature'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _goalController,
-                    label: 'diet_form_goal'.tr(context),
-                    validator: _required,
-                  ),
-                  DietFormSectionTitle(
-                    title: 'diet_form_section_health'.tr(context),
-                  ),
-                  DietLabeledCustomField(
-                    controller: _chronicDiseasesController,
-                    label: 'diet_form_chronic_diseases'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _medicationsController,
-                    label: 'diet_form_medications'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _allergiesController,
-                    label: 'diet_form_allergies'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _digestionIssuesController,
-                    label: 'diet_form_digestion_issues'.tr(context),
-                    validator: _required,
-                  ),
-                  DietFormSectionTitle(
-                    title: 'diet_form_section_habits'.tr(context),
-                  ),
-                  DietLabeledCustomField(
-                    controller: _mealsPerDayController,
-                    label: 'diet_form_meals_per_day'.tr(context),
-                    keyboardType: TextInputType.number,
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _sweetsFrequencyController,
-                    label: 'diet_form_sweets_frequency'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _sodaFrequencyController,
-                    label: 'diet_form_soda_frequency'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _eatingOutFrequencyController,
-                    label: 'diet_form_eating_out_frequency'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _exerciseController,
-                    label: 'diet_form_exercise'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _sleepHoursController,
-                    label: 'diet_form_sleep_hours'.tr(context),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DietLabeledCustomField(
+                                controller: _heightController,
+                                label: 'diet_form_height_cm'.tr(context),
+                                keyboardType: TextInputType.number,
+                                validator: _required,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: DietLabeledCustomField(
+                                controller: _weightController,
+                                label: 'diet_form_weight_kg'.tr(context),
+                                keyboardType: TextInputType.number,
+                                validator: _required,
+                              ),
+                            ),
+                          ],
+                        ),
+                        DietLabeledCustomField(
+                          controller: _jobNatureController,
+                          label: 'diet_form_job_nature'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _goalController,
+                          label: 'diet_form_goal'.tr(context),
+                          validator: _required,
+                        ),
+                      ],
                     ),
-                    validator: _required,
                   ),
-                  DietLabeledCustomField(
-                    controller: _insomniaController,
-                    label: 'diet_form_insomnia'.tr(context),
-                    validator: _required,
+                  DietFormSectionCard(
+                    child: Column(
+                      children: [
+                        DietFormSectionTitle(
+                          title: 'diet_form_section_health'.tr(context),
+                          icon: Icons.favorite_border_rounded,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _chronicDiseasesController,
+                          label: 'diet_form_chronic_diseases'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _medicationsController,
+                          label: 'diet_form_medications'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _allergiesController,
+                          label: 'diet_form_allergies'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _digestionIssuesController,
+                          label: 'diet_form_digestion_issues'.tr(context),
+                          validator: _required,
+                        ),
+                      ],
+                    ),
                   ),
-                  DietLabeledCustomField(
-                    controller: _emotionalEatingController,
-                    label: 'diet_form_emotional_eating'.tr(context),
-                    validator: _required,
-                  ),
-                  DietLabeledCustomField(
-                    controller: _eatingSpeedController,
-                    label: 'diet_form_eating_speed'.tr(context),
-                    validator: _required,
+                  DietFormSectionCard(
+                    child: Column(
+                      children: [
+                        DietFormSectionTitle(
+                          title: 'diet_form_section_habits'.tr(context),
+                          icon: Icons.self_improvement_outlined,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _mealsPerDayController,
+                          label: 'diet_form_meals_per_day'.tr(context),
+                          keyboardType: TextInputType.number,
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _sweetsFrequencyController,
+                          label: 'diet_form_sweets_frequency'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _sodaFrequencyController,
+                          label: 'diet_form_soda_frequency'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _eatingOutFrequencyController,
+                          label: 'diet_form_eating_out_frequency'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _exerciseController,
+                          label: 'diet_form_exercise'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _sleepHoursController,
+                          label: 'diet_form_sleep_hours'.tr(context),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _insomniaController,
+                          label: 'diet_form_insomnia'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _emotionalEatingController,
+                          label: 'diet_form_emotional_eating'.tr(context),
+                          validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _eatingSpeedController,
+                          label: 'diet_form_eating_speed'.tr(context),
+                          validator: _required,
+                        ),
+                      ],
+                    ),
                   ),
                   if (widget.isSpecialist) ...[
-                    DietFormSectionTitle(
-                      title: 'diet_form_section_specialist'.tr(context),
-                    ),
-                    DietLabeledCustomField(
-                      controller: _dietTypeController,
-                      label: 'diet_form_diet_type'.tr(context),
-                      validator: _required,
-                    ),
-                    DietLabeledCustomField(
-                      controller: _macroDistributionController,
-                      label: 'diet_form_macro_distribution'.tr(context),
-                      validator: _required,
-                    ),
-                    DietLabeledCustomField(
-                      controller: _specialistNotesController,
-                      label: 'diet_form_specialist_notes'.tr(context),
-                      maxLines: 4,
+                    DietFormSectionCard(
+                      child: Column(
+                        children: [
+                          DietFormSectionTitle(
+                            title: 'diet_form_section_specialist'.tr(context),
+                            icon: Icons.tune_rounded,
+                          ),
+                          DietLabeledCustomField(
+                            controller: _dietTypeController,
+                            label: 'diet_form_diet_type'.tr(context),
+                            validator: _required,
+                          ),
+                          DietLabeledCustomField(
+                            controller: _macroDistributionController,
+                            label: 'diet_form_macro_distribution'.tr(context),
+                            validator: _required,
+                          ),
+                          DietLabeledCustomField(
+                            controller: _specialistNotesController,
+                            label: 'diet_form_specialist_notes'.tr(context),
+                            maxLines: 4,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                  const SizedBox(height: 12),
-                  PrimaryButton(
-                    text: state.isLoading
-                        ? 'diet_form_generating'.tr(context)
-                        : 'diet_form_generate_button'.tr(context),
-                    fontSize: 20,
-                    onPressed: state.isLoading ? () {} : _submit,
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 18,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: PrimaryButton(
+                      text: state.isGenerating
+                          ? 'diet_form_generating'.tr(context)
+                          : 'diet_form_generate_button'.tr(context),
+                      fontSize: 20,
+                      onPressed: state.isGenerating ? () {} : _submit,
+                    ),
                   ),
                   const SizedBox(height: 20),
                 ],

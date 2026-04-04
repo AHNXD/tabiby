@@ -30,7 +30,11 @@ class DiagnosisResultContent extends StatelessWidget {
         ],
         DiagnosisSummaryCard(result: result, urgencyColor: urgencyColor),
         const SizedBox(height: 14),
-        DiagnosisTextSection(titleKey: 'reasoning', content: result.reasoning),
+        DiagnosisTextSection(
+          titleKey: 'reasoning',
+          icon: Icons.psychology_alt_outlined,
+          content: result.reasoning,
+        ),
         const SizedBox(height: 14),
         DiagnosisNextStepsSection(steps: result.adviceSteps),
         const SizedBox(height: 24),
@@ -52,11 +56,11 @@ class DiagnosisResultContent extends StatelessWidget {
     switch (urgency.toUpperCase()) {
       case 'EMERGENCY':
       case 'HIGH':
-        return Colors.red;
+        return const Color(0xFFE25F63);
       case 'MEDIUM':
-        return Colors.orange;
+        return const Color(0xFFE7A423);
       default:
-        return Colors.green;
+        return AppColors.primaryColors;
     }
   }
 }
@@ -69,21 +73,42 @@ class EmergencyWarningBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+        color: const Color(0xFFFFF5F5),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: const Color(0xFFE25F63).withValues(alpha: 0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFE25F63).withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
-          const SizedBox(width: 10),
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE25F63).withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(
+              Icons.warning_amber_rounded,
+              color: Color(0xFFE25F63),
+              size: 26,
+            ),
+          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               'emergency_msg'.tr(context),
               style: TextStyle(
-                color: Colors.red.shade800,
-                fontWeight: FontWeight.w600,
+                color: const Color(0xFF8A2E32),
+                fontWeight: FontWeight.w700,
                 height: 1.5,
               ),
             ),
@@ -107,72 +132,133 @@ class DiagnosisSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        color: const Color(0xFFF8FCFA),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.12),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
+          Positioned(
+            right: 18,
+            top: -22,
+            child: Container(
+              width: 110,
+              height: 110,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColors.withValues(alpha: 0.05),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            left: -24,
+            bottom: 26,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: AppColors.secColors.withValues(alpha: 0.035),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 58,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        color: urgencyColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        Icons.medical_information_outlined,
+                        color: urgencyColor,
+                        size: 28,
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: urgencyColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        _localizedUrgency(context, result.urgency),
+                        style: TextStyle(
+                          color: urgencyColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                decoration: BoxDecoration(
-                  color: urgencyColor.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  _localizedUrgency(context, result.urgency),
+                const SizedBox(height: 18),
+                Text(
+                  'possible_condition'.tr(context),
                   style: TextStyle(
-                    color: urgencyColor,
-                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.2,
                   ),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                '${'confidence'.tr(context)}: ${result.confidence}',
-                style: TextStyle(
-                  color: Colors.grey.shade700,
-                  fontWeight: FontWeight.w600,
+                const SizedBox(height: 6),
+                Text(
+                  result.conditionName,
+                  style: const TextStyle(
+                    color: Color(0xFF1F2C28),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    height: 1.2,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            'possible_condition'.tr(context),
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontWeight: FontWeight.w600,
+                const SizedBox(height: 16),
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: _ResultStatCard(
+                          icon: Icons.percent_rounded,
+                          label: 'confidence'.tr(context),
+                          value: result.confidence,
+                          accentColor: urgencyColor,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _ResultStatCard(
+                          icon: Icons.local_hospital_outlined,
+                          label: 'recommended_specialty'.tr(context),
+                          value: result.specialist,
+                          accentColor: AppColors.primaryColors,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            result.conditionName,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textColor,
-            ),
-          ),
-          const SizedBox(height: 14),
-          ResultInfoRow(
-            icon: Icons.local_hospital_outlined,
-            title: 'recommended_specialty'.tr(context),
-            value: result.specialist,
           ),
         ],
       ),
@@ -199,34 +285,22 @@ class DiagnosisTextSection extends StatelessWidget {
   const DiagnosisTextSection({
     super.key,
     required this.titleKey,
+    required this.icon,
     required this.content,
   });
 
   final String titleKey;
+  final IconData icon;
   final String content;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            titleKey.tr(context),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            content,
-            style: TextStyle(color: Colors.grey.shade700, height: 1.6),
-          ),
-        ],
+    return _DiagnosisSectionCard(
+      icon: icon,
+      title: titleKey.tr(context),
+      child: Text(
+        content,
+        style: TextStyle(color: Colors.grey.shade700, height: 1.65),
       ),
     );
   }
@@ -239,55 +313,54 @@ class DiagnosisNextStepsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'next_steps'.tr(context),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          const SizedBox(height: 8),
-          if (steps.isEmpty)
-            Text(
+    return _DiagnosisSectionCard(
+      icon: Icons.route_outlined,
+      title: 'next_steps'.tr(context),
+      child: steps.isEmpty
+          ? Text(
               'no_data_subtitle'.tr(context),
               style: TextStyle(color: Colors.grey.shade600),
             )
-          else
-            ...steps.asMap().entries.map(
-              (entry) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${entry.key + 1}. ',
-                      style: TextStyle(
-                        color: AppColors.primaryColors,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        entry.value,
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                          height: 1.5,
+          : Column(
+              children: steps.asMap().entries.map((entry) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: entry.key == steps.length - 1 ? 0 : 12,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 28,
+                        height: 28,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColors.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${entry.key + 1}',
+                          style: const TextStyle(
+                            color: AppColors.primaryColors,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          entry.value,
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            height: 1.55,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             ),
-        ],
-      ),
     );
   }
 }
@@ -301,80 +374,188 @@ class DiagnosisNoResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(28),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
+        padding: const EdgeInsets.all(24),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: Colors.grey.shade200),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 18,
+                offset: const Offset(0, 10),
               ),
-              child: const Icon(
-                Icons.search_off_rounded,
-                size: 44,
-                color: Colors.red,
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE25F63).withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.search_off_rounded,
+                  size: 44,
+                  color: Color(0xFFE25F63),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'couldnt_get_condition'.tr(context),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'conflicting_symptoms'.tr(context),
-              style: TextStyle(color: Colors.grey.shade600, height: 1.5),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            PrimaryButton(
-              onPressed: onStartOver,
-              text: 'start_new_diagnosis'.tr(context),
-              fontSize: 20,
-            ),
-          ],
+              const SizedBox(height: 18),
+              Text(
+                'couldnt_get_condition'.tr(context),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF1F2C28),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'conflicting_symptoms'.tr(context),
+                style: TextStyle(color: Colors.grey.shade600, height: 1.55),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              PrimaryButton(
+                onPressed: onStartOver,
+                text: 'start_new_diagnosis'.tr(context),
+                fontSize: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class ResultInfoRow extends StatelessWidget {
-  const ResultInfoRow({
-    super.key,
+class _DiagnosisSectionCard extends StatelessWidget {
+  const _DiagnosisSectionCard({
     required this.icon,
     required this.title,
-    required this.value,
+    required this.child,
   });
 
   final IconData icon;
   final String title;
-  final String value;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: AppColors.primaryColors),
-        const SizedBox(width: 8),
-        Text(
-          '$title: ',
-          style: TextStyle(
-            color: Colors.grey.shade700,
-            fontWeight: FontWeight.w600,
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
           ),
-        ),
-        Expanded(
-          child: Text(
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColors.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, color: AppColors.primaryColors, size: 20),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    color: Color(0xFF1F2C28),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _ResultStatCard extends StatelessWidget {
+  const _ResultStatCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.accentColor,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 98),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: accentColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: accentColor, size: 18),
+          ),
+          const Spacer(),
+          Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.end,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Color(0xFF1F2C28),
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              height: 1.25,
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 12,
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

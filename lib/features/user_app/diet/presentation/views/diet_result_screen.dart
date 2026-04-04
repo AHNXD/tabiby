@@ -21,9 +21,11 @@ class DietResultScreen extends StatelessWidget {
           final DietPlanResponse? plan = state.plan;
           final DietRequestData? request = state.currentRequest;
 
-          if (plan == null && state.isLoading) {
+          if (plan == null && (state.isGenerating || state.isLoadingPlan)) {
             return DietLoadingOnlyView(
-              text: 'diet_result_loading_only_message'.tr(context),
+              text: state.isLoadingPlan
+                  ? 'diet_result_loading_selected_plan'.tr(context)
+                  : 'diet_result_loading_only_message'.tr(context),
             );
           }
 
@@ -37,23 +39,21 @@ class DietResultScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              if (state.isLoading)
+              if (state.isGenerating)
                 DietNoticeBanner(
                   text: 'diet_result_background_generation_message'.tr(context),
                 ),
-              DietInfoCard(
-                title: 'diet_result_applied_diet'.tr(context),
-                value: plan.dietTypeApplied,
-              ),
-              const SizedBox(height: 10),
-              DietInfoCard(
-                title: 'diet_result_daily_calories'.tr(context),
-                value: plan.dailyCaloriesTarget.toString(),
+              DietOverviewCard(
+                title: plan.dietTypeApplied.trim().isEmpty
+                    ? 'diet_mode_fallback_plan_name'.tr(context)
+                    : plan.dietTypeApplied,
+                calories: plan.dailyCaloriesTarget,
+                waterLiters: plan.dailyWaterLiters,
               ),
               const SizedBox(height: 10),
               DietMacrosCard(macros: plan.dailyMacrosSummary),
               const SizedBox(height: 10),
-              DietSummaryCard(summary: plan.summaryAr),
+              DietSummaryCard(summary: plan.localizedSummary),
               if (request != null) ...[
                 const SizedBox(height: 10),
                 DietRequestValuesCard(request: request),
