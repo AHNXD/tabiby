@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
@@ -10,9 +12,10 @@ import '../models/medical_file_model.dart';
 import 'medical_files_repo.dart';
 
 class MedicalFilesRepoIplm implements MedicalFilesRepo {
-  MedicalFilesRepoIplm(this._apiServices);
+  MedicalFilesRepoIplm(this._apiServices, this._dio);
 
   final ApiServices _apiServices;
+  final Dio _dio;
 
   final List<MedicalFile> _cachedMedicalFiles = <MedicalFile>[];
   final List<MedicalImageType> _cachedMedicalImageTypes = <MedicalImageType>[];
@@ -55,6 +58,37 @@ class MedicalFilesRepoIplm implements MedicalFilesRepo {
       return left(
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> downloadMedicalFileToTemp(
+    MedicalFile file,
+  ) async {
+    try {
+      if (file.localFile != null && file.localFile!.existsSync()) {
+        return right(file.localFile!.path);
+      }
+
+      if (!file.hasRemoteFile) {
+        return left(const ServerFailure(ErrorHandler.errorTryAgain));
+      }
+
+      final Directory targetDirectory = Directory(
+        '${Directory.systemTemp.path}/tabiby_medical_files',
+      );
+      if (!targetDirectory.existsSync()) {
+        targetDirectory.createSync(recursive: true);
+      }
+
+      final String targetPath =
+          '${targetDirectory.path}/${_buildDownloadFileName(file)}';
+
+      await _dio.download(Urls.fixUrl(file.remoteFileUrl!), targetPath);
+
+      return right(targetPath);
     } catch (error) {
       return left(ErrorHandler.handle(error));
     }
@@ -187,5 +221,44 @@ class MedicalFilesRepoIplm implements MedicalFilesRepo {
     updatedFiles.removeWhere((MedicalFile item) => item.id == file.id);
     updatedFiles.insert(0, file);
     _replaceCachedFiles(updatedFiles);
+  }
+
+  String _buildDownloadFileName(MedicalFile file) {
+    final String normalizedTitle = file.title
+        .trim()
+        .replaceAll(RegExp(r'[^a-zA-Z0-9]+'), '_')
+        .replaceAll(RegExp(r'_+'), '_');
+
+    final String fileType = file.type == MedicalFileType.radiology
+        ? 'radiology'
+        : 'lab';
+    final String extension = _resolveFileExtension(file);
+
+    return '${normalizedTitle.isEmpty ? fileType : normalizedTitle}_${file.id}$extension';
+  }
+
+  String _resolveFileExtension(MedicalFile file) {
+    final String? localPath = file.localFilePath;
+    if (localPath != null && localPath.contains('.')) {
+      return '.${localPath.split('.').last}';
+    }
+
+    final String? remotePath = file.remoteFileUrl;
+    if (remotePath != null) {
+      final Uri? uri = Uri.tryParse(remotePath);
+      final String lastSegment = uri?.pathSegments.isNotEmpty == true
+          ? uri!.pathSegments.last
+          : '';
+      if (lastSegment.contains('.')) {
+        return '.${lastSegment.split('.').last}';
+      }
+    }
+
+    final String? apiFilePath = file.filePath;
+    if (apiFilePath != null && apiFilePath.contains('.')) {
+      return '.${apiFilePath.split('.').last}';
+    }
+
+    return '.jpg';
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
@@ -10,6 +11,7 @@ import '../../../../../core/errors/failuer.dart';
 import '../models/diagnosis_request_model.dart';
 import '../models/diagnosis_result_model.dart';
 import '../models/symptom_model.dart';
+import '../models/xray_diagnosis_result_model.dart';
 
 class DiagnosisRepositoryIplm implements DiagnosisRepository {
   final ApiServices _apiServices;
@@ -70,6 +72,42 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, XrayDiagnosisResult>> analyzeChestXray(
+    String imagePath,
+  ) async {
+    try {
+      final FormData data = FormData.fromMap({
+        'image': await MultipartFile.fromFile(imagePath),
+      });
+
+      final response = await _apiServices.post(
+        endPoint: Urls.analyzeChestXrayAutomation,
+        data: data,
+        sendTimeout: const Duration(minutes: 2),
+        receiveTimeout: const Duration(minutes: 2),
+      );
+
+      final dynamic normalized = _normalizeN8nBody(response.data);
+
+      if (normalized is Map && normalized['error'] != null) {
+        return left(ServerFailure(normalized['error'].toString()));
+      }
+
+      final Map<String, dynamic>? imageDiagnosisMap = _extractImageDiagnosisMap(
+        normalized,
+      );
+
+      if (imageDiagnosisMap == null) {
+        return left(const ServerFailure(ErrorHandler.errorTryAgain));
+      }
+
+      return right(XrayDiagnosisResult.fromJson(imageDiagnosisMap));
+    } catch (e) {
+      return left(ErrorHandler.handle(e));
+    }
+  }
+
   List<dynamic> _extractSymptomsList(dynamic source) {
     if (source is Map<String, dynamic>) {
       if (source['symptoms'] is List) {
@@ -122,10 +160,42 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
     return null;
   }
 
+  Map<String, dynamic>? _extractImageDiagnosisMap(dynamic source) {
+    if (source is Map<String, dynamic>) {
+      if (_looksLikeImageDiagnosisResult(source)) {
+        return source;
+      }
+
+      if (source['data'] is Map<String, dynamic>) {
+        return _extractImageDiagnosisMap(source['data']);
+      }
+
+      if (source['result'] != null) {
+        return _extractImageDiagnosisMap(source['result']);
+      }
+
+      if (source['output'] != null) {
+        return _extractImageDiagnosisMap(source['output']);
+      }
+    }
+
+    if (source is List && source.isNotEmpty) {
+      return _extractImageDiagnosisMap(source.first);
+    }
+
+    return null;
+  }
+
   bool _looksLikeTriageResult(Map<String, dynamic> json) {
     return json.containsKey('urgency') ||
         json.containsKey('emergency_warning') ||
         json.containsKey('primary_condition_suspicion');
+  }
+
+  bool _looksLikeImageDiagnosisResult(Map<String, dynamic> json) {
+    return json.containsKey('top_3_diseases') ||
+        json.containsKey('ai_diagnosis') ||
+        json.containsKey('heatmap_url');
   }
 
   dynamic _normalizeN8nBody(dynamic source) {

@@ -60,10 +60,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.appBackgroundColor,
-      appBar: CustomAppbar(
-        title: 'diagnose_category'.tr(context),
-        showBackButton: false,
-      ),
+      appBar: CustomAppbar(title: 'diagnose_category'.tr(context)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

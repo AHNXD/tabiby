@@ -16,6 +16,8 @@ abstract class MedicalFilesRepo {
     CreateMedicalFileRequest request,
   );
 
+  Future<Either<Failure, String>> downloadMedicalFileToTemp(MedicalFile file);
+
   List<MedicalFile> getCachedMedicalFiles();
 
   List<MedicalImageType> getCachedMedicalImageTypes();

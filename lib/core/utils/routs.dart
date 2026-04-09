@@ -4,6 +4,7 @@ import 'package:tabiby/features/shared/about_us/presentation/view/about_us_scree
 import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_screen.dart';
 import 'package:tabiby/features/shared/splash/presentation/view/splash_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/category_screen.dart';
+import 'package:tabiby/features/user_app/diagnose/presentation/views/diagnose_mode_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/question_screen.dart';
 import 'package:tabiby/features/user_app/diet/presentation/views/diet_mode_screen.dart';
 
@@ -75,6 +76,7 @@ class Routes {
     AboutUsScreen.routeName: (context) => AboutUsScreen(),
 
     //Diagnosis
+    DiagnoseModeScreen.routeName: (context) => const DiagnoseModeScreen(),
     CategoryScreen.routeName: (context) => CategoryScreen(),
     QuestionScreen.routeName: (context) => QuestionScreen(),
     ResultScreen.routeName: (context) => ResultScreen(),

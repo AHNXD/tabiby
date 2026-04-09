@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/features/user_app/diagnose/presentation/views/diagnose_mode_screen.dart';
 import 'package:tabiby/features/user_app/diet/presentation/views/diet_mode_screen.dart';
 import 'package:tabiby/features/user_app/home/presentation/view/home_screen.dart';
 import 'package:tabiby/features/user_app/user_appointments/presentation/view/appointment_screen.dart';
-
-import '../../features/user_app/diagnose/presentation/views/category_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -21,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const UserAppointmentScreen(),
-    const CategoryScreen(),
+    const DiagnoseModeScreen(),
     const DietModeScreen(),
   ];
 
