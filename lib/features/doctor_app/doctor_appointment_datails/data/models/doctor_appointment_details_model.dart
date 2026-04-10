@@ -316,6 +316,7 @@ class Patient {
   String? img;
   String? fullName;
   String? gender;
+  int? age;
   int? height;
   int? weight;
   bool? hasChildren;
@@ -328,6 +329,7 @@ class Patient {
     this.img,
     this.fullName,
     this.gender,
+    this.age,
     this.height,
     this.weight,
     this.hasChildren,
@@ -341,11 +343,12 @@ class Patient {
     img = json['image'];
     fullName = json['full_name'];
     gender = json['gender'];
+    age = _toInt(json['age']);
     height = _toInt(json['height']);
     weight = _toInt(json['weight']);
     hasChildren = json['has_children'];
     numberOfChildren = _toInt(json['number_of_children']);
-    birthDate = json['birth_date']?.toString();
+    birthDate = json['birth_date'];
     smoker = _toInt(json['smoker']);
     maritalStatus = json['marital_status']?.toString();
   }
@@ -355,6 +358,7 @@ class Patient {
     data['image'] = img;
     data['full_name'] = fullName;
     data['gender'] = gender;
+    data['age'] = age;
     data['height'] = height;
     data['weight'] = weight;
     data['has_children'] = hasChildren;

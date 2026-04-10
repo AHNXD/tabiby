@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/shared/settings/view/settings_screen.dart';
+import 'package:tabiby/features/user_app/notification_history/presentation/view-model/notification_history_cubit.dart';
+import 'package:tabiby/features/user_app/notification_history/presentation/view/notification_history_screen.dart';
 import 'package:tabiby/features/user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import 'package:tabiby/features/user_app/user/presentation/view/user_profile.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
 
-class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
+class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
   const BuildAppbar({
     super.key,
     this.isDoctor = false,
@@ -20,10 +22,30 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDoctor;
 
   @override
+  State<BuildAppbar> createState() => _BuildAppbarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(toolbarHeight);
+}
+
+class _BuildAppbarState extends State<BuildAppbar> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || widget.isDoctor) {
+        return;
+      }
+
+      context.read<NotificationHistoryCubit>().loadNotifications();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double topPadding = MediaQuery.of(context).padding.top * 0.75;
 
-    final double totalContainerHeight = toolbarHeight + topPadding;
+    final double totalContainerHeight = widget.toolbarHeight + topPadding;
 
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
@@ -94,7 +116,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
           Expanded(
             child: InkWell(
               borderRadius: BorderRadius.circular(18),
-              onTap: isDoctor
+              onTap: widget.isDoctor
                   ? null
                   : () {
                       Navigator.pushNamed(context, UserProfileScreen.routeName);
@@ -119,7 +141,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                       child: ClipOval(
                         child: CustomImageWidget(
                           imageUrl: user?.image,
-                          placeholderAsset: isDoctor
+                          placeholderAsset: widget.isDoctor
                               ? AssetsData.defaultDoctorProfile
                               : AssetsData.defaultProfileImage,
                           height: 55,
@@ -144,7 +166,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${isDoctor ? "dr".tr(context) : ""} ${user?.firstName} ${user?.lastName ?? ""}',
+                            '${widget.isDoctor ? "dr".tr(context) : ""} ${user?.firstName} ${user?.lastName ?? ""}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -168,15 +190,67 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: IconButton(
-              onPressed: isDoctor
-                  ? () => Navigator.pushNamed(context, SettingsScreen.routeName)
-                  : () {},
-              icon: Icon(
-                isDoctor ? Icons.settings : Icons.notifications_outlined,
-                color: Colors.white,
-              ),
-            ),
+            child:
+                BlocBuilder<NotificationHistoryCubit, NotificationHistoryState>(
+                  builder: (context, notificationState) {
+                    final int unreadCount = notificationState.unreadCount;
+                    final String unreadCountLabel = unreadCount > 99
+                        ? '99+'
+                        : unreadCount.toString();
+
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        IconButton(
+                          onPressed: widget.isDoctor
+                              ? () => Navigator.pushNamed(
+                                  context,
+                                  SettingsScreen.routeName,
+                                )
+                              : () => Navigator.pushNamed(
+                                  context,
+                                  NotificationHistoryScreen.routeName,
+                                ),
+                          icon: Icon(
+                            widget.isDoctor
+                                ? Icons.settings
+                                : Icons.notifications_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                        if (!widget.isDoctor && unreadCount > 0)
+                          Positioned(
+                            right: 6,
+                            top: 6,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 2,
+                              ),
+                              constraints: const BoxConstraints(minWidth: 18),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE2574C),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1.4,
+                                ),
+                              ),
+                              child: Text(
+                                unreadCountLabel,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
           ),
         ],
       );
@@ -184,7 +258,4 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return const SizedBox.shrink();
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight);
 }

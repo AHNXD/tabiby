@@ -21,6 +21,7 @@ class PrescriptionItem {
           json['drug_name']?.toString() ??
           json['name']?.toString() ??
           json['drug']?.toString() ??
+          json['medicine_name']?.toString() ??
           '',
       dosage:
           json['dosage']?.toString() ??

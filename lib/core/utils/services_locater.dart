@@ -13,6 +13,8 @@ import 'package:tabiby/features/user_app/diet/data/repos/diet_repository.dart';
 import 'package:tabiby/features/user_app/diet/data/repos/diet_repository_iplm.dart';
 import 'package:tabiby/features/user_app/medical_files/data/repos/medical_files_repo.dart';
 import 'package:tabiby/features/user_app/medical_files/data/repos/medical_files_repo_iplm.dart';
+import 'package:tabiby/features/user_app/notification_history/data/repos/notification_history_repo.dart';
+import 'package:tabiby/features/user_app/notification_history/data/repos/notification_history_repo_iplm.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/repos/my_appointments/my_appointments_repo.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/repos/rating/rating_repo.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/repos/rating/rating_repo_iplm.dart';
@@ -94,6 +96,9 @@ void setupLocatorServices() {
   );
   getit.registerSingleton<MedicalFilesRepo>(
     MedicalFilesRepoIplm(getit.get<ApiServices>(), getit.get<Dio>()),
+  );
+  getit.registerSingleton<NotificationHistoryRepo>(
+    NotificationHistoryRepoIplm(getit.get<ApiServices>()),
   );
   getit.registerSingleton<MyAppointmentsRepo>(
     MyAppointmentsRepoIplm(getit.get<ApiServices>()),

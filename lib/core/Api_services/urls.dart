@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "10.157.151.64";
+  static String ip = "192.168.1.2";
 
   static String fixUrl(String url) {
     if (url.contains("127.0.0.1")) {
@@ -60,6 +60,9 @@ class Urls {
       "$labTests?center_id=$centerId";
   static String getAppointments = "$basePort/appointments";
   static String getMyAppointments = "$basePort/appointments";
+  static String notifications = "$basePort/notifications";
+  static String markNotificationAsRead(String notificationId) =>
+      "$notifications/$notificationId/read";
 
   //medical files
   static String medicalImageTypes = "$basePort/medical-image-types";

@@ -28,6 +28,7 @@ import '../../features/user_app/doctor_details/presentation/view/doctor_details_
 import '../../features/user_app/doctors/presentation/view/all_doctors_screen.dart';
 import '../../features/user_app/home/presentation/view/home_screen.dart';
 import '../../features/user_app/medical_files/presentation/view/show_medical_files_screen.dart';
+import '../../features/user_app/notification_history/presentation/view/notification_history_screen.dart';
 import '../../features/user_app/user/presentation/view/user_profile.dart';
 import '../../features/user_app/user_appointments/presentation/view/appointment_screen.dart';
 import '../widgets/main_screen.dart';
@@ -54,6 +55,8 @@ class Routes {
     UserProfileScreen.routeName: (context) => UserProfileScreen(),
     ShowMedicalFilesScreen.routeName: (context) =>
         const ShowMedicalFilesScreen(),
+    NotificationHistoryScreen.routeName: (context) =>
+        const NotificationHistoryScreen(),
     UserAppointmentScreen.routeName: (context) => UserAppointmentScreen(),
     MainScreen.routeName: (context) => MainScreen(),
 
