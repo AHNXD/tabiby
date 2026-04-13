@@ -100,27 +100,27 @@ class DoctorCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
                             ),
-                            if (doctor.yearsOfExperience != null) ...[
+                            if (doctor.yearsOfExperience != null ||
+                                doctor.bookedAppointmentsCount != null) ...[
                               const SizedBox(height: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey.withValues(
-                                    alpha: 0.08,
-                                  ),
-                                  borderRadius: BorderRadius.circular(999),
-                                ),
-                                child: Text(
-                                  '${doctor.yearsOfExperience} ${'years'.tr(context)}',
-                                  style: TextStyle(
-                                    color: Colors.blueGrey.shade700,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+                              Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 6,
+                                runSpacing: 6,
+                                children: [
+                                  if (doctor.yearsOfExperience != null)
+                                    _DoctorStatChip(
+                                      icon: Icons.workspace_premium_outlined,
+                                      label:
+                                          '${doctor.yearsOfExperience} ${'years'.tr(context)}',
+                                    ),
+                                  if (doctor.bookedAppointmentsCount != null)
+                                    _DoctorStatChip(
+                                      icon: Icons.calendar_today_rounded,
+                                      label:
+                                          '${doctor.bookedAppointmentsCount} ${'appointments'.tr(context)}',
+                                    ),
+                                ],
                               ),
                             ],
                           ],
@@ -211,6 +211,39 @@ class DoctorCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _DoctorStatChip extends StatelessWidget {
+  const _DoctorStatChip({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 10, color: Colors.blueGrey.shade700),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.blueGrey.shade700,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
   }

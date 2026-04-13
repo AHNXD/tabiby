@@ -40,6 +40,7 @@ class Doctor {
   String? doctorType;
   int? rate;
   int? yearsOfExperience;
+  int? bookedAppointmentsCount;
   int? isActive;
   SpecializationModel? specialty;
   List<DoctorCenters>? centers;
@@ -52,6 +53,7 @@ class Doctor {
     this.doctorType,
     this.rate,
     this.yearsOfExperience,
+    this.bookedAppointmentsCount,
     this.isActive,
     this.specialty,
     this.centers,
@@ -65,6 +67,8 @@ class Doctor {
     doctorType = json['doctor_type']?.toString();
     rate = (json['rate'] as num?)?.toInt();
     yearsOfExperience = json['experience_years'];
+    bookedAppointmentsCount = (json['booked_appointments_count'] as num?)
+        ?.toInt();
     isActive = json['is_active'];
     specialty = json['specialty'] != null
         ? SpecializationModel.fromJson(json['specialty'])
@@ -86,6 +90,7 @@ class Doctor {
     data['doctor_type'] = doctorType;
     data['rate'] = rate;
     data['experience_years'] = yearsOfExperience;
+    data['booked_appointments_count'] = bookedAppointmentsCount;
     data['is_active'] = isActive;
     if (specialty != null) {
       data['specialty'] = specialty!.toJson();
