@@ -23,12 +23,14 @@ class AllCentersScreen extends StatefulWidget {
 
 class _AllCentersScreenState extends State<AllCentersScreen> {
   final ScrollController _controller = ScrollController();
-  late CentersCubit _centersCubit;
+  final TextEditingController _searchController = TextEditingController();
+  late final CentersCubit _centersCubit;
 
   @override
   void initState() {
     super.initState();
-    _centersCubit = CentersCubit(getit.get<CentersRepo>());
+    _centersCubit = CentersCubit(getit.get<CentersRepo>())..getCenters();
+    _searchController.addListener(_handleSearchTextChanged);
 
     _controller.addListener(() {
       if (_controller.position.pixels >=
@@ -41,101 +43,248 @@ class _AllCentersScreenState extends State<AllCentersScreen> {
 
   @override
   void dispose() {
+    _searchController
+      ..removeListener(_handleSearchTextChanged)
+      ..dispose();
     _controller.dispose();
+    _centersCubit.close();
     super.dispose();
+  }
+
+  void _handleSearchTextChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _submitSearch() async {
+    FocusScope.of(context).unfocus();
+    await _centersCubit.getCenters(
+      queryParams: _centersCubit.currentQuery.copyWith(
+        search: _searchController.text,
+      ),
+    );
+  }
+
+  Future<void> _clearSearch() async {
+    if (_searchController.text.isEmpty &&
+        !_centersCubit.currentQuery.hasActiveSearch) {
+      return;
+    }
+
+    _searchController.clear();
+    FocusScope.of(context).unfocus();
+    await _centersCubit.getCenters(
+      queryParams: _centersCubit.currentQuery.copyWith(search: null),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.appBackgroundColor,
-      appBar: CustomAppbar(title: "all_popular_centers".tr(context)),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return CentersCubit(getit.get<CentersRepo>())..getCenters();
-        },
-        child: BlocBuilder<CentersCubit, CentersState>(
+    return BlocProvider<CentersCubit>.value(
+      value: _centersCubit,
+      child: Scaffold(
+        backgroundColor: AppColors.appBackgroundColor,
+        appBar: CustomAppbar(title: "all_popular_centers".tr(context)),
+        body: BlocBuilder<CentersCubit, CentersState>(
           builder: (context, state) {
-            if (state is CentersSuccess) {
-              Future<void> onRefresh() async {
-                await context.read<CentersCubit>().refreshCenters();
-              }
+            final bool hasActiveSearch =
+                _centersCubit.currentQuery.hasActiveSearch;
 
-              if (state.centers.isEmpty) {
-                return NoDataWidget(
-                  title: "no_data_title".tr(context),
-                  subtitle: "no_data_subtitle".tr(context),
-                );
-              }
-              return RefreshIndicator(
-                onRefresh: onRefresh,
-                child: CustomScrollView(
-                  controller: _controller,
-                  physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics(),
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+                  child: _CentersSearchCard(
+                    controller: _searchController,
+                    onSearch: () {
+                      _submitSearch();
+                    },
+                    onClearSearch: () {
+                      _clearSearch();
+                    },
                   ),
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-                        child: _CentersOverviewCard(
-                          count: state.centers.length,
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-                      sliver: SliverGrid(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          final center = state.centers[index];
-                          return CenterCard(
-                            center: center,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CenterDetailsScreen(centerID: center.id!),
-                                ),
-                              );
-                            },
-                          );
-                        }, childCount: state.centers.length),
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 220,
-                              mainAxisSpacing: 14,
-                              crossAxisSpacing: 14,
-                              childAspectRatio: 0.78,
-                            ),
-                      ),
-                    ),
-                    if (state.isLoadingMore)
-                      const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 18),
-                          child: BottomLoader(),
-                        ),
-                      ),
-                  ],
                 ),
-              );
-            } else if (state is CentersError) {
-              return CustomErrorWidget(
-                textColor: Colors.black,
-                errorMessage: state.errorMsg,
-                onRetry: () {
-                  context.read<CentersCubit>().getCenters();
-                },
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryColors,
+                Expanded(
+                  child: _buildContent(
+                    context: context,
+                    state: state,
+                    hasActiveSearch: hasActiveSearch,
+                  ),
                 ),
-              );
-            }
+              ],
+            );
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required CentersState state,
+    required bool hasActiveSearch,
+  }) {
+    if (state is CentersLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColors),
+      );
+    }
+
+    if (state is CentersError) {
+      return CustomErrorWidget(
+        textColor: Colors.black,
+        errorMessage: state.errorMsg,
+        onRetry: () {
+          _centersCubit.getCenters();
+        },
+      );
+    }
+
+    if (state is! CentersSuccess) {
+      return const SizedBox.shrink();
+    }
+
+    Future<void> onRefresh() async {
+      await _centersCubit.refreshCenters();
+    }
+
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: CustomScrollView(
+        controller: _controller,
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+              child: _CentersOverviewCard(count: state.totalCount),
+            ),
+          ),
+          if (state.centers.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: NoDataWidget(
+                    title: hasActiveSearch
+                        ? 'no_matching_centers_title'.tr(context)
+                        : 'no_data_title'.tr(context),
+                    subtitle: hasActiveSearch
+                        ? 'no_matching_centers_subtitle'.tr(context)
+                        : 'no_data_subtitle'.tr(context),
+                  ),
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final center = state.centers[index];
+                  return CenterCard(
+                    center: center,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CenterDetailsScreen(centerID: center.id!),
+                        ),
+                      );
+                    },
+                  );
+                }, childCount: state.centers.length),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 220,
+                  mainAxisSpacing: 14,
+                  crossAxisSpacing: 14,
+                  childAspectRatio: 0.78,
+                ),
+              ),
+            ),
+          if (state.isLoadingMore)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 18),
+                child: BottomLoader(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CentersSearchCard extends StatelessWidget {
+  const _CentersSearchCard({
+    required this.controller,
+    required this.onSearch,
+    required this.onClearSearch,
+  });
+
+  final TextEditingController controller;
+  final VoidCallback onSearch;
+  final VoidCallback onClearSearch;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool hasSearchText = controller.text.trim().isNotEmpty;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.1),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        textInputAction: TextInputAction.search,
+        onSubmitted: (_) => onSearch(),
+        decoration: InputDecoration(
+          hintText: 'center_search_hint'.tr(context),
+          prefixIcon: const Icon(
+            Icons.search_rounded,
+            color: AppColors.primaryColors,
+          ),
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (hasSearchText)
+                IconButton(
+                  onPressed: onClearSearch,
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              IconButton(
+                onPressed: onSearch,
+                icon: const Icon(Icons.arrow_forward_rounded),
+              ),
+            ],
+          ),
+          filled: true,
+          fillColor: AppColors.appBackgroundColor,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 16,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );
@@ -247,7 +396,7 @@ class _CentersOverviewCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'center_details'.tr(context),
+                  'center_results_subtitle'.tr(context),
                   style: TextStyle(color: Colors.grey.shade700, height: 1.45),
                 ),
                 const SizedBox(height: 18),

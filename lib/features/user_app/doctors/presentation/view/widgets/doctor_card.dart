@@ -22,7 +22,7 @@ class DoctorCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: 2,
@@ -57,8 +57,8 @@ class DoctorCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: isAvailable
-                                ? Colors.green.withOpacity(0.5)
-                                : Colors.grey.withOpacity(0.3),
+                                ? Colors.green.withValues(alpha: 0.5)
+                                : Colors.grey.withValues(alpha: 0.3),
                             width: 2,
                           ),
                         ),
@@ -100,6 +100,29 @@ class DoctorCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
                             ),
+                            if (doctor.yearsOfExperience != null) ...[
+                              const SizedBox(height: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blueGrey.withValues(
+                                    alpha: 0.08,
+                                  ),
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(
+                                  '${doctor.yearsOfExperience} ${'years'.tr(context)}',
+                                  style: TextStyle(
+                                    color: Colors.blueGrey.shade700,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -111,8 +134,8 @@ class DoctorCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: isAvailable
-                              ? Colors.green.withOpacity(0.08)
-                              : Colors.red.withOpacity(0.08),
+                              ? Colors.green.withValues(alpha: 0.08)
+                              : Colors.red.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -159,7 +182,7 @@ class DoctorCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
+                        color: Colors.grey.withValues(alpha: 0.15),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

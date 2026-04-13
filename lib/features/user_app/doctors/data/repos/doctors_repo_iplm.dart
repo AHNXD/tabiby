@@ -3,6 +3,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../models/doctors_query_params.dart';
 import '../../../doctor_details/data/models/doctor_model.dart';
 import 'doctors_repo.dart';
 
@@ -16,17 +17,19 @@ class DoctorsRepoIplm implements DoctorsRepo {
     int? centerID,
     int? specialtyID,
     int page,
+    DoctorsQueryParams queryParams,
   ) async {
     try {
       String endpoint = Urls.doctors;
-      if (centerID != null && specialtyID != null) {
-        endpoint += "/$specialtyID/$centerID";
-      } else if (centerID != null) {
-        endpoint += "/0/$centerID";
-      } else if (specialtyID != null) {
-        endpoint += "/$specialtyID";
+
+      if (centerID != null || specialtyID != null) {
+        endpoint += '/${specialtyID ?? 0}/${centerID ?? 0}';
       }
-      endpoint += "?page=$page";
+
+      final String queryString = Uri(
+        queryParameters: queryParams.toQueryParameters(page: page),
+      ).query;
+      endpoint += '?$queryString';
 
       var resp = await _apiServices.get(endPoint: endpoint);
 

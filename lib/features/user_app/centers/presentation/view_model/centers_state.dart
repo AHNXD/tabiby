@@ -21,13 +21,15 @@ final class CentersError extends CentersState {
 
 final class CentersSuccess extends CentersState {
   final List<Centers> centers;
+  final int totalCount;
   final bool hasMore;
   final bool isLoadingMore;
   const CentersSuccess({
     required this.centers,
+    required this.totalCount,
     required this.hasMore,
     required this.isLoadingMore,
   });
   @override
-  List<Object> get props => [centers, hasMore, isLoadingMore];
+  List<Object> get props => [centers, totalCount, hasMore, isLoadingMore];
 }

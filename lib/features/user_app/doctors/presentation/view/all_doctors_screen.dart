@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/no_data.dart';
 import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/buttom_loader.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
+import '../../data/models/doctors_query_params.dart';
 import '../../data/repos/doctors_repo.dart';
 import '../view_model/doctor_cubit.dart';
 import 'widgets/doctor_card.dart';
@@ -22,14 +25,18 @@ class AllDoctorsScreen extends StatefulWidget {
 
 class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
   final ScrollController _controller = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  late final DoctorsCubit _doctorsCubit;
+
+  bool _didLoadInitialData = false;
   int? centerID;
   int? specialtyID;
-  late DoctorsCubit _doctorsCubit;
 
   @override
   void initState() {
     super.initState();
     _doctorsCubit = DoctorsCubit(getit.get<DoctorsRepo>());
+    _searchController.addListener(_handleSearchTextChanged);
 
     _controller.addListener(() {
       if (_controller.position.pixels >=
@@ -41,105 +48,835 @@ class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_didLoadInitialData) {
+      return;
+    }
+
+    final Object? arguments = ModalRoute.of(context)?.settings.arguments;
+    final Map<String, dynamic> args = arguments is Map<String, dynamic>
+        ? arguments
+        : <String, dynamic>{};
+
+    centerID = args['centerID'] as int?;
+    specialtyID = args['specialtyID'] as int?;
+    _didLoadInitialData = true;
+
+    _doctorsCubit.getDoctors(centerID, specialtyID);
+  }
+
+  @override
   void dispose() {
+    _searchController
+      ..removeListener(_handleSearchTextChanged)
+      ..dispose();
     _controller.dispose();
+    _doctorsCubit.close();
     super.dispose();
+  }
+
+  void _handleSearchTextChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _submitSearch() async {
+    FocusScope.of(context).unfocus();
+    await _doctorsCubit.getDoctors(
+      centerID,
+      specialtyID,
+      queryParams: _doctorsCubit.currentQuery.copyWith(
+        search: _searchController.text,
+      ),
+    );
+  }
+
+  Future<void> _clearSearch() async {
+    if (_searchController.text.isEmpty &&
+        !_doctorsCubit.currentQuery.hasActiveSearch) {
+      return;
+    }
+
+    _searchController.clear();
+    FocusScope.of(context).unfocus();
+
+    await _doctorsCubit.getDoctors(
+      centerID,
+      specialtyID,
+      queryParams: _doctorsCubit.currentQuery.copyWith(search: null),
+    );
+  }
+
+  Future<void> _openFiltersSheet() async {
+    final DoctorsQueryParams? updatedFilters =
+        await showModalBottomSheet<DoctorsQueryParams>(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (BuildContext context) {
+            return _DoctorsFiltersSheet(
+              initialQuery: _doctorsCubit.currentQuery,
+              showCenterNameFilter: centerID == null,
+            );
+          },
+        );
+
+    if (!mounted || updatedFilters == null) {
+      return;
+    }
+
+    await _doctorsCubit.getDoctors(
+      centerID,
+      specialtyID,
+      queryParams: updatedFilters.copyWith(search: _searchController.text),
+    );
+  }
+
+  Future<void> _clearFilters() async {
+    await _doctorsCubit.getDoctors(
+      centerID,
+      specialtyID,
+      queryParams: _doctorsCubit.currentQuery.clearFilters(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final Object? arguments = ModalRoute.of(context)!.settings.arguments;
-    final Map<String, dynamic> args =
-        (arguments != null && arguments is Map<String, dynamic>)
-        ? arguments
-        : {};
-
-    centerID = args['centerID'];
-    specialtyID = args['specialtyID'];
-    return Scaffold(
-      backgroundColor: AppColors.appBackgroundColor,
-      appBar: CustomAppbar(title: "all_popular_doctors".tr(context)),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _doctorsCubit..getDoctors(centerID, specialtyID);
-        },
-        child: BlocBuilder<DoctorsCubit, DoctorsState>(
+    return BlocProvider<DoctorsCubit>.value(
+      value: _doctorsCubit,
+      child: Scaffold(
+        backgroundColor: AppColors.appBackgroundColor,
+        appBar: CustomAppbar(title: "all_popular_doctors".tr(context)),
+        body: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
-            if (state is DoctorsSuccess) {
-              Future<void> onRefresh() async {
-                await context.read<DoctorsCubit>().refreshDoctors(
-                  centerID,
-                  specialtyID,
-                );
-              }
+            final DoctorsQueryParams currentQuery = _doctorsCubit.currentQuery;
 
-              if (state.doctors.isEmpty) {
-                return NoDataWidget(
-                  title: "no_data_title".tr(context),
-                  subtitle: "no_data_subtitle".tr(context),
-                );
-              }
-              return RefreshIndicator(
-                onRefresh: onRefresh,
-                child: CustomScrollView(
-                  controller: _controller,
-                  physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics(),
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+                  child: _DoctorsSearchCard(
+                    controller: _searchController,
+                    activeFilterCount: currentQuery.activeFilterCount,
+                    onSearch: () {
+                      _submitSearch();
+                    },
+                    onClearSearch: () {
+                      _clearSearch();
+                    },
+                    onOpenFilters: () {
+                      _openFiltersSheet();
+                    },
                   ),
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-                        child: _DoctorsOverviewCard(
-                          count: state.doctors.length,
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-                      sliver: SliverGrid(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return DoctorCard(doctor: state.doctors[index]);
-                        }, childCount: state.doctors.length),
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 220,
-                              mainAxisSpacing: 14,
-                              crossAxisSpacing: 14,
-                              childAspectRatio: 0.74,
-                            ),
-                      ),
-                    ),
-                    if (state.isLoadingMore)
-                      const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 18),
-                          child: BottomLoader(),
-                        ),
-                      ),
-                  ],
                 ),
-              );
-            } else if (state is DoctorsError) {
-              return CustomErrorWidget(
-                textColor: Colors.black,
-                errorMessage: state.errorMsg,
-                onRetry: () {
-                  context.read<DoctorsCubit>().getDoctors(
-                    centerID,
-                    specialtyID,
-                  );
-                },
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryColors,
+                Expanded(
+                  child: _buildContent(
+                    context: context,
+                    state: state,
+                    currentQuery: currentQuery,
+                  ),
                 ),
-              );
-            }
+              ],
+            );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required DoctorsState state,
+    required DoctorsQueryParams currentQuery,
+  }) {
+    if (state is DoctorsLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColors),
+      );
+    }
+
+    if (state is DoctorsError) {
+      return CustomErrorWidget(
+        textColor: Colors.black,
+        errorMessage: state.errorMsg,
+        onRetry: () {
+          _doctorsCubit.getDoctors(centerID, specialtyID);
+        },
+      );
+    }
+
+    if (state is! DoctorsSuccess) {
+      return const SizedBox.shrink();
+    }
+
+    Future<void> onRefresh() async {
+      await _doctorsCubit.refreshDoctors(centerID, specialtyID);
+    }
+
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: CustomScrollView(
+        controller: _controller,
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+              child: _DoctorsOverviewCard(count: state.totalCount),
+            ),
+          ),
+          if (currentQuery.hasActiveFilters)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                child: _AppliedDoctorFilters(
+                  query: currentQuery,
+                  onClearFilters: () {
+                    _clearFilters();
+                  },
+                ),
+              ),
+            ),
+          if (state.doctors.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: _DoctorsEmptyState(
+                hasActiveQuery:
+                    currentQuery.hasActiveSearch ||
+                    currentQuery.hasActiveFilters,
+                onClearFilters: currentQuery.hasActiveFilters
+                    ? () {
+                        _clearFilters();
+                      }
+                    : null,
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return DoctorCard(doctor: state.doctors[index]);
+                }, childCount: state.doctors.length),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 220,
+                  mainAxisSpacing: 14,
+                  crossAxisSpacing: 14,
+                  childAspectRatio: 0.72,
+                ),
+              ),
+            ),
+          if (state.isLoadingMore)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 18),
+                child: BottomLoader(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DoctorsSearchCard extends StatelessWidget {
+  const _DoctorsSearchCard({
+    required this.controller,
+    required this.activeFilterCount,
+    required this.onSearch,
+    required this.onClearSearch,
+    required this.onOpenFilters,
+  });
+
+  final TextEditingController controller;
+  final int activeFilterCount;
+  final VoidCallback onSearch;
+  final VoidCallback onClearSearch;
+  final VoidCallback onOpenFilters;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool hasSearchText = controller.text.trim().isNotEmpty;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.1),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => onSearch(),
+              decoration: InputDecoration(
+                hintText: 'doctor_search_hint'.tr(context),
+                prefixIcon: const Icon(
+                  Icons.search_rounded,
+                  color: AppColors.primaryColors,
+                ),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (hasSearchText)
+                      IconButton(
+                        onPressed: onClearSearch,
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                    IconButton(
+                      onPressed: onSearch,
+                      icon: const Icon(Icons.arrow_forward_rounded),
+                    ),
+                  ],
+                ),
+                filled: true,
+                fillColor: AppColors.appBackgroundColor,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 16,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(22),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Material(
+                color: AppColors.primaryColors.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(18),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(18),
+                  onTap: onOpenFilters,
+                  child: SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: Icon(
+                      Icons.tune_rounded,
+                      color: AppColors.primaryColors,
+                    ),
+                  ),
+                ),
+              ),
+              if (activeFilterCount > 0)
+                Positioned(
+                  top: -6,
+                  right: -4,
+                  child: Container(
+                    width: 22,
+                    height: 22,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$activeFilterCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AppliedDoctorFilters extends StatelessWidget {
+  const _AppliedDoctorFilters({
+    required this.query,
+    required this.onClearFilters,
+  });
+
+  final DoctorsQueryParams query;
+  final VoidCallback onClearFilters;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'doctor_filters_title'.tr(context),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  color: Color(0xFF1F2C28),
+                ),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: onClearFilters,
+                child: Text('clear_filters'.tr(context)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              if (query.normalizedCenterName != null)
+                _DoctorFilterChip(
+                  icon: Icons.apartment_rounded,
+                  label:
+                      '${'center_name'.tr(context)}: ${query.normalizedCenterName!}',
+                ),
+              if (query.experienceYears != null)
+                _DoctorFilterChip(
+                  icon: Icons.timeline_rounded,
+                  label:
+                      '${'years_of_experience'.tr(context)}: ${query.experienceYears} ${'years'.tr(context)}',
+                ),
+              if (query.experienceYears == null &&
+                  (query.minExperience != null || query.maxExperience != null))
+                _DoctorFilterChip(
+                  icon: Icons.stacked_line_chart_rounded,
+                  label: _buildRangeLabel(context, query),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _buildRangeLabel(BuildContext context, DoctorsQueryParams query) {
+    if (query.minExperience != null && query.maxExperience != null) {
+      return '${'experience_range'.tr(context)}: ${query.minExperience}-${query.maxExperience} ${'years'.tr(context)}';
+    }
+
+    if (query.minExperience != null) {
+      return '${'minimum_experience'.tr(context)}: ${query.minExperience} ${'years'.tr(context)}';
+    }
+
+    return '${'maximum_experience'.tr(context)}: ${query.maxExperience} ${'years'.tr(context)}';
+  }
+}
+
+class _DoctorFilterChip extends StatelessWidget {
+  const _DoctorFilterChip({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColors.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: AppColors.primaryColors),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Color(0xFF1F2C28),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DoctorsEmptyState extends StatelessWidget {
+  const _DoctorsEmptyState({required this.hasActiveQuery, this.onClearFilters});
+
+  final bool hasActiveQuery;
+  final VoidCallback? onClearFilters;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            NoDataWidget(
+              title: hasActiveQuery
+                  ? 'no_matching_doctors_title'.tr(context)
+                  : 'no_data_title'.tr(context),
+              subtitle: hasActiveQuery
+                  ? 'no_matching_doctors_subtitle'.tr(context)
+                  : 'no_data_subtitle'.tr(context),
+            ),
+            if (onClearFilters != null) ...[
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: onClearFilters,
+                child: Text('clear_filters'.tr(context)),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum _DoctorExperienceFilterMode { exact, range }
+
+class _DoctorsFiltersSheet extends StatefulWidget {
+  const _DoctorsFiltersSheet({
+    required this.initialQuery,
+    required this.showCenterNameFilter,
+  });
+
+  final DoctorsQueryParams initialQuery;
+  final bool showCenterNameFilter;
+
+  @override
+  State<_DoctorsFiltersSheet> createState() => _DoctorsFiltersSheetState();
+}
+
+class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
+  late final TextEditingController _centerNameController;
+  late final TextEditingController _exactExperienceController;
+  late final TextEditingController _minExperienceController;
+  late final TextEditingController _maxExperienceController;
+  late _DoctorExperienceFilterMode _selectedMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _centerNameController = TextEditingController(
+      text: widget.initialQuery.centerName ?? '',
+    );
+    _exactExperienceController = TextEditingController(
+      text: widget.initialQuery.experienceYears?.toString() ?? '',
+    );
+    _minExperienceController = TextEditingController(
+      text: widget.initialQuery.minExperience?.toString() ?? '',
+    );
+    _maxExperienceController = TextEditingController(
+      text: widget.initialQuery.maxExperience?.toString() ?? '',
+    );
+    _selectedMode =
+        widget.initialQuery.experienceYears != null ||
+            (widget.initialQuery.minExperience == null &&
+                widget.initialQuery.maxExperience == null)
+        ? _DoctorExperienceFilterMode.exact
+        : _DoctorExperienceFilterMode.range;
+  }
+
+  @override
+  void dispose() {
+    _centerNameController.dispose();
+    _exactExperienceController.dispose();
+    _minExperienceController.dispose();
+    _maxExperienceController.dispose();
+    super.dispose();
+  }
+
+  void _resetFilters() {
+    _centerNameController.clear();
+    _exactExperienceController.clear();
+    _minExperienceController.clear();
+    _maxExperienceController.clear();
+    setState(() {
+      _selectedMode = _DoctorExperienceFilterMode.exact;
+    });
+  }
+
+  void _applyFilters() {
+    final int? exactExperience = _parseInt(_exactExperienceController.text);
+    final int? minExperience = _parseInt(_minExperienceController.text);
+    final int? maxExperience = _parseInt(_maxExperienceController.text);
+
+    if (_hasInvalidNumber(_exactExperienceController.text, exactExperience) ||
+        _hasInvalidNumber(_minExperienceController.text, minExperience) ||
+        _hasInvalidNumber(_maxExperienceController.text, maxExperience)) {
+      messages(context, 'enter_valid_number'.tr(context), Colors.red);
+      return;
+    }
+
+    if (_selectedMode == _DoctorExperienceFilterMode.range &&
+        minExperience != null &&
+        maxExperience != null &&
+        minExperience > maxExperience) {
+      messages(context, 'experience_range_invalid'.tr(context), Colors.red);
+      return;
+    }
+
+    Navigator.pop(
+      context,
+      widget.initialQuery.copyWith(
+        centerName: widget.showCenterNameFilter
+            ? _centerNameController.text
+            : null,
+        experienceYears: _selectedMode == _DoctorExperienceFilterMode.exact
+            ? exactExperience
+            : null,
+        minExperience: _selectedMode == _DoctorExperienceFilterMode.range
+            ? minExperience
+            : null,
+        maxExperience: _selectedMode == _DoctorExperienceFilterMode.range
+            ? maxExperience
+            : null,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(32),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 48,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'doctor_filters_title'.tr(context),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF1F2C28),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'doctor_filters_subtitle'.tr(context),
+                style: TextStyle(color: Colors.grey.shade600, height: 1.45),
+              ),
+              const SizedBox(height: 22),
+              if (widget.showCenterNameFilter) ...[
+                _FilterFieldLabel(label: 'center_name'.tr(context)),
+                const SizedBox(height: 10),
+                _BottomSheetTextField(
+                  controller: _centerNameController,
+                  hintText: 'doctor_center_name_hint'.tr(context),
+                ),
+                const SizedBox(height: 18),
+              ],
+              _FilterFieldLabel(label: 'years_of_experience'.tr(context)),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  ChoiceChip(
+                    label: Text('exact_experience'.tr(context)),
+                    selected:
+                        _selectedMode == _DoctorExperienceFilterMode.exact,
+                    onSelected: (_) {
+                      setState(() {
+                        _selectedMode = _DoctorExperienceFilterMode.exact;
+                      });
+                    },
+                  ),
+                  ChoiceChip(
+                    label: Text('experience_range'.tr(context)),
+                    selected:
+                        _selectedMode == _DoctorExperienceFilterMode.range,
+                    onSelected: (_) {
+                      setState(() {
+                        _selectedMode = _DoctorExperienceFilterMode.range;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              if (_selectedMode == _DoctorExperienceFilterMode.exact)
+                _BottomSheetTextField(
+                  controller: _exactExperienceController,
+                  hintText: 'exact_experience_hint'.tr(context),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                )
+              else
+                Row(
+                  children: [
+                    Expanded(
+                      child: _BottomSheetTextField(
+                        controller: _minExperienceController,
+                        hintText: 'minimum_experience'.tr(context),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _BottomSheetTextField(
+                        controller: _maxExperienceController,
+                        hintText: 'maximum_experience'.tr(context),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _resetFilters,
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(54),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text('reset_filters'.tr(context)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _applyFilters,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColors,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(54),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text('apply_filters'.tr(context)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _hasInvalidNumber(String rawValue, int? parsedValue) {
+    return rawValue.trim().isNotEmpty && parsedValue == null;
+  }
+
+  int? _parseInt(String value) {
+    final String trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return null;
+    }
+
+    return int.tryParse(trimmed);
+  }
+}
+
+class _BottomSheetTextField extends StatelessWidget {
+  const _BottomSheetTextField({
+    required this.controller,
+    required this.hintText,
+    this.keyboardType,
+    this.inputFormatters,
+  });
+
+  final TextEditingController controller;
+  final String hintText;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      decoration: InputDecoration(
+        hintText: hintText,
+        filled: true,
+        fillColor: AppColors.appBackgroundColor,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 16,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+}
+
+class _FilterFieldLabel extends StatelessWidget {
+  const _FilterFieldLabel({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: const TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 15,
+        color: Color(0xFF1F2C28),
       ),
     );
   }
@@ -250,7 +987,7 @@ class _DoctorsOverviewCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'doctor_details'.tr(context),
+                  'doctor_results_subtitle'.tr(context),
                   style: TextStyle(color: Colors.grey.shade700, height: 1.45),
                 ),
                 const SizedBox(height: 18),
