@@ -42,7 +42,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteColor,
       appBar: CustomAppbar(title: 'confirm_password'.tr(context)),
       body: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
         listener: (context, state) {
@@ -50,11 +50,11 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
             messages(
               context,
               "password_updated_successfully".tr(context),
-              Colors.green,
+              AppColors.greenColor,
             );
             Navigator.pop(context);
           } else if (state is ResetPasswordError) {
-            messages(context, state.errorMsg, Colors.red);
+            messages(context, state.errorMsg, AppColors.redColor);
           }
         },
         builder: (context, state) {

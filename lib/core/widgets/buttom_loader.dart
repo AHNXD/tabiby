@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class BottomLoader extends StatelessWidget {
   const BottomLoader({super.key});
@@ -9,11 +10,11 @@ class BottomLoader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: AppColors.whiteColor.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(30),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black12,
+              color: AppColors.black12Color,
               blurRadius: 10,
               offset: Offset(0, 4),
             ),

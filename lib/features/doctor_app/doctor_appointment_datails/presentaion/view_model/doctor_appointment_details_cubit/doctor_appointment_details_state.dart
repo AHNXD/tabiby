@@ -7,11 +7,14 @@ sealed class DoctorsAppointmentDetailsState extends Equatable {
   List<Object> get props => [];
 }
 
-final class DoctorsAppointmentDetailsInitial extends DoctorsAppointmentDetailsState {}
+final class DoctorsAppointmentDetailsInitial
+    extends DoctorsAppointmentDetailsState {}
 
-final class DoctorsAppointmentDetailsLoading extends DoctorsAppointmentDetailsState {}
+final class DoctorsAppointmentDetailsLoading
+    extends DoctorsAppointmentDetailsState {}
 
-final class DoctorsAppointmentDetailsError extends DoctorsAppointmentDetailsState {
+final class DoctorsAppointmentDetailsError
+    extends DoctorsAppointmentDetailsState {
   final String errorMsg;
 
   const DoctorsAppointmentDetailsError({required this.errorMsg});
@@ -19,9 +22,12 @@ final class DoctorsAppointmentDetailsError extends DoctorsAppointmentDetailsStat
   List<Object> get props => [errorMsg];
 }
 
-final class DoctorAppointmentDetailsSuccess extends DoctorsAppointmentDetailsState {
+final class DoctorAppointmentDetailsSuccess
+    extends DoctorsAppointmentDetailsState {
   final DoctorAppointmentDetailsModel doctorsAppointmentDetails;
-  const DoctorAppointmentDetailsSuccess({required this.doctorsAppointmentDetails});
+  const DoctorAppointmentDetailsSuccess({
+    required this.doctorsAppointmentDetails,
+  });
   @override
   List<Object> get props => [doctorsAppointmentDetails];
 }

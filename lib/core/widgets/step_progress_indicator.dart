@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils/colors.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class StepProgressIndicator extends StatelessWidget {
   final int currentStep;
@@ -13,7 +12,7 @@ class StepProgressIndicator extends StatelessWidget {
     required this.currentStep,
     this.totalSteps = 3,
     this.activeColor = AppColors.primaryColors,
-    this.inactiveColor = const Color(0xFFE0E0E0),
+    this.inactiveColor = AppColors.borderColor,
   });
 
   @override
@@ -46,7 +45,7 @@ class StepProgressIndicator extends StatelessWidget {
         child: Text(
           '${index + 1}',
           style: TextStyle(
-            color: isActive ? Colors.white : Colors.black54,
+            color: isActive ? AppColors.whiteColor : AppColors.black54Color,
             fontWeight: FontWeight.bold,
           ),
         ),

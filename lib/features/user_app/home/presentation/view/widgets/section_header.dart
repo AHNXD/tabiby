@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 class SectionHeader extends StatelessWidget {
@@ -12,20 +13,17 @@ class SectionHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18,),
-        ),
+        Text(title, style: const TextStyle(fontSize: 18)),
         TextButton.icon(
           onPressed: onSeeAll,
-          icon:  Text(
+          icon: Text(
             'see_all'.tr(context),
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: AppColors.greyColor),
           ),
           label: const Icon(
             Icons.arrow_forward_ios,
             size: 14,
-            color: Colors.grey,
+            color: AppColors.greyColor,
           ),
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,

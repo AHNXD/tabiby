@@ -57,9 +57,9 @@ class TimeSlotGrid extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 18),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FBF9),
+        color: AppColors.softSurfaceAltColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFE4ECE8)),
+        border: Border.all(color: AppColors.sageBorderSoftColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class TimeSlotGrid extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF21352D),
+                    color: AppColors.forestDeepColor,
                   ),
                 ),
               ],
@@ -125,22 +125,24 @@ class TimeSlotGrid extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              isSelected ? AppColors.primaryColors : Colors.white,
-              isSelected ? const Color(0xFF3F7F69) : const Color(0xFFFDFEFE),
+              isSelected ? AppColors.primaryColors : AppColors.whiteColor,
+              isSelected
+                  ? AppColors.forestAccentColor
+                  : AppColors.sageSurfaceWhiteColor,
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
                 ? AppColors.primaryColors
-                : const Color(0xFFDCE5E0),
+                : AppColors.sageBorderMutedColor,
             width: 1.5,
           ),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: isSelected
                   ? AppColors.primaryColors.withValues(alpha: 0.24)
-                  : Colors.black.withValues(alpha: 0.03),
+                  : AppColors.blackColor.withValues(alpha: 0.03),
               blurRadius: isSelected ? 14 : 8,
               offset: const Offset(0, 6),
             ),
@@ -149,7 +151,7 @@ class TimeSlotGrid extends StatelessWidget {
         child: Text(
           time,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black87,
+            color: isSelected ? AppColors.whiteColor : AppColors.black87Color,
             fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
             fontSize: 14,
           ),

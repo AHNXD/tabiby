@@ -56,9 +56,9 @@ class DiagnosisResultContent extends StatelessWidget {
     switch (urgency.toUpperCase()) {
       case 'EMERGENCY':
       case 'HIGH':
-        return const Color(0xFFE25F63);
+        return AppColors.dangerAccentColor;
       case 'MEDIUM':
-        return const Color(0xFFE7A423);
+        return AppColors.warningAccentColor;
       default:
         return AppColors.primaryColors;
     }
@@ -73,14 +73,14 @@ class EmergencyWarningBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF5F5),
+        color: AppColors.dangerSurfaceColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: const Color(0xFFE25F63).withValues(alpha: 0.2),
+          color: AppColors.dangerAccentColor.withValues(alpha: 0.2),
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFE25F63).withValues(alpha: 0.08),
+            color: AppColors.dangerAccentColor.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -93,12 +93,12 @@ class EmergencyWarningBanner extends StatelessWidget {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: const Color(0xFFE25F63).withValues(alpha: 0.12),
+              color: AppColors.dangerAccentColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
               Icons.warning_amber_rounded,
-              color: Color(0xFFE25F63),
+              color: AppColors.dangerAccentColor,
               size: 26,
             ),
           ),
@@ -107,7 +107,7 @@ class EmergencyWarningBanner extends StatelessWidget {
             child: Text(
               'emergency_msg'.tr(context),
               style: TextStyle(
-                color: const Color(0xFF8A2E32),
+                color: AppColors.dangerDeepColor,
                 fontWeight: FontWeight.w700,
                 height: 1.5,
               ),
@@ -134,14 +134,14 @@ class DiagnosisSummaryCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -217,7 +217,7 @@ class DiagnosisSummaryCard extends StatelessWidget {
                 Text(
                   'possible_condition'.tr(context),
                   style: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: AppColors.grey600Color,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
                   ),
@@ -226,7 +226,7 @@ class DiagnosisSummaryCard extends StatelessWidget {
                 Text(
                   result.conditionName,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     height: 1.2,
@@ -300,7 +300,7 @@ class DiagnosisTextSection extends StatelessWidget {
       title: titleKey.tr(context),
       child: Text(
         content,
-        style: TextStyle(color: Colors.grey.shade700, height: 1.65),
+        style: TextStyle(color: AppColors.grey700Color, height: 1.65),
       ),
     );
   }
@@ -319,7 +319,7 @@ class DiagnosisNextStepsSection extends StatelessWidget {
       child: steps.isEmpty
           ? Text(
               'no_data_subtitle'.tr(context),
-              style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: AppColors.grey600Color),
             )
           : Column(
               children: steps.asMap().entries.map((entry) {
@@ -351,7 +351,7 @@ class DiagnosisNextStepsSection extends StatelessWidget {
                         child: Text(
                           entry.value,
                           style: TextStyle(
-                            color: Colors.grey.shade700,
+                            color: AppColors.grey700Color,
                             height: 1.55,
                           ),
                         ),
@@ -378,12 +378,12 @@ class DiagnosisNoResultView extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.grey200Color),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.blackColor.withValues(alpha: 0.04),
                 blurRadius: 18,
                 offset: const Offset(0, 10),
               ),
@@ -395,13 +395,13 @@ class DiagnosisNoResultView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE25F63).withValues(alpha: 0.1),
+                  color: AppColors.dangerAccentColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.search_off_rounded,
                   size: 44,
-                  color: Color(0xFFE25F63),
+                  color: AppColors.dangerAccentColor,
                 ),
               ),
               const SizedBox(height: 18),
@@ -410,14 +410,14 @@ class DiagnosisNoResultView extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1F2C28),
+                  color: AppColors.titleColor,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Text(
                 'conflicting_symptoms'.tr(context),
-                style: TextStyle(color: Colors.grey.shade600, height: 1.55),
+                style: TextStyle(color: AppColors.grey600Color, height: 1.55),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -450,12 +450,12 @@ class _DiagnosisSectionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -482,7 +482,7 @@ class _DiagnosisSectionCard extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
               ),
@@ -515,9 +515,9 @@ class _ResultStatCard extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 98),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,7 +537,7 @@ class _ResultStatCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 16,
               fontWeight: FontWeight.w800,
               height: 1.25,
@@ -549,7 +549,7 @@ class _ResultStatCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: AppColors.grey600Color,
               fontSize: 12,
               height: 1.3,
             ),

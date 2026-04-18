@@ -336,7 +336,11 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
             }
 
             if (state.submitStatus == DietAsyncStatus.error) {
-              messages(context, state.errorMessage.tr(context), Colors.red);
+              messages(
+                context,
+                state.errorMessage.tr(context),
+                AppColors.redColor,
+              );
             }
 
             if (state.submitStatus == DietAsyncStatus.success &&
@@ -553,11 +557,11 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
+                          color: AppColors.blackColor.withValues(alpha: 0.04),
                           blurRadius: 18,
                           offset: const Offset(0, 10),
                         ),

@@ -28,10 +28,10 @@ class ProgressSection extends StatelessWidget {
                 radius: 15,
                 backgroundColor: isActive
                     ? AppColors.primaryColors
-                    : Colors.grey[300],
+                    : AppColors.grey300Color,
                 child: Text(
                   '${index + 1}',
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: AppColors.whiteColor),
                 ),
               ),
               if (index < totalSteps - 1)
@@ -40,7 +40,7 @@ class ProgressSection extends StatelessWidget {
                   height: 2,
                   color: index < currentStep
                       ? AppColors.primaryColors
-                      : Colors.grey[300],
+                      : AppColors.grey300Color,
                 ),
             ],
           ),

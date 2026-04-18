@@ -57,12 +57,12 @@ class AppointmentItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -87,7 +87,7 @@ class AppointmentItem extends StatelessWidget {
                         Text(
                           _weekdayLabel(context, parsedDate),
                           style: const TextStyle(
-                            color: Color(0xFF1F2C28),
+                            color: AppColors.titleColor,
                             fontSize: 17,
                             fontWeight: FontWeight.w800,
                           ),
@@ -96,7 +96,7 @@ class AppointmentItem extends StatelessWidget {
                         Text(
                           _fullDateLabel(parsedDate),
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: AppColors.grey600Color,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -115,7 +115,7 @@ class AppointmentItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFFF7FAF8),
+                color: AppColors.lighterSurfaceColor,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: AppColors.primaryColors.withValues(alpha: 0.08),
@@ -152,7 +152,7 @@ class AppointmentItem extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            color: Color(0xFF1F2C28),
+                            color: AppColors.titleColor,
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
                           ),
@@ -163,7 +163,7 @@ class AppointmentItem extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: AppColors.grey600Color,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -182,7 +182,7 @@ class AppointmentItem extends StatelessWidget {
                               icon: Icons.star_rounded,
                               label:
                                   appointment.doctor?.rate?.toString() ?? '--',
-                              accentColor: const Color(0xFFE7A423),
+                              accentColor: AppColors.warningAccentColor,
                             ),
                           ],
                         ),
@@ -249,9 +249,9 @@ class AppointmentItem extends StatelessWidget {
       case 'completed':
         return AppColors.primaryColors;
       case 'canceled':
-        return const Color(0xFFE56B6F);
+        return AppColors.dangerSoftColor;
       default:
-        return const Color(0xFFE7A423);
+        return AppColors.warningAccentColor;
     }
   }
 }
@@ -356,9 +356,9 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -368,7 +368,7 @@ class _InfoChip extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.grey.shade800,
+              color: AppColors.grey800Color,
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
@@ -425,13 +425,13 @@ class _ActionButton extends StatelessWidget {
             Icon(
               icon,
               size: 18,
-              color: filled ? Colors.white : AppColors.primaryColors,
+              color: filled ? AppColors.whiteColor : AppColors.primaryColors,
             ),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: filled ? Colors.white : AppColors.primaryColors,
+                color: filled ? AppColors.whiteColor : AppColors.primaryColors,
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
               ),

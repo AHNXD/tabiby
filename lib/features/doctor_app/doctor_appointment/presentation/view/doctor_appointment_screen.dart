@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/app_localizations.dart';
 import '../../../../../core/utils/services_locater.dart';
@@ -144,7 +145,7 @@ class _DoctorAppointmentViewState extends State<DoctorAppointmentScreen> {
                           );
                         } else if (state is DoctorsAppointmentError) {
                           return CustomErrorWidget(
-                            textColor: Colors.black,
+                            textColor: AppColors.blackColor,
                             errorMessage: state.errorMsg,
                             onRetry: () {
                               context

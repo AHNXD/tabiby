@@ -50,24 +50,24 @@ class DateSelector extends StatelessWidget {
                     colors: <Color>[
                       isSelected
                           ? AppColors.primaryColors
-                          : const Color(0xFFFFFFFF),
+                          : AppColors.whiteColor,
                       isSelected
-                          ? const Color(0xFF3F7F69)
-                          : const Color(0xFFF8FAF9),
+                          ? AppColors.forestAccentColor
+                          : AppColors.lightSurfaceColor,
                     ],
                   ),
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primaryColors
-                        : const Color(0xFFE7ECE9),
+                        : AppColors.sageSurfaceAltColor,
                     width: 1.5,
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: isSelected
                           ? AppColors.primaryColors.withValues(alpha: 0.24)
-                          : Colors.black.withValues(alpha: 0.04),
+                          : AppColors.blackColor.withValues(alpha: 0.04),
                       blurRadius: isSelected ? 16 : 10,
                       offset: const Offset(0, 8),
                     ),
@@ -83,8 +83,8 @@ class DateSelector extends StatelessWidget {
                       ).format(parsedDate).toUpperCase().tr(context),
                       style: TextStyle(
                         color: isSelected
-                            ? Colors.white.withValues(alpha: 0.8)
-                            : Colors.grey.shade500,
+                            ? AppColors.whiteColor.withValues(alpha: 0.8)
+                            : AppColors.grey500Color,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
@@ -96,7 +96,9 @@ class DateSelector extends StatelessWidget {
                     Text(
                       DateFormat('dd').format(parsedDate),
                       style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black87,
+                        color: isSelected
+                            ? AppColors.whiteColor
+                            : AppColors.black87Color,
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
                         height: 1.0,
@@ -117,8 +119,8 @@ class DateSelector extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: isSelected
-                                ? Colors.white
-                                : Colors.grey.shade600,
+                                ? AppColors.whiteColor
+                                : AppColors.grey600Color,
                             fontWeight: FontWeight.w600,
                             fontSize: 11,
                             height: 1,

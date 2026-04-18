@@ -78,7 +78,7 @@ class AllSpecialtiesScreen extends StatelessWidget {
               );
             } else if (state is SpecialtiesError) {
               return CustomErrorWidget(
-                textColor: Colors.black,
+                textColor: AppColors.blackColor,
                 errorMessage: state.errorMsg.tr(context),
                 onRetry: () {
                   context.read<SpecialtiesCubit>().getSpecialties();
@@ -104,14 +104,14 @@ class _SpecialtiesOverviewCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -170,7 +170,7 @@ class _SpecialtiesOverviewCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -192,7 +192,7 @@ class _SpecialtiesOverviewCard extends StatelessWidget {
                 Text(
                   'all_specialties'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -200,7 +200,7 @@ class _SpecialtiesOverviewCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   'find_your_doctor'.tr(context),
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.45),
                 ),
                 const SizedBox(height: 18),
                 Wrap(
@@ -237,9 +237,9 @@ class _SpecialtyOverviewChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -249,7 +249,7 @@ class _SpecialtyOverviewChip extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontWeight: FontWeight.w700,
             ),
           ),

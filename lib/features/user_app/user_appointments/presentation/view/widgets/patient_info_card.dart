@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
@@ -23,19 +24,25 @@ class PatientInfoCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF333333),
+                color: AppColors.bodyTextColor,
               ),
             ),
             const SizedBox(height: 4),
             const Text(
               '2008 / 21 / 5',
-              style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.secondaryBodyTextColor,
+              ),
             ),
 
             const SizedBox(height: 4),
             Text(
               '1 ${"appointment".tr(context)}',
-              style: TextStyle(fontSize: 14, color: Color(0xFF888888)),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.secondaryBodyTextColor,
+              ),
             ),
           ],
         ),

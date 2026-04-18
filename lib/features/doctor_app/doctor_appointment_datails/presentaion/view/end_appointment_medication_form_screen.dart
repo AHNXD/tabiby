@@ -89,7 +89,7 @@ class _EndAppointmentMedicationFormScreenState
       messages(
         context,
         'complete_medication_fields'.tr(context),
-        Colors.orange,
+        AppColors.orangeColor,
       );
       return;
     }
@@ -109,7 +109,7 @@ class _EndAppointmentMedicationFormScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7F6),
+      backgroundColor: AppColors.softSurfaceMutedColor,
       appBar: CustomAppbar(
         title:
             (_isEditing
@@ -190,7 +190,7 @@ class _EndAppointmentMedicationFormScreenState
             child: Text(
               'save_changes'.tr(context),
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
               ),
@@ -213,11 +213,11 @@ class _MedicationFieldCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 16,
             offset: const Offset(0, 6),
           ),
@@ -253,18 +253,18 @@ class _MedicationTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         filled: true,
-        fillColor: const Color(0xFFF8FAF9),
+        fillColor: AppColors.lightSurfaceColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 15,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.grey300Color),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.grey300Color),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

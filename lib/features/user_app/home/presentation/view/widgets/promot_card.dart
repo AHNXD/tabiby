@@ -30,12 +30,12 @@ class PromotCard extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 AppColors.primaryColors,
-                AppColors.primaryColors.withOpacity(0.85),
+                AppColors.primaryColors.withValues(alpha: 0.85),
               ],
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primaryColors.withOpacity(0.3),
+                color: AppColors.primaryColors.withValues(alpha: 0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -54,7 +54,7 @@ class PromotCard extends StatelessWidget {
                   height: 150,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.1),
+                    color: AppColors.whiteColor.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -130,7 +130,7 @@ class PromotCard extends StatelessWidget {
                                       ? TextAlign.right
                                       : TextAlign.left,
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.whiteColor,
                                     fontSize:
                                         18, // Base size (will shrink if needed)
                                     fontWeight: FontWeight.bold,

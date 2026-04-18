@@ -8,5 +8,4 @@ abstract class DoctorAppointmentsRepo {
     int? center,
     String? date,
   );
-  
 }

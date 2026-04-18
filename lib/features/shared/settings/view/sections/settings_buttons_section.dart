@@ -25,7 +25,7 @@ class SettingsButtonsSection extends StatelessWidget {
   void _showLanguageDialog(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparentColor,
       isScrollControlled: true,
       builder: (BuildContext dialogContext) {
         Future<void> setLanguage(String value) async {
@@ -44,7 +44,7 @@ class SettingsButtonsSection extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 child: Column(
@@ -56,7 +56,7 @@ class SettingsButtonsSection extends StatelessWidget {
                         width: 44,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
+                          color: AppColors.grey300Color,
                           borderRadius: BorderRadius.circular(999),
                         ),
                       ),
@@ -81,14 +81,14 @@ class SettingsButtonsSection extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'language_picker_hint'.tr(context),
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: AppColors.grey600Color,
                         height: 1.45,
                       ),
                     ),
@@ -114,8 +114,8 @@ class SettingsButtonsSection extends StatelessWidget {
                       child: OutlinedButton(
                         onPressed: () => Navigator.of(dialogContext).pop(),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.grey.shade700,
-                          side: BorderSide(color: Colors.grey.shade300),
+                          foregroundColor: AppColors.grey700Color,
+                          side: BorderSide(color: AppColors.grey300Color),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           ),
@@ -167,14 +167,18 @@ class SettingsButtonsSection extends StatelessWidget {
         BlocListener<LogoutCubit, LogoutState>(
           listener: (context, state) {
             if (state is LogoutSuccess) {
-              messages(context, "logout_success".tr(context), Colors.green);
+              messages(
+                context,
+                "logout_success".tr(context),
+                AppColors.greenColor,
+              );
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 LoginScreen.routeName,
                 (Route<dynamic> route) => false,
               );
             } else if (state is LogoutError) {
-              messages(context, state.errorMsg.tr(context), Colors.red);
+              messages(context, state.errorMsg.tr(context), AppColors.redColor);
             }
           },
         ),
@@ -184,7 +188,7 @@ class SettingsButtonsSection extends StatelessWidget {
               messages(
                 context,
                 "account_deleted_success".tr(context),
-                Colors.green,
+                AppColors.greenColor,
               );
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -192,7 +196,7 @@ class SettingsButtonsSection extends StatelessWidget {
                 (Route<dynamic> route) => false,
               );
             } else if (state is UserError) {
-              messages(context, state.errorMsg.tr(context), Colors.red);
+              messages(context, state.errorMsg.tr(context), AppColors.redColor);
             }
           },
         ),
@@ -334,11 +338,11 @@ class SettingsButtonsSection extends StatelessWidget {
     required bool isLoading,
     bool isFilled = true,
   }) {
-    final Color dangerColor = Colors.red.shade400;
-    final Color dangerBg = Colors.red.shade50;
+    final Color dangerColor = AppColors.red400Color;
+    final Color dangerBg = AppColors.red50Color;
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(22),
@@ -347,16 +351,16 @@ class SettingsButtonsSection extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
           decoration: BoxDecoration(
-            color: isFilled ? dangerBg : Colors.white,
+            color: isFilled ? dangerBg : AppColors.whiteColor,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
               color: isFilled
-                  ? Colors.transparent
+                  ? AppColors.transparentColor
                   : dangerColor.withValues(alpha: 0.22),
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: AppColors.blackColor.withValues(alpha: 0.03),
                 blurRadius: 14,
                 offset: const Offset(0, 8),
               ),
@@ -368,7 +372,7 @@ class SettingsButtonsSection extends StatelessWidget {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: isFilled ? Colors.white : dangerBg,
+                  color: isFilled ? AppColors.whiteColor : dangerBg,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: isLoading
@@ -420,14 +424,14 @@ class _SettingsHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -486,7 +490,7 @@ class _SettingsHeroCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -519,7 +523,7 @@ class _SettingsHeroCard extends StatelessWidget {
                 Text(
                   'settings'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -527,7 +531,7 @@ class _SettingsHeroCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   'settings_intro_subtitle'.tr(context),
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.45),
                 ),
               ],
             ),
@@ -549,12 +553,12 @@ class _SettingsGroupCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: AppColors.blackColor.withValues(alpha: 0.03),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),
@@ -585,7 +589,7 @@ class _LanguageOptionCard extends StatelessWidget {
     final bool isSelected = value == groupValue;
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(22),
@@ -594,12 +598,12 @@ class _LanguageOptionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primaryColors.withValues(alpha: 0.08)
-                : Colors.white,
+                : AppColors.whiteColor,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
               color: isSelected
                   ? AppColors.primaryColors.withValues(alpha: 0.35)
-                  : Colors.grey.shade200,
+                  : AppColors.grey200Color,
               width: isSelected ? 1.4 : 1,
             ),
           ),
@@ -631,7 +635,7 @@ class _LanguageOptionCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
               ),
@@ -642,19 +646,19 @@ class _LanguageOptionCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryColors
-                      : Colors.transparent,
+                      : AppColors.transparentColor,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primaryColors
-                        : Colors.grey.shade400,
+                        : AppColors.grey400Color,
                     width: 1.5,
                   ),
                 ),
                 child: isSelected
                     ? const Icon(
                         Icons.check_rounded,
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         size: 16,
                       )
                     : null,

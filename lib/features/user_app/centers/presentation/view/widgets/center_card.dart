@@ -17,11 +17,11 @@ class CenterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: AppColors.greyColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: 2,
@@ -29,7 +29,7 @@ class CenterCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparentColor,
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
@@ -51,7 +51,7 @@ class CenterCard extends StatelessWidget {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: AppColors.blackColor.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 5),
                         ),
@@ -77,7 +77,7 @@ class CenterCard extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
-                            color: Colors.black87,
+                            color: AppColors.black87Color,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -91,7 +91,7 @@ class CenterCard extends StatelessWidget {
                             Icon(
                               Icons.location_on_rounded,
                               size: 12,
-                              color: Colors.grey.shade500,
+                              color: AppColors.grey500Color,
                             ),
                             const SizedBox(width: 4),
                             Flexible(
@@ -99,7 +99,7 @@ class CenterCard extends StatelessWidget {
                                 center.address ?? '',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: Colors.grey.shade600,
+                                  color: AppColors.grey600Color,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,

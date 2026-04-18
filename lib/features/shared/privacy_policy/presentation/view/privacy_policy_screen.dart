@@ -110,14 +110,14 @@ class _PolicyHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -176,7 +176,7 @@ class _PolicyHeroCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -198,7 +198,7 @@ class _PolicyHeroCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -206,7 +206,7 @@ class _PolicyHeroCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.5),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.5),
                 ),
                 const SizedBox(height: 18),
                 Wrap(
@@ -243,9 +243,9 @@ class _PolicyHeroChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -255,7 +255,7 @@ class _PolicyHeroChip extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -275,9 +275,9 @@ class _LastUpdatedCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: <Widget>[
@@ -299,7 +299,7 @@ class _LastUpdatedCard extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.grey.shade700,
+                color: AppColors.grey700Color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -329,12 +329,12 @@ class _PolicySectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -371,7 +371,7 @@ class _PolicySectionCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1F2C28),
+                      color: AppColors.titleColor,
                     ),
                   ),
                 ),
@@ -397,7 +397,7 @@ class _PolicySectionCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     height: 1.65,
-                    color: Colors.grey.shade700,
+                    color: AppColors.grey700Color,
                   ),
                 ),
               ),
@@ -412,7 +412,7 @@ class _PolicySectionCard extends StatelessWidget {
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF7FAF9),
+                    color: AppColors.lighterSurfaceColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
@@ -440,7 +440,7 @@ class _PolicySectionCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 15,
                             height: 1.6,
-                            color: Colors.grey.shade700,
+                            color: AppColors.grey700Color,
                           ),
                         ),
                       ),

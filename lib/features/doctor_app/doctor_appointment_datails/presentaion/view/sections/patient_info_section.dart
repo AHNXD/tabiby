@@ -67,11 +67,11 @@ class _AttachmentCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -100,7 +100,7 @@ class _AttachmentCard extends StatelessWidget {
               Text(
                 _typeLabel(context),
                 style: TextStyle(
-                  color: Colors.grey.shade800,
+                  color: AppColors.grey800Color,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -109,7 +109,7 @@ class _AttachmentCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
                     attachment.recordDate!,
-                    style: TextStyle(color: Colors.grey.shade700),
+                    style: TextStyle(color: AppColors.grey700Color),
                   ),
                 ),
               if ((attachment.sourceLabel ?? '').isNotEmpty)
@@ -119,7 +119,7 @@ class _AttachmentCard extends StatelessWidget {
                     attachment.sourceLabel!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.grey.shade700),
+                    style: TextStyle(color: AppColors.grey700Color),
                   ),
                 ),
             ],
@@ -131,7 +131,7 @@ class _AttachmentCard extends StatelessWidget {
           label: Text('show'.tr(context)),
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primaryColors,
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.whiteColor,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -145,7 +145,11 @@ class _AttachmentCard extends StatelessWidget {
   Future<void> _showAttachment(BuildContext context) async {
     final String? url = attachment.url;
     if (url == null || url.isEmpty) {
-      messages(context, 'cannot_show_medical_file'.tr(context), Colors.red);
+      messages(
+        context,
+        'cannot_show_medical_file'.tr(context),
+        AppColors.redColor,
+      );
       return;
     }
 
@@ -153,10 +157,10 @@ class _AttachmentCard extends StatelessWidget {
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
           return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.blackColor,
             appBar: AppBar(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.blackColor,
+              foregroundColor: AppColors.whiteColor,
               elevation: 0,
               title: Text(
                 attachment.title,
@@ -172,7 +176,7 @@ class _AttachmentCard extends StatelessWidget {
                     child: Text(
                       'medical_image_zoom_hint'.tr(context),
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: AppColors.white70Color),
                     ),
                   ),
                   Expanded(

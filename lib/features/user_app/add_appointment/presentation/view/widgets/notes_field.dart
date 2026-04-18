@@ -13,9 +13,9 @@ class NotesField extends StatelessWidget {
       controller: noteController,
       decoration: InputDecoration(
         hintText: 'hint_for_center_or_doctor'.tr(context),
-        hintStyle: TextStyle(color: Colors.grey.shade500, height: 1.4),
+        hintStyle: TextStyle(color: AppColors.grey500Color, height: 1.4),
         filled: true,
-        fillColor: const Color(0xFFF8FBF9),
+        fillColor: AppColors.softSurfaceAltColor,
         contentPadding: const EdgeInsets.all(18),
         prefixIcon: Padding(
           padding: const EdgeInsetsDirectional.only(
@@ -31,11 +31,11 @@ class NotesField extends StatelessWidget {
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(22),
-          borderSide: const BorderSide(color: Color(0xFFE1E9E4)),
+          borderSide: const BorderSide(color: AppColors.sageBorderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(22),
-          borderSide: const BorderSide(color: Color(0xFFE1E9E4)),
+          borderSide: const BorderSide(color: AppColors.sageBorderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(22),

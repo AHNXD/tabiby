@@ -25,14 +25,14 @@ class DoctorHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.shadowColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -77,10 +77,15 @@ class DoctorHeader extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 4),
+                            border: Border.all(
+                              color: AppColors.backgroundColor,
+                              width: 4,
+                            ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.08),
+                                color: AppColors.shadowColor.withValues(
+                                  alpha: 0.08,
+                                ),
                                 blurRadius: 15,
                                 offset: const Offset(0, 6),
                               ),
@@ -103,10 +108,12 @@ class DoctorHeader extends StatelessWidget {
                             width: 22,
                             height: 22,
                             decoration: BoxDecoration(
-                              color: isActive ? Colors.green : Colors.grey,
+                              color: isActive
+                                  ? AppColors.successColor
+                                  : AppColors.neutralColor,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.white,
+                                color: AppColors.backgroundColor,
                                 width: 2.5,
                               ),
                             ),
@@ -125,7 +132,7 @@ class DoctorHeader extends StatelessWidget {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.backgroundColor,
                               borderRadius: BorderRadius.circular(999),
                               border: Border.all(
                                 color: AppColors.primaryColors.withValues(
@@ -147,7 +154,7 @@ class DoctorHeader extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFF1F2C28),
+                              color: AppColors.titleColor,
                               height: 1.2,
                             ),
                             maxLines: 2,
@@ -222,9 +229,9 @@ class _DoctorInfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.softBorderColor),
       ),
       child: Row(
         children: [
@@ -244,7 +251,7 @@ class _DoctorInfoChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                color: Color(0xFF1F2C28),
+                color: AppColors.titleColor,
                 fontWeight: FontWeight.w700,
               ),
             ),

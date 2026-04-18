@@ -13,12 +13,12 @@ class AboutSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -53,7 +53,7 @@ class AboutSection extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -61,7 +61,7 @@ class AboutSection extends StatelessWidget {
                       'center_details'.tr(context),
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.grey.shade600,
+                        color: AppColors.grey600Color,
                       ),
                     ),
                   ],
@@ -74,7 +74,7 @@ class AboutSection extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF6F8F8),
+                  color: AppColors.subtleCoolSurfaceColor,
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: const Icon(
@@ -99,7 +99,7 @@ class AboutSection extends StatelessWidget {
             description,
             style: TextStyle(
               fontSize: 15,
-              color: Colors.grey.shade700,
+              color: AppColors.grey700Color,
               height: 1.65,
             ),
           ),

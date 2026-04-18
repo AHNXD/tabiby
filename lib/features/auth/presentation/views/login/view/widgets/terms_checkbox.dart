@@ -29,7 +29,7 @@ class TermsCheckbox extends StatelessWidget {
               shape: BoxShape.circle,
               color: agreeToTerms
                   ? AppColors.primaryColors
-                  : Colors.transparent,
+                  : AppColors.transparentColor,
               border: Border.all(
                 color: agreeToTerms
                     ? AppColors.primaryColors
@@ -38,7 +38,7 @@ class TermsCheckbox extends StatelessWidget {
               ),
             ),
             child: agreeToTerms
-                ? const Icon(Icons.check, size: 16, color: Colors.white)
+                ? const Icon(Icons.check, size: 16, color: AppColors.whiteColor)
                 : null,
           ),
         ),

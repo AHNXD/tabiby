@@ -37,12 +37,12 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
           end: Alignment.bottomRight,
           colors: [
             AppColors.primaryColors,
-            AppColors.primaryColors.withOpacity(0.8),
+            AppColors.primaryColors.withValues(alpha: 0.8),
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryColors.withOpacity(0.3),
+            color: AppColors.primaryColors.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -62,7 +62,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.5,
@@ -81,14 +81,14 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: AppColors.whiteColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: const Icon(
                       Icons.arrow_back_ios_new,
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       size: 18,
                     ),
                     onPressed:

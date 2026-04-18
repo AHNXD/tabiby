@@ -22,14 +22,14 @@ class QuestionIntroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -92,7 +92,7 @@ class QuestionIntroCard extends StatelessWidget {
                 Text(
                   'questions_title'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -114,7 +114,7 @@ class QuestionIntroCard extends StatelessWidget {
                         child: _QuestionStatCard(
                           icon: Icons.monitor_heart_outlined,
                           value: totalCount.toString(),
-                          accentColor: const Color(0xFFE7A423),
+                          accentColor: AppColors.warningAccentColor,
                         ),
                       ),
                     ],
@@ -144,19 +144,19 @@ class SymptomCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
           color: symptom.isSelected
               ? AppColors.primaryColors.withValues(alpha: 0.45)
-              : Colors.grey.shade200,
+              : AppColors.grey200Color,
           width: symptom.isSelected ? 1.6 : 1,
         ),
         boxShadow: [
           BoxShadow(
             color: symptom.isSelected
                 ? AppColors.primaryColors.withValues(alpha: 0.08)
-                : Colors.black.withValues(alpha: 0.04),
+                : AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -181,12 +181,12 @@ class SymptomCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: symptom.isSelected
                           ? AppColors.primaryColors
-                          : Colors.transparent,
+                          : AppColors.transparentColor,
                       borderRadius: BorderRadius.circular(9),
                       border: Border.all(
                         color: symptom.isSelected
                             ? AppColors.primaryColors
-                            : Colors.grey.shade400,
+                            : AppColors.grey400Color,
                         width: 1.6,
                       ),
                     ),
@@ -194,7 +194,7 @@ class SymptomCard extends StatelessWidget {
                         ? const Icon(
                             Icons.check_rounded,
                             size: 18,
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                           )
                         : null,
                   ),
@@ -205,7 +205,7 @@ class SymptomCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                       ),
                     ),
                   ),
@@ -246,7 +246,7 @@ class SymptomCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7FAF8),
+                  color: AppColors.lighterSurfaceColor,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(
                     color: AppColors.primaryColors.withValues(alpha: 0.08),
@@ -304,7 +304,7 @@ class QuestionInput extends StatelessWidget {
           question.labelAr,
           style: const TextStyle(
             fontSize: 14,
-            color: Color(0xFF1F2C28),
+            color: AppColors.titleColor,
             fontWeight: FontWeight.w700,
             height: 1.35,
           ),
@@ -330,9 +330,9 @@ class QuestionInput extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: [
@@ -393,15 +393,19 @@ class QuestionInput extends StatelessWidget {
           label: Text(option),
           selected: isSelected,
           selectedColor: AppColors.primaryColors.withValues(alpha: 0.14),
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.whiteColor,
           side: BorderSide(
-            color: isSelected ? AppColors.primaryColors : Colors.grey.shade300,
+            color: isSelected
+                ? AppColors.primaryColors
+                : AppColors.grey300Color,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
           labelStyle: TextStyle(
-            color: isSelected ? AppColors.primaryColors : Colors.grey.shade700,
+            color: isSelected
+                ? AppColors.primaryColors
+                : AppColors.grey700Color,
             fontWeight: FontWeight.w700,
           ),
           onSelected: (_) => onChanged(option),
@@ -426,7 +430,7 @@ class QuestionInput extends StatelessWidget {
       menuMaxHeight: 280,
       icon: Icon(
         Icons.keyboard_arrow_down_rounded,
-        color: Colors.grey.shade600,
+        color: AppColors.grey600Color,
       ),
       selectedItemBuilder: (BuildContext context) {
         return question.options
@@ -452,7 +456,7 @@ class QuestionInput extends StatelessWidget {
           .toList(),
       onChanged: (String? value) => onChanged(value),
       style: const TextStyle(
-        color: Color(0xFF1F2C28),
+        color: AppColors.titleColor,
         fontSize: 15,
         fontWeight: FontWeight.w600,
       ),
@@ -463,14 +467,14 @@ class QuestionInput extends StatelessWidget {
           vertical: 14,
         ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.whiteColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.grey300Color),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.grey300Color),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -496,11 +500,11 @@ class QuestionSubmitBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: AppColors.blackColor.withValues(alpha: 0.06),
             blurRadius: 18,
             offset: const Offset(0, -6),
           ),
@@ -530,7 +534,7 @@ class QuestionSubmitBar extends StatelessWidget {
                   child: Text(
                     selectedCount.toString(),
                     style: const TextStyle(
-                      color: Color(0xFF1F2C28),
+                      color: AppColors.titleColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                     ),
@@ -559,7 +563,7 @@ class _QuestionInfoBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
             color: AppColors.primaryColors.withValues(alpha: 0.16),
@@ -604,9 +608,9 @@ class _QuestionStatCard extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 88),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: [
@@ -623,7 +627,7 @@ class _QuestionStatCard extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),

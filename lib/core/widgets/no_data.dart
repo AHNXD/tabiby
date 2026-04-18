@@ -31,7 +31,7 @@ class NoDataWidget extends StatelessWidget {
               title,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
               ),
               textAlign: TextAlign.center,
             ),
@@ -41,7 +41,7 @@ class NoDataWidget extends StatelessWidget {
               subtitle,
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.grey600Color),
               textAlign: TextAlign.center,
             ),
 

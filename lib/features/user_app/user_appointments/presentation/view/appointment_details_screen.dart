@@ -38,7 +38,7 @@ class _AppointmentDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7F6),
+      backgroundColor: AppColors.softSurfaceMutedColor,
       appBar: CustomAppbar(title: 'appointment_details'.tr(context)),
       body: BlocBuilder<AppointmentDetailsCubit, AppointmentDetailsState>(
         builder: (BuildContext context, AppointmentDetailsState state) {
@@ -49,7 +49,7 @@ class _AppointmentDetailsView extends StatelessWidget {
 
           if (state is AppointmentDetailsError) {
             return CustomErrorWidget(
-              textColor: Colors.black,
+              textColor: AppColors.blackColor,
               errorMessage: state.errorMsg,
               onRetry: () => context
                   .read<AppointmentDetailsCubit>()
@@ -123,20 +123,20 @@ class _HeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color statusColor = switch (details.status) {
-      'completed' => Colors.green,
-      'canceled' => Colors.red,
-      _ => Colors.orange,
+      'completed' => AppColors.greenColor,
+      'canceled' => AppColors.redColor,
+      _ => AppColors.orangeColor,
     };
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -221,11 +221,11 @@ class _DoctorCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -257,7 +257,7 @@ class _DoctorCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   details.doctor?.specialization ?? '--',
-                  style: TextStyle(color: Colors.grey.shade700),
+                  style: TextStyle(color: AppColors.grey700Color),
                 ),
               ],
             ),
@@ -279,11 +279,11 @@ class _SummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -339,7 +339,7 @@ class _TextSectionCard extends StatelessWidget {
       child: Text(
         content,
         style: TextStyle(
-          color: Colors.grey.shade800,
+          color: AppColors.grey800Color,
           height: 1.6,
           fontSize: 15,
         ),
@@ -395,7 +395,9 @@ class _DiagnosisCard extends StatelessWidget {
               label: (diagnosis.isEmergency! ? 'emergency' : 'recommended').tr(
                 context,
               ),
-              color: diagnosis.isEmergency! ? Colors.red : Colors.green,
+              color: diagnosis.isEmergency!
+                  ? AppColors.redColor
+                  : AppColors.greenColor,
             ),
           ],
         ],
@@ -423,7 +425,7 @@ class _CompletionSection extends StatelessWidget {
                   child: Text(
                     'send_to_center_pharmacy'.tr(context),
                     style: TextStyle(
-                      color: Colors.grey.shade800,
+                      color: AppColors.grey800Color,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -433,8 +435,8 @@ class _CompletionSection extends StatelessWidget {
                     context,
                   ),
                   color: details.sendToPharmacy == true
-                      ? Colors.green
-                      : Colors.grey,
+                      ? AppColors.greenColor
+                      : AppColors.greyColor,
                 ),
               ],
             ),
@@ -570,7 +572,7 @@ class _ResultSectionCard extends StatelessWidget {
           if ((result.notes ?? '').trim().isNotEmpty)
             Text(
               result.notes!,
-              style: TextStyle(color: Colors.grey.shade800, height: 1.5),
+              style: TextStyle(color: AppColors.grey800Color, height: 1.5),
             ),
           if (result.hasFile) ...<Widget>[
             if ((result.notes ?? '').trim().isNotEmpty)
@@ -580,9 +582,9 @@ class _ResultSectionCard extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
+                  color: AppColors.grey50Color,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: Colors.grey.shade200),
+                  border: Border.all(color: AppColors.grey200Color),
                 ),
                 child: Row(
                   children: <Widget>[
@@ -594,7 +596,7 @@ class _ResultSectionCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'pdf_preview_not_available'.tr(context),
-                        style: TextStyle(color: Colors.grey.shade700),
+                        style: TextStyle(color: AppColors.grey700Color),
                       ),
                     ),
                   ],
@@ -673,9 +675,9 @@ class _AttachmentCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.grey.shade50,
+          color: AppColors.grey50Color,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.grey200Color),
         ),
         child: Row(
           children: <Widget>[
@@ -703,7 +705,7 @@ class _AttachmentCard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         attachment.recordDate!,
-                        style: TextStyle(color: Colors.grey.shade700),
+                        style: TextStyle(color: AppColors.grey700Color),
                       ),
                     ),
                   if ((attachment.sourceLabel ?? '').isNotEmpty)
@@ -711,7 +713,7 @@ class _AttachmentCard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         attachment.sourceLabel!,
-                        style: TextStyle(color: Colors.grey.shade700),
+                        style: TextStyle(color: AppColors.grey700Color),
                       ),
                     ),
                 ],
@@ -771,9 +773,9 @@ class _AttachmentCard extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
+                      color: AppColors.grey50Color,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.grey200Color),
                     ),
                     child: Row(
                       children: <Widget>[
@@ -785,7 +787,7 @@ class _AttachmentCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'pdf_preview_not_available'.tr(context),
-                            style: TextStyle(color: Colors.grey.shade700),
+                            style: TextStyle(color: AppColors.grey700Color),
                           ),
                         ),
                       ],
@@ -834,13 +836,13 @@ class _ResultExpandBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.58),
+        color: AppColors.blackColor.withValues(alpha: 0.58),
         borderRadius: BorderRadius.circular(999),
       ),
       child: const Icon(
         Icons.open_in_full_rounded,
         size: 16,
-        color: Colors.white,
+        color: AppColors.whiteColor,
       ),
     );
   }
@@ -855,10 +857,10 @@ Future<void> _openZoomableImageViewer(
     MaterialPageRoute<void>(
       builder: (BuildContext context) {
         return Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.blackColor,
           appBar: AppBar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.blackColor,
+            foregroundColor: AppColors.whiteColor,
             elevation: 0,
             title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
@@ -870,7 +872,7 @@ Future<void> _openZoomableImageViewer(
                   child: Text(
                     'medical_image_zoom_hint'.tr(context),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: AppColors.white70Color),
                   ),
                 ),
                 Expanded(
@@ -913,11 +915,11 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -962,9 +964,9 @@ class _ItemCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.grey50Color,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -981,7 +983,7 @@ class _ItemCard extends StatelessWidget {
                 text: TextSpan(
                   style: DefaultTextStyle.of(
                     context,
-                  ).style.copyWith(color: Colors.grey.shade800, height: 1.5),
+                  ).style.copyWith(color: AppColors.grey800Color, height: 1.5),
                   children: <InlineSpan>[
                     TextSpan(
                       text: '${row.key}: ',
@@ -1015,7 +1017,7 @@ class _SummaryRow extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: Colors.grey.shade700,
+                color: AppColors.grey700Color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -1050,9 +1052,9 @@ class _MetaTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.grey50Color,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: <Widget>[
@@ -1064,7 +1066,7 @@ class _MetaTile extends StatelessWidget {
               children: <Widget>[
                 Text(
                   label,
-                  style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+                  style: TextStyle(color: AppColors.grey700Color, fontSize: 12),
                 ),
                 const SizedBox(height: 2),
                 Text(

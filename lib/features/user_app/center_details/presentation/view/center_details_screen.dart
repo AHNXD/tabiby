@@ -63,7 +63,7 @@ class CenterDetailsScreen extends StatelessWidget {
               );
             } else if (state is CenterError) {
               return CustomErrorWidget(
-                textColor: Colors.black,
+                textColor: AppColors.blackColor,
                 errorMessage: state.errorMsg,
                 onRetry: () {
                   context.read<CenterCubit>().getCenter(centerID);

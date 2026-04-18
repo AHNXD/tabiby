@@ -29,7 +29,7 @@ class CenterSelector extends StatelessWidget {
           final isSelected = selectedId == center.id;
 
           return Material(
-            color: Colors.transparent,
+            color: AppColors.transparentColor,
             child: InkWell(
               borderRadius: BorderRadius.circular(24),
               onTap: () {
@@ -49,24 +49,24 @@ class CenterSelector extends StatelessWidget {
                       colors: <Color>[
                         isSelected
                             ? AppColors.primaryColors.withValues(alpha: 0.16)
-                            : Colors.white,
+                            : AppColors.whiteColor,
                         isSelected
-                            ? const Color(0xFFF2FAF6)
-                            : const Color(0xFFFCFDFC),
+                            ? AppColors.sageSurfaceSelectedColor
+                            : AppColors.sageSurfacePageColor,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
                       color: isSelected
                           ? AppColors.primaryColors.withValues(alpha: 0.55)
-                          : const Color(0xFFE7ECE9),
+                          : AppColors.sageSurfaceAltColor,
                       width: isSelected ? 1.8 : 1.2,
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: isSelected
                             ? AppColors.primaryColors.withValues(alpha: 0.16)
-                            : Colors.black.withValues(alpha: 0.04),
+                            : AppColors.blackColor.withValues(alpha: 0.04),
                         blurRadius: isSelected ? 18 : 12,
                         offset: const Offset(0, 8),
                       ),
@@ -84,13 +84,13 @@ class CenterSelector extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? AppColors.primaryColors
-                                  : const Color(0xFFF1F4F2),
+                                  : AppColors.sageSurfaceSoftColor,
                               borderRadius: BorderRadius.circular(14),
                             ),
                             child: Icon(
                               Icons.local_hospital_outlined,
                               color: isSelected
-                                  ? Colors.white
+                                  ? AppColors.whiteColor
                                   : AppColors.primaryColors,
                             ),
                           ),
@@ -106,8 +106,8 @@ class CenterSelector extends StatelessWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     color: isSelected
-                                        ? const Color(0xFF21493B)
-                                        : Colors.black87,
+                                        ? AppColors.forestTextColor
+                                        : AppColors.black87Color,
                                     fontSize: 16,
                                     height: 1.2,
                                   ),
@@ -118,7 +118,7 @@ class CenterSelector extends StatelessWidget {
                                     Icon(
                                       Icons.location_on_rounded,
                                       size: 15,
-                                      color: Colors.grey.shade500,
+                                      color: AppColors.grey500Color,
                                     ),
                                     const SizedBox(width: 4),
                                     Expanded(
@@ -127,7 +127,7 @@ class CenterSelector extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Colors.grey.shade600,
+                                          color: AppColors.grey600Color,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -147,11 +147,11 @@ class CenterSelector extends StatelessWidget {
                               shape: BoxShape.circle,
                               color: isSelected
                                   ? AppColors.primaryColors
-                                  : Colors.white,
+                                  : AppColors.whiteColor,
                               border: Border.all(
                                 color: isSelected
                                     ? AppColors.primaryColors
-                                    : Colors.grey.shade300,
+                                    : AppColors.grey300Color,
                                 width: 1.8,
                               ),
                             ),
@@ -161,8 +161,8 @@ class CenterSelector extends StatelessWidget {
                                   : Icons.add_rounded,
                               size: 16,
                               color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey.shade500,
+                                  ? AppColors.whiteColor
+                                  : AppColors.grey500Color,
                             ),
                           ),
                         ],
@@ -178,7 +178,7 @@ class CenterSelector extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? AppColors.primaryColors
-                                  : const Color(0xFFF3F5F4),
+                                  : AppColors.sageSurfaceCardColor,
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
@@ -187,8 +187,8 @@ class CenterSelector extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                                 fontSize: 13,
                                 color: isSelected
-                                    ? Colors.white
-                                    : const Color(0xFF32463E),
+                                    ? AppColors.whiteColor
+                                    : AppColors.forestTextSoftAltColor,
                               ),
                             ),
                           ),

@@ -80,7 +80,7 @@ class _MedicalAttachmentPickerScreenState
                       child: Text(
                         'apply_selected_records'.tr(context),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
@@ -128,24 +128,24 @@ class _AttachmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Ink(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
                   ? Theme.of(context).primaryColor
-                  : Colors.grey.shade200,
+                  : AppColors.grey200Color,
               width: isSelected ? 1.5 : 1,
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.blackColor.withValues(alpha: 0.04),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
@@ -171,7 +171,7 @@ class _AttachmentCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         attachment.subtitle!.tr(context),
-                        style: TextStyle(color: Colors.grey.shade700),
+                        style: TextStyle(color: AppColors.grey700Color),
                       ),
                     ],
                     if (attachment.sourceLabel != null &&
@@ -180,7 +180,7 @@ class _AttachmentCard extends StatelessWidget {
                       Text(
                         attachment.sourceLabel!,
                         style: TextStyle(
-                          color: Colors.grey.shade500,
+                          color: AppColors.grey500Color,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -192,7 +192,7 @@ class _AttachmentCard extends StatelessWidget {
                       Text(
                         attachment.recordedAt!,
                         style: TextStyle(
-                          color: Colors.grey.shade500,
+                          color: AppColors.grey500Color,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -208,7 +208,7 @@ class _AttachmentCard extends StatelessWidget {
                     : Icons.radio_button_unchecked_rounded,
                 color: isSelected
                     ? Theme.of(context).primaryColor
-                    : Colors.grey.shade400,
+                    : AppColors.grey400Color,
                 size: 24,
               ),
             ],
@@ -246,14 +246,14 @@ class _AttachmentPreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: isRadiology
             ? Theme.of(context).primaryColor.withValues(alpha: 0.08)
-            : Colors.orange.withValues(alpha: 0.12),
+            : AppColors.orangeColor.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Icon(
         isRadiology ? Icons.image_outlined : Icons.description_outlined,
         color: isRadiology
             ? Theme.of(context).primaryColor
-            : Colors.orange.shade700,
+            : AppColors.orange700Color,
         size: 34,
       ),
     );
@@ -272,7 +272,7 @@ class _EmptyAttachmentState extends StatelessWidget {
           'no_medical_records_available'.tr(context),
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.grey.shade600,
+            color: AppColors.grey600Color,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

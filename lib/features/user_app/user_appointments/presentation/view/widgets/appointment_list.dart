@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/widgets/no_data.dart';
 import 'package:tabiby/features/user_app/user_appointments/data/models/appointments_model.dart';
@@ -28,12 +29,12 @@ class AppointmentList extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 4),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.grey.shade200),
+              border: Border.all(color: AppColors.grey200Color),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
+                  color: AppColors.blackColor.withValues(alpha: 0.04),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 ),

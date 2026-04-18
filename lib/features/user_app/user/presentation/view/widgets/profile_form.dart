@@ -245,7 +245,7 @@ class ProfileForm extends StatelessWidget {
                   SelectableCircle(
                     icon: Icons.close,
                     isSelected: isSmoke == false,
-                    selectedColor: Colors.red,
+                    selectedColor: AppColors.redColor,
                     onTap: () => onSmokeChanged(false),
                   ),
                 ],
@@ -273,7 +273,7 @@ class ProfileForm extends StatelessWidget {
                       SelectableCircle(
                         icon: Icons.close,
                         isSelected: hasChildren == false,
-                        selectedColor: Colors.red,
+                        selectedColor: AppColors.redColor,
                         onTap: () => onChildrenChanged(false),
                       ),
                     ],
@@ -370,9 +370,9 @@ class ProfileForm extends StatelessWidget {
       height: 55,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FBFA),
+        color: AppColors.profileSurfaceColor,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: [
@@ -384,7 +384,7 @@ class ProfileForm extends StatelessWidget {
               style: TextStyle(
                 color: isPlaceholder
                     ? AppColors.textFieldColor
-                    : Colors.black87,
+                    : AppColors.black87Color,
                 fontSize: 16,
               ),
             ),
@@ -410,7 +410,7 @@ class ProfileForm extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF3E4A46),
+              color: AppColors.deepMutedTextColor,
             ),
           ),
         ),
@@ -441,12 +441,12 @@ class _ProfileSectionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),

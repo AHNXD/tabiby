@@ -24,7 +24,7 @@ class SettingsSectionHeader extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 16,
               fontWeight: FontWeight.w800,
             ),

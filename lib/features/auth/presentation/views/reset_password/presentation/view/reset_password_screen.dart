@@ -32,14 +32,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteColor,
       appBar: CustomAppbar(title: 'reset_password'.tr(context)),
       body: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
         listener: (context, state) {
           if (state is ForgetPasswordSuccess) {
-            Navigator.pushNamed(context, OTPScreen.routeName,arguments: _emailController.text.trim());
+            Navigator.pushNamed(
+              context,
+              OTPScreen.routeName,
+              arguments: _emailController.text.trim(),
+            );
           } else if (state is ResetPasswordError) {
-            messages(context, state.errorMsg, Colors.red);
+            messages(context, state.errorMsg, AppColors.redColor);
           }
         },
         builder: (context, state) {

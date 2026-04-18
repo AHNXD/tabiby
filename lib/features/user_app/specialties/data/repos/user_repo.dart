@@ -3,7 +3,6 @@ import 'package:tabiby/features/user_app/specialties/data/models/specialties_mod
 
 import '../../../../../core/errors/failuer.dart';
 
-
 abstract class SpecialtiesRepo {
   Future<Either<Failure, SpecialtiesModel>> getSpecialties();
 }

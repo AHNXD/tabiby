@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 class WelcomSection extends StatelessWidget {
@@ -13,7 +14,7 @@ class WelcomSection extends StatelessWidget {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: AppColors.black87Color,
           ),
         ),
         SizedBox(height: 10),
@@ -23,7 +24,7 @@ class WelcomSection extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 14,
-            color: Colors.grey,
+            color: AppColors.greyColor,
             height: 1.5,
           ),
         ),

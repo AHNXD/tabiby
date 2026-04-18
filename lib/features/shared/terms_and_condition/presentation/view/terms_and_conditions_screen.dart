@@ -94,14 +94,14 @@ class _TermsHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -160,7 +160,7 @@ class _TermsHeroCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -182,7 +182,7 @@ class _TermsHeroCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -190,7 +190,7 @@ class _TermsHeroCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.5),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.5),
                 ),
                 const SizedBox(height: 18),
                 Wrap(
@@ -227,9 +227,9 @@ class _TermsHeroChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -239,7 +239,7 @@ class _TermsHeroChip extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -260,10 +260,10 @@ class _TermsNoticeCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7F4),
+        color: AppColors.warningSoftSurfaceColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFFE28C63).withValues(alpha: 0.22),
+          color: AppColors.peachAccentColor.withValues(alpha: 0.22),
         ),
       ),
       child: Row(
@@ -273,12 +273,12 @@ class _TermsNoticeCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color(0xFFE28C63).withValues(alpha: 0.12),
+              color: AppColors.peachAccentColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(
               Icons.priority_high_rounded,
-              color: Color(0xFFE28C63),
+              color: AppColors.peachAccentColor,
             ),
           ),
           const SizedBox(width: 12),
@@ -288,7 +288,7 @@ class _TermsNoticeCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF8A5132),
+                color: AppColors.peachDeepColor,
                 height: 1.45,
               ),
             ),
@@ -316,12 +316,12 @@ class _TermsSectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -358,7 +358,7 @@ class _TermsSectionCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1F2C28),
+                      color: AppColors.titleColor,
                     ),
                   ),
                 ),
@@ -385,7 +385,7 @@ class _TermsSectionCard extends StatelessWidget {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF9FBFA),
+                  color: AppColors.softNeutralSurfaceColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
@@ -393,7 +393,7 @@ class _TermsSectionCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     height: 1.65,
-                    color: Colors.grey.shade700,
+                    color: AppColors.grey700Color,
                   ),
                 ),
               ),

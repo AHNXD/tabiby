@@ -118,7 +118,7 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
       messages(
         context,
         'please_add_radiology_request'.tr(context),
-        Colors.orange,
+        AppColors.orangeColor,
       );
       return null;
     }
@@ -132,7 +132,7 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
         messages(
           context,
           'complete_radiology_fields'.tr(context),
-          Colors.orange,
+          AppColors.orangeColor,
         );
         return null;
       }
@@ -141,7 +141,7 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
         messages(
           context,
           'duplicate_radiology_requests'.tr(context),
-          Colors.orange,
+          AppColors.orangeColor,
         );
         return null;
       }
@@ -154,12 +154,20 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
 
   void _submit(EndAppointmentState state) {
     if (_notesController.text.trim().isEmpty) {
-      messages(context, 'please_add_general_notes'.tr(context), Colors.orange);
+      messages(
+        context,
+        'please_add_general_notes'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
     if (_includeLabRequests && _selectedLabTestIds.isEmpty) {
-      messages(context, 'please_select_lab_test'.tr(context), Colors.orange);
+      messages(
+        context,
+        'please_select_lab_test'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -190,16 +198,16 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7F5),
+      backgroundColor: AppColors.paleSurfaceAltColor,
       appBar: CustomAppbar(title: 'complete_appointment'.tr(context)),
       body: BlocConsumer<EndAppointmentCubit, EndAppointmentState>(
         listener: (context, state) {
           if (state.result != null) {
-            messages(context, state.result!.message, Colors.green);
+            messages(context, state.result!.message, AppColors.greenColor);
             context.read<EndAppointmentCubit>().clearSubmissionState();
             Navigator.of(context).pop(true);
           } else if (state.submitErrorMessage != null) {
-            messages(context, state.submitErrorMessage!, Colors.red);
+            messages(context, state.submitErrorMessage!, AppColors.redColor);
             context.read<EndAppointmentCubit>().clearSubmissionState();
           }
         },
@@ -434,7 +442,7 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
                         if (state.optionsErrorMessage != null) ...<Widget>[
                           const SizedBox(height: 16),
                           _InlineMessageCard(
-                            color: Colors.orange,
+                            color: AppColors.orangeColor,
                             message:
                                 '${'request_types_load_failed'.tr(context)}\n${state.optionsErrorMessage!}',
                             actionLabel: 'retry_loading'.tr(context),
@@ -472,13 +480,13 @@ class _EndAppointmentScreenState extends State<EndAppointmentScreen> {
                               height: 22,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2.4,
-                                color: Colors.white,
+                                color: AppColors.whiteColor,
                               ),
                             )
                           : Text(
                               'submit'.tr(context),
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.whiteColor,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
                               ),
@@ -517,11 +525,11 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -549,7 +557,7 @@ class _SectionTitle extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF233B33),
+            color: AppColors.forestDarkColor,
           ),
         ),
       ],
@@ -576,15 +584,15 @@ class _StyledTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         filled: true,
-        fillColor: const Color(0xFFF8FAF9),
+        fillColor: AppColors.lightSurfaceColor,
         contentPadding: const EdgeInsets.all(16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.grey300Color),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.grey300Color),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -612,16 +620,19 @@ class _ToggleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAF9),
+        color: AppColors.lightSurfaceColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE3ECE7)),
+        border: Border.all(color: AppColors.sageBorderAltColor),
       ),
       child: SwitchListTile(
         value: value,
         onChanged: onChanged,
         activeThumbColor: AppColors.primaryColors,
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(color: AppColors.grey600Color),
+        ),
       ),
     );
   }
@@ -700,9 +711,9 @@ class _MedicationSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAF9),
+        color: AppColors.lightSurfaceColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE3ECE7)),
+        border: Border.all(color: AppColors.sageBorderAltColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -727,7 +738,7 @@ class _MedicationSummaryCard extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onRemove,
-                icon: Icon(Icons.delete_outline, color: Colors.red.shade400),
+                icon: Icon(Icons.delete_outline, color: AppColors.red400Color),
               ),
             ],
           ),
@@ -767,7 +778,7 @@ class _SummaryLine extends StatelessWidget {
         text: TextSpan(
           style: DefaultTextStyle.of(
             context,
-          ).style.copyWith(color: const Color(0xFF31453D)),
+          ).style.copyWith(color: AppColors.forestTextSoftColor),
           children: <InlineSpan>[
             TextSpan(
               text: '$title: ',
@@ -797,7 +808,7 @@ class _SelectableChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(999),
         onTap: onTap,
@@ -807,8 +818,10 @@ class _SelectableChip extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: <Color>[
-                isSelected ? AppColors.primaryColors : const Color(0xFFFFFFFF),
-                isSelected ? const Color(0xFF3F7F69) : const Color(0xFFF7FAF8),
+                isSelected ? AppColors.primaryColors : AppColors.whiteColor,
+                isSelected
+                    ? AppColors.forestAccentColor
+                    : AppColors.lighterSurfaceColor,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -817,7 +830,7 @@ class _SelectableChip extends StatelessWidget {
             border: Border.all(
               color: isSelected
                   ? AppColors.primaryColors
-                  : const Color(0xFFE1E9E4),
+                  : AppColors.sageBorderColor,
             ),
           ),
           child: Row(
@@ -826,7 +839,9 @@ class _SelectableChip extends StatelessWidget {
               Icon(
                 isSelected ? Icons.check_circle : Icons.add_circle_outline,
                 size: 18,
-                color: isSelected ? Colors.white : AppColors.primaryColors,
+                color: isSelected
+                    ? AppColors.whiteColor
+                    : AppColors.primaryColors,
               ),
               const SizedBox(width: 8),
               Column(
@@ -838,8 +853,8 @@ class _SelectableChip extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: isSelected
-                          ? Colors.white
-                          : const Color(0xFF31453D),
+                          ? AppColors.whiteColor
+                          : AppColors.forestTextSoftColor,
                     ),
                   ),
                   if (subtitle != null)
@@ -848,8 +863,8 @@ class _SelectableChip extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         color: isSelected
-                            ? Colors.white.withValues(alpha: 0.92)
-                            : const Color(0xFF5C746B),
+                            ? AppColors.whiteColor.withValues(alpha: 0.92)
+                            : AppColors.forestMutedTextColor,
                       ),
                     ),
                 ],
@@ -927,14 +942,14 @@ class _EmptyStateCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FBF9),
+        color: AppColors.softSurfaceAltColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE1E9E4)),
+        border: Border.all(color: AppColors.sageBorderColor),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: Colors.grey.shade600,
+          color: AppColors.grey600Color,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -960,9 +975,9 @@ class _RadiologyRequestCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAF9),
+        color: AppColors.lightSurfaceColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE3ECE7)),
+        border: Border.all(color: AppColors.sageBorderAltColor),
       ),
       child: Column(
         children: <Widget>[
@@ -979,7 +994,7 @@ class _RadiologyRequestCard extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onRemove,
-                icon: Icon(Icons.delete_outline, color: Colors.red.shade400),
+                icon: Icon(Icons.delete_outline, color: AppColors.red400Color),
               ),
             ],
           ),
@@ -991,18 +1006,18 @@ class _RadiologyRequestCard extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'select_image_type'.tr(context),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: AppColors.whiteColor,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 14,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.grey300Color),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.grey300Color),
               ),
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(14)),
@@ -1035,18 +1050,18 @@ class _RadiologyRequestCard extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'radiology_request_note_hint'.tr(context),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: AppColors.whiteColor,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 14,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.grey300Color),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.grey300Color),
               ),
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(14)),

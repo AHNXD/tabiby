@@ -95,8 +95,8 @@ class _MainScreenState extends State<MainScreen> {
     final isSelected = _selectedIndex == index;
 
     // Defines the colors based on selection state
-    final activeColor = Colors.white;
-    final inactiveColor = Colors.white.withValues(
+    final activeColor = AppColors.whiteColor;
+    final inactiveColor = AppColors.whiteColor.withValues(
       alpha: 0.5,
     ); // Soft faded white
 
@@ -149,7 +149,7 @@ class _MainScreenState extends State<MainScreen> {
               height: 4,
               width: isSelected ? 16 : 0,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

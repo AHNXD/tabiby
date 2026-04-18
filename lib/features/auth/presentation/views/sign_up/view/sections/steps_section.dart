@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
@@ -98,17 +99,25 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
 
   bool _validateStep3(BuildContext context) {
     if (maritalStatus == null) {
-      messages(context, 'please_select_marital_status'.tr(context), Colors.red);
+      messages(
+        context,
+        'please_select_marital_status'.tr(context),
+        AppColors.redColor,
+      );
       return false;
     }
 
     if (isSmoke == null) {
-      messages(context, 'please_select_smoking_status'.tr(context), Colors.red);
+      messages(
+        context,
+        'please_select_smoking_status'.tr(context),
+        AppColors.redColor,
+      );
       return false;
     }
 
     if (selectedBirthDate == null) {
-      messages(context, 'select_your_birth'.tr(context), Colors.red);
+      messages(context, 'select_your_birth'.tr(context), AppColors.redColor);
       return false;
     }
     return true;
@@ -120,7 +129,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
     }
 
     if (!agreeToTerms) {
-      messages(context, 'please_agree_terms'.tr(context), Colors.red);
+      messages(context, 'please_agree_terms'.tr(context), AppColors.redColor);
       return;
     }
 
@@ -164,7 +173,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
           messages(
             context,
             "registration_successful".tr(context),
-            Colors.green,
+            AppColors.greenColor,
           );
           context.read<UserCubit>().getProfile();
           Navigator.pushNamedAndRemoveUntil(
@@ -173,7 +182,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
             (route) => false,
           );
         } else if (state is RegisterError) {
-          messages(context, state.errorMsg.tr(context), Colors.red);
+          messages(context, state.errorMsg.tr(context), AppColors.redColor);
         }
       },
       builder: (context, state) {

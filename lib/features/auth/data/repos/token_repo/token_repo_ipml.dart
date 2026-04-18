@@ -18,7 +18,8 @@ class TokenRepoIpml implements TokenRepo {
         return right(UserModel.fromJson(resp.data['data']));
       }
       return left(
-          resp.data['message'] ?? ServerFailure(ErrorHandler.defaultMessage()));
+        resp.data['message'] ?? ServerFailure(ErrorHandler.defaultMessage()),
+      );
     } catch (e) {
       return left(ErrorHandler.handle(e));
     }

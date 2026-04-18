@@ -17,14 +17,14 @@ class DiagnoseModeHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -100,7 +100,7 @@ class DiagnoseModeHeroCard extends StatelessWidget {
                 Text(
                   'diagnose_mode_title'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -109,7 +109,7 @@ class DiagnoseModeHeroCard extends StatelessWidget {
                 Text(
                   'diagnose_mode_subtitle'.tr(context),
                   style: TextStyle(
-                    color: Colors.grey.shade700,
+                    color: AppColors.grey700Color,
                     height: 1.5,
                     fontWeight: FontWeight.w600,
                   ),
@@ -148,12 +148,12 @@ class DiagnoseModeEntryCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.grey200Color),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: AppColors.blackColor.withValues(alpha: 0.04),
               blurRadius: 16,
               offset: const Offset(0, 8),
             ),
@@ -180,7 +180,7 @@ class DiagnoseModeEntryCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1F2C28),
+                      color: AppColors.titleColor,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -189,7 +189,7 @@ class DiagnoseModeEntryCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       height: 1.45,
-                      color: Colors.grey.shade600,
+                      color: AppColors.grey600Color,
                     ),
                   ),
                   if (statusKey != null) ...[
@@ -217,7 +217,7 @@ class DiagnoseModeEntryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Icon(Icons.arrow_forward_rounded, color: Colors.grey.shade400),
+            Icon(Icons.arrow_forward_rounded, color: AppColors.grey400Color),
           ],
         ),
       ),

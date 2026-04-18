@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 class EmptyStateSection extends StatelessWidget {
@@ -12,7 +13,7 @@ class EmptyStateSection extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.event_busy, size: 60, color: Colors.grey.shade400),
+            Icon(Icons.event_busy, size: 60, color: AppColors.grey400Color),
             const SizedBox(height: 16),
             Text(
               'no_appointments_found'.tr(context),

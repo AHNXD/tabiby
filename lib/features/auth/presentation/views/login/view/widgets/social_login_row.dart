@@ -5,7 +5,6 @@ import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../../../core/utils/colors.dart';
 import 'build_social_button.dart';
 
-
 class SocialLoginRow extends StatelessWidget {
   const SocialLoginRow({super.key});
 
@@ -14,7 +13,7 @@ class SocialLoginRow extends StatelessWidget {
     return Column(
       children: [
         Row(
-          children:  [
+          children: [
             Expanded(child: Divider(color: AppColors.textColor)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -29,9 +28,7 @@ class SocialLoginRow extends StatelessWidget {
         const SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            SocialButton(icon: FontAwesomeIcons.google),
-          ],
+          children: const [SocialButton(icon: FontAwesomeIcons.google)],
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
@@ -58,7 +59,7 @@ class HomeScreen extends StatelessWidget {
               } else if (state is HomeError) {
                 return Center(
                   child: CustomErrorWidget(
-                    textColor: Colors.black,
+                    textColor: AppColors.blackColor,
                     errorMessage: state.errorMsg.tr(context),
                     onRetry: () {
                       context.read<HomeCubit>().getHome();

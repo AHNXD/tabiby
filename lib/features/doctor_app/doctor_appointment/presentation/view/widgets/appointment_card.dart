@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
@@ -24,11 +25,11 @@ class AppointmentCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: AppColors.greyColor.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 5),
             spreadRadius: 2,
@@ -36,7 +37,7 @@ class AppointmentCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparentColor,
         borderRadius: BorderRadius.circular(16.0),
         child: InkWell(
           borderRadius: BorderRadius.circular(16.0),
@@ -72,7 +73,7 @@ class AppointmentCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),
@@ -101,7 +102,7 @@ class AppointmentCard extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.black87,
+                            color: AppColors.black87Color,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -116,7 +117,7 @@ class AppointmentCard extends StatelessWidget {
                               Icon(
                                 Icons.business_rounded,
                                 size: 12,
-                                color: Colors.grey.shade500,
+                                color: AppColors.grey500Color,
                               ),
                               const SizedBox(width: 4),
                               Expanded(
@@ -124,7 +125,7 @@ class AppointmentCard extends StatelessWidget {
                                   appointment.centerName!,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey.shade600,
+                                    color: AppColors.grey600Color,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -141,14 +142,14 @@ class AppointmentCard extends StatelessWidget {
                             Icon(
                               Icons.access_time_rounded,
                               size: 12,
-                              color: Colors.grey.shade500,
+                              color: AppColors.grey500Color,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               appointment.time ?? '--:--',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey.shade600,
+                                color: AppColors.grey600Color,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -170,7 +171,7 @@ class AppointmentCard extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.1),
+                          color: statusColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -189,13 +190,13 @@ class AppointmentCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.08),
+                          color: AppColors.greyColor.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
                           Icons.arrow_forward_ios_rounded,
                           size: 14,
-                          color: Colors.grey.shade600,
+                          color: AppColors.grey600Color,
                         ),
                       ),
                     ],
@@ -212,14 +213,14 @@ class AppointmentCard extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'completed':
-        return Colors.green;
+        return AppColors.greenColor;
       case 'pending':
-        return Colors.orange;
+        return AppColors.orangeColor;
       case 'cancelled':
       case 'canceled':
-        return Colors.red;
+        return AppColors.redColor;
       default:
-        return Colors.grey;
+        return AppColors.greyColor;
     }
   }
 }

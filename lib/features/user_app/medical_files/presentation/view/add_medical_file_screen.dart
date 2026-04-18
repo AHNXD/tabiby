@@ -87,7 +87,7 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
       messages(
         context,
         'unsupported_medical_file_type'.tr(context),
-        Colors.orange,
+        AppColors.orangeColor,
       );
       return;
     }
@@ -96,7 +96,11 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
       if (!mounted) {
         return;
       }
-      messages(context, 'medical_file_too_large'.tr(context), Colors.orange);
+      messages(
+        context,
+        'medical_file_too_large'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -108,17 +112,25 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
   void _saveMedicalFile() {
     final bool isFormValid = _formKey.currentState?.validate() ?? false;
     if (!isFormValid) {
-      messages(context, 'fix_form_error'.tr(context), Colors.red);
+      messages(context, 'fix_form_error'.tr(context), AppColors.redColor);
       return;
     }
 
     if (_selectedType == null) {
-      messages(context, 'please_select_file_type'.tr(context), Colors.orange);
+      messages(
+        context,
+        'please_select_file_type'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
     if (_selectedDate == null) {
-      messages(context, 'please_select_file_date'.tr(context), Colors.orange);
+      messages(
+        context,
+        'please_select_file_date'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -126,7 +138,7 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
       messages(
         context,
         'please_upload_medical_file'.tr(context),
-        Colors.orange,
+        AppColors.orangeColor,
       );
       return;
     }
@@ -152,7 +164,7 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
       body: BlocConsumer<MedicalFilesCubit, MedicalFilesState>(
         listener: (BuildContext context, MedicalFilesState state) {
           if (state.submissionStatus == MedicalFileSubmissionStatus.failure) {
-            messages(context, state.errorMessage, Colors.red);
+            messages(context, state.errorMessage, AppColors.redColor);
             context.read<MedicalFilesCubit>().clearSubmissionStatus();
           }
 
@@ -160,7 +172,7 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
             messages(
               context,
               'medical_file_added_successfully'.tr(context),
-              Colors.green,
+              AppColors.greenColor,
             );
             context.read<MedicalFilesCubit>().clearSubmissionStatus();
             Navigator.of(context).pop(true);
@@ -284,11 +296,11 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
     return InputDecoration(
       hintText: hintText,
       filled: true,
-      fillColor: const Color(0xFFFAFAFA),
+      fillColor: AppColors.subtleNeutralSurfaceColor,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide(color: AppColors.grey300Color),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
@@ -296,11 +308,11 @@ class _AddMedicalFileScreenState extends State<AddMedicalFileScreen> {
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide: const BorderSide(color: AppColors.redColor),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: Colors.red, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.redColor, width: 1.5),
       ),
     );
   }
@@ -328,7 +340,7 @@ class _FilePickerCard extends StatelessWidget {
 
     return _SectionCard(
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparentColor,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(24),
@@ -360,7 +372,7 @@ class _FilePickerCard extends StatelessWidget {
                           ),
                     border: Border.all(
                       color: hasFile
-                          ? Colors.transparent
+                          ? AppColors.transparentColor
                           : AppColors.primaryColors.withValues(alpha: 0.2),
                     ),
                   ),
@@ -387,12 +399,12 @@ class _FilePickerCard extends StatelessWidget {
                                       width: 84,
                                       height: 84,
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: AppColors.whiteColor,
                                         borderRadius: BorderRadius.circular(24),
                                       ),
                                       child: const Icon(
                                         Icons.picture_as_pdf_rounded,
-                                        color: Color(0xFFD65555),
+                                        color: AppColors.destructiveColor,
                                         size: 40,
                                       ),
                                     ),
@@ -413,7 +425,7 @@ class _FilePickerCard extends StatelessWidget {
                                       'pdf_file_selected'.tr(context),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: Colors.grey.shade700,
+                                        color: AppColors.grey700Color,
                                         height: 1.4,
                                       ),
                                     ),
@@ -430,14 +442,16 @@ class _FilePickerCard extends StatelessWidget {
                                   vertical: 10,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.48),
+                                  color: AppColors.blackColor.withValues(
+                                    alpha: 0.48,
+                                  ),
                                   borderRadius: BorderRadius.circular(18),
                                 ),
                                 child: Row(
                                   children: <Widget>[
                                     const Icon(
                                       Icons.check_circle_rounded,
-                                      color: Colors.white,
+                                      color: AppColors.whiteColor,
                                       size: 20,
                                     ),
                                     const SizedBox(width: 8),
@@ -445,7 +459,7 @@ class _FilePickerCard extends StatelessWidget {
                                       child: Text(
                                         'change_selected_file'.tr(context),
                                         style: const TextStyle(
-                                          color: Colors.white,
+                                          color: AppColors.whiteColor,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -463,7 +477,7 @@ class _FilePickerCard extends StatelessWidget {
                               width: 72,
                               height: 72,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: AppColors.whiteColor,
                                 borderRadius: BorderRadius.circular(22),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(
@@ -565,14 +579,14 @@ class _PageIntroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -629,7 +643,7 @@ class _PageIntroCard extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          color: Color(0xFF1F2C28),
+                          color: AppColors.titleColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
                         ),
@@ -638,7 +652,7 @@ class _PageIntroCard extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          color: Colors.grey.shade700,
+                          color: AppColors.grey700Color,
                           height: 1.5,
                         ),
                       ),
@@ -665,12 +679,12 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -726,11 +740,11 @@ class _SubmitSection extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(28),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: AppColors.blackColor.withValues(alpha: 0.05),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -754,7 +768,9 @@ class _SubmitSection extends StatelessWidget {
                     height: 22,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.6,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.whiteColor,
+                      ),
                     ),
                   )
                 : Text(
@@ -762,7 +778,7 @@ class _SubmitSection extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 22,
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                     ),
                   ),
           ),

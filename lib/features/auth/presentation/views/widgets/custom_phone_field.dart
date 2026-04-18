@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 import '../../../../../core/utils/constats.dart';
+import '../../../../../core/utils/colors.dart';
 
 class CustomPhoneField extends StatefulWidget {
-  const CustomPhoneField(
-      {super.key, required this.controller, required this.text});
+  const CustomPhoneField({
+    super.key,
+    required this.controller,
+    required this.text,
+  });
   final PhoneController controller;
   final String text;
   @override
@@ -17,25 +21,25 @@ class CustomPhoneField extends StatefulWidget {
 class _CustomPhoneFieldState extends State<CustomPhoneField> {
   final FocusNode fNode = FocusNode();
   bool isFill = true;
-  Color fillColor = const Color(0xffF4F7FE);
-  Color textColor = Colors.black87;
-  Color labelTextColor = Colors.grey;
+  Color fillColor = AppColors.authFieldFillColor;
+  Color textColor = AppColors.black87Color;
+  Color labelTextColor = AppColors.greyColor;
   @override
   void initState() {
     fNode.addListener(() {
       if (fNode.hasFocus) {
         setState(() {
-          fillColor = Colors.transparent;
-          labelTextColor = Colors.white;
+          fillColor = AppColors.transparentColor;
+          labelTextColor = AppColors.whiteColor;
 
-          textColor = Colors.white;
+          textColor = AppColors.whiteColor;
         });
       } else {
         setState(() {
-          fillColor = const Color(0xffF4F7FE);
+          fillColor = AppColors.authFieldFillColor;
 
-          labelTextColor = Colors.grey;
-          textColor = Colors.black87;
+          labelTextColor = AppColors.greyColor;
+          textColor = AppColors.black87Color;
         });
       }
     });
@@ -48,8 +52,9 @@ class _CustomPhoneFieldState extends State<CustomPhoneField> {
       textDirection: TextDirection.ltr,
       child: Container(
         decoration: BoxDecoration(
-            color: fillColor,
-            borderRadius: BorderRadius.circular(kBorderRadius)),
+          color: fillColor,
+          borderRadius: BorderRadius.circular(kBorderRadius),
+        ),
         padding: EdgeInsets.only(top: 8),
         margin: EdgeInsets.symmetric(vertical: 16),
         child: PhoneFormField(
@@ -65,21 +70,22 @@ class _CustomPhoneFieldState extends State<CustomPhoneField> {
           style: TextStyle(color: textColor),
           decoration: InputDecoration(
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xffB2B9C6)),
+              borderSide: BorderSide(color: AppColors.authFieldBorderColor),
               borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             labelStyle: TextStyle(color: labelTextColor),
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle: const TextStyle(color: AppColors.greyColor),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: const Color(0xffB2B9C6)),
+              borderSide: BorderSide(color: AppColors.authFieldBorderColor),
               borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             filled: true,
             fillColor: fillColor,
             labelText: widget.text,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(kBorderRadius),
-                borderSide: BorderSide.none),
+              borderRadius: BorderRadius.circular(kBorderRadius),
+              borderSide: BorderSide.none,
+            ),
           ),
           validator: PhoneValidator.compose([
             PhoneValidator.required(context, errorText: "رقم الهاتف مطلوب"),

@@ -26,13 +26,16 @@ class AffiliatedCentersSection extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1F2C28),
+                      color: AppColors.titleColor,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     'doctor_details'.tr(context),
-                    style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.grey600Color,
+                    ),
                   ),
                 ],
               ),

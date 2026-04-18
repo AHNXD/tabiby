@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/custom_image_widget.dart';
@@ -19,11 +20,11 @@ class AppointmentDetailsHeader extends StatelessWidget {
     final status = appointment.status ?? 'pending';
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.08),
+            color: AppColors.greyColor.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -51,7 +52,7 @@ class AppointmentDetailsHeader extends StatelessWidget {
                   appointment.patient?.fullName ?? ' ',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.blackColor,
                   ),
                 ),
                 const SizedBox(height: 6),

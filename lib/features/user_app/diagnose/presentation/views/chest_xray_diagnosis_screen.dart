@@ -19,7 +19,11 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
 
   void _submit(BuildContext context, DiagnosisState state) {
     if (!state.hasSelectedXrayImage) {
-      messages(context, 'xray_select_image_first'.tr(context), Colors.orange);
+      messages(
+        context,
+        'xray_select_image_first'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -38,7 +42,11 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
     }
 
     if (files.isEmpty) {
-      messages(context, 'no_xray_records_available'.tr(context), Colors.orange);
+      messages(
+        context,
+        'no_xray_records_available'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -63,7 +71,7 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
           previous.errorMessage != current.errorMessage &&
           current.errorMessage.isNotEmpty,
       listener: (context, state) {
-        messages(context, state.errorMessage.tr(context), Colors.red);
+        messages(context, state.errorMessage.tr(context), AppColors.redColor);
       },
       child: Scaffold(
         backgroundColor: AppColors.appBackgroundColor,
@@ -87,9 +95,9 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.grey200Color),
                     ),
                     child: Row(
                       children: [
@@ -103,7 +111,7 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
                           child: Text(
                             'xray_loading_saved_files'.tr(context),
                             style: TextStyle(
-                              color: Colors.grey.shade700,
+                              color: AppColors.grey700Color,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

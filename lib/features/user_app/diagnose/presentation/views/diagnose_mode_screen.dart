@@ -22,7 +22,7 @@ class DiagnoseModeScreen extends StatelessWidget {
           previous.errorMessage != current.errorMessage &&
           current.errorMessage.isNotEmpty,
       listener: (context, state) {
-        messages(context, state.errorMessage.tr(context), Colors.red);
+        messages(context, state.errorMessage.tr(context), AppColors.redColor);
       },
       child: Scaffold(
         backgroundColor: AppColors.appBackgroundColor,

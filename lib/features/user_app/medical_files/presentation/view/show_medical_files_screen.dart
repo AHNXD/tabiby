@@ -55,7 +55,7 @@ class _ShowMedicalFilesView extends StatelessWidget {
           if (state.status == MedicalFilesStatus.failure) {
             return CustomErrorWidget(
               errorMessage: state.errorMessage,
-              textColor: Colors.black,
+              textColor: AppColors.blackColor,
               onRetry: () =>
                   context.read<MedicalFilesCubit>().loadMedicalFiles(),
             );
@@ -130,7 +130,11 @@ class _ShowMedicalFilesView extends StatelessWidget {
     final bool hasRemoteFile = file.hasRemoteFile;
 
     if (!hasLocalFile && !hasRemoteFile) {
-      messages(context, 'cannot_show_medical_file'.tr(context), Colors.red);
+      messages(
+        context,
+        'cannot_show_medical_file'.tr(context),
+        AppColors.redColor,
+      );
       return;
     }
 
@@ -139,14 +143,14 @@ class _ShowMedicalFilesView extends StatelessWidget {
       builder: (BuildContext context) {
         final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
         return Dialog(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparentColor,
           insetPadding: const EdgeInsets.all(18),
           child: Container(
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.8,
             ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(30),
             ),
             child: Column(
@@ -248,14 +252,18 @@ class _ShowMedicalFilesView extends StatelessWidget {
       messages(
         context,
         '${"medical_file_downloaded_to".tr(context)} $targetPath',
-        Colors.green,
+        AppColors.greenColor,
         msgTime: 4,
       );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
-      messages(context, 'medical_file_download_failed'.tr(context), Colors.red);
+      messages(
+        context,
+        'medical_file_download_failed'.tr(context),
+        AppColors.redColor,
+      );
     }
   }
 
@@ -316,14 +324,14 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -379,7 +387,7 @@ class _SummaryCard extends StatelessWidget {
                           Text(
                             '$totalFiles',
                             style: const TextStyle(
-                              color: Color(0xFF1F2C28),
+                              color: AppColors.titleColor,
                               fontSize: 36,
                               fontWeight: FontWeight.w800,
                             ),
@@ -387,7 +395,7 @@ class _SummaryCard extends StatelessWidget {
                           Text(
                             'stored_medical_files'.tr(context),
                             style: TextStyle(
-                              color: Colors.grey.shade700,
+                              color: AppColors.grey700Color,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
@@ -405,7 +413,7 @@ class _SummaryCard extends StatelessWidget {
                 const SizedBox(height: 18),
                 Text(
                   'open_saved_medical_files'.tr(context),
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.45),
                 ),
                 const SizedBox(height: 16),
                 Wrap(
@@ -442,7 +450,7 @@ class _HeaderActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(20),
@@ -457,7 +465,7 @@ class _HeaderActionButton extends StatelessWidget {
             children: <Widget>[
               const Icon(
                 Icons.add_circle_outline_rounded,
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -468,7 +476,7 @@ class _HeaderActionButton extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -476,7 +484,7 @@ class _HeaderActionButton extends StatelessWidget {
               const SizedBox(width: 2),
               const Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 size: 14,
               ),
             ],
@@ -534,12 +542,12 @@ class _FilterCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: AppColors.blackColor.withValues(alpha: 0.03),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),
@@ -551,7 +559,7 @@ class _FilterCard extends StatelessWidget {
           Text(
             'open_saved_medical_files'.tr(context),
             style: TextStyle(
-              color: Colors.grey.shade700,
+              color: AppColors.grey700Color,
               height: 1.5,
               fontWeight: FontWeight.w500,
             ),
@@ -582,7 +590,7 @@ class _FilterChips extends StatelessWidget {
           label: Text(
             filter.labelKey.tr(context),
             style: TextStyle(
-              color: isSelected ? Colors.white : Colors.grey.shade700,
+              color: isSelected ? AppColors.whiteColor : AppColors.grey700Color,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               fontSize: 14.0,
             ),
@@ -592,7 +600,7 @@ class _FilterChips extends StatelessWidget {
 
           showCheckmark: false,
           selectedColor: AppColors.primaryColors,
-          backgroundColor: Colors.grey.shade50,
+          backgroundColor: AppColors.grey50Color,
           elevation: 0,
           pressElevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -600,7 +608,9 @@ class _FilterChips extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
             side: BorderSide(
-              color: isSelected ? Colors.transparent : Colors.grey.shade300,
+              color: isSelected
+                  ? AppColors.transparentColor
+                  : AppColors.grey300Color,
               width: 1.0,
             ),
           ),
@@ -629,12 +639,12 @@ class _MedicalFileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),
@@ -744,7 +754,7 @@ class _FileMetaChip extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              color: Colors.grey.shade700,
+              color: AppColors.grey700Color,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -770,7 +780,7 @@ class _MedicalFilePreview extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.blackColor.withValues(alpha: 0.06),
               blurRadius: 14,
               offset: const Offset(0, 8),
             ),
@@ -794,7 +804,7 @@ class _MedicalFilePreview extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.blackColor.withValues(alpha: 0.06),
               blurRadius: 14,
               offset: const Offset(0, 8),
             ),
@@ -819,8 +829,8 @@ class _MedicalFilePreview extends StatelessWidget {
         gradient: LinearGradient(
           colors: file.type == MedicalFileType.radiology
               ? <Color>[
-                  Colors.blueGrey.withValues(alpha: 0.16),
-                  Colors.grey.withValues(alpha: 0.1),
+                  AppColors.blueGreyColor.withValues(alpha: 0.16),
+                  AppColors.greyColor.withValues(alpha: 0.1),
                 ]
               : <Color>[
                   AppColors.primaryColors.withValues(alpha: 0.16),
@@ -838,7 +848,7 @@ class _MedicalFilePreview extends StatelessWidget {
                   : Icons.image_outlined)
             : Icons.description_outlined,
         color: file.type == MedicalFileType.radiology
-            ? Colors.grey.shade700
+            ? AppColors.grey700Color
             : Theme.of(context).primaryColor,
         size: 34,
       ),
@@ -898,7 +908,7 @@ class _DialogFilePreview extends StatelessWidget {
             width: 92,
             height: 92,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(28),
             ),
             child: Icon(
@@ -906,7 +916,7 @@ class _DialogFilePreview extends StatelessWidget {
                   ? Icons.picture_as_pdf_rounded
                   : Icons.insert_drive_file_rounded,
               color: file.isPdf
-                  ? const Color(0xFFD65555)
+                  ? AppColors.destructiveColor
                   : AppColors.primaryColors,
               size: 46,
             ),
@@ -923,7 +933,7 @@ class _DialogFilePreview extends StatelessWidget {
                 ? 'pdf_preview_not_available'.tr(context)
                 : 'cannot_show_medical_file'.tr(context),
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey.shade700, height: 1.5),
+            style: TextStyle(color: AppColors.grey700Color, height: 1.5),
           ),
         ],
       ),
@@ -939,18 +949,22 @@ class _ExpandHintBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.58),
+        color: AppColors.blackColor.withValues(alpha: 0.58),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const Icon(Icons.open_in_full_rounded, size: 16, color: Colors.white),
+          const Icon(
+            Icons.open_in_full_rounded,
+            size: 16,
+            color: AppColors.whiteColor,
+          ),
           const SizedBox(width: 6),
           Text(
             'zoom'.tr(context),
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
@@ -969,10 +983,10 @@ Future<void> _openZoomableMedicalImageViewer(
     MaterialPageRoute<void>(
       builder: (BuildContext context) {
         return Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.blackColor,
           appBar: AppBar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.blackColor,
+            foregroundColor: AppColors.whiteColor,
             elevation: 0,
             title: Text(
               file.title,
@@ -988,7 +1002,7 @@ Future<void> _openZoomableMedicalImageViewer(
                   child: Text(
                     'medical_image_zoom_hint'.tr(context),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: AppColors.white70Color),
                   ),
                 ),
                 Expanded(
@@ -1029,7 +1043,7 @@ class _TypeBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isRadiology
-            ? Colors.grey.withValues(alpha: 0.14)
+            ? AppColors.greyColor.withValues(alpha: 0.14)
             : Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(999),
       ),
@@ -1037,7 +1051,7 @@ class _TypeBadge extends StatelessWidget {
         type.labelKey.tr(context),
         style: TextStyle(
           color: isRadiology
-              ? Colors.grey.shade800
+              ? AppColors.grey800Color
               : Theme.of(context).primaryColor,
           fontWeight: FontWeight.w700,
           fontSize: 12,
@@ -1057,12 +1071,12 @@ class _EmptyMedicalFilesState extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: AppColors.blackColor.withValues(alpha: 0.03),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),
@@ -1093,7 +1107,7 @@ class _EmptyMedicalFilesState extends StatelessWidget {
           Text(
             'no_medical_files_subtitle'.tr(context),
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey.shade600, height: 1.5),
+            style: TextStyle(color: AppColors.grey600Color, height: 1.5),
           ),
           const SizedBox(height: 20),
           _ActionButton(
@@ -1123,18 +1137,18 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color foregroundColor = isPrimary
-        ? Colors.white
+        ? AppColors.whiteColor
         : AppColors.primaryColors;
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(18),
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
           decoration: BoxDecoration(
-            color: isPrimary ? AppColors.primaryColors : Colors.white,
+            color: isPrimary ? AppColors.primaryColors : AppColors.whiteColor,
             borderRadius: BorderRadius.circular(18),
             border: isPrimary
                 ? null

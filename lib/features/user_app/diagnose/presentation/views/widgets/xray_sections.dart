@@ -23,14 +23,14 @@ class XrayHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -92,7 +92,7 @@ class XrayHeroCard extends StatelessWidget {
                         color:
                             (hasSelectedImage || hasResult
                                     ? AppColors.primaryColors
-                                    : Colors.grey.shade500)
+                                    : AppColors.grey500Color)
                                 .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(999),
                       ),
@@ -106,7 +106,7 @@ class XrayHeroCard extends StatelessWidget {
                         style: TextStyle(
                           color: hasSelectedImage || hasResult
                               ? AppColors.primaryColors
-                              : Colors.grey.shade700,
+                              : AppColors.grey700Color,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -117,7 +117,7 @@ class XrayHeroCard extends StatelessWidget {
                 Text(
                   'xray_diagnosis_title'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -126,7 +126,7 @@ class XrayHeroCard extends StatelessWidget {
                 Text(
                   'xray_diagnosis_subtitle'.tr(context),
                   style: TextStyle(
-                    color: Colors.grey.shade700,
+                    color: AppColors.grey700Color,
                     height: 1.45,
                     fontWeight: FontWeight.w600,
                   ),
@@ -160,17 +160,17 @@ class XrayUploadCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: hasImage
               ? AppColors.primaryColors.withValues(alpha: 0.35)
-              : Colors.grey.shade200,
+              : AppColors.grey200Color,
           width: hasImage ? 1.6 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -198,14 +198,14 @@ class XrayUploadCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'xray_upload_hint'.tr(context),
                   textAlign: TextAlign.center,
-                  style: TextStyle(height: 1.45, color: Colors.grey.shade600),
+                  style: TextStyle(height: 1.45, color: AppColors.grey600Color),
                 ),
                 const SizedBox(height: 18),
                 Align(
@@ -248,7 +248,7 @@ class XrayUploadCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFF1F2C28),
+                              color: AppColors.titleColor,
                             ),
                           ),
                           if (selectedTitle != null &&
@@ -259,7 +259,7 @@ class XrayUploadCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.grey.shade600,
+                                color: AppColors.grey600Color,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -319,7 +319,7 @@ class XrayUploadCard extends StatelessWidget {
                       icon: const Icon(Icons.close_rounded, size: 18),
                       label: Text('remove'.tr(context)),
                       style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xFFE25F63),
+                        foregroundColor: AppColors.dangerAccentColor,
                       ),
                     ),
                   ),
@@ -404,7 +404,7 @@ class XrayAnalyzeButton extends StatelessWidget {
                   AppColors.primaryColors,
                   AppColors.primaryColors.withValues(alpha: 0.82),
                 ]
-              : [Colors.grey.shade400, Colors.grey.shade300],
+              : [AppColors.grey400Color, AppColors.grey300Color],
         ),
         boxShadow: isEnabled
             ? [
@@ -419,9 +419,9 @@ class XrayAnalyzeButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isEnabled ? onPressed : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          disabledBackgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
+          backgroundColor: AppColors.transparentColor,
+          disabledBackgroundColor: AppColors.transparentColor,
+          shadowColor: AppColors.transparentColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -431,14 +431,14 @@ class XrayAnalyzeButton extends StatelessWidget {
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   strokeWidth: 2.4,
                 ),
               )
             : Text(
                 'xray_analyze_button'.tr(context),
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                 ),
@@ -493,14 +493,14 @@ class XraySummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -548,7 +548,7 @@ class XraySummaryCard extends StatelessWidget {
           Text(
             'xray_top_finding'.tr(context),
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: AppColors.grey600Color,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -556,7 +556,7 @@ class XraySummaryCard extends StatelessWidget {
           Text(
             result.topDisease,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 24,
               fontWeight: FontWeight.w800,
             ),
@@ -617,11 +617,11 @@ class XrayHeatmapSection extends StatelessWidget {
             },
             errorBuilder: (context, error, stackTrace) {
               return Container(
-                color: Colors.grey.shade100,
+                color: AppColors.grey100Color,
                 alignment: Alignment.center,
                 child: Icon(
                   Icons.broken_image_outlined,
-                  color: Colors.grey.shade500,
+                  color: AppColors.grey500Color,
                   size: 40,
                 ),
               );
@@ -646,7 +646,7 @@ class XrayFindingsGridSection extends StatelessWidget {
       child: results.isEmpty
           ? Text(
               'xray_no_findings'.tr(context),
-              style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: AppColors.grey600Color),
             )
           : GridView.builder(
               shrinkWrap: true,
@@ -684,9 +684,9 @@ class XrayFindingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color cardColor;
     if (probability >= 0.79) {
-      cardColor = const Color(0xFFE25F63);
+      cardColor = AppColors.dangerAccentColor;
     } else if (probability > 0.6) {
-      cardColor = const Color(0xFFE7A423);
+      cardColor = AppColors.warningAccentColor;
     } else {
       cardColor = AppColors.primaryColors;
     }
@@ -694,9 +694,9 @@ class XrayFindingCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -761,20 +761,20 @@ class XrayNarrativeSection extends StatelessWidget {
             aiAnalysisText,
             textAlign: isArabic ? TextAlign.right : TextAlign.left,
             textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
-            style: TextStyle(color: Colors.grey.shade700, height: 1.65),
+            style: TextStyle(color: AppColors.grey700Color, height: 1.65),
           ),
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF6E8),
+              color: AppColors.warningSurfaceColor,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
               'xray_disclaimer'.tr(context),
               style: const TextStyle(
-                color: Color(0xFF8B5E1E),
+                color: AppColors.warningDeepColor,
                 fontSize: 12,
                 height: 1.45,
                 fontWeight: FontWeight.w600,
@@ -800,12 +800,12 @@ class XrayNoResultView extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.grey200Color),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.blackColor.withValues(alpha: 0.04),
                 blurRadius: 18,
                 offset: const Offset(0, 10),
               ),
@@ -817,13 +817,13 @@ class XrayNoResultView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE25F63).withValues(alpha: 0.1),
+                  color: AppColors.dangerAccentColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.search_off_rounded,
                   size: 44,
-                  color: Color(0xFFE25F63),
+                  color: AppColors.dangerAccentColor,
                 ),
               ),
               const SizedBox(height: 18),
@@ -832,14 +832,14 @@ class XrayNoResultView extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1F2C28),
+                  color: AppColors.titleColor,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Text(
                 'xray_no_result_subtitle'.tr(context),
-                style: TextStyle(color: Colors.grey.shade600, height: 1.55),
+                style: TextStyle(color: AppColors.grey600Color, height: 1.55),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -872,9 +872,9 @@ class _XrayStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -884,7 +884,7 @@ class _XrayStatCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: AppColors.grey600Color,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -893,7 +893,7 @@ class _XrayStatCard extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 16,
               fontWeight: FontWeight.w800,
             ),
@@ -920,12 +920,12 @@ class _XraySectionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -952,7 +952,7 @@ class _XraySectionCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
               ),

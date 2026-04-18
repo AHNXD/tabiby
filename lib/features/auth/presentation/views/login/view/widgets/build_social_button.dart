@@ -14,7 +14,7 @@ class SocialButton extends StatelessWidget {
       width: 55,
       height: 55,
       decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 246, 245, 245), // رمادي فاتح للخلفية
+        color: AppColors.authSocialSurfaceColor, // رمادي فاتح للخلفية
         shape: BoxShape.circle,
       ),
       child: Center(

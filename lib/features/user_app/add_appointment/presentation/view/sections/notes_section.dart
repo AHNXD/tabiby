@@ -59,14 +59,14 @@ class _DiagnosisShareCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.14),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -99,14 +99,14 @@ class _DiagnosisShareCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'booking_send_diagnosis_result_subtitle'.tr(context),
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: AppColors.grey600Color,
                         fontSize: 12,
                         height: 1.4,
                       ),
@@ -168,7 +168,7 @@ class _DiagnosisInfoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = isAlert
-        ? const Color(0xFFE25F63)
+        ? AppColors.dangerAccentColor
         : AppColors.primaryColors;
 
     return Container(

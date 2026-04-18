@@ -19,14 +19,14 @@ class DietFormIntroCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -80,7 +80,7 @@ class DietFormIntroCard extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          color: Color(0xFF1F2C28),
+                          color: AppColors.titleColor,
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                         ),
@@ -89,7 +89,7 @@ class DietFormIntroCard extends StatelessWidget {
                       Text(
                         subtitle,
                         style: TextStyle(
-                          color: Colors.grey.shade700,
+                          color: AppColors.grey700Color,
                           height: 1.45,
                         ),
                       ),
@@ -116,7 +116,7 @@ class DietFormLoadingBanner extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -141,7 +141,7 @@ class DietFormLoadingBanner extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -163,12 +163,12 @@ class DietFormSectionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -242,13 +242,13 @@ class DietLabeledCustomField extends StatelessWidget {
             margin: const EdgeInsets.only(left: 4, bottom: 8),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFFF4F7F7),
+              color: AppColors.paleSurfaceColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               label,
               style: TextStyle(
-                color: Colors.grey.shade700,
+                color: AppColors.grey700Color,
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
               ),

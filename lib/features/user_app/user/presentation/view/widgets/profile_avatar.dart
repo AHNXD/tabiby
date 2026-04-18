@@ -30,7 +30,7 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(54),
@@ -43,7 +43,7 @@ class ProfileAvatar extends StatelessWidget {
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFE8FFF5), Colors.white],
+                  colors: [AppColors.mintSurfaceColor, AppColors.whiteColor],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -58,7 +58,7 @@ class ProfileAvatar extends StatelessWidget {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(32),
                 ),
                 child: ClipRRect(
@@ -74,11 +74,11 @@ class ProfileAvatar extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.10),
+                      color: AppColors.blackColor.withValues(alpha: 0.10),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     ),

@@ -90,7 +90,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
       return Center(
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(
-            Colors.white.withValues(alpha: 0.8),
+            AppColors.whiteColor.withValues(alpha: 0.8),
           ),
         ),
       );
@@ -101,7 +101,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
         child: Text(
           state.errorMsg.tr(context),
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -129,10 +129,13 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(
+                          color: AppColors.whiteColor,
+                          width: 2,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
+                            color: AppColors.blackColor.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -159,7 +162,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           Text(
                             'welcome_back'.tr(context),
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.9),
+                              color: AppColors.whiteColor.withValues(
+                                alpha: 0.9,
+                              ),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
@@ -172,7 +177,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: AppColors.whiteColor,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -187,7 +192,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
 
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: AppColors.whiteColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child:
@@ -215,7 +220,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                             widget.isDoctor
                                 ? Icons.settings
                                 : Icons.notifications_outlined,
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                           ),
                         ),
                         if (!widget.isDoctor && unreadCount > 0)
@@ -229,10 +234,10 @@ class _BuildAppbarState extends State<BuildAppbar> {
                               ),
                               constraints: const BoxConstraints(minWidth: 18),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFE2574C),
+                                color: AppColors.coralAccentColor,
                                 borderRadius: BorderRadius.circular(999),
                                 border: Border.all(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   width: 1.4,
                                 ),
                               ),
@@ -240,7 +245,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 unreadCountLabel,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
                                 ),

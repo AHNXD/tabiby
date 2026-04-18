@@ -34,7 +34,7 @@ class ContactUsScreen extends StatelessWidget {
                     title: 'contact_sub_support'.tr(context),
                     description: 'contact_desc_support'.tr(context),
                     detail: 'contact_email_support'.tr(context),
-                    accentColor: const Color(0xFF539E84),
+                    accentColor: AppColors.primaryColors,
                   ),
                   const SizedBox(height: 14),
                   _ContactInfoCard(
@@ -42,7 +42,7 @@ class ContactUsScreen extends StatelessWidget {
                     title: 'contact_sub_media'.tr(context),
                     description: 'contact_desc_media'.tr(context),
                     detail: 'contact_email_media'.tr(context),
-                    accentColor: const Color(0xFF4E7EB5),
+                    accentColor: AppColors.linkBlueColor,
                   ),
                   const SizedBox(height: 14),
                   _AddressCard(
@@ -83,7 +83,7 @@ class _ContactQuickActions extends StatelessWidget {
           child: _ContactQuickActionCard(
             icon: Icons.headset_mic_outlined,
             label: supportLabel,
-            color: const Color(0xFF539E84),
+            color: AppColors.primaryColors,
           ),
         ),
         const SizedBox(width: 12),
@@ -91,7 +91,7 @@ class _ContactQuickActions extends StatelessWidget {
           child: _ContactQuickActionCard(
             icon: Icons.campaign_outlined,
             label: mediaLabel,
-            color: const Color(0xFF4E7EB5),
+            color: AppColors.linkBlueColor,
           ),
         ),
       ],
@@ -115,7 +115,7 @@ class _ContactQuickActionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.12)),
       ),
@@ -138,7 +138,7 @@ class _ContactQuickActionCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1F2C28),
+                color: AppColors.titleColor,
               ),
             ),
           ),
@@ -156,14 +156,14 @@ class _ContactHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -222,7 +222,7 @@ class _ContactHeroCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -244,7 +244,7 @@ class _ContactHeroCard extends StatelessWidget {
                 Text(
                   'contact_welcome'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -252,7 +252,7 @@ class _ContactHeroCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   'contact_intro'.tr(context),
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.5),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.5),
                 ),
                 const SizedBox(height: 18),
                 Wrap(
@@ -290,9 +290,9 @@ class _ContactHeroChip extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 40),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -305,7 +305,7 @@ class _ContactHeroChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                color: Color(0xFF1F2C28),
+                color: AppColors.titleColor,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -337,12 +337,12 @@ class _ContactInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: accentColor.withValues(alpha: 0.14)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -370,13 +370,13 @@ class _ContactInfoCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   description,
-                  style: TextStyle(color: Colors.grey.shade600, height: 1.45),
+                  style: TextStyle(color: AppColors.grey600Color, height: 1.45),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -440,12 +440,12 @@ class _AddressCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -476,7 +476,7 @@ class _AddressCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -485,7 +485,7 @@ class _AddressCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -494,7 +494,7 @@ class _AddressCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     height: 1.45,
-                    color: Colors.grey.shade600,
+                    color: AppColors.grey600Color,
                   ),
                 ),
               ],
@@ -541,7 +541,7 @@ class _ContactFooterButton extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.whiteColor,
             ),
           ),
         ),

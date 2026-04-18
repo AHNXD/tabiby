@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils/colors.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -28,15 +27,15 @@ class PrimaryButton extends StatelessWidget {
         elevation: 5,
       ),
       child: FittedBox(
-        fit: BoxFit.scaleDown, 
+        fit: BoxFit.scaleDown,
         child: Text(
           text,
           maxLines: 1,
-     
+
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: fontSize,
-            color: Colors.white,
+            color: AppColors.whiteColor,
           ),
         ),
       ),

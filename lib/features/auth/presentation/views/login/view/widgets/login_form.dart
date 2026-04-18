@@ -45,7 +45,7 @@ class _LoginFormState extends State<LoginForm> {
       return;
     }
     if (!agreeToTerms) {
-      messages(context, 'please_agree_terms'.tr(context), Colors.red);
+      messages(context, 'please_agree_terms'.tr(context), AppColors.redColor);
 
       return;
     }
@@ -56,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _handleSuccess(String role) {
-    messages(context, "login_success".tr(context), Colors.green);
+    messages(context, "login_success".tr(context), AppColors.greenColor);
     context.read<UserCubit>().getProfile();
     if (role == "patient") {
       Navigator.pushNamedAndRemoveUntil(
@@ -74,7 +74,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _handleError(String errorMsg) {
-    messages(context, errorMsg, Colors.red);
+    messages(context, errorMsg, AppColors.redColor);
   }
 
   @override

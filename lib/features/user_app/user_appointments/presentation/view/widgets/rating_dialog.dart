@@ -37,15 +37,15 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
   Widget build(BuildContext context) {
     // Using a transparent background for the dialog itself to let our rounded shape shine
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparentColor,
       insetPadding: const EdgeInsets.all(16),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: AppColors.blackColor.withValues(alpha: 0.1),
               blurRadius: 15,
               offset: const Offset(0, 5),
             ),
@@ -59,11 +59,11 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
               messages(
                 context,
                 'rating_submitted_successfully'.tr(context),
-                Colors.green,
+                AppColors.greenColor,
               );
             } else if (state is RatingError) {
               Navigator.pop(context);
-              messages(context, state.errorMsg, Colors.red);
+              messages(context, state.errorMsg, AppColors.redColor);
             }
           },
           builder: (context, state) {
@@ -76,7 +76,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                   const SizedBox(height: 20),
                   Text(
                     "checking".tr(context),
-                    style: const TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: AppColors.greyColor),
                   ),
                 ],
               );
@@ -89,7 +89,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                 children: [
                   Icon(
                     Icons.error_outline_rounded,
-                    color: Colors.red.shade400,
+                    color: AppColors.red400Color,
                     size: 50,
                   ),
                   const SizedBox(height: 16),
@@ -101,7 +101,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                   const SizedBox(height: 20),
                   TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.grey.shade600,
+                      foregroundColor: AppColors.grey600Color,
                     ),
                     onPressed: () => Navigator.pop(context),
                     child: Text('close'.tr(context)),
@@ -124,7 +124,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                   const SizedBox(height: 20),
                   Text(
                     "submitting".tr(context),
-                    style: const TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: AppColors.greyColor),
                   ),
                 ],
               );
@@ -162,9 +162,9 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: AppColors.grey50Color,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.shade200),
+              border: Border.all(color: AppColors.grey200Color),
             ),
             child: Text(
               status.rating!.comment != null &&
@@ -172,7 +172,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                   ? status.rating!.comment!
                   : "no_comment".tr(context),
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 fontSize: 15,
                 height: 1.4,
               ),
@@ -182,7 +182,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
           const SizedBox(height: 24),
           TextButton(
             style: TextButton.styleFrom(
-              foregroundColor: Colors.grey.shade600,
+              foregroundColor: AppColors.grey600Color,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
             onPressed: () => Navigator.pop(context),
@@ -215,7 +215,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
               context,
             ), // Add this key to your localization
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 14, color: AppColors.grey600Color),
           ),
           const SizedBox(height: 24),
 
@@ -238,7 +238,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                 style: TextStyle(
                   color: _currentRating > 0
                       ? AppColors.primaryColors
-                      : Colors.grey.shade400,
+                      : AppColors.grey400Color,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
@@ -249,11 +249,11 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
           // NEW Beautiful Comment Field
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.15),
+                  color: AppColors.greyColor.withValues(alpha: 0.15),
                   spreadRadius: 1,
                   blurRadius: 8,
                   offset: const Offset(0, 2), // changes position of shadow
@@ -265,13 +265,13 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
               maxLines: 3,
               decoration: InputDecoration(
                 hintText: "write_comment_here".tr(context),
-                hintStyle: TextStyle(color: Colors.grey.shade400),
+                hintStyle: TextStyle(color: AppColors.grey400Color),
                 border: InputBorder.none, // Remove default harsh border
                 contentPadding: const EdgeInsets.all(16),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(
-                    color: AppColors.primaryColors.withOpacity(0.5),
+                    color: AppColors.primaryColors.withValues(alpha: 0.5),
                     width: 1.5,
                   ),
                 ),
@@ -296,9 +296,9 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColors,
-                disabledBackgroundColor: Colors.grey.shade300,
+                disabledBackgroundColor: AppColors.grey300Color,
                 elevation: _currentRating > 0 ? 4 : 0,
-                shadowColor: AppColors.primaryColors.withOpacity(0.4),
+                shadowColor: AppColors.primaryColors.withValues(alpha: 0.4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -306,7 +306,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
               child: Text(
                 'submit'.tr(context),
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -321,15 +321,15 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.block_rounded, color: Colors.grey.shade400, size: 50),
+        Icon(Icons.block_rounded, color: AppColors.grey400Color, size: 50),
         const SizedBox(height: 16),
         Text(
           "cannot_rate_appointment".tr(context),
-          style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+          style: TextStyle(color: AppColors.grey700Color, fontSize: 16),
         ),
         const SizedBox(height: 24),
         TextButton(
-          style: TextButton.styleFrom(foregroundColor: Colors.grey.shade600),
+          style: TextButton.styleFrom(foregroundColor: AppColors.grey600Color),
           onPressed: () => Navigator.pop(context),
           child: Text(
             'close'.tr(context),
@@ -401,7 +401,7 @@ class _AnimatedStarRatingSelector extends StatelessWidget {
                 key: ValueKey<bool>(
                   isSelected,
                 ), // Important for AnimatedSwitcher
-                color: isSelected ? starColor : Colors.grey.shade300,
+                color: isSelected ? starColor : AppColors.grey300Color,
                 size: 44,
               ),
             ),
@@ -427,7 +427,7 @@ class _StarDisplay extends StatelessWidget {
       children: List.generate(5, (index) {
         return Icon(
           index < value ? Icons.star_rounded : Icons.star_outline_rounded,
-          color: index < value ? starColor : Colors.grey.shade300,
+          color: index < value ? starColor : AppColors.grey300Color,
           size: size,
         );
       }),

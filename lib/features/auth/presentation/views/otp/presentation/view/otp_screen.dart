@@ -54,7 +54,7 @@ class _OTPScreenState extends State<OTPScreen> {
         messages(
           context,
           "please_enter_the_full_OTP_code".tr(context),
-          Colors.red,
+          AppColors.redColor,
         );
         return;
       }
@@ -68,7 +68,7 @@ class _OTPScreenState extends State<OTPScreen> {
           email: _userEmail!,
         );
       } catch (e) {
-        messages(context, "invalid_OTP_format".tr(context), Colors.red);
+        messages(context, "invalid_OTP_format".tr(context), AppColors.redColor);
       }
     }
   }
@@ -78,7 +78,7 @@ class _OTPScreenState extends State<OTPScreen> {
     final size = MediaQuery.sizeOf(context);
     final double responsiveFieldWidth = (size.width - 150) / _otpLength;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteColor,
       appBar: CustomAppbar(title: 'otp'.tr(context)),
       body: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
         listener: (context, state) {
@@ -86,12 +86,12 @@ class _OTPScreenState extends State<OTPScreen> {
             messages(
               context,
               "password_updated_successfully".tr(context),
-              Colors.green,
+              AppColors.greenColor,
             );
             // Navigate to Login or Home after success
             Navigator.popUntil(context, (route) => route.isFirst);
           } else if (state is ResetPasswordError) {
-            messages(context, state.errorMsg, Colors.red);
+            messages(context, state.errorMsg, AppColors.redColor);
           }
         },
         builder: (context, state) {

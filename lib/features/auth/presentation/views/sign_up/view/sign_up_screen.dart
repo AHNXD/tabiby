@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/features/auth/data/repos/register_repo/register_repo.dart';
 import 'package:tabiby/features/auth/presentation/view-model/register_cubit/register_cubit.dart';
@@ -14,7 +15,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteColor,
       body: BlocProvider(
         create: (context) => RegisterCubit(getit.get<RegisterRepo>()),
         child: SafeArea(

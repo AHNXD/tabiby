@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils/colors.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class PasswordTextField extends StatefulWidget {
   final String hintText;
@@ -47,7 +46,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         // --- Interactive Borders Matching CustomTextField ---
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+          borderSide: BorderSide(color: AppColors.grey300Color, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -58,11 +57,17 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.errorAccentColor,
+            width: 1.5,
+          ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 2.0),
+          borderSide: const BorderSide(
+            color: AppColors.errorAccentColor,
+            width: 2.0,
+          ),
         ),
 
         prefixIcon: Padding(

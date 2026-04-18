@@ -22,14 +22,14 @@ class DietModeHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -88,7 +88,7 @@ class DietModeHeroCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -121,7 +121,7 @@ class DietModeHeroCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -129,7 +129,7 @@ class DietModeHeroCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                  style: TextStyle(color: AppColors.grey700Color, height: 1.45),
                 ),
                 const SizedBox(height: 18),
                 IntrinsicHeight(
@@ -181,9 +181,9 @@ class DietCompactStat extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 88),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: [
@@ -204,7 +204,7 @@ class DietCompactStat extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -215,7 +215,7 @@ class DietCompactStat extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: AppColors.grey600Color,
                     fontSize: 11,
                     height: 1.2,
                   ),
@@ -244,7 +244,7 @@ class DietInfoBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -274,7 +274,7 @@ class DietInfoBanner extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 height: 1.45,
                 fontWeight: FontWeight.w600,
               ),
@@ -303,7 +303,7 @@ class DietActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       borderRadius: BorderRadius.circular(20),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
@@ -311,12 +311,12 @@ class DietActionCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.grey200Color),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: AppColors.blackColor.withValues(alpha: 0.05),
                 blurRadius: 16,
                 offset: const Offset(0, 10),
               ),
@@ -350,7 +350,7 @@ class DietActionCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(color: Colors.grey.shade700),
+                      style: TextStyle(color: AppColors.grey700Color),
                     ),
                   ],
                 ),
@@ -402,12 +402,12 @@ class DietHistoryCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.045),
+            color: AppColors.blackColor.withValues(alpha: 0.045),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -439,7 +439,7 @@ class DietHistoryCard extends StatelessWidget {
               const Spacer(),
               Icon(
                 Icons.schedule_rounded,
-                color: Colors.grey.shade500,
+                color: AppColors.grey500Color,
                 size: 18,
               ),
             ],
@@ -455,7 +455,7 @@ class DietHistoryCard extends StatelessWidget {
               summary,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+              style: TextStyle(color: AppColors.grey700Color, height: 1.45),
             ),
           ],
           const SizedBox(height: 12),
@@ -495,7 +495,7 @@ class DietHistoryCard extends StatelessWidget {
                   onPressed: onOpenPlan,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColors,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.whiteColor,
                     padding: const EdgeInsets.symmetric(vertical: 13),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -530,7 +530,7 @@ class DietModeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
@@ -538,12 +538,12 @@ class DietModeCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.grey200Color),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.blackColor.withValues(alpha: 0.04),
                 blurRadius: 18,
                 offset: const Offset(0, 10),
               ),
@@ -581,7 +581,7 @@ class DietModeCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: Colors.grey.shade700,
+                        color: AppColors.grey700Color,
                         height: 1.4,
                       ),
                     ),
@@ -620,7 +620,7 @@ class _DietTagChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF4F7F7),
+        color: AppColors.paleSurfaceColor,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -633,7 +633,7 @@ class _DietTagChip extends StatelessWidget {
               label,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 fontWeight: FontWeight.w600,
               ),
             ),

@@ -16,14 +16,14 @@ class CategoryHeroCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -88,7 +88,7 @@ class CategoryHeroCard extends StatelessWidget {
                 Text(
                   'diagnose_category'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -97,7 +97,7 @@ class CategoryHeroCard extends StatelessWidget {
                 Text(
                   'select_body_part_instruction'.tr(context),
                   style: TextStyle(
-                    color: Colors.grey.shade700,
+                    color: AppColors.grey700Color,
                     height: 1.45,
                     fontWeight: FontWeight.w600,
                   ),
@@ -126,9 +126,9 @@ class CategorySideToggle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F4F2),
+        color: AppColors.sagePanelColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: [
@@ -185,21 +185,27 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: isSelected
-                    ? [const Color(0xFFEFF8F5), const Color(0xFFF9FCFB)]
-                    : [Colors.white, const Color(0xFFF9FAFB)],
+                    ? [
+                        AppColors.sageTintSurfaceAltColor,
+                        AppColors.softNeutralSurfaceMintColor,
+                      ]
+                    : [
+                        AppColors.whiteColor,
+                        AppColors.softNeutralSurfaceBrightColor,
+                      ],
               ),
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
                 color: isSelected
                     ? AppColors.primaryColors.withValues(alpha: 0.8)
-                    : Colors.grey.shade200,
+                    : AppColors.grey200Color,
                 width: isSelected ? 1.8 : 1,
               ),
               boxShadow: [
                 BoxShadow(
                   color: isSelected
                       ? AppColors.primaryColors.withValues(alpha: 0.12)
-                      : Colors.black.withValues(alpha: 0.04),
+                      : AppColors.blackColor.withValues(alpha: 0.04),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 ),
@@ -218,7 +224,7 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                         color:
                             (isSelected
                                     ? AppColors.primaryColors
-                                    : Colors.grey.shade500)
+                                    : AppColors.grey500Color)
                                 .withValues(alpha: isSelected ? 0.14 : 0.1),
                         shape: BoxShape.circle,
                       ),
@@ -226,7 +232,7 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                         part.icon,
                         color: isSelected
                             ? AppColors.primaryColors
-                            : Colors.grey.shade700,
+                            : AppColors.grey700Color,
                         size: 20,
                       ),
                     ),
@@ -273,7 +279,7 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_rounded,
                         size: 16,
-                        color: Colors.grey.shade400,
+                        color: AppColors.grey400Color,
                       ),
                   ],
                 ),
@@ -285,7 +291,7 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                     color:
                         (isSelected
                                 ? AppColors.primaryColors
-                                : Colors.grey.shade400)
+                                : AppColors.grey400Color)
                             .withValues(alpha: 0.32),
                     borderRadius: BorderRadius.circular(999),
                   ),
@@ -297,8 +303,8 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: isSelected
-                        ? const Color(0xFF1F2C28)
-                        : Colors.black87,
+                        ? AppColors.titleColor
+                        : AppColors.black87Color,
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     height: 1.3,
@@ -314,7 +320,7 @@ class CategoryBodyPartsGrid extends StatelessWidget {
                   style: TextStyle(
                     color: isSelected
                         ? AppColors.primaryColors
-                        : Colors.grey.shade500,
+                        : AppColors.grey500Color,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
@@ -358,11 +364,11 @@ class CategorySideButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
-          color: selected ? Colors.white : Colors.transparent,
+          color: selected ? AppColors.whiteColor : AppColors.transparentColor,
           boxShadow: selected
               ? [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
+                    color: AppColors.blackColor.withValues(alpha: 0.04),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -375,7 +381,9 @@ class CategorySideButton extends StatelessWidget {
             Icon(
               icon,
               size: 18,
-              color: selected ? AppColors.primaryColors : Colors.grey.shade600,
+              color: selected
+                  ? AppColors.primaryColors
+                  : AppColors.grey600Color,
             ),
             const SizedBox(width: 8),
             Flexible(
@@ -385,7 +393,7 @@ class CategorySideButton extends StatelessWidget {
                 style: TextStyle(
                   color: selected
                       ? AppColors.primaryColors
-                      : Colors.grey.shade700,
+                      : AppColors.grey700Color,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -409,11 +417,12 @@ class _CategoryHeroBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
-            color: (isSelected ? AppColors.primaryColors : Colors.grey.shade400)
-                .withValues(alpha: 0.18),
+            color:
+                (isSelected ? AppColors.primaryColors : AppColors.grey400Color)
+                    .withValues(alpha: 0.18),
           ),
         ),
         child: Row(
@@ -425,7 +434,7 @@ class _CategoryHeroBadge extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primaryColors
-                    : Colors.grey.shade400,
+                    : AppColors.grey400Color,
                 shape: BoxShape.circle,
               ),
             ),
@@ -437,7 +446,7 @@ class _CategoryHeroBadge extends StatelessWidget {
                 style: TextStyle(
                   color: isSelected
                       ? AppColors.primaryColors
-                      : Colors.grey.shade600,
+                      : AppColors.grey600Color,
                   fontWeight: FontWeight.w700,
                   fontSize: 11,
                 ),

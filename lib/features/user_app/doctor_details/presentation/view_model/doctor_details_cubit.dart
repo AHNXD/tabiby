@@ -14,11 +14,11 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
   Future getDoctor(int? centerID) async {
     emit(DoctorDetailsLoading());
     var data = await _doctorsRepo.getDoctor(centerID);
-    data.fold((failure) => emit(DoctorDetailsError(errorMsg: failure.message)), (
-      doctor,
-    ) {
-      emit(DoctorDetailsSuccess(doctor: doctor));
-    });
+    data.fold(
+      (failure) => emit(DoctorDetailsError(errorMsg: failure.message)),
+      (doctor) {
+        emit(DoctorDetailsSuccess(doctor: doctor));
+      },
+    );
   }
 }
-  

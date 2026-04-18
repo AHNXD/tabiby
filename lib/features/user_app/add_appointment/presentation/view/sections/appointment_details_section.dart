@@ -54,7 +54,7 @@ class AppointmentDetailsSection extends StatelessWidget {
       children: <Widget>[
         Text(
           'radiology_booking_hint'.tr(context),
-          style: TextStyle(color: Colors.grey.shade600, height: 1.4),
+          style: TextStyle(color: AppColors.grey600Color, height: 1.4),
         ),
         const SizedBox(height: 10),
         ...availableMedicalImageTypes.map((MedicalImageTypeOption item) {
@@ -78,7 +78,7 @@ class AppointmentDetailsSection extends StatelessWidget {
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primaryColors
-                        : const Color(0xFFB8C8C0),
+                        : AppColors.sageBorderTintColor,
                     width: 2,
                   ),
                 ),
@@ -91,7 +91,7 @@ class AppointmentDetailsSection extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: isSelected
                           ? AppColors.primaryColors
-                          : Colors.transparent,
+                          : AppColors.transparentColor,
                     ),
                   ),
                 ),
@@ -115,7 +115,7 @@ class AppointmentDetailsSection extends StatelessWidget {
       children: <Widget>[
         Text(
           'laboratory_booking_hint'.tr(context),
-          style: TextStyle(color: Colors.grey.shade600, height: 1.4),
+          style: TextStyle(color: AppColors.grey600Color, height: 1.4),
         ),
         const SizedBox(height: 10),
         Wrap(
@@ -166,7 +166,7 @@ class AppointmentDetailsSection extends StatelessWidget {
       children: <Widget>[
         Text(
           'medical_records_hint'.tr(context),
-          style: TextStyle(color: Colors.grey.shade600, height: 1.4),
+          style: TextStyle(color: AppColors.grey600Color, height: 1.4),
         ),
         const SizedBox(height: 12),
         _AttachmentSelectorCard(
@@ -245,7 +245,7 @@ class _ChoiceTile extends StatelessWidget {
     final bool isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: onTap,
@@ -254,12 +254,12 @@ class _ChoiceTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primaryColors.withValues(alpha: 0.08)
-                : const Color(0xFFF8FBF9),
+                : AppColors.softSurfaceAltColor,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: isSelected
                   ? AppColors.primaryColors.withValues(alpha: 0.35)
-                  : const Color(0xFFE1E9E4),
+                  : AppColors.sageBorderColor,
             ),
           ),
           child: Row(
@@ -281,8 +281,8 @@ class _ChoiceTile extends StatelessWidget {
                             ? FontWeight.w700
                             : FontWeight.w600,
                         color: isSelected
-                            ? const Color(0xFF21493B)
-                            : Colors.black87,
+                            ? AppColors.forestTextColor
+                            : AppColors.black87Color,
                       ),
                     ),
                     if (priceLabel != null) ...<Widget>[
@@ -295,7 +295,7 @@ class _ChoiceTile extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? AppColors.primaryColors.withValues(alpha: 0.14)
-                              : const Color(0xFFEFF5F1),
+                              : AppColors.sageTintSurfaceColor,
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
@@ -304,8 +304,8 @@ class _ChoiceTile extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                             color: isSelected
-                                ? const Color(0xFF21493B)
-                                : const Color(0xFF45685A),
+                                ? AppColors.forestTextColor
+                                : AppColors.forestBodyColor,
                           ),
                         ),
                       ),
@@ -338,7 +338,7 @@ class _LabTestChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(999),
         onTap: onTap,
@@ -348,8 +348,10 @@ class _LabTestChip extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: <Color>[
-                isSelected ? AppColors.primaryColors : const Color(0xFFFFFFFF),
-                isSelected ? const Color(0xFF3F7F69) : const Color(0xFFF7FAF8),
+                isSelected ? AppColors.primaryColors : AppColors.whiteColor,
+                isSelected
+                    ? AppColors.forestAccentColor
+                    : AppColors.lighterSurfaceColor,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -358,13 +360,13 @@ class _LabTestChip extends StatelessWidget {
             border: Border.all(
               color: isSelected
                   ? AppColors.primaryColors
-                  : const Color(0xFFE1E9E4),
+                  : AppColors.sageBorderColor,
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: isSelected
                     ? AppColors.primaryColors.withValues(alpha: 0.2)
-                    : Colors.black.withValues(alpha: 0.03),
+                    : AppColors.blackColor.withValues(alpha: 0.03),
                 blurRadius: isSelected ? 12 : 6,
                 offset: const Offset(0, 4),
               ),
@@ -380,13 +382,15 @@ class _LabTestChip extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isSelected
-                      ? Colors.white.withValues(alpha: 0.2)
-                      : const Color(0xFFE9F0EC),
+                      ? AppColors.whiteColor.withValues(alpha: 0.2)
+                      : AppColors.sageSurfaceMutedColor,
                 ),
                 child: Icon(
                   isSelected ? Icons.check_rounded : Icons.add_rounded,
                   size: 14,
-                  color: isSelected ? Colors.white : AppColors.primaryColors,
+                  color: isSelected
+                      ? AppColors.whiteColor
+                      : AppColors.primaryColors,
                 ),
               ),
               const SizedBox(width: 8),
@@ -399,8 +403,8 @@ class _LabTestChip extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: isSelected
-                          ? Colors.white
-                          : const Color(0xFF31453D),
+                          ? AppColors.whiteColor
+                          : AppColors.forestTextSoftColor,
                     ),
                   ),
                   if (priceLabel != null) ...<Widget>[
@@ -411,8 +415,8 @@ class _LabTestChip extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                         color: isSelected
-                            ? Colors.white.withValues(alpha: 0.92)
-                            : const Color(0xFF5C746B),
+                            ? AppColors.whiteColor.withValues(alpha: 0.92)
+                            : AppColors.forestMutedTextColor,
                       ),
                     ),
                   ],
@@ -437,14 +441,14 @@ class _EmptySelectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FBF9),
+        color: AppColors.softSurfaceAltColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE1E9E4)),
+        border: Border.all(color: AppColors.sageBorderColor),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: Colors.grey.shade600,
+          color: AppColors.grey600Color,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -477,7 +481,7 @@ class _SelectionTotalCard extends StatelessWidget {
               label,
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF21493B),
+                color: AppColors.forestTextColor,
               ),
             ),
           ),
@@ -485,7 +489,7 @@ class _SelectionTotalCard extends StatelessWidget {
             value,
             style: const TextStyle(
               fontWeight: FontWeight.w800,
-              color: Color(0xFF21493B),
+              color: AppColors.forestTextColor,
             ),
           ),
         ],
@@ -518,16 +522,16 @@ class _AttachmentSelectorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: onTap,
         child: Ink(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: AppColors.grey300Color),
           ),
           child: Row(
             children: <Widget>[
@@ -564,8 +568,8 @@ class _AttachmentSelectorCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: hasSelection
-                            ? Colors.black87
-                            : Colors.grey.shade600,
+                            ? AppColors.black87Color
+                            : AppColors.grey600Color,
                         fontWeight: hasSelection
                             ? FontWeight.w600
                             : FontWeight.w400,
@@ -577,7 +581,7 @@ class _AttachmentSelectorCard extends StatelessWidget {
                           ? '$selectedCount ${"selected_medical_records".tr(context)}'
                           : countLabel,
                       style: TextStyle(
-                        color: Colors.grey.shade500,
+                        color: AppColors.grey500Color,
                         fontSize: 12,
                       ),
                     ),
@@ -588,11 +592,14 @@ class _AttachmentSelectorCard extends StatelessWidget {
               if (onClear != null)
                 IconButton(
                   onPressed: onClear,
-                  icon: Icon(Icons.close_rounded, color: Colors.grey.shade500),
+                  icon: Icon(
+                    Icons.close_rounded,
+                    color: AppColors.grey500Color,
+                  ),
                 ),
               Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: Colors.grey.shade400,
+                color: AppColors.grey400Color,
               ),
             ],
           ),

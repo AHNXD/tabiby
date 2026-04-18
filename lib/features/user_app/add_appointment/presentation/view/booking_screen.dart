@@ -48,7 +48,7 @@ class BookingScreen extends StatelessWidget {
               colors: <Color>[
                 AppColors.primaryColors.withValues(alpha: 0.12),
                 AppColors.appBackgroundColor,
-                Colors.white,
+                AppColors.whiteColor,
               ],
               stops: const <double>[0, 0.28, 1],
             ),

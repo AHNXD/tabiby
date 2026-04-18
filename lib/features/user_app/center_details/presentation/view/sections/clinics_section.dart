@@ -31,7 +31,7 @@ class ClinicsSection extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -39,7 +39,7 @@ class ClinicsSection extends StatelessWidget {
                       'center_details'.tr(context),
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.grey.shade600,
+                        color: AppColors.grey600Color,
                       ),
                     ),
                   ],

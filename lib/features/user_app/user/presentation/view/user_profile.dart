@@ -163,7 +163,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
       context.read<UserCubit>().updateProfile(registerData);
     } else {
-      messages(context, 'fix_form_error'.tr(context), Colors.red);
+      messages(context, 'fix_form_error'.tr(context), AppColors.redColor);
     }
   }
 
@@ -223,7 +223,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         showBackButton: Navigator.of(context).canPop(),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.white),
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: AppColors.whiteColor,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -279,7 +282,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             icon: Icons.folder_open_rounded,
                             title: 'medical_files'.tr(context),
                             subtitle: 'all_files'.tr(context),
-                            accentColor: AppColors.secColors,
+                            accentColor: AppColors.primaryColors,
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -371,7 +374,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             return Center(
               child: CustomErrorWidget(
                 errorMessage: state.errorMsg.tr(context),
-                textColor: Colors.black,
+                textColor: AppColors.blackColor,
                 onRetry: () {
                   context.read<UserCubit>().getProfile();
                 },
@@ -396,12 +399,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -424,7 +427,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Text(
                       fullName.isEmpty ? 'my_profile'.tr(context) : fullName,
                       style: const TextStyle(
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
@@ -433,7 +436,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Text(
                       email.isEmpty ? '--' : email,
                       style: TextStyle(
-                        color: Colors.grey.shade700,
+                        color: AppColors.grey700Color,
                         fontSize: 14,
                       ),
                     ),
@@ -487,9 +490,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FBFA),
+        color: AppColors.profileSurfaceColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -499,7 +502,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           Text(
             text,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -514,12 +517,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -560,12 +563,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -609,23 +612,23 @@ class _ProfileActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(22),
         child: Ink(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
               color: isActive
                   ? accentColor.withValues(alpha: 0.28)
-                  : Colors.grey.shade200,
+                  : AppColors.grey200Color,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.blackColor.withValues(alpha: 0.04),
                 blurRadius: 14,
                 offset: const Offset(0, 8),
               ),
@@ -660,7 +663,7 @@ class _ProfileActionCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F2C28),
+                  color: AppColors.titleColor,
                 ),
               ),
               const SizedBox(height: 6),
@@ -669,7 +672,7 @@ class _ProfileActionCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   height: 1.35,
-                  color: Colors.grey.shade700,
+                  color: AppColors.grey700Color,
                 ),
               ),
             ],

@@ -26,7 +26,7 @@ class NotificationHistoryTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparentColor,
         child: InkWell(
           onTap: canMarkAsRead ? onTap : null,
           borderRadius: BorderRadius.circular(28),
@@ -38,7 +38,7 @@ class NotificationHistoryTile extends StatelessWidget {
                 colors: <Color>[
                   palette.backgroundColor,
                   palette.backgroundColor.withValues(alpha: 0.96),
-                  Colors.white,
+                  AppColors.whiteColor,
                 ],
               ),
               borderRadius: BorderRadius.circular(28),
@@ -148,7 +148,7 @@ class NotificationHistoryTile extends StatelessWidget {
                                   Text(
                                     notification.title,
                                     style: const TextStyle(
-                                      color: Color(0xFF1F2C28),
+                                      color: AppColors.titleColor,
                                       fontSize: 17,
                                       fontWeight: FontWeight.w800,
                                       height: 1.25,
@@ -160,7 +160,7 @@ class NotificationHistoryTile extends StatelessWidget {
                                       Icon(
                                         Icons.schedule_rounded,
                                         size: 15,
-                                        color: Colors.grey.shade600,
+                                        color: AppColors.grey600Color,
                                       ),
                                       const SizedBox(width: 6),
                                       Expanded(
@@ -170,7 +170,7 @@ class NotificationHistoryTile extends StatelessWidget {
                                             notification.createdAt,
                                           ),
                                           style: TextStyle(
-                                            color: Colors.grey.shade700,
+                                            color: AppColors.grey700Color,
                                             fontSize: 12,
                                             fontWeight: FontWeight.w700,
                                           ),
@@ -208,14 +208,14 @@ class NotificationHistoryTile extends StatelessWidget {
                           width: double.infinity,
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.72),
+                            color: AppColors.whiteColor.withValues(alpha: 0.72),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: palette.outlineSoftColor),
                           ),
                           child: Text(
                             notification.body,
                             style: TextStyle(
-                              color: Colors.grey.shade800,
+                              color: AppColors.grey800Color,
                               height: 1.6,
                               fontWeight: FontWeight.w500,
                             ),
@@ -231,9 +231,10 @@ class NotificationHistoryTile extends StatelessWidget {
                                 icon: Icons.event_note_outlined,
                                 label:
                                     '${'appointment'.tr(context)} #${notification.appointmentId}',
-                                backgroundColor: Colors.white,
+                                backgroundColor: AppColors.whiteColor,
                                 iconColor: palette.accentColor,
-                                textColor: const Color(0xFF31443D),
+                                textColor:
+                                    AppColors.forestNotificationTextColor,
                               ),
                             if (notification.isRead &&
                                 notification.readAt != null)
@@ -241,9 +242,10 @@ class NotificationHistoryTile extends StatelessWidget {
                                 icon: Icons.done_all_rounded,
                                 label:
                                     '${'notifications_read'.tr(context)} • ${_formatShortDate(context, notification.readAt!)}',
-                                backgroundColor: Colors.white,
+                                backgroundColor: AppColors.whiteColor,
                                 iconColor: palette.badgeTextColor,
-                                textColor: const Color(0xFF31443D),
+                                textColor:
+                                    AppColors.forestNotificationTextColor,
                               ),
                             if (!notification.isRead)
                               _ActionChip(
@@ -323,30 +325,30 @@ class NotificationHistoryTile extends StatelessWidget {
     Color accentColor = AppColors.primaryColors;
 
     if (normalized.contains('cancel') || normalized.contains('reject')) {
-      accentColor = const Color(0xFFDC6B5C);
+      accentColor = AppColors.dangerMutedColor;
     } else if (normalized.contains('appointment') ||
         item.appointmentId != null ||
         normalized.contains('reminder')) {
       accentColor = AppColors.secColors;
     } else if (normalized.contains('success') ||
         normalized.contains('approve')) {
-      accentColor = const Color(0xFF4F9D69);
+      accentColor = AppColors.successMutedColor;
     } else if (normalized.contains('warning')) {
-      accentColor = const Color(0xFFE7A423);
+      accentColor = AppColors.warningAccentColor;
     }
 
     if (item.isRead) {
       return _NotificationPalette(
         accentColor: accentColor.withValues(alpha: 0.84),
-        backgroundColor: const Color(0xFFFCFCFC),
-        borderColor: const Color(0xFFEAECEF),
-        shadowColor: Colors.black.withValues(alpha: 0.03),
-        badgeBackgroundColor: Colors.grey.shade100,
-        badgeTextColor: const Color(0xFF5E6A67),
-        statusBackgroundColor: const Color(0xFFF2F4F6),
-        statusTextColor: const Color(0xFF5E6A67),
-        outlineSoftColor: const Color(0xFFE8EBEE),
-        iconColor: Colors.white,
+        backgroundColor: AppColors.notificationSurfaceColor,
+        borderColor: AppColors.notificationBorderColor,
+        shadowColor: AppColors.blackColor.withValues(alpha: 0.03),
+        badgeBackgroundColor: AppColors.grey100Color,
+        badgeTextColor: AppColors.notificationTextColor,
+        statusBackgroundColor: AppColors.notificationBadgeSurfaceColor,
+        statusTextColor: AppColors.notificationTextColor,
+        outlineSoftColor: AppColors.notificationOutlineColor,
+        iconColor: AppColors.whiteColor,
       );
     }
 
@@ -360,7 +362,7 @@ class NotificationHistoryTile extends StatelessWidget {
       statusBackgroundColor: accentColor.withValues(alpha: 0.12),
       statusTextColor: accentColor,
       outlineSoftColor: accentColor.withValues(alpha: 0.14),
-      iconColor: Colors.white,
+      iconColor: AppColors.whiteColor,
     );
   }
 }

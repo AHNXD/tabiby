@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/user_app/doctor_details/data/models/doctor_model.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
@@ -18,11 +19,11 @@ class DoctorCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: AppColors.neutralColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: 2,
@@ -30,7 +31,7 @@ class DoctorCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparentColor,
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
@@ -57,8 +58,8 @@ class DoctorCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: isAvailable
-                                ? Colors.green.withValues(alpha: 0.5)
-                                : Colors.grey.withValues(alpha: 0.3),
+                                ? AppColors.successColor.withValues(alpha: 0.5)
+                                : AppColors.neutralColor.withValues(alpha: 0.3),
                             width: 2,
                           ),
                         ),
@@ -82,7 +83,7 @@ class DoctorCard extends StatelessWidget {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
-                                color: Colors.black87,
+                                color: AppColors.primaryTextColor,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -92,7 +93,7 @@ class DoctorCard extends StatelessWidget {
                             Text(
                               doctor.specialty?.name ?? '',
                               style: TextStyle(
-                                color: Colors.grey.shade600,
+                                color: AppColors.mutedTextColor,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -134,8 +135,8 @@ class DoctorCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: isAvailable
-                              ? Colors.green.withValues(alpha: 0.08)
-                              : Colors.red.withValues(alpha: 0.08),
+                              ? AppColors.successColor.withValues(alpha: 0.08)
+                              : AppColors.errorColor.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -143,7 +144,9 @@ class DoctorCard extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.circle,
-                              color: isAvailable ? Colors.green : Colors.red,
+                              color: isAvailable
+                                  ? AppColors.successColor
+                                  : AppColors.errorColor,
                               size: 8,
                             ),
                             const SizedBox(width: 6),
@@ -156,8 +159,8 @@ class DoctorCard extends StatelessWidget {
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   color: isAvailable
-                                      ? Colors.green.shade700
-                                      : Colors.red.shade700,
+                                      ? AppColors.successTextColor
+                                      : AppColors.errorTextColor,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -178,11 +181,11 @@ class DoctorCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.backgroundColor,
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withValues(alpha: 0.15),
+                        color: AppColors.neutralColor.withValues(alpha: 0.15),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -192,7 +195,7 @@ class DoctorCard extends StatelessWidget {
                     children: [
                       const Icon(
                         FontAwesomeIcons.solidStar,
-                        color: Colors.amber,
+                        color: AppColors.warningColor,
                         size: 10,
                       ),
                       const SizedBox(width: 4),
@@ -201,7 +204,7 @@ class DoctorCard extends StatelessWidget {
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 10,
-                          color: Colors.black87,
+                          color: AppColors.primaryTextColor,
                         ),
                       ),
                     ],
@@ -227,18 +230,18 @@ class _DoctorStatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.blueGrey.withValues(alpha: 0.08),
+        color: AppColors.infoSurfaceColor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 10, color: Colors.blueGrey.shade700),
+          Icon(icon, size: 10, color: AppColors.infoColor),
           const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(
-              color: Colors.blueGrey.shade700,
+              color: AppColors.infoColor,
               fontSize: 10,
               fontWeight: FontWeight.w700,
             ),

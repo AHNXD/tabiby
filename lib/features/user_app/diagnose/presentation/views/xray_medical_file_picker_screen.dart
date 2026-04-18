@@ -31,7 +31,7 @@ class XrayMedicalFilePickerScreen extends StatelessWidget {
                   'no_xray_records_available'.tr(context),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: AppColors.grey600Color,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -72,24 +72,24 @@ class _MedicalFileCard extends StatelessWidget {
     final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Ink(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
                   ? AppColors.primaryColors
-                  : Colors.grey.shade200,
+                  : AppColors.grey200Color,
               width: isSelected ? 1.5 : 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.blackColor.withValues(alpha: 0.04),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
@@ -113,13 +113,13 @@ class _MedicalFileCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       'radiology_file'.tr(context),
-                      style: TextStyle(color: Colors.grey.shade700),
+                      style: TextStyle(color: AppColors.grey700Color),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       '${'date'.tr(context)}: ${dateFormat.format(file.fileDate)}',
                       style: TextStyle(
-                        color: Colors.grey.shade500,
+                        color: AppColors.grey500Color,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -129,7 +129,7 @@ class _MedicalFileCard extends StatelessWidget {
                       Text(
                         file.resolvedSourceLabel,
                         style: TextStyle(
-                          color: Colors.grey.shade500,
+                          color: AppColors.grey500Color,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -145,7 +145,7 @@ class _MedicalFileCard extends StatelessWidget {
                     : Icons.arrow_forward_ios_rounded,
                 color: isSelected
                     ? AppColors.primaryColors
-                    : Colors.grey.shade400,
+                    : AppColors.grey400Color,
                 size: isSelected ? 24 : 18,
               ),
             ],

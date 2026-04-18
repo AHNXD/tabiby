@@ -22,10 +22,10 @@ class DietModeScreen extends StatelessWidget {
           previous.errorMessage != current.errorMessage &&
           current.errorMessage.isNotEmpty,
       listener: (context, state) {
-        messages(context, state.errorMessage.tr(context), Colors.red);
+        messages(context, state.errorMessage.tr(context), AppColors.redColor);
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FB),
+        backgroundColor: AppColors.appBackgroundColor,
         appBar: CustomAppbar(
           title: 'diet_mode_title'.tr(context),
           showBackButton: false,
@@ -83,7 +83,7 @@ class DietModeScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade900,
+                    color: AppColors.grey900Color,
                   ),
                 ),
                 const SizedBox(height: 10),

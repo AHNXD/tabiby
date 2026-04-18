@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -22,14 +23,17 @@ class SectionTitle extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: <Color>[Color(0xFF539E84), Color(0xFF3F7F69)],
+                  colors: <Color>[
+                    AppColors.primaryColors,
+                    AppColors.forestAccentColor,
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: const Color(0xFF539E84).withValues(alpha: 0.28),
+                    color: AppColors.primaryColors.withValues(alpha: 0.28),
                     blurRadius: 14,
                     offset: const Offset(0, 6),
                   ),
@@ -38,7 +42,7 @@ class SectionTitle extends StatelessWidget {
               child: Text(
                 stepNumber,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                 ),
@@ -52,7 +56,7 @@ class SectionTitle extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF21352D),
+                color: AppColors.forestDeepColor,
               ),
             ),
           ),

@@ -15,16 +15,16 @@ class CenterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: Colors.grey.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.greyColor.withValues(alpha: 0.12)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -73,7 +73,7 @@ class CenterCard extends StatelessWidget {
                               style: const TextStyle(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 17,
-                                color: Color(0xFF1F2C28),
+                                color: AppColors.titleColor,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -111,14 +111,14 @@ class CenterCard extends StatelessWidget {
                           Icon(
                             Icons.access_time_rounded,
                             size: 14,
-                            color: Colors.grey.shade600,
+                            color: AppColors.grey600Color,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             "${center.timeFrom ?? '--:--'} - ${center.timeTo ?? '--:--'}",
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.grey.shade600,
+                              color: AppColors.grey600Color,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -129,7 +129,7 @@ class CenterCard extends StatelessWidget {
                         "view_doctors".tr(context),
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey.shade600,
+                          color: AppColors.grey600Color,
                         ),
                       ),
                     ],
@@ -139,7 +139,11 @@ class CenterCard extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            const Divider(height: 1, thickness: 0.5, color: Color(0xFFEEEEEE)),
+            const Divider(
+              height: 1,
+              thickness: 0.5,
+              color: AppColors.softBorderColor,
+            ),
             const SizedBox(height: 12),
 
             if (center.days != null && center.days!.isNotEmpty)
@@ -180,7 +184,10 @@ class CenterCard extends StatelessWidget {
                 alignment: AlignmentDirectional.centerStart,
                 child: Text(
                   "contact_for_days".tr(context),
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.greyColor,
+                  ),
                 ),
               ),
           ],

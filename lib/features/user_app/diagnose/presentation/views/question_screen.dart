@@ -20,7 +20,11 @@ class QuestionScreen extends StatelessWidget {
 
   void _submit(BuildContext context, DiagnosisState state) {
     if (state.selectedSymptoms.isEmpty) {
-      messages(context, 'no_symptom_selected'.tr(context), Colors.orange);
+      messages(
+        context,
+        'no_symptom_selected'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -40,7 +44,7 @@ class QuestionScreen extends StatelessWidget {
               return const LoadingView();
             case ViewState.error:
               return CustomErrorWidget(
-                textColor: Colors.black,
+                textColor: AppColors.blackColor,
                 errorMessage: state.errorMessage.tr(context),
                 onRetry: () => context
                     .read<DiagnosisCubit>()
@@ -53,9 +57,9 @@ class QuestionScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.grey200Color),
                     ),
                     child: NoDataWidget(
                       title: 'no_data_title'.tr(context),

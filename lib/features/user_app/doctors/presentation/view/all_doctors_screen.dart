@@ -115,7 +115,7 @@ class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
         await showModalBottomSheet<DoctorsQueryParams>(
           context: context,
           isScrollControlled: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparentColor,
           builder: (BuildContext context) {
             return _DoctorsFiltersSheet(
               initialQuery: _doctorsCubit.currentQuery,
@@ -200,7 +200,7 @@ class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
 
     if (state is DoctorsError) {
       return CustomErrorWidget(
-        textColor: Colors.black,
+        textColor: AppColors.textButtonColors,
         errorMessage: state.errorMsg,
         onRetry: () {
           _doctorsCubit.getDoctors(centerID, specialtyID);
@@ -306,14 +306,14 @@ class _DoctorsSearchCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.1),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.shadowColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -388,13 +388,13 @@ class _DoctorsSearchCard extends StatelessWidget {
                     height: 22,
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
-                      color: Colors.redAccent,
+                      color: AppColors.errorAccentColor,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '$activeFilterCount',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.backgroundColor,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),
@@ -424,9 +424,9 @@ class _AppliedDoctorFilters extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.softBorderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,7 +438,7 @@ class _AppliedDoctorFilters extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   fontSize: 16,
-                  color: Color(0xFF1F2C28),
+                  color: AppColors.titleColor,
                 ),
               ),
               const Spacer(),
@@ -513,7 +513,7 @@ class _DoctorFilterChip extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -631,7 +631,7 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
     if (_hasInvalidNumber(_exactExperienceController.text, exactExperience) ||
         _hasInvalidNumber(_minExperienceController.text, minExperience) ||
         _hasInvalidNumber(_maxExperienceController.text, maxExperience)) {
-      messages(context, 'enter_valid_number'.tr(context), Colors.red);
+      messages(context, 'enter_valid_number'.tr(context), AppColors.errorColor);
       return;
     }
 
@@ -639,7 +639,11 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
         minExperience != null &&
         maxExperience != null &&
         minExperience > maxExperience) {
-      messages(context, 'experience_range_invalid'.tr(context), Colors.red);
+      messages(
+        context,
+        'experience_range_invalid'.tr(context),
+        AppColors.errorColor,
+      );
       return;
     }
 
@@ -671,7 +675,7 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom + 16,
       ),
       child: Material(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(32),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
@@ -684,7 +688,7 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
                   width: 48,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: AppColors.borderColor,
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
@@ -695,13 +699,16 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1F2C28),
+                  color: AppColors.titleColor,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 'doctor_filters_subtitle'.tr(context),
-                style: TextStyle(color: Colors.grey.shade600, height: 1.45),
+                style: const TextStyle(
+                  color: AppColors.mutedTextColor,
+                  height: 1.45,
+                ),
               ),
               const SizedBox(height: 22),
               if (widget.showCenterNameFilter) ...[
@@ -796,7 +803,7 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
                       onPressed: _applyFilters,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColors,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.backgroundColor,
                         minimumSize: const Size.fromHeight(54),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18),
@@ -876,7 +883,7 @@ class _FilterFieldLabel extends StatelessWidget {
       style: const TextStyle(
         fontWeight: FontWeight.w700,
         fontSize: 15,
-        color: Color(0xFF1F2C28),
+        color: AppColors.titleColor,
       ),
     );
   }
@@ -892,14 +899,14 @@ class _DoctorsOverviewCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.shadowColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -958,7 +965,7 @@ class _DoctorsOverviewCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.backgroundColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -980,7 +987,7 @@ class _DoctorsOverviewCard extends StatelessWidget {
                 Text(
                   'all_popular_doctors'.tr(context),
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                   ),
@@ -988,7 +995,10 @@ class _DoctorsOverviewCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   'doctor_results_subtitle'.tr(context),
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                  style: const TextStyle(
+                    color: AppColors.subduedTextColor,
+                    height: 1.45,
+                  ),
                 ),
                 const SizedBox(height: 18),
                 Wrap(
@@ -1025,9 +1035,9 @@ class _OverviewChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.softBorderColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1037,7 +1047,7 @@ class _OverviewChip extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontWeight: FontWeight.w700,
             ),
           ),

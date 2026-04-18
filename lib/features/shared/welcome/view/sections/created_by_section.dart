@@ -15,7 +15,7 @@ class CreatedBySection extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 14,
-            color: Colors.grey,
+            color: AppColors.greyColor,
             height: 1.5,
           ),
         ),

@@ -85,7 +85,7 @@ class _DoctorAppointmentDetailsScreenState
               BlocListener<CancelAppointmentCubit, CancelAppointmentState>(
                 listener: (context, state) {
                   if (state is CancelAppointmentSuccess) {
-                    messages(context, state.message, Colors.green);
+                    messages(context, state.message, AppColors.greenColor);
                     try {
                       context
                           .read<DoctorsAppointmentsCubit>()
@@ -97,13 +97,13 @@ class _DoctorAppointmentDetailsScreenState
                     }
                     Navigator.of(context).pop(true);
                   } else if (state is CancelAppointmentFailure) {
-                    messages(context, state.error, Colors.red);
+                    messages(context, state.error, AppColors.redColor);
                   }
                 },
               ),
             ],
             child: Scaffold(
-              backgroundColor: Colors.grey.shade100,
+              backgroundColor: AppColors.grey100Color,
               appBar: CustomAppbar(title: "appointment_details".tr(context)),
               body:
                   BlocBuilder<
@@ -123,10 +123,10 @@ class _DoctorAppointmentDetailsScreenState
                                 AppointmentDetailsHeader(
                                   appointment: details,
                                   primaryColor: details.status == "completed"
-                                      ? Colors.green
+                                      ? AppColors.greenColor
                                       : details.status == "pending"
-                                      ? Colors.orange
-                                      : Colors.red,
+                                      ? AppColors.orangeColor
+                                      : AppColors.redColor,
                                 ),
                                 const SizedBox(height: 16),
 
@@ -162,7 +162,7 @@ class _DoctorAppointmentDetailsScreenState
                         );
                       } else if (state is DoctorsAppointmentDetailsError) {
                         return CustomErrorWidget(
-                          textColor: Colors.black,
+                          textColor: AppColors.blackColor,
                           errorMessage: state.errorMsg,
                           onRetry: () {
                             context
@@ -222,19 +222,19 @@ class _DoctorAppointmentDetailsScreenState
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isEmergency
-              ? Colors.red.withOpacity(0.5)
-              : AppColors.primaryColors.withOpacity(0.1),
+              ? AppColors.redColor.withValues(alpha: 0.5)
+              : AppColors.primaryColors.withValues(alpha: 0.1),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
             color: isEmergency
-                ? Colors.red.withOpacity(0.05)
-                : Colors.black.withOpacity(0.05),
+                ? AppColors.redColor.withValues(alpha: 0.05)
+                : AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -248,7 +248,7 @@ class _DoctorAppointmentDetailsScreenState
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColors.withOpacity(0.1),
+                  color: AppColors.primaryColors.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -274,22 +274,22 @@ class _DoctorAppointmentDetailsScreenState
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.red.shade50,
+                    color: AppColors.red50Color,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.red.shade100),
+                    border: Border.all(color: AppColors.red100Color),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         Icons.warning_amber_rounded,
                         size: 14,
-                        color: Colors.red,
+                        color: AppColors.redColor,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         "emergency".tr(context),
                         style: const TextStyle(
-                          color: Colors.red,
+                          color: AppColors.redColor,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -326,7 +326,7 @@ class _DoctorAppointmentDetailsScreenState
                   "confidence".tr(context),
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey.shade600,
+                    color: AppColors.grey600Color,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -346,11 +346,11 @@ class _DoctorAppointmentDetailsScreenState
               child: LinearProgressIndicator(
                 value: progressBarValue,
                 minHeight: 8,
-                backgroundColor: AppColors.primaryColors.withOpacity(0.1),
+                backgroundColor: AppColors.primaryColors.withValues(alpha: 0.1),
                 valueColor: AlwaysStoppedAnimation<Color>(
                   percentageText > 80
                       ? AppColors.primaryColors
-                      : AppColors.primaryColors.withOpacity(0.7),
+                      : AppColors.primaryColors.withValues(alpha: 0.7),
                 ),
               ),
             ),
@@ -391,7 +391,7 @@ class _DoctorAppointmentDetailsScreenState
             child: Text(
               details.doctorNote!,
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 height: 1.6,
                 fontSize: 15,
               ),
@@ -410,7 +410,7 @@ class _DoctorAppointmentDetailsScreenState
                   child: Text(
                     'send_to_center_pharmacy'.tr(context),
                     style: TextStyle(
-                      color: Colors.grey.shade800,
+                      color: AppColors.grey800Color,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -420,8 +420,8 @@ class _DoctorAppointmentDetailsScreenState
                     context,
                   ),
                   color: details.sendToPharmacy == true
-                      ? Colors.green
-                      : Colors.grey,
+                      ? AppColors.greenColor
+                      : AppColors.greyColor,
                 ),
               ],
             ),
@@ -539,11 +539,11 @@ class _DoctorAppointmentDetailsScreenState
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -590,9 +590,9 @@ class _DoctorAppointmentDetailsScreenState
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.grey50Color,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -609,7 +609,7 @@ class _DoctorAppointmentDetailsScreenState
                 text: TextSpan(
                   style: DefaultTextStyle.of(
                     context,
-                  ).style.copyWith(color: Colors.grey.shade800, height: 1.5),
+                  ).style.copyWith(color: AppColors.grey800Color, height: 1.5),
                   children: <InlineSpan>[
                     TextSpan(
                       text: '${row.key}: ',
@@ -679,11 +679,11 @@ class _DoctorAppointmentDetailsScreenState
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -695,7 +695,7 @@ class _DoctorAppointmentDetailsScreenState
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppColors.primaryColors.withOpacity(0.1),
+            color: AppColors.primaryColors.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -711,13 +711,13 @@ class _DoctorAppointmentDetailsScreenState
         trailing: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.1),
+            color: AppColors.greyColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Icon(
             Icons.arrow_forward_ios_rounded,
             size: 14,
-            color: Colors.grey,
+            color: AppColors.greyColor,
           ),
         ),
       ),
@@ -730,15 +730,15 @@ class _DoctorAppointmentDetailsScreenState
       context: context,
       builder: (context) => Dialog(
         // 1. Transparent background
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparentColor,
         insetPadding: const EdgeInsets.all(16),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.blackColor.withValues(alpha: 0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
@@ -768,9 +768,9 @@ class _DoctorAppointmentDetailsScreenState
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
+                      color: AppColors.grey50Color,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.grey200Color),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -782,7 +782,9 @@ class _DoctorAppointmentDetailsScreenState
                             Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColors.withOpacity(0.1),
+                                color: AppColors.primaryColors.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Icon(
@@ -799,7 +801,7 @@ class _DoctorAppointmentDetailsScreenState
                                 style: TextStyle(
                                   fontSize: 15,
                                   height: 1.6,
-                                  color: Colors.grey.shade800,
+                                  color: AppColors.grey800Color,
                                 ),
                               ),
                             ),
@@ -829,7 +831,7 @@ class _DoctorAppointmentDetailsScreenState
                   child: Text(
                     'close'.tr(context),
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

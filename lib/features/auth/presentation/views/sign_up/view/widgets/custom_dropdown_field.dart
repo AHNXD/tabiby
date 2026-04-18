@@ -31,7 +31,7 @@ class CustomDropdownField extends StatelessWidget {
         hintText: hintText,
         hintStyle: const TextStyle(color: AppColors.textFieldColor),
         filled: true,
-        fillColor: const Color(0xFFF6F6F6),
+        fillColor: AppColors.fieldSurfaceColor,
         prefixIcon: prefixIcon != null
             ? Padding(
                 padding: const EdgeInsets.all(12),

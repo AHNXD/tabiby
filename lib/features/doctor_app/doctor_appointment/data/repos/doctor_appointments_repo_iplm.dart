@@ -29,7 +29,8 @@ class DoctorAppointmentRepoIplm implements DoctorAppointmentsRepo {
       var resp = await _apiServices.get(endPoint: endpoint);
 
       if (resp.statusCode == 200 && resp.data['status'] == true) {
-        DoctorAppointmentsModel doctorsAppointment = DoctorAppointmentsModel.fromJson(resp.data['data']);
+        DoctorAppointmentsModel doctorsAppointment =
+            DoctorAppointmentsModel.fromJson(resp.data['data']);
 
         return right(doctorsAppointment);
       }
@@ -41,6 +42,4 @@ class DoctorAppointmentRepoIplm implements DoctorAppointmentsRepo {
       return left(ServerFailure(e.toString()));
     }
   }
-   
-  }
-
+}

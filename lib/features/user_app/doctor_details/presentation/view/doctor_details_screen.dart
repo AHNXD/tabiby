@@ -70,7 +70,7 @@ class DoctorDetailsScreen extends StatelessWidget {
               );
             } else if (state is DoctorDetailsError) {
               return CustomErrorWidget(
-                textColor: Colors.black,
+                textColor: AppColors.blackColor,
                 errorMessage: state.errorMsg,
                 onRetry: () {
                   context.read<DoctorDetailsCubit>().getDoctor(doctorID);
@@ -102,7 +102,7 @@ class _DoctorHighlightsRow extends StatelessWidget {
         Expanded(
           child: _DoctorStatCard(
             icon: Icons.star_rounded,
-            color: Colors.amber,
+            color: AppColors.amberColor,
             value: (doctor.rate ?? 0).toString(),
             label: "rate".tr(context),
           ),
@@ -142,12 +142,12 @@ class _DoctorStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 8),
           ),
@@ -170,13 +170,13 @@ class _DoctorStatCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             _label,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+            style: TextStyle(fontSize: 12, color: AppColors.grey500Color),
             textAlign: TextAlign.center,
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
@@ -14,7 +15,7 @@ class DietResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.appBackgroundColor,
       appBar: CustomAppbar(title: 'diet_result_title'.tr(context)),
       body: BlocBuilder<DietCubit, DietState>(
         builder: (context, state) {

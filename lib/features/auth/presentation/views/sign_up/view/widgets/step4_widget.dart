@@ -175,7 +175,7 @@ class Step4Widget extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: agreeToTerms
                             ? AppColors.primaryColors
-                            : Colors.transparent,
+                            : AppColors.transparentColor,
                         border: Border.all(
                           color: agreeToTerms
                               ? AppColors.primaryColors
@@ -187,7 +187,7 @@ class Step4Widget extends StatelessWidget {
                           ? const Icon(
                               Icons.check,
                               size: 16,
-                              color: Colors.white,
+                              color: AppColors.whiteColor,
                             )
                           : null,
                     ),

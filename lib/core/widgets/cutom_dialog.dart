@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
-import '../utils/colors.dart';
 import '../utils/constats.dart';
 
 class CustomDialog extends StatelessWidget {
@@ -31,7 +31,7 @@ class CustomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparentColor,
       elevation: 4,
       insetPadding: const EdgeInsets.all(24),
       shape: RoundedRectangleBorder(
@@ -40,11 +40,11 @@ class CustomDialog extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(24, 15, 24, 15),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: AppColors.blackColor.withValues(alpha: 0.1),
               blurRadius: 16,
               offset: const Offset(0, 8),
             ),
@@ -70,7 +70,7 @@ class CustomDialog extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.black87Color,
               ),
             ),
             const SizedBox(height: 12),
@@ -81,7 +81,7 @@ class CustomDialog extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                color: Colors.black54,
+                color: AppColors.black54Color,
                 height: 1.4,
               ),
             ),
@@ -133,7 +133,7 @@ class CustomDialog extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           primaryButtonColor ?? AppColors.primaryColors,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.whiteColor,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,

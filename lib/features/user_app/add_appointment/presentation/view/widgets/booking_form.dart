@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
@@ -37,11 +38,15 @@ class _BookingFormState extends State<BookingForm> {
     return BlocConsumer<BookingCubit, BookingState>(
       listener: (context, state) {
         if (state is AppointmentBookedSuccessfully) {
-          messages(context, 'booking_request_sent'.tr(context), Colors.green);
+          messages(
+            context,
+            'booking_request_sent'.tr(context),
+            AppColors.greenColor,
+          );
           Navigator.pop(context);
         }
         if (state is BookingFailure) {
-          messages(context, state.errMessage, Colors.red);
+          messages(context, state.errMessage, AppColors.redColor);
         }
       },
       builder: (context, state) {
@@ -183,7 +188,11 @@ class _BookingFormState extends State<BookingForm> {
         .state
         .diagnosisResult;
     if (state.selectedTime == null) {
-      messages(context, 'please_select_time'.tr(context), Colors.orange);
+      messages(
+        context,
+        'please_select_time'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 
@@ -192,7 +201,7 @@ class _BookingFormState extends State<BookingForm> {
       state,
     );
     if (detailsValidationMessage != null) {
-      messages(context, detailsValidationMessage, Colors.orange);
+      messages(context, detailsValidationMessage, AppColors.orangeColor);
       return;
     }
 
@@ -299,14 +308,14 @@ class _BookingProgressHeader extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.92),
+        color: AppColors.whiteColor.withValues(alpha: 0.92),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF539E84).withValues(alpha: 0.14),
+          color: AppColors.primaryColors.withValues(alpha: 0.14),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -322,13 +331,13 @@ class _BookingProgressHeader extends StatelessWidget {
                 height: 28,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF539E84).withValues(alpha: 0.12),
+                  color: AppColors.primaryColors.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   '$currentStep',
                   style: const TextStyle(
-                    color: Color(0xFF3F7F69),
+                    color: AppColors.forestAccentColor,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -342,7 +351,7 @@ class _BookingProgressHeader extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF21352D),
+                    color: AppColors.forestDeepColor,
                   ),
                 ),
               ),
@@ -351,7 +360,7 @@ class _BookingProgressHeader extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF6E8078),
+                  color: AppColors.forestHintColor,
                 ),
               ),
             ],
@@ -369,8 +378,8 @@ class _BookingProgressHeader extends StatelessWidget {
                     height: 6,
                     decoration: BoxDecoration(
                       color: isActive
-                          ? const Color(0xFF539E84)
-                          : const Color(0xFFE2ECE7),
+                          ? AppColors.primaryColors
+                          : AppColors.sageSurfaceColor,
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),
@@ -411,12 +420,12 @@ class _StepCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFE4ECE8)),
+        border: Border.all(color: AppColors.sageBorderSoftColor),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.blackColor.withValues(alpha: 0.05),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),

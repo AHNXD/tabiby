@@ -41,8 +41,11 @@ class LoginInputs extends StatelessWidget {
                 suffixIcon: Icons.phone,
                 keyboardType: TextInputType.phone,
                 controller: phoneController,
-                validator: (val) =>
-                    Validator.validate(val, ValidationState.phoneNumber,context),
+                validator: (val) => Validator.validate(
+                  val,
+                  ValidationState.phoneNumber,
+                  context,
+                ),
               ),
             ),
           ),
@@ -55,7 +58,7 @@ class LoginInputs extends StatelessWidget {
                 hintText: "password".tr(context),
                 controller: passwordController,
                 validator: (val) =>
-                    Validator.validate(val, ValidationState.password,context),
+                    Validator.validate(val, ValidationState.password, context),
               ),
             ),
           ),

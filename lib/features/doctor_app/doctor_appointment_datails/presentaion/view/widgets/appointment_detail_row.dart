@@ -15,14 +15,12 @@ class AppointmentDetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return ListTile(
       leading: Icon(icon, color: AppColors.primaryColors),
       title: Text(label, style: TextStyle(color: AppColors.primaryColors)),
       trailing: Text(
         value,
-        style: const TextStyle(fontSize: 16, color: Colors.black),
+        style: const TextStyle(fontSize: 16, color: AppColors.blackColor),
       ),
     );
   }

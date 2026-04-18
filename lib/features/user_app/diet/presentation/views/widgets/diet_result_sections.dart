@@ -40,7 +40,7 @@ class DietLoadingOnlyView extends StatelessWidget {
                 text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.grey.shade800,
+                  color: AppColors.grey800Color,
                   fontWeight: FontWeight.w600,
                   height: 1.5,
                 ),
@@ -64,12 +64,12 @@ class DietNoticeBanner extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.blue.withValues(alpha: 0.18)),
+        border: Border.all(color: AppColors.blueColor.withValues(alpha: 0.18)),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.08),
+            color: AppColors.blueColor.withValues(alpha: 0.08),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -82,17 +82,17 @@ class DietNoticeBanner extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.blue.withValues(alpha: 0.1),
+              color: AppColors.blueColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(Icons.info_outline, color: Colors.blue),
+            child: const Icon(Icons.info_outline, color: AppColors.blueColor),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 fontWeight: FontWeight.w600,
                 height: 1.45,
               ),
@@ -121,14 +121,14 @@ class DietOverviewCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -187,7 +187,7 @@ class DietOverviewCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
                           color: AppColors.primaryColors.withValues(
@@ -220,7 +220,7 @@ class DietOverviewCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -326,7 +326,7 @@ class DietSummaryCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: const Color(0xFFF6FAF8),
+              color: AppColors.paleSuccessSurfaceColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: AppColors.primaryColors.withValues(alpha: 0.12),
@@ -334,7 +334,7 @@ class DietSummaryCard extends StatelessWidget {
             ),
             child: Text(
               summary,
-              style: TextStyle(color: Colors.grey.shade800, height: 1.6),
+              style: TextStyle(color: AppColors.grey800Color, height: 1.6),
             ),
           ),
         ],
@@ -382,7 +382,9 @@ class DietRequestValuesCard extends StatelessWidget {
     return Container(
       decoration: _boxStyle(radius: 22),
       child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(
+          context,
+        ).copyWith(dividerColor: AppColors.transparentColor),
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           title: Text(
@@ -429,7 +431,7 @@ class _RequestValueRow extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                color: Colors.grey.shade700,
+                color: AppColors.grey700Color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -454,7 +456,9 @@ class DietDayPlanTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       decoration: _boxStyle(radius: 22),
       child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(
+          context,
+        ).copyWith(dividerColor: AppColors.transparentColor),
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           title: Row(
@@ -525,7 +529,7 @@ class DietDayPlanTile extends StatelessWidget {
                       child: Text(
                         '${'diet_result_daily_advice'.tr(context)}: ${plan.dailyAdvice}',
                         style: TextStyle(
-                          color: Colors.grey.shade800,
+                          color: AppColors.grey800Color,
                           height: 1.45,
                         ),
                       ),
@@ -578,9 +582,9 @@ class DietMealCard extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FBFB),
+        color: AppColors.softNeutralSurfaceAltColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,7 +650,7 @@ class DietMealCard extends StatelessWidget {
             Text(
               'diet_result_ingredients'.tr(context),
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -671,7 +675,7 @@ class DietMealCard extends StatelessWidget {
                       child: Text(
                         ingredient,
                         style: TextStyle(
-                          color: Colors.grey.shade700,
+                          color: AppColors.grey700Color,
                           height: 1.4,
                         ),
                       ),
@@ -687,7 +691,7 @@ class DietMealCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: AppColors.primaryColors.withValues(alpha: 0.12),
@@ -695,7 +699,7 @@ class DietMealCard extends StatelessWidget {
               ),
               child: Text(
                 '${'diet_result_tip'.tr(context)}: ${meal!.preparationTip}',
-                style: TextStyle(color: Colors.grey.shade800, height: 1.4),
+                style: TextStyle(color: AppColors.grey800Color, height: 1.4),
               ),
             ),
           ],
@@ -707,12 +711,12 @@ class DietMealCard extends StatelessWidget {
 
 BoxDecoration _boxStyle({double radius = 14}) {
   return BoxDecoration(
-    color: Colors.white,
+    color: AppColors.whiteColor,
     borderRadius: BorderRadius.circular(radius),
-    border: Border.all(color: Colors.grey.shade200),
+    border: Border.all(color: AppColors.grey200Color),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withValues(alpha: 0.04),
+        color: AppColors.blackColor.withValues(alpha: 0.04),
         blurRadius: 18,
         offset: const Offset(0, 10),
       ),
@@ -737,9 +741,9 @@ class _DietSummaryStat extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 88),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Row(
         children: [
@@ -760,7 +764,7 @@ class _DietSummaryStat extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Color(0xFF1F2C28),
+                    color: AppColors.titleColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -770,7 +774,7 @@ class _DietSummaryStat extends StatelessWidget {
                   label,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+                  style: TextStyle(color: AppColors.grey600Color, fontSize: 11),
                 ),
               ],
             ),
@@ -792,7 +796,7 @@ class _MacroTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6FAF8),
+        color: AppColors.paleSuccessSurfaceColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -810,7 +814,7 @@ class _MacroTile extends StatelessWidget {
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.grey.shade700,
+              color: AppColors.grey700Color,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -831,14 +835,14 @@ class _MetricChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: Colors.grey.shade800,
+          color: AppColors.grey800Color,
           fontWeight: FontWeight.w600,
         ),
       ),

@@ -17,38 +17,38 @@ class ColoredTextTabBar extends StatelessWidget {
       _AppointmentTabData(
         label: 'pending'.tr(context),
         icon: Icons.hourglass_top_rounded,
-        color: const Color(0xFFE7A423),
+        color: AppColors.warningAccentColor,
       ),
       _AppointmentTabData(
         label: 'canceled'.tr(context),
         icon: Icons.cancel_outlined,
-        color: const Color(0xFFE56B6F),
+        color: AppColors.dangerSoftColor,
       ),
     ];
 
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F4F2),
+        color: AppColors.sagePanelColor,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.grey200Color),
       ),
       child: AnimatedBuilder(
         animation: controller.animation!,
         builder: (context, _) {
           return TabBar(
             controller: controller,
-            dividerColor: Colors.transparent,
+            dividerColor: AppColors.transparentColor,
             indicatorSize: TabBarIndicatorSize.tab,
             padding: EdgeInsets.zero,
             labelPadding: EdgeInsets.zero,
             splashBorderRadius: BorderRadius.circular(18),
             indicator: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: AppColors.blackColor.withValues(alpha: 0.05),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -76,7 +76,9 @@ class ColoredTextTabBar extends StatelessWidget {
                         child: Icon(
                           tab.icon,
                           size: 14,
-                          color: isSelected ? tab.color : Colors.grey.shade500,
+                          color: isSelected
+                              ? tab.color
+                              : AppColors.grey500Color,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -90,7 +92,7 @@ class ColoredTextTabBar extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             color: isSelected
                                 ? tab.color
-                                : Colors.grey.shade600,
+                                : AppColors.grey600Color,
                           ),
                         ),
                       ),

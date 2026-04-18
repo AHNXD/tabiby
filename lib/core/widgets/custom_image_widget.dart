@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tabiby/core/Api_services/urls.dart';
@@ -20,9 +21,13 @@ class CustomImageWidget extends StatelessWidget {
   });
   Widget _buildShimmerPlaceholder() {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(height: height, width: width, color: Colors.white),
+      baseColor: AppColors.grey300Color,
+      highlightColor: AppColors.grey100Color,
+      child: Container(
+        height: height,
+        width: width,
+        color: AppColors.whiteColor,
+      ),
     );
   }
 

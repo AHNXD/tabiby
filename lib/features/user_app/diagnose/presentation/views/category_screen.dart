@@ -43,7 +43,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void _openSymptomsStep() {
     final BodyPartDescriptor? selected = findBodyPartById(_selectedPartKey);
     if (selected == null) {
-      messages(context, 'select_body_part_first'.tr(context), Colors.orange);
+      messages(
+        context,
+        'select_body_part_first'.tr(context),
+        AppColors.orangeColor,
+      );
       return;
     }
 

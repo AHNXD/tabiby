@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class SelectableCircle extends StatelessWidget {
   final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
   final Color selectedColor;
-  final Color unselectedColor; 
+  final Color unselectedColor;
 
   const SelectableCircle({
     super.key,
     required this.icon,
     required this.isSelected,
     required this.onTap,
-    this.selectedColor = const Color(0xFF74B89C), 
-    this.unselectedColor = const Color(0xFFF6F6F6),
+    this.selectedColor = AppColors.accentMintColor,
+    this.unselectedColor = AppColors.fieldSurfaceColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final color = isSelected ? selectedColor : unselectedColor;
-    final iconColor = isSelected ? Colors.white : Colors.grey;
+    final iconColor = isSelected ? AppColors.whiteColor : AppColors.greyColor;
 
     return GestureDetector(
       onTap: onTap,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 import '../../../../../../core/widgets/custom_image_widget.dart';
 import '../../../../doctors/presentation/view/all_doctors_screen.dart';
@@ -27,15 +28,17 @@ class SpecialtyWidget extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(20), // Soft squircle shape
               border: Border.all(
-                color: Colors.grey.withOpacity(0.08),
+                color: AppColors.greyColor.withValues(alpha: 0.08),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1), // Much softer shadow
+                  color: AppColors.greyColor.withValues(
+                    alpha: 0.1,
+                  ), // Much softer shadow
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                   spreadRadius: 2,
@@ -65,7 +68,7 @@ class SpecialtyWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey.shade800,
+                color: AppColors.grey800Color,
                 fontSize: 12,
                 fontWeight: FontWeight.w600, // Slightly bolder for readability
                 height: 1.2,

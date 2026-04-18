@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../utils/colors.dart';
 import '../utils/constats.dart';
 
 class ShimmerContainer extends StatelessWidget {

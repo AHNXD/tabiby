@@ -22,16 +22,16 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparentColor,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(22),
         child: Ink(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.grey200Color),
           ),
           child: Row(
             children: <Widget>[
@@ -54,7 +54,7 @@ class SettingsTile extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF1F2C28),
+                        color: AppColors.titleColor,
                       ),
                     ),
                     if (subtitle != null &&
@@ -65,7 +65,7 @@ class SettingsTile extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           height: 1.35,
-                          color: Colors.grey.shade600,
+                          color: AppColors.grey600Color,
                         ),
                       ),
                     ],

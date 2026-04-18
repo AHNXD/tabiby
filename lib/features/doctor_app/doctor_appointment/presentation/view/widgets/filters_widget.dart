@@ -90,11 +90,11 @@ class FiltersWidget extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
+            color: AppColors.greyColor.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: 1,
@@ -103,28 +103,31 @@ class FiltersWidget extends StatelessWidget {
       ),
       child: DropdownButtonFormField<String>(
         value: value,
-        icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
+        icon: const Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: AppColors.greyColor,
+        ),
         iconSize: 20,
         isExpanded: true,
-        dropdownColor: Colors.white,
+        dropdownColor: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(16),
         elevation: 3,
         style: const TextStyle(
-          color: Colors.black87,
+          color: AppColors.black87Color,
           fontWeight: FontWeight.w500,
           fontFamily: 'cocon-next-arabic',
         ),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
-            color: Colors.grey.shade500,
+            color: AppColors.grey500Color,
             fontSize: 13,
             fontWeight: FontWeight.normal,
           ),
           prefixIcon: Icon(
             icon,
             size: 18,
-            color: AppColors.primaryColors.withOpacity(0.7),
+            color: AppColors.primaryColors.withValues(alpha: 0.7),
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 12,
@@ -141,12 +144,12 @@ class FiltersWidget extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
             borderSide: BorderSide(
-              color: AppColors.primaryColors.withOpacity(0.5),
+              color: AppColors.primaryColors.withValues(alpha: 0.5),
               width: 1.5,
             ),
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: AppColors.whiteColor,
         ),
         items: items,
         onChanged: onChanged,

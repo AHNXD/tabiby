@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class DividerSection extends StatelessWidget {
   const DividerSection({super.key});
@@ -7,7 +8,7 @@ class DividerSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Divider(
       thickness: 1,
-      color: Color.fromARGB(255, 144, 135, 135),
+      color: AppColors.dividerMutedColor,
       height: 16,
     );
   }

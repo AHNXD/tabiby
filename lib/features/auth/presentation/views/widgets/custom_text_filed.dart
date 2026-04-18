@@ -37,26 +37,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   bool showPassowrd = false;
   FocusNode focusNode = FocusNode();
-  Color fillColor = const Color(0xffF4F7FE);
-  Color labelTextColor = Colors.grey;
-  Color passwordIconColor = Colors.black87;
-  Color textColor = Colors.black87;
+  Color fillColor = AppColors.authFieldFillColor;
+  Color labelTextColor = AppColors.greyColor;
+  Color passwordIconColor = AppColors.black87Color;
+  Color textColor = AppColors.black87Color;
   @override
   void initState() {
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
-          fillColor = Colors.transparent;
-          labelTextColor = Colors.white;
+          fillColor = AppColors.transparentColor;
+          labelTextColor = AppColors.whiteColor;
           passwordIconColor = AppColors.primaryColors;
-          textColor = Colors.white;
+          textColor = AppColors.whiteColor;
         });
       } else {
         setState(() {
-          fillColor = const Color(0xffF4F7FE);
-          passwordIconColor = Colors.black87;
-          labelTextColor = Colors.grey;
-          textColor = Colors.black87;
+          fillColor = AppColors.authFieldFillColor;
+          passwordIconColor = AppColors.black87Color;
+          labelTextColor = AppColors.greyColor;
+          textColor = AppColors.black87Color;
         });
       }
     });
@@ -86,7 +86,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           focusedErrorBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: widget.borderColor == null
-                  ? const Color(0xffB2B9C6)
+                  ? AppColors.authFieldBorderColor
                   : widget.borderColor!,
             ),
             borderRadius: BorderRadius.circular(kBorderRadius),
@@ -96,7 +96,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: widget.borderColor == null
-                  ? const Color(0xffB2B9C6)
+                  ? AppColors.authFieldBorderColor
                   : widget.borderColor!,
             ),
             borderRadius: BorderRadius.circular(kBorderRadius),

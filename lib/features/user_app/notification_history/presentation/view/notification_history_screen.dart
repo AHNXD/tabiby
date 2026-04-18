@@ -71,7 +71,7 @@ class _NotificationHistoryScreenState extends State<NotificationHistoryScreen> {
                     vertical: 32,
                   ),
                   child: CustomErrorWidget(
-                    textColor: Colors.black,
+                    textColor: AppColors.blackColor,
                     errorMessage: state.errorMessage.tr(context),
                     onRetry: () => context
                         .read<NotificationHistoryCubit>()
@@ -133,14 +133,14 @@ class _NotificationOverviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FCFA),
+        color: AppColors.softSurfaceColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -173,7 +173,7 @@ class _NotificationOverviewCard extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(
                       color: AppColors.primaryColors.withValues(alpha: 0.16),
@@ -204,7 +204,7 @@ class _NotificationOverviewCard extends StatelessWidget {
             Text(
               'notifications'.tr(context),
               style: const TextStyle(
-                color: Color(0xFF1F2C28),
+                color: AppColors.titleColor,
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
               ),
@@ -213,7 +213,7 @@ class _NotificationOverviewCard extends StatelessWidget {
             Text(
               'notifications_history_hint'.tr(context),
               style: TextStyle(
-                color: Colors.grey.shade700,
+                color: AppColors.grey700Color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -234,7 +234,7 @@ class _NotificationOverviewCard extends StatelessWidget {
                     icon: Icons.mark_email_unread_outlined,
                     label: 'notifications_unread'.tr(context),
                     value: unreadCount.toString(),
-                    accentColor: const Color(0xFFE7A423),
+                    accentColor: AppColors.warningAccentColor,
                   ),
                 ),
               ],
@@ -264,7 +264,7 @@ class _OverviewStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: accentColor.withValues(alpha: 0.12)),
       ),
@@ -286,14 +286,14 @@ class _OverviewStatCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
-              color: Colors.grey.shade700,
+              color: AppColors.grey700Color,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -311,7 +311,7 @@ class _EmptyNotificationsState extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: AppColors.primaryColors.withValues(alpha: 0.12),
@@ -336,7 +336,7 @@ class _EmptyNotificationsState extends StatelessWidget {
           Text(
             'notifications_empty_title'.tr(context),
             style: const TextStyle(
-              color: Color(0xFF1F2C28),
+              color: AppColors.titleColor,
               fontSize: 20,
               fontWeight: FontWeight.w800,
             ),
@@ -346,7 +346,7 @@ class _EmptyNotificationsState extends StatelessWidget {
           Text(
             'notifications_empty_subtitle'.tr(context),
             style: TextStyle(
-              color: Colors.grey.shade700,
+              color: AppColors.grey700Color,
               fontWeight: FontWeight.w600,
               height: 1.5,
             ),

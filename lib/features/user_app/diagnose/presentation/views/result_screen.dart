@@ -41,7 +41,7 @@ class ResultScreen extends StatelessWidget {
               return const LoadingView();
             case ViewState.error:
               return CustomErrorWidget(
-                textColor: Colors.black,
+                textColor: AppColors.blackColor,
                 errorMessage: state.errorMessage.tr(context),
                 onRetry: () => _retry(context),
               );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils/colors.dart';
+import 'package:tabiby/core/utils/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
@@ -77,7 +76,7 @@ class CustomTextField extends StatelessWidget {
         // 1. Default resting state (Subtle crisp border)
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
+          borderSide: BorderSide(color: AppColors.grey300Color, width: 1.0),
         ),
 
         // 2. Focused state (Pops out with your theme's primary color)
@@ -92,13 +91,19 @@ class CustomTextField extends StatelessWidget {
         // 3. Error state (Turns red if validation fails)
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.errorAccentColor,
+            width: 1.5,
+          ),
         ),
 
         // 4. Focused Error state (Red and bold when typing an invalid field)
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 2.0),
+          borderSide: const BorderSide(
+            color: AppColors.errorAccentColor,
+            width: 2.0,
+          ),
         ),
 
         // --- Icons ---

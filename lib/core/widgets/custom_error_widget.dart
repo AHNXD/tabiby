@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import '../utils/constats.dart';
 import '../utils/styles.dart';
@@ -28,12 +29,16 @@ class CustomErrorWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.error_outline_rounded, size: 50, color: Colors.red),
+          Icon(
+            Icons.error_outline_rounded,
+            size: 50,
+            color: AppColors.redColor,
+          ),
           const SizedBox(height: kSizedBoxHeight),
           Text(
             errorMessage,
             style: Styles.textStyle18.copyWith(
-              color: textColor ?? Colors.white,
+              color: textColor ?? AppColors.whiteColor,
               fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.center,
@@ -42,7 +47,7 @@ class CustomErrorWidget extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.redColor,
               foregroundColor: colorScheme.errorContainer,
               padding: const EdgeInsets.symmetric(
                 horizontal: kHorizontalPadding,
@@ -57,7 +62,7 @@ class CustomErrorWidget extends StatelessWidget {
               retryButtonText ?? "try_again".tr(context),
               style: Styles.textStyle16.copyWith(
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: AppColors.whiteColor,
               ),
             ),
           ),

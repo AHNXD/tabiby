@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 
 class SaveButton extends StatelessWidget {
@@ -17,8 +18,8 @@ class SaveButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          backgroundColor: Colors.blue[800],
-          foregroundColor: Colors.white,
+          backgroundColor: AppColors.blue800Color,
+          foregroundColor: AppColors.whiteColor,
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
