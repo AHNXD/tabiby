@@ -1,7 +1,6 @@
 class DietPlanResponse {
   const DietPlanResponse({
     required this.summary,
-    required this.summaryAr,
     required this.dietTypeApplied,
     required this.dailyCaloriesTarget,
     this.dailyWaterLiters,
@@ -10,15 +9,13 @@ class DietPlanResponse {
   });
 
   final String summary;
-  final String summaryAr;
   final String dietTypeApplied;
   final int dailyCaloriesTarget;
   final double? dailyWaterLiters;
   final Macros dailyMacrosSummary;
   final Map<String, DayPlan> weekPlan;
 
-  String get localizedSummary =>
-      summaryAr.trim().isNotEmpty ? summaryAr : summary;
+  String get localizedSummary => summary.trim().isNotEmpty ? summary : '';
 
   factory DietPlanResponse.fromJson(Map<String, dynamic> json) {
     final rawWeek = _mapOf(json['week_plan']);
@@ -30,11 +27,9 @@ class DietPlanResponse {
     });
 
     final String summary = (json['summary'] ?? '').toString();
-    final String summaryAr = (json['summary_ar'] ?? summary).toString();
 
     return DietPlanResponse(
       summary: summary,
-      summaryAr: summaryAr,
       dietTypeApplied: (json['diet_type_applied'] ?? '').toString(),
       dailyCaloriesTarget: _toInt(json['daily_calories_target']),
       dailyWaterLiters: _toDoubleOrNull(json['daily_water_liters']),
@@ -46,7 +41,6 @@ class DietPlanResponse {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{
       'summary': summary,
-      'summary_ar': summaryAr,
       'diet_type_applied': dietTypeApplied,
       'daily_calories_target': dailyCaloriesTarget,
       'daily_macros_summary': dailyMacrosSummary.toJson(),

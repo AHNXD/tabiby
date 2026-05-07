@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:tabiby/features/shared/welcome/view/welcome_screen.dart';
+import 'package:tabiby/features/auth/presentation/views/login/view/login_screen.dart';
 import '../utils/cache_helper.dart';
 import '../utils/constats.dart';
 import 'auth_interceptor.dart';
@@ -28,7 +28,7 @@ class ApiServices {
       AuthInterceptor(
         onUnauthorized: () {
           navigatorKey.currentState?.pushNamedAndRemoveUntil(
-            WelcomeScreen.routeName,
+            LoginScreen.routeName,
             (route) => false,
           );
         },
