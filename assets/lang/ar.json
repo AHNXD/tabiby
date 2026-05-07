@@ -668,5 +668,9 @@
     "diet_result_carbs_short": "ك",
     "diet_result_fats_short": "د",
     "diet_result_ingredients": "المكونات",
-    "diet_result_tip": "نصيحة"
+    "diet_result_tip": "نصيحة",
+    "diet_export_pdf": "تصدير كـ PDF",
+    "diet_export_pdf_generating": "جاري تجهيز ملف PDF...",
+    "diet_export_pdf_missing_plan": "قم بفتح خطة غذائية محفوظة أولاً.",
+    "pdf_page": "الصفحة"
 }

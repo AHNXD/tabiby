@@ -666,5 +666,9 @@
     "diet_result_carbs_short": "C",
     "diet_result_fats_short": "F",
     "diet_result_ingredients": "Ingredients",
-    "diet_result_tip": "Tip"
+    "diet_result_tip": "Tip",
+    "diet_export_pdf": "Export as PDF",
+    "diet_export_pdf_generating": "Preparing PDF...",
+    "diet_export_pdf_missing_plan": "Open a saved diet plan first.",
+    "pdf_page": "Page"
 }

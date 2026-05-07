@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,6 +25,9 @@ class DietCubit extends Cubit<DietState> {
         currentRequest: request,
         errorMessage: '',
         infoMessage: 'diet_generation_takes_time',
+        exportStatus: DietAsyncStatus.initial,
+        exportErrorMessage: '',
+        clearExportPdfBytes: true,
       ),
     );
 
@@ -49,6 +54,8 @@ class DietCubit extends Cubit<DietState> {
             plan: item.plan,
             currentRequest: item.request,
             history: updatedHistory,
+            currentPlanId: item.id,
+            currentPlanCreatedAt: item.createdAt,
             errorMessage: '',
             infoMessage: '',
           ),
@@ -92,6 +99,9 @@ class DietCubit extends Cubit<DietState> {
         planStatus: DietAsyncStatus.loading,
         errorMessage: '',
         infoMessage: '',
+        exportStatus: DietAsyncStatus.initial,
+        exportErrorMessage: '',
+        clearExportPdfBytes: true,
       ),
     );
 
@@ -114,6 +124,8 @@ class DietCubit extends Cubit<DietState> {
             plan: savedItem.plan,
             currentRequest: savedItem.request,
             history: _upsertHistoryItem(savedItem),
+            currentPlanId: savedItem.id,
+            currentPlanCreatedAt: savedItem.createdAt,
             errorMessage: '',
           ),
         );
@@ -128,6 +140,9 @@ class DietCubit extends Cubit<DietState> {
         planStatus: DietAsyncStatus.loading,
         errorMessage: '',
         infoMessage: '',
+        exportStatus: DietAsyncStatus.initial,
+        exportErrorMessage: '',
+        clearExportPdfBytes: true,
       ),
     );
 
@@ -151,6 +166,8 @@ class DietCubit extends Cubit<DietState> {
             plan: item.plan,
             currentRequest: item.request,
             history: _upsertHistoryItem(item),
+            currentPlanId: item.id,
+            currentPlanCreatedAt: item.createdAt,
             errorMessage: '',
           ),
         );
@@ -176,6 +193,74 @@ class DietCubit extends Cubit<DietState> {
         infoMessage: '',
         clearPlan: true,
         clearCurrentRequest: true,
+        currentPlanId: '',
+        clearCurrentPlanCreatedAt: true,
+        exportStatus: DietAsyncStatus.initial,
+        exportErrorMessage: '',
+        clearExportPdfBytes: true,
+      ),
+    );
+  }
+
+  Future<void> exportCurrentPlanAsPdf() async {
+    final DietPlanResponse? plan = state.plan;
+    final DietRequestData? request = state.currentRequest;
+
+    if (plan == null || request == null) {
+      emit(
+        state.copyWith(
+          exportStatus: DietAsyncStatus.error,
+          exportErrorMessage: 'diet_export_pdf_missing_plan',
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        exportStatus: DietAsyncStatus.loading,
+        exportErrorMessage: '',
+        clearExportPdfBytes: true,
+      ),
+    );
+
+    final result = await _dietRepository.exportDietPlanAsPdf(
+      plan: plan,
+      request: request,
+      createdAt: state.currentPlanCreatedAt,
+    );
+
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            exportStatus: DietAsyncStatus.error,
+            exportErrorMessage: failure.message,
+          ),
+        );
+      },
+      (Uint8List bytes) {
+        final String fileName =
+            'diet_plan_${state.currentPlanId.isEmpty ? "export" : state.currentPlanId}.pdf';
+        emit(
+          state.copyWith(
+            exportStatus: DietAsyncStatus.success,
+            exportPdfBytes: bytes,
+            exportFileName: fileName,
+            exportErrorMessage: '',
+          ),
+        );
+      },
+    );
+  }
+
+  void clearExport() {
+    emit(
+      state.copyWith(
+        exportStatus: DietAsyncStatus.initial,
+        exportErrorMessage: '',
+        exportFileName: '',
+        clearExportPdfBytes: true,
       ),
     );
   }

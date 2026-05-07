@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -11,12 +12,15 @@ import '../models/diet_plan_history_item.dart';
 import '../models/diet_plan_response.dart';
 import '../models/diet_request_data.dart';
 import '../models/paginated_diet_plans_result.dart';
+import '../services/diet_pdf_builder.dart';
 import 'diet_repository.dart';
 
 class DietRepositoryIplm implements DietRepository {
-  DietRepositoryIplm(this._apiServices);
+  DietRepositoryIplm(this._apiServices, {DietPdfBuilder? pdfBuilder})
+    : _pdfBuilder = pdfBuilder ?? DietPdfBuilder();
 
   final ApiServices _apiServices;
+  final DietPdfBuilder _pdfBuilder;
 
   @override
   Future<Either<Failure, DietPlanHistoryItem>> generateDietPlan(
@@ -112,6 +116,34 @@ class DietRepositoryIplm implements DietRepository {
       return left(
         _mapPlanFailure(e, notFoundMessage: 'diet_result_no_plan_found'),
       );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Uint8List>> exportDietPlanAsPdf({
+    required DietPlanResponse plan,
+    required DietRequestData request,
+    DateTime? createdAt,
+  }) async {
+    try {
+      final bytes = await _pdfBuilder.build(
+        plan: plan,
+        request: request,
+        createdAt: createdAt,
+      );
+      return right(bytes);
+    } catch (e) {
+      // Local PDF generation can fail due to missing bundled assets (fonts),
+      // invalid data, or platform share limitations. Preserve details to help
+      // diagnose instead of returning a generic "try again".
+      final Failure mapped = ErrorHandler.handle(e);
+      final String raw = e.toString();
+      if (mapped.message == ErrorHandler.errorTryAgain &&
+          raw.isNotEmpty &&
+          raw.toLowerCase() != 'exception') {
+        return left(ServerFailure(raw));
+      }
+      return left(mapped);
     }
   }
 
