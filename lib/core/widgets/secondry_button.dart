@@ -3,7 +3,7 @@ import 'package:tabiby/core/utils/colors.dart';
 
 class SecondryButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final double fontSize;
 
   const SecondryButton({

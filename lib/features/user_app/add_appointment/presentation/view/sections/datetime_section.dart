@@ -15,6 +15,7 @@ class DateTimeSection extends StatelessWidget {
   final bool isLoadingTimes;
   final Periods? periods;
   final String? selectedTimeSlot;
+  final String? selectedPeriodName;
   final Function(String time, String category) onSelectTimeSlot;
 
   const DateTimeSection({
@@ -25,6 +26,7 @@ class DateTimeSection extends StatelessWidget {
     required this.isLoadingTimes,
     this.periods,
     required this.selectedTimeSlot,
+    required this.selectedPeriodName,
     required this.onSelectTimeSlot,
   });
 
@@ -52,6 +54,7 @@ class DateTimeSection extends StatelessWidget {
           TimeSlotGrid(
             periods: periods!,
             selectedSlot: selectedTimeSlot,
+            selectedPeriodName: selectedPeriodName,
             onSelect: onSelectTimeSlot,
           ),
       ],

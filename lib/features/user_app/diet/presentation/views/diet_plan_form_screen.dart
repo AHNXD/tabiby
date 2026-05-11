@@ -5,6 +5,8 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
+import 'package:tabiby/core/ai_usage/ai_usage_cubit.dart';
+import 'package:tabiby/core/models/ai_usage_models.dart';
 import 'package:tabiby/features/auth/data/models/user_model.dart';
 import 'package:tabiby/features/user_app/diet/data/models/diet_request_data.dart';
 import 'package:tabiby/features/user_app/diet/presentation/view_models/diet_cubit.dart';
@@ -270,7 +272,7 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     return null;
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -301,6 +303,22 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
       macroDistribution: _macroDistributionController.text.trim(),
       specialistNotes: _specialistNotesController.text.trim(),
     );
+
+    final allowed = await context.read<AiUsageCubit>().consumeFeature(
+      AiFeatureType.programDiet,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    if (!allowed) {
+      final errorMessage = context.read<AiUsageCubit>().state.errorMessage;
+      if (errorMessage.isEmpty) return;
+
+      messages(context, errorMessage.tr(context), AppColors.orangeColor);
+      return;
+    }
 
     context.read<DietCubit>().generateDietPlan(request);
   }
@@ -567,12 +585,49 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
                         ),
                       ],
                     ),
-                    child: PrimaryButton(
-                      text: state.isGenerating
-                          ? 'diet_form_generating'.tr(context)
-                          : 'diet_form_generate_button'.tr(context),
-                      fontSize: 20,
-                      onPressed: state.isGenerating ? () {} : _submit,
+                    child: BlocBuilder<AiUsageCubit, AiUsageState>(
+                      builder: (context, usageState) {
+                        final usage = usageState
+                            .remainingByFeature[AiFeatureType.programDiet];
+                        final bool blocked =
+                            usage != null && usage.remaining <= 0;
+
+                        final String usageText = usage == null
+                            ? ''
+                            : '${'ai_usage_used'.tr(context)}: ${usage.used}/${usage.limit} • ${'ai_usage_remaining'.tr(context)}: ${usage.remaining}';
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (usageText.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  usageText,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: blocked
+                                        ? AppColors.grey600Color
+                                        : AppColors.grey800Color,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            PrimaryButton(
+                              text: state.isGenerating
+                                  ? 'diet_form_generating'.tr(context)
+                                  : 'diet_form_generate_button'.tr(context),
+                              fontSize: 20,
+                              onPressed: (state.isGenerating || blocked)
+                                  ? null
+                                  : () {
+                                      _submit();
+                                    },
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 20),

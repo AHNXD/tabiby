@@ -6,12 +6,14 @@ import '../../../data/models/times_model.dart';
 class TimeSlotGrid extends StatelessWidget {
   final Periods periods;
   final String? selectedSlot;
+  final String? selectedPeriodName;
   final Function(String time, String category) onSelect;
 
   const TimeSlotGrid({
     super.key,
     required this.periods,
     required this.selectedSlot,
+    required this.selectedPeriodName,
     required this.onSelect,
   });
 
@@ -98,12 +100,24 @@ class TimeSlotGrid extends StatelessWidget {
             child: Row(
               children: List<Widget>.generate(slots.length, (int index) {
                 final TimeSlot slot = slots[index];
-                final bool isSelected = selectedSlot == slot.time;
+                final String? time = slot.time;
+                if (time == null || time.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+
+                final bool isSelected =
+                    selectedSlot == time && selectedPeriodName == categoryKey;
                 return Padding(
                   padding: EdgeInsetsDirectional.only(
                     end: index == slots.length - 1 ? 0 : 10,
                   ),
-                  child: _buildTimeChip(slot.time!, isSelected, categoryKey),
+                  child: _buildTimeChip(
+                    context,
+                    slot,
+                    label,
+                    isSelected,
+                    categoryKey,
+                  ),
                 );
               }),
             ),
@@ -113,7 +127,15 @@ class TimeSlotGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeChip(String time, bool isSelected, String categoryKey) {
+  Widget _buildTimeChip(
+    BuildContext context,
+    TimeSlot slot,
+    String periodLabel,
+    bool isSelected,
+    String categoryKey,
+  ) {
+    final String time = slot.time ?? '';
+
     return InkWell(
       onTap: () => onSelect(time, categoryKey),
       borderRadius: BorderRadius.circular(16),
@@ -148,13 +170,44 @@ class TimeSlotGrid extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(
-          time,
-          style: TextStyle(
-            color: isSelected ? AppColors.whiteColor : AppColors.black87Color,
-            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-            fontSize: 14,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              time,
+              style: TextStyle(
+                color: isSelected
+                    ? AppColors.whiteColor
+                    : AppColors.black87Color,
+                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              periodLabel,
+              style: TextStyle(
+                color: isSelected
+                    ? AppColors.whiteColor.withValues(alpha: 0.9)
+                    : AppColors.grey600Color,
+                fontWeight: FontWeight.w700,
+                fontSize: 11,
+              ),
+            ),
+            if (slot.durationMinutes != null) ...[
+              const SizedBox(height: 2),
+              Text(
+                '${slot.durationMinutes} ${'minutes'.tr(context)}',
+                style: TextStyle(
+                  color: isSelected
+                      ? AppColors.whiteColor.withValues(alpha: 0.82)
+                      : AppColors.grey600Color,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );

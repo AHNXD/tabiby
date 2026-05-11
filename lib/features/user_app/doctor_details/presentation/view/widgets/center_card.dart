@@ -13,6 +13,16 @@ class CenterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final schedules = center.daySchedules ?? const <DoctorCenterDay>[];
+    final firstSchedule = schedules.isNotEmpty ? schedules.first : null;
+    final firstTimeRange = _formatTimeRange(
+      firstSchedule?.timeFrom ?? center.timeFrom,
+      firstSchedule?.timeTo ?? center.timeTo,
+    );
+    final appointmentDuration =
+        center.appointmentDurationMinutes ??
+        firstSchedule?.appointmentDurationMinutes;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
@@ -106,32 +116,28 @@ class CenterCard extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.access_time_rounded,
-                            size: 14,
-                            color: AppColors.grey600Color,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${center.timeFrom ?? '--:--'} - ${center.timeTo ?? '--:--'}",
-                            style: TextStyle(
-                              fontSize: 13,
+
+                      if (appointmentDuration != null) ...[
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.timer_outlined,
+                              size: 14,
                               color: AppColors.grey600Color,
-                              fontWeight: FontWeight.w500,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "view_doctors".tr(context),
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: AppColors.grey600Color,
+                            const SizedBox(width: 4),
+                            Text(
+                              '${'duration'.tr(context)}: $appointmentDuration ${'minutes'.tr(context)}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: AppColors.grey600Color,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                      ],
                     ],
                   ),
                 ),
@@ -146,7 +152,20 @@ class CenterCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            if (center.days != null && center.days!.isNotEmpty)
+            if (schedules.isNotEmpty)
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: schedules.where((day) => day.dayOfWeek != null).map(
+                    (day) {
+                      return _ScheduleChip(day: day);
+                    },
+                  ).toList(),
+                ),
+              )
+            else if (center.days != null && center.days!.isNotEmpty)
               SizedBox(
                 width: double.infinity,
                 child: Wrap(
@@ -192,6 +211,61 @@ class CenterCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  static String? _formatTimeRange(String? from, String? to) {
+    if ((from == null || from.isEmpty) && (to == null || to.isEmpty)) {
+      return null;
+    }
+
+    return '${from ?? '--:--'} - ${to ?? '--:--'}';
+  }
+}
+
+class _ScheduleChip extends StatelessWidget {
+  const _ScheduleChip({required this.day});
+
+  final DoctorCenterDay day;
+
+  @override
+  Widget build(BuildContext context) {
+    final timeRange = CenterCard._formatTimeRange(day.timeFrom, day.timeTo);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColors.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.primaryColors.withValues(alpha: 0.15),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            getDayName(day.dayOfWeek!, context),
+            style: TextStyle(
+              fontSize: 11,
+              color: AppColors.primaryColors.withValues(alpha: 0.9),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          if (timeRange != null) ...[
+            const SizedBox(height: 2),
+            Text(
+              timeRange,
+              style: TextStyle(
+                fontSize: 10,
+                color: AppColors.grey600Color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

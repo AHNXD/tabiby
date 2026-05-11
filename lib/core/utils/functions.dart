@@ -64,9 +64,24 @@ Route goRoute({required var x}) {
   );
 }
 
-//messages
+String? _lastSnackBarMessage;
+DateTime? _lastSnackBarShownAt;
+
 void messages(BuildContext context, String error, Color c, {int msgTime = 2}) {
-  ScaffoldMessenger.of(context).showSnackBar(
+  final now = DateTime.now();
+  final lastShownAt = _lastSnackBarShownAt;
+  if (_lastSnackBarMessage == error &&
+      lastShownAt != null &&
+      now.difference(lastShownAt) < const Duration(milliseconds: 1200)) {
+    return;
+  }
+
+  _lastSnackBarMessage = error;
+  _lastSnackBarShownAt = now;
+
+  final messenger = ScaffoldMessenger.of(context);
+  messenger.clearSnackBars();
+  messenger.showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 32),

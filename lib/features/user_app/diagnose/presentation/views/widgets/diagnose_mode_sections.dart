@@ -131,18 +131,23 @@ class DiagnoseModeEntryCard extends StatelessWidget {
     required this.subtitleKey,
     required this.onTap,
     this.statusKey,
+    this.usageText,
+    this.isEnabled = true,
   });
 
   final IconData icon;
   final String titleKey;
   final String subtitleKey;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String? statusKey;
+  final String? usageText;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
+    final bool disabled = !isEnabled || onTap == null;
     return InkWell(
-      onTap: onTap,
+      onTap: disabled ? null : onTap,
       borderRadius: BorderRadius.circular(24),
       child: Container(
         width: double.infinity,
@@ -165,10 +170,18 @@ class DiagnoseModeEntryCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: AppColors.primaryColors.withValues(alpha: 0.1),
+                color: disabled
+                    ? AppColors.grey100Color
+                    : AppColors.primaryColors.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(18),
               ),
-              child: Icon(icon, color: AppColors.primaryColors, size: 28),
+              child: Icon(
+                icon,
+                color: disabled
+                    ? AppColors.grey500Color
+                    : AppColors.primaryColors,
+                size: 28,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -192,6 +205,19 @@ class DiagnoseModeEntryCard extends StatelessWidget {
                       color: AppColors.grey600Color,
                     ),
                   ),
+                  if (usageText != null && usageText!.trim().isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      usageText!,
+                      style: TextStyle(
+                        color: disabled
+                            ? AppColors.grey500Color
+                            : AppColors.grey700Color,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                   if (statusKey != null) ...[
                     const SizedBox(height: 10),
                     Container(
@@ -217,7 +243,10 @@ class DiagnoseModeEntryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Icon(Icons.arrow_forward_rounded, color: AppColors.grey400Color),
+            Icon(
+              Icons.arrow_forward_rounded,
+              color: disabled ? AppColors.grey300Color : AppColors.grey400Color,
+            ),
           ],
         ),
       ),

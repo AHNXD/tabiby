@@ -102,7 +102,7 @@ class FiltersWidget extends StatelessWidget {
         ],
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         icon: const Icon(
           Icons.keyboard_arrow_down_rounded,
           color: AppColors.greyColor,

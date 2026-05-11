@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "10.162.238.64";
+  static String ip = "10.80.222.64";
 
   static String fixUrl(String url) {
     if (url.contains("127.0.0.1")) {
@@ -109,4 +109,8 @@ class Urls {
   static String nutritionPlans = "$basePort/nutrition-plans";
   static String latestNutritionPlan = "$nutritionPlans/latest";
   static String nutritionPlanById(String id) => "$nutritionPlans/$id";
+
+  // AI usage limits
+  static String aiUseFeature = "$basePort/ai/use-feature";
+  static String aiRemaining = "$basePort/ai/remaining";
 }

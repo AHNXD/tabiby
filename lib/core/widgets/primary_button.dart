@@ -3,7 +3,7 @@ import 'package:tabiby/core/utils/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final double fontSize;
 
   const PrimaryButton({
@@ -19,7 +19,6 @@ class PrimaryButton extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: onPressed,
-
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryColors,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

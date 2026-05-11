@@ -63,16 +63,26 @@ class Periods {
 
 class TimeSlot {
   String? time;
+  int? durationMinutes;
 
-  TimeSlot({this.time});
+  TimeSlot({this.time, this.durationMinutes});
 
   TimeSlot.fromJson(Map<String, dynamic> json) {
-    time = json['time'];
+    time = json['time']?.toString();
+    durationMinutes = _readInt(json['duration_minutes']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['time'] = time;
+    data['duration_minutes'] = durationMinutes;
     return data;
+  }
+
+  static int? _readInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 }

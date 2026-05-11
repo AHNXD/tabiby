@@ -115,6 +115,7 @@ class _BookingFormState extends State<BookingForm> {
                     isLoadingTimes: state.isLoadingTimes,
                     periods: state.times?.periods,
                     selectedTimeSlot: state.selectedTime,
+                    selectedPeriodName: state.selectedPeriodName,
                     onSelectTimeSlot: (time, category) {
                       context.read<BookingCubit>().selectTime(time, category);
                     },

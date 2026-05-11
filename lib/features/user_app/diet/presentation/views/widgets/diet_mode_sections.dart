@@ -520,21 +520,26 @@ class DietModeCard extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.onTap,
+    this.usageText,
+    this.isEnabled = true,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final String? usageText;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
+    final bool disabled = !isEnabled || onTap == null;
     return Material(
       color: AppColors.transparentColor,
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
-        onTap: onTap,
+        onTap: disabled ? null : onTap,
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -585,6 +590,19 @@ class DietModeCard extends StatelessWidget {
                         height: 1.4,
                       ),
                     ),
+                    if (usageText != null && usageText!.trim().isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Text(
+                        usageText!,
+                        style: TextStyle(
+                          color: disabled
+                              ? AppColors.grey500Color
+                              : AppColors.grey700Color,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

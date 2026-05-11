@@ -7,6 +7,8 @@ import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
 import 'package:tabiby/core/widgets/no_data.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
+import 'package:tabiby/core/ai_usage/ai_usage_cubit.dart';
+import 'package:tabiby/core/models/ai_usage_models.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/models/loading_view.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/result_screen.dart';
 import 'package:tabiby/features/user_app/diagnose/presentation/views/widgets/body_part_catalog.dart';
@@ -18,7 +20,7 @@ class QuestionScreen extends StatelessWidget {
   static const routeName = '/questions';
   const QuestionScreen({super.key});
 
-  void _submit(BuildContext context, DiagnosisState state) {
+  Future<void> _submit(BuildContext context, DiagnosisState state) async {
     if (state.selectedSymptoms.isEmpty) {
       messages(
         context,
@@ -27,6 +29,20 @@ class QuestionScreen extends StatelessWidget {
       );
       return;
     }
+
+    final allowed = await context.read<AiUsageCubit>().consumeFeature(
+      AiFeatureType.diagnosis,
+    );
+
+    if (!allowed && context.mounted) {
+      final errorMessage = context.read<AiUsageCubit>().state.errorMessage;
+      if (errorMessage.isEmpty) return;
+
+      messages(context, errorMessage.tr(context), AppColors.orangeColor);
+      return;
+    }
+
+    if (!context.mounted) return;
 
     context.read<DiagnosisCubit>().submitDiagnosis();
     Navigator.of(context).pushNamed(ResultScreen.routeName);
@@ -108,10 +124,47 @@ class QuestionScreen extends StatelessWidget {
                   ),
                   QuestionSubmitBar(
                     selectedCount: state.selectedSymptoms.length,
-                    child: PrimaryButton(
-                      text: 'get_diagnosis'.tr(context),
-                      fontSize: 20,
-                      onPressed: () => _submit(context, state),
+                    child: BlocBuilder<AiUsageCubit, AiUsageState>(
+                      builder: (context, usageState) {
+                        final usage = usageState
+                            .remainingByFeature[AiFeatureType.diagnosis];
+                        final bool blocked =
+                            usage != null && usage.remaining <= 0;
+
+                        final String usageText = usage == null
+                            ? ''
+                            : '${'ai_usage_used'.tr(context)}: ${usage.used}/${usage.limit} • ${'ai_usage_remaining'.tr(context)}: ${usage.remaining}';
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (usageText.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  usageText,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: blocked
+                                        ? AppColors.grey600Color
+                                        : AppColors.grey800Color,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            PrimaryButton(
+                              text: 'get_diagnosis'.tr(context),
+                              fontSize: 20,
+                              onPressed: blocked
+                                  ? null
+                                  : () {
+                                      _submit(context, state);
+                                    },
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ],

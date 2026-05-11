@@ -5,7 +5,7 @@ import 'package:tabiby/core/widgets/primary_button.dart';
 class NewAnalysisButton extends StatelessWidget {
   const NewAnalysisButton({super.key, required this.onPressed});
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

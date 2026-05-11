@@ -5,6 +5,8 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/secondry_button.dart';
+import 'package:tabiby/core/ai_usage/ai_usage_cubit.dart';
+import 'package:tabiby/core/models/ai_usage_models.dart';
 import 'package:tabiby/features/user_app/medical_files/data/models/medical_file_model.dart';
 
 import '../view_models/diagnosis_cubit.dart';
@@ -17,7 +19,7 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
 
   static const routeName = '/diagnose-xray';
 
-  void _submit(BuildContext context, DiagnosisState state) {
+  Future<void> _submit(BuildContext context, DiagnosisState state) async {
     if (!state.hasSelectedXrayImage) {
       messages(
         context,
@@ -26,6 +28,20 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
       );
       return;
     }
+
+    final allowed = await context.read<AiUsageCubit>().consumeFeature(
+      AiFeatureType.xrayAnalysis,
+    );
+
+    if (!allowed && context.mounted) {
+      final errorMessage = context.read<AiUsageCubit>().state.errorMessage;
+      if (errorMessage.isEmpty) return;
+
+      messages(context, errorMessage.tr(context), AppColors.orangeColor);
+      return;
+    }
+
+    if (!context.mounted) return;
 
     context.read<DiagnosisCubit>().analyzeSelectedXray();
     Navigator.of(
@@ -135,17 +151,53 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
                   text: 'xray_pick_from_medical_files'.tr(context),
                   fontSize: 18,
                   onPressed: isLoadingMedicalFiles
-                      ? () {}
+                      ? null
                       : () => _pickFromMedicalFiles(context),
                 ),
                 const SizedBox(height: 24),
-                XrayAnalyzeButton(
-                  isLoading: state.xrayState == ViewState.loading,
-                  isEnabled:
-                      state.hasSelectedXrayImage &&
-                      state.xrayState != ViewState.loading &&
-                      !isLoadingMedicalFiles,
-                  onPressed: () => _submit(context, state),
+                BlocBuilder<AiUsageCubit, AiUsageState>(
+                  builder: (context, usageState) {
+                    final usage = usageState
+                        .remainingByFeature[AiFeatureType.xrayAnalysis];
+                    final bool blocked = usage != null && usage.remaining <= 0;
+
+                    final String usageText = usage == null
+                        ? ''
+                        : '${'ai_usage_used'.tr(context)}: ${usage.used}/${usage.limit} • ${'ai_usage_remaining'.tr(context)}: ${usage.remaining}';
+
+                    final bool canPress =
+                        state.hasSelectedXrayImage &&
+                        state.xrayState != ViewState.loading &&
+                        !isLoadingMedicalFiles &&
+                        !blocked;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (usageText.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              usageText,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: blocked
+                                    ? AppColors.grey600Color
+                                    : AppColors.grey800Color,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        XrayAnalyzeButton(
+                          isLoading: state.xrayState == ViewState.loading,
+                          isEnabled: canPress,
+                          onPressed: () {
+                            _submit(context, state);
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             );
