@@ -15,10 +15,6 @@ class CenterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final schedules = center.daySchedules ?? const <DoctorCenterDay>[];
     final firstSchedule = schedules.isNotEmpty ? schedules.first : null;
-    final firstTimeRange = _formatTimeRange(
-      firstSchedule?.timeFrom ?? center.timeFrom,
-      firstSchedule?.timeTo ?? center.timeTo,
-    );
     final appointmentDuration =
         center.appointmentDurationMinutes ??
         firstSchedule?.appointmentDurationMinutes;

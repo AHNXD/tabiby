@@ -9,4 +9,5 @@ abstract class MyAppointmentsRepo {
   Future<Either<Failure, AppointmentDetailsModel>> getAppointmentDetails(
     int appointmentId,
   );
+  Future<Either<Failure, String>> cancelAppointment(int appointmentId);
 }

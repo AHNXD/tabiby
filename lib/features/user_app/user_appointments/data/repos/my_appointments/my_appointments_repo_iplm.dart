@@ -58,6 +58,26 @@ class MyAppointmentsRepoIplm implements MyAppointmentsRepo {
     }
   }
 
+  @override
+  Future<Either<Failure, String>> cancelAppointment(int appointmentId) async {
+    try {
+      final resp = await _apiServices.post(
+        endPoint: Urls.cancelAppointment,
+        data: {'appointment_id': appointmentId},
+      );
+
+      if (resp.statusCode == 200) {
+        return right('appointment_cancelled_successfully');
+      }
+
+      return left(
+        ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
+      );
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
+    }
+  }
+
   Map<String, dynamic>? _extractAppointment(dynamic responseData) {
     if (responseData is Map<String, dynamic>) {
       if (responseData['data'] is Map<String, dynamic> &&

@@ -11,10 +11,14 @@ class AppointmentList extends StatelessWidget {
     super.key,
     required this.appointments,
     required this.status,
+    this.cancelingAppointmentId,
+    this.onCancelAppointment,
   });
 
   final List<Appointment> appointments;
   final String status;
+  final int? cancelingAppointmentId;
+  final ValueChanged<Appointment>? onCancelAppointment;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +62,12 @@ class AppointmentList extends StatelessWidget {
       itemCount: appointments.length,
       itemBuilder: (context, index) {
         final Appointment appointment = appointments[index];
-        return AppointmentItem(appointment: appointment, status: status);
+        return AppointmentItem(
+          appointment: appointment,
+          status: status,
+          isCancelling: cancelingAppointmentId == appointment.id,
+          onCancelAppointment: onCancelAppointment,
+        );
       },
     );
   }

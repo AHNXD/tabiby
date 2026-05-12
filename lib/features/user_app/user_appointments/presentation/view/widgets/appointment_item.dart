@@ -18,10 +18,14 @@ class AppointmentItem extends StatelessWidget {
     super.key,
     required this.appointment,
     required this.status,
+    this.isCancelling = false,
+    this.onCancelAppointment,
   });
 
   final Appointment appointment;
   final String status;
+  final bool isCancelling;
+  final ValueChanged<Appointment>? onCancelAppointment;
 
   void _showRatingDialog(BuildContext context) {
     showDialog(
@@ -47,6 +51,124 @@ class AppointmentItem extends StatelessWidget {
         builder: (_) => AppointmentDetailsScreen(appointmentId: appointmentId),
       ),
     );
+  }
+
+  Future<void> _confirmCancelAppointment(BuildContext context) async {
+    final shouldCancel = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return Dialog(
+          backgroundColor: AppColors.transparentColor,
+          insetPadding: const EdgeInsets.all(16),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.whiteColor,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.blackColor.withValues(alpha: 0.1),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 58,
+                  height: 58,
+                  decoration: BoxDecoration(
+                    color: AppColors.redColor.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.event_busy_rounded,
+                    color: AppColors.redColor,
+                    size: 30,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  'cancel_appointment'.tr(context),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.redColor,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'cancel_appointment_confirmation'.tr(context),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    height: 1.45,
+                    color: AppColors.grey700Color,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.grey600Color,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(dialogContext).pop(false),
+                        child: Text(
+                          'no'.tr(context),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.redColor,
+                          elevation: 4,
+                          shadowColor: AppColors.redColor.withValues(
+                            alpha: 0.3,
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(dialogContext).pop(true),
+                        child: Text(
+                          'cancel_appointment'.tr(context),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: AppColors.whiteColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (shouldCancel == true) {
+      onCancelAppointment?.call(appointment);
+    }
   }
 
   @override
@@ -210,6 +332,19 @@ class AppointmentItem extends StatelessWidget {
                     icon: Icons.star_rate_rounded,
                     onTap: () => _showRatingDialog(context),
                     filled: false,
+                  ),
+                if (status == 'pending' && onCancelAppointment != null)
+                  _ActionButton(
+                    label: isCancelling
+                        ? 'canceling'.tr(context)
+                        : 'cancel_appointment'.tr(context),
+                    icon: Icons.cancel_outlined,
+                    onTap: isCancelling
+                        ? null
+                        : () => _confirmCancelAppointment(context),
+                    filled: false,
+                    color: AppColors.redColor,
+                    isLoading: isCancelling,
                   ),
               ],
             ),
@@ -385,12 +520,16 @@ class _ActionButton extends StatelessWidget {
     required this.icon,
     required this.onTap,
     required this.filled,
+    this.color = AppColors.primaryColors,
+    this.isLoading = false,
   });
 
   final String label;
   final IconData icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool filled;
+  final Color color;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -400,19 +539,15 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: filled
-              ? AppColors.primaryColors
-              : AppColors.primaryColors.withValues(alpha: 0.08),
+          color: filled ? color : color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(16),
           border: filled
               ? null
-              : Border.all(
-                  color: AppColors.primaryColors.withValues(alpha: 0.18),
-                ),
+              : Border.all(color: color.withValues(alpha: 0.18)),
           boxShadow: filled
               ? [
                   BoxShadow(
-                    color: AppColors.primaryColors.withValues(alpha: 0.2),
+                    color: color.withValues(alpha: 0.2),
                     blurRadius: 14,
                     offset: const Offset(0, 8),
                   ),
@@ -422,16 +557,26 @@ class _ActionButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 18,
-              color: filled ? AppColors.whiteColor : AppColors.primaryColors,
-            ),
+            if (isLoading)
+              SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: filled ? AppColors.whiteColor : color,
+                ),
+              )
+            else
+              Icon(
+                icon,
+                size: 18,
+                color: filled ? AppColors.whiteColor : color,
+              ),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: filled ? AppColors.whiteColor : AppColors.primaryColors,
+                color: filled ? AppColors.whiteColor : color,
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
               ),

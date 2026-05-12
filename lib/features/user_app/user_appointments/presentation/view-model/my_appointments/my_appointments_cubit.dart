@@ -21,4 +21,68 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
       },
     );
   }
+
+  Future<void> cancelAppointment(Appointment appointment) async {
+    final currentState = state;
+    final appointmentId = appointment.id;
+    if (currentState is! MyAppointmentsSuccess || appointmentId == null) {
+      return;
+    }
+
+    emit(
+      currentState.copyWith(
+        cancelingAppointmentId: appointmentId,
+        actionMessage: '',
+        actionErrorMessage: '',
+      ),
+    );
+
+    final result = await _myAppointmentsRepo.cancelAppointment(appointmentId);
+    result.fold(
+      (failure) {
+        emit(
+          currentState.copyWith(
+            clearCancelingAppointmentId: true,
+            actionErrorMessage: failure.message,
+            actionMessage: '',
+          ),
+        );
+      },
+      (message) {
+        final updatedAppointments = _movePendingToCanceled(
+          currentState.myAppointments,
+          appointment,
+        );
+        emit(
+          currentState.copyWith(
+            myAppointments: updatedAppointments,
+            clearCancelingAppointmentId: true,
+            actionMessage: message,
+            actionErrorMessage: '',
+          ),
+        );
+      },
+    );
+  }
+
+  Appointments _movePendingToCanceled(
+    Appointments appointments,
+    Appointment canceledAppointment,
+  ) {
+    final pending = List<Appointment>.from(appointments.pending ?? []);
+    final canceled = List<Appointment>.from(appointments.canceled ?? []);
+
+    pending.removeWhere(
+      (appointment) => appointment.id == canceledAppointment.id,
+    );
+    canceled.insert(0, canceledAppointment);
+
+    return Appointments(
+      completed: appointments.completed == null
+          ? null
+          : List<Appointment>.from(appointments.completed!),
+      pending: pending,
+      canceled: canceled,
+    );
+  }
 }

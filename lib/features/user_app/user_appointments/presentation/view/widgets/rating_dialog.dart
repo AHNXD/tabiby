@@ -20,6 +20,7 @@ class AppointmentRatingDialog extends StatefulWidget {
 class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
   int _currentRating = 0;
   final TextEditingController _commentController = TextEditingController();
+  String? _commentErrorText;
 
   @override
   void initState() {
@@ -31,6 +32,22 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
   void dispose() {
     _commentController.dispose();
     super.dispose();
+  }
+
+  void _submitRating(BuildContext context) {
+    final String comment = _commentController.text.trim();
+    if (comment.isEmpty) {
+      setState(() {
+        _commentErrorText = 'this_field_is_required'.tr(context);
+      });
+      return;
+    }
+
+    context.read<RatingCubit>().addRate(
+      widget.appointmentId,
+      _currentRating,
+      comment,
+    );
   }
 
   @override
@@ -263,11 +280,17 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
             child: TextField(
               controller: _commentController,
               maxLines: 3,
+              onChanged: (value) {
+                if (_commentErrorText != null && value.trim().isNotEmpty) {
+                  setState(() => _commentErrorText = null);
+                }
+              },
               decoration: InputDecoration(
                 hintText: "write_comment_here".tr(context),
                 hintStyle: TextStyle(color: AppColors.grey400Color),
                 border: InputBorder.none, // Remove default harsh border
                 contentPadding: const EdgeInsets.all(16),
+                errorText: _commentErrorText,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide(
@@ -287,11 +310,7 @@ class _AppointmentRatingDialogState extends State<AppointmentRatingDialog> {
             child: ElevatedButton(
               onPressed: _currentRating > 0
                   ? () {
-                      context.read<RatingCubit>().addRate(
-                        widget.appointmentId,
-                        _currentRating,
-                        _commentController.text,
-                      );
+                      _submitRating(context);
                     }
                   : null,
               style: ElevatedButton.styleFrom(

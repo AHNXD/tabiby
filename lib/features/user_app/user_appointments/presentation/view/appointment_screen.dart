@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/colors.dart';
+import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/utils/services_locater.dart';
 import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/custom_error_widget.dart';
@@ -35,7 +36,28 @@ class UserAppointmentScreen extends StatelessWidget {
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              child: BlocBuilder<MyAppointmentsCubit, MyAppointmentsState>(
+              child: BlocConsumer<MyAppointmentsCubit, MyAppointmentsState>(
+                listener: (context, state) {
+                  if (state is! MyAppointmentsSuccess) {
+                    return;
+                  }
+
+                  if (state.actionMessage.isNotEmpty) {
+                    messages(
+                      context,
+                      state.actionMessage.tr(context),
+                      AppColors.greenColor,
+                    );
+                  }
+
+                  if (state.actionErrorMessage.isNotEmpty) {
+                    messages(
+                      context,
+                      state.actionErrorMessage.tr(context),
+                      AppColors.redColor,
+                    );
+                  }
+                },
                 builder: (context, state) {
                   if (state is MyAppointmentsSuccess) {
                     final int completedCount =
@@ -91,6 +113,13 @@ class UserAppointmentScreen extends StatelessWidget {
                                 appointments:
                                     state.myAppointments.pending ?? [],
                                 status: "pending",
+                                cancelingAppointmentId:
+                                    state.cancelingAppointmentId,
+                                onCancelAppointment: (appointment) {
+                                  context
+                                      .read<MyAppointmentsCubit>()
+                                      .cancelAppointment(appointment);
+                                },
                               ),
                             ),
                             RefreshIndicator(
