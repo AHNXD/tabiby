@@ -46,11 +46,6 @@ class DiagnoseModeScreen extends StatelessWidget {
                   return '${'ai_usage_used'.tr(context)}: ${usage.used}/${usage.limit} • ${'ai_usage_remaining'.tr(context)}: ${usage.remaining}';
                 }
 
-                final bool diagnosisBlocked =
-                    diagnosisUsage != null && diagnosisUsage.remaining <= 0;
-                final bool xrayBlocked =
-                    xrayUsage != null && xrayUsage.remaining <= 0;
-
                 return ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
@@ -67,21 +62,9 @@ class DiagnoseModeScreen extends StatelessWidget {
                           ? 'diagnose_mode_status_symptom_ready'
                           : null,
                       usageText: usageTextFor(diagnosisUsage),
-                      isEnabled: !diagnosisBlocked,
-                      onTap: () async {
+                      isEnabled: true,
+                      onTap: () {
                         context.read<DiagnosisCubit>().clearError();
-
-                        final ok = await context
-                            .read<AiUsageCubit>()
-                            .canNavigateToFeature(AiFeatureType.diagnosis);
-                        if (!ok && context.mounted) {
-                          messages(
-                            context,
-                            'ai_usage_limit_reached'.tr(context),
-                            AppColors.orangeColor,
-                          );
-                          return;
-                        }
 
                         if (context.mounted) {
                           Navigator.of(context).push(
@@ -101,21 +84,9 @@ class DiagnoseModeScreen extends StatelessWidget {
                           ? 'diagnose_mode_status_xray_ready'
                           : null,
                       usageText: usageTextFor(xrayUsage),
-                      isEnabled: !xrayBlocked,
-                      onTap: () async {
+                      isEnabled: true,
+                      onTap: () {
                         context.read<DiagnosisCubit>().clearError();
-
-                        final ok = await context
-                            .read<AiUsageCubit>()
-                            .canNavigateToFeature(AiFeatureType.xrayAnalysis);
-                        if (!ok && context.mounted) {
-                          messages(
-                            context,
-                            'ai_usage_limit_reached'.tr(context),
-                            AppColors.orangeColor,
-                          );
-                          return;
-                        }
 
                         if (context.mounted) {
                           Navigator.of(context).push(

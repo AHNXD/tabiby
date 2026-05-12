@@ -4,8 +4,10 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
+import '../../../../../core/Api_services/ai_proxy_service.dart';
 import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
+import '../../../../../core/errors/ai_exception.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/diet_plan_history_item.dart';
@@ -16,10 +18,14 @@ import '../services/diet_pdf_builder.dart';
 import 'diet_repository.dart';
 
 class DietRepositoryIplm implements DietRepository {
-  DietRepositoryIplm(this._apiServices, {DietPdfBuilder? pdfBuilder})
-    : _pdfBuilder = pdfBuilder ?? DietPdfBuilder();
+  DietRepositoryIplm(
+    this._apiServices,
+    this._aiProxyService, {
+    DietPdfBuilder? pdfBuilder,
+  }) : _pdfBuilder = pdfBuilder ?? DietPdfBuilder();
 
   final ApiServices _apiServices;
+  final AiProxyService _aiProxyService;
   final DietPdfBuilder _pdfBuilder;
 
   @override
@@ -27,21 +33,16 @@ class DietRepositoryIplm implements DietRepository {
     DietRequestData request,
   ) async {
     try {
-      final response = await _apiServices.post(
-        endPoint: Urls.generateDietPlanAutomation,
-        data: request.toJson(),
-        sendTimeout: const Duration(minutes: 5),
-        receiveTimeout: const Duration(minutes: 5),
-      );
+      final response = await _aiProxyService.generateDietPlan(request.toJson());
 
-      final dynamic normalized = _normalizeN8nBody(response.data);
+      final dynamic normalized = _normalizeAiBody(response);
 
       if (normalized is Map<String, dynamic> && normalized['error'] != null) {
-        return left(ServerFailure(normalized['error'].toString()));
+        return left(const ServerFailure(AiException.serviceUnavailable));
       }
 
       if (normalized is! Map<String, dynamic>) {
-        return left(const ServerFailure(ErrorHandler.errorTryAgain));
+        return left(const ServerFailure(AiException.serviceUnavailable));
       }
 
       final generatedPlan = DietPlanResponse.fromJson(normalized);
@@ -202,7 +203,7 @@ class DietRepositoryIplm implements DietRepository {
     return null;
   }
 
-  dynamic _normalizeN8nBody(dynamic source) {
+  dynamic _normalizeAiBody(dynamic source) {
     dynamic current = source;
 
     if (current is List && current.isNotEmpty) {
@@ -235,12 +236,18 @@ class DietRepositoryIplm implements DietRepository {
     if (current is String) {
       final dynamic decoded = _decodeJsonString(current);
       if (decoded != null) {
-        return _normalizeN8nBody(decoded);
+        return _normalizeAiBody(decoded);
       }
     }
 
     if (current is Map<String, dynamic> && current['body'] != null) {
-      return _normalizeN8nBody(current['body']);
+      return _normalizeAiBody(current['body']);
+    }
+
+    if (current is Map<String, dynamic> &&
+        current['data'] != null &&
+        !current.containsKey('week_plan')) {
+      return _normalizeAiBody(current['data']);
     }
 
     return current;

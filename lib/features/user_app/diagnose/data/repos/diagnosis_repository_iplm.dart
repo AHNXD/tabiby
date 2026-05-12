@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:tabiby/features/user_app/diagnose/data/repos/diagnosis_repository.dart';
 
-import '../../../../../core/Api_services/api_services.dart';
-import '../../../../../core/Api_services/urls.dart';
+import '../../../../../core/Api_services/ai_proxy_service.dart';
+import '../../../../../core/errors/ai_exception.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/diagnosis_request_model.dart';
@@ -14,19 +14,18 @@ import '../models/symptom_model.dart';
 import '../models/xray_diagnosis_result_model.dart';
 
 class DiagnosisRepositoryIplm implements DiagnosisRepository {
-  final ApiServices _apiServices;
+  final AiProxyService _aiProxyService;
 
-  DiagnosisRepositoryIplm(this._apiServices);
+  DiagnosisRepositoryIplm(this._aiProxyService);
 
   @override
   Future<Either<Failure, List<Symptom>>> getSymptoms(String bodyPart) async {
     try {
-      final response = await _apiServices.post(
-        endPoint: Urls.getSymptomsAutomation,
-        data: {'body_part': bodyPart},
-      );
+      final response = await _aiProxyService.getSymptoms({
+        'body_part': bodyPart,
+      });
 
-      final dynamic normalized = _normalizeN8nBody(response.data);
+      final dynamic normalized = _normalizeAiBody(response);
       final List<dynamic> rawSymptoms = _extractSymptomsList(normalized);
       final List<Symptom> symptoms = rawSymptoms
           .whereType<Map>()
@@ -47,15 +46,12 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
     DiagnosisRequest request,
   ) async {
     try {
-      final response = await _apiServices.post(
-        endPoint: Urls.diagnoseAutomation,
-        data: request.toJson(),
-      );
+      final response = await _aiProxyService.diagnose(request.toJson());
 
-      final dynamic normalized = _normalizeN8nBody(response.data);
+      final dynamic normalized = _normalizeAiBody(response);
 
       if (normalized is Map && normalized['error'] != null) {
-        return left(ServerFailure(normalized['error'].toString()));
+        return left(const ServerFailure(AiException.serviceUnavailable));
       }
 
       final Map<String, dynamic>? triageResult = _extractTriageResultMap(
@@ -63,7 +59,7 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
       );
 
       if (triageResult == null) {
-        return left(const ServerFailure(ErrorHandler.errorTryAgain));
+        return left(const ServerFailure(AiException.serviceUnavailable));
       }
 
       return right(DiagnosisResult.fromJson(triageResult));
@@ -77,21 +73,17 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
     String imagePath,
   ) async {
     try {
-      final FormData data = FormData.fromMap({
-        'image': await MultipartFile.fromFile(imagePath),
+      final file = File(imagePath);
+      final fileName = imagePath.split(Platform.pathSeparator).last;
+      final response = await _aiProxyService.analyzeXray({
+        'image': base64Encode(await file.readAsBytes()),
+        'file_name': fileName,
       });
 
-      final response = await _apiServices.post(
-        endPoint: Urls.analyzeChestXrayAutomation,
-        data: data,
-        sendTimeout: const Duration(minutes: 2),
-        receiveTimeout: const Duration(minutes: 2),
-      );
-
-      final dynamic normalized = _normalizeN8nBody(response.data);
+      final dynamic normalized = _normalizeAiBody(response);
 
       if (normalized is Map && normalized['error'] != null) {
-        return left(ServerFailure(normalized['error'].toString()));
+        return left(const ServerFailure(AiException.serviceUnavailable));
       }
 
       final Map<String, dynamic>? imageDiagnosisMap = _extractImageDiagnosisMap(
@@ -99,7 +91,7 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
       );
 
       if (imageDiagnosisMap == null) {
-        return left(const ServerFailure(ErrorHandler.errorTryAgain));
+        return left(const ServerFailure(AiException.serviceUnavailable));
       }
 
       return right(XrayDiagnosisResult.fromJson(imageDiagnosisMap));
@@ -198,7 +190,7 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
         json.containsKey('heatmap_url');
   }
 
-  dynamic _normalizeN8nBody(dynamic source) {
+  dynamic _normalizeAiBody(dynamic source) {
     dynamic current = source;
 
     if (current is List && current.isNotEmpty) {
@@ -212,12 +204,12 @@ class DiagnosisRepositoryIplm implements DiagnosisRepository {
     if (current is String) {
       final dynamic decoded = _decodeJsonString(current);
       if (decoded != null) {
-        return _normalizeN8nBody(decoded);
+        return _normalizeAiBody(decoded);
       }
     }
 
     if (current is Map && current['body'] != null) {
-      return _normalizeN8nBody(current['body']);
+      return _normalizeAiBody(current['body']);
     }
 
     return current;

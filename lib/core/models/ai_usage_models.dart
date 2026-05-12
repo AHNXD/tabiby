@@ -80,55 +80,6 @@ class AiFeatureUsageLimit {
   }
 }
 
-class AiUseFeatureResponse {
-  final String message;
-  final int? status;
-  final int? httpStatusCode;
-  final AiFeatureType featureType;
-  final AiFeatureUsageLimit usage;
-
-  const AiUseFeatureResponse({
-    required this.message,
-    required this.featureType,
-    required this.usage,
-    this.status,
-    this.httpStatusCode,
-  });
-
-  bool get isLimitReached =>
-      httpStatusCode == 404 ||
-      httpStatusCode == 429 ||
-      status == 404 ||
-      status == 429;
-
-  factory AiUseFeatureResponse.fromJson(
-    Map<String, dynamic> json, {
-    int? httpStatusCode,
-  }) {
-    final String featureTypeRaw = AiJsonParsing.readString(
-      json['feature_type'],
-    );
-    final AiFeatureType featureType =
-        AiFeatureTypeX.fromApiValue(featureTypeRaw) ?? AiFeatureType.diagnosis;
-
-    return AiUseFeatureResponse(
-      message: AiJsonParsing.readString(json['message']),
-      status: json['status'] == null
-          ? null
-          : AiJsonParsing.readInt(json['status']),
-      httpStatusCode: httpStatusCode,
-      featureType: featureType,
-      usage: AiFeatureUsageLimit(
-        limit: AiJsonParsing.readInt(json['limit']),
-        used: AiJsonParsing.readInt(json['used']),
-        remaining: AiJsonParsing.readInt(json['remaining']),
-        periodStart: AiJsonParsing.readDateTime(json['period_start']),
-        periodEnd: AiJsonParsing.readDateTime(json['period_end']),
-      ),
-    );
-  }
-}
-
 class AiRemainingUsageResponse {
   final String message;
   final int status;

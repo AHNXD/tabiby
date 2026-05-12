@@ -20,7 +20,7 @@ class QuestionScreen extends StatelessWidget {
   static const routeName = '/questions';
   const QuestionScreen({super.key});
 
-  Future<void> _submit(BuildContext context, DiagnosisState state) async {
+  void _submit(BuildContext context, DiagnosisState state) {
     if (state.selectedSymptoms.isEmpty) {
       messages(
         context,
@@ -29,20 +29,6 @@ class QuestionScreen extends StatelessWidget {
       );
       return;
     }
-
-    final allowed = await context.read<AiUsageCubit>().consumeFeature(
-      AiFeatureType.diagnosis,
-    );
-
-    if (!allowed && context.mounted) {
-      final errorMessage = context.read<AiUsageCubit>().state.errorMessage;
-      if (errorMessage.isEmpty) return;
-
-      messages(context, errorMessage.tr(context), AppColors.orangeColor);
-      return;
-    }
-
-    if (!context.mounted) return;
 
     context.read<DiagnosisCubit>().submitDiagnosis();
     Navigator.of(context).pushNamed(ResultScreen.routeName);
@@ -128,8 +114,6 @@ class QuestionScreen extends StatelessWidget {
                       builder: (context, usageState) {
                         final usage = usageState
                             .remainingByFeature[AiFeatureType.diagnosis];
-                        final bool blocked =
-                            usage != null && usage.remaining <= 0;
 
                         final String usageText = usage == null
                             ? ''
@@ -146,9 +130,7 @@ class QuestionScreen extends StatelessWidget {
                                   usageText,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: blocked
-                                        ? AppColors.grey600Color
-                                        : AppColors.grey800Color,
+                                    color: AppColors.grey800Color,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -156,11 +138,9 @@ class QuestionScreen extends StatelessWidget {
                             PrimaryButton(
                               text: 'get_diagnosis'.tr(context),
                               fontSize: 20,
-                              onPressed: blocked
+                              onPressed: state.resultState == ViewState.loading
                                   ? null
-                                  : () {
-                                      _submit(context, state);
-                                    },
+                                  : () => _submit(context, state),
                             ),
                           ],
                         );

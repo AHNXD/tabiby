@@ -49,6 +49,8 @@ class ChestXrayResultScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: XrayDiagnosisResultContent(
                     result: result,
+                    imagePath: state.selectedXrayImagePath,
+                    selectedTitle: state.selectedXrayTitle,
                     onStartOver: () => _startOver(context),
                   ),
                 ),

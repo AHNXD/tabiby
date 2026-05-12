@@ -304,22 +304,6 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
       specialistNotes: _specialistNotesController.text.trim(),
     );
 
-    final allowed = await context.read<AiUsageCubit>().consumeFeature(
-      AiFeatureType.programDiet,
-    );
-
-    if (!mounted) {
-      return;
-    }
-
-    if (!allowed) {
-      final errorMessage = context.read<AiUsageCubit>().state.errorMessage;
-      if (errorMessage.isEmpty) return;
-
-      messages(context, errorMessage.tr(context), AppColors.orangeColor);
-      return;
-    }
-
     context.read<DietCubit>().generateDietPlan(request);
   }
 
@@ -589,8 +573,6 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
                       builder: (context, usageState) {
                         final usage = usageState
                             .remainingByFeature[AiFeatureType.programDiet];
-                        final bool blocked =
-                            usage != null && usage.remaining <= 0;
 
                         final String usageText = usage == null
                             ? ''
@@ -607,9 +589,7 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
                                   usageText,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: blocked
-                                        ? AppColors.grey600Color
-                                        : AppColors.grey800Color,
+                                    color: AppColors.grey800Color,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -619,7 +599,7 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
                                   ? 'diet_form_generating'.tr(context)
                                   : 'diet_form_generate_button'.tr(context),
                               fontSize: 20,
-                              onPressed: (state.isGenerating || blocked)
+                              onPressed: state.isGenerating
                                   ? null
                                   : () {
                                       _submit();

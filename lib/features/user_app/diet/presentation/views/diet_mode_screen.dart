@@ -38,28 +38,14 @@ class DietModeScreen extends StatelessWidget {
               builder: (context, usageState) {
                 final dietUsage =
                     usageState.remainingByFeature[AiFeatureType.programDiet];
-                final bool dietBlocked =
-                    dietUsage != null && dietUsage.remaining <= 0;
 
                 String usageTextFor(AiFeatureUsageLimit? usage) {
                   if (usage == null) return '';
                   return '${'ai_usage_used'.tr(context)}: ${usage.used}/${usage.limit} • ${'ai_usage_remaining'.tr(context)}: ${usage.remaining}';
                 }
 
-                Future<void> openDietForm(bool isSpecialist) async {
+                void openDietForm(bool isSpecialist) {
                   context.read<DietCubit>().clearError();
-
-                  final ok = await context
-                      .read<AiUsageCubit>()
-                      .canNavigateToFeature(AiFeatureType.programDiet);
-                  if (!ok && context.mounted) {
-                    messages(
-                      context,
-                      'ai_usage_limit_reached'.tr(context),
-                      AppColors.orangeColor,
-                    );
-                    return;
-                  }
 
                   if (context.mounted) {
                     Navigator.of(context).push(
@@ -135,7 +121,7 @@ class DietModeScreen extends StatelessWidget {
                       subtitle: 'diet_mode_basic_subtitle'.tr(context),
                       icon: Icons.person_outline,
                       usageText: usageTextFor(dietUsage),
-                      isEnabled: !dietBlocked,
+                      isEnabled: true,
                       onTap: () => openDietForm(false),
                     ),
                     const SizedBox(height: 12),
@@ -144,7 +130,7 @@ class DietModeScreen extends StatelessWidget {
                       subtitle: 'diet_mode_advanced_subtitle'.tr(context),
                       icon: Icons.medical_services_outlined,
                       usageText: usageTextFor(dietUsage),
-                      isEnabled: !dietBlocked,
+                      isEnabled: true,
                       onTap: () => openDietForm(true),
                     ),
                     if (state.historyStatus == DietAsyncStatus.error &&

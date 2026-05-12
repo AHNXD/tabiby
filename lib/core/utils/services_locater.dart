@@ -40,6 +40,7 @@ import '../../features/user_app/specialties/data/repos/user_repo_iplm.dart';
 import '../../features/user_app/user/data/repos/user_repo.dart';
 import '../../features/user_app/user/data/repos/user_repo_iplm.dart';
 import '../../features/user_app/user_appointments/data/repos/my_appointments/my_appointments_repo_iplm.dart';
+import '../Api_services/ai_proxy_service.dart';
 import '../Api_services/api_services.dart';
 import '../locale/locale_cubit.dart';
 
@@ -59,6 +60,9 @@ void setupLocatorServices() {
 
   getit.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
   getit.registerLazySingleton<ApiServices>(() => ApiServices(getit.get<Dio>()));
+  getit.registerLazySingleton<AiProxyService>(
+    () => AiProxyService(getit.get<ApiServices>()),
+  );
 
   // AI usage limits
   getit.registerSingleton<AiUsageRepo>(
@@ -122,12 +126,12 @@ void setupLocatorServices() {
 
   //Diagnose
   getit.registerSingleton<DiagnosisRepository>(
-    DiagnosisRepositoryIplm(getit.get<ApiServices>()),
+    DiagnosisRepositoryIplm(getit.get<AiProxyService>()),
   );
 
   //Diet
   getit.registerSingleton<DietRepository>(
-    DietRepositoryIplm(getit.get<ApiServices>()),
+    DietRepositoryIplm(getit.get<ApiServices>(), getit.get<AiProxyService>()),
   );
 
   //Rating

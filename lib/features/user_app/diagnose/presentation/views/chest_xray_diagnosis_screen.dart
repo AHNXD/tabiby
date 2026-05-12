@@ -19,7 +19,7 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
 
   static const routeName = '/diagnose-xray';
 
-  Future<void> _submit(BuildContext context, DiagnosisState state) async {
+  void _submit(BuildContext context, DiagnosisState state) {
     if (!state.hasSelectedXrayImage) {
       messages(
         context,
@@ -28,20 +28,6 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
       );
       return;
     }
-
-    final allowed = await context.read<AiUsageCubit>().consumeFeature(
-      AiFeatureType.xrayAnalysis,
-    );
-
-    if (!allowed && context.mounted) {
-      final errorMessage = context.read<AiUsageCubit>().state.errorMessage;
-      if (errorMessage.isEmpty) return;
-
-      messages(context, errorMessage.tr(context), AppColors.orangeColor);
-      return;
-    }
-
-    if (!context.mounted) return;
 
     context.read<DiagnosisCubit>().analyzeSelectedXray();
     Navigator.of(
@@ -159,7 +145,6 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
                   builder: (context, usageState) {
                     final usage = usageState
                         .remainingByFeature[AiFeatureType.xrayAnalysis];
-                    final bool blocked = usage != null && usage.remaining <= 0;
 
                     final String usageText = usage == null
                         ? ''
@@ -168,8 +153,7 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
                     final bool canPress =
                         state.hasSelectedXrayImage &&
                         state.xrayState != ViewState.loading &&
-                        !isLoadingMedicalFiles &&
-                        !blocked;
+                        !isLoadingMedicalFiles;
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -181,9 +165,7 @@ class ChestXrayDiagnosisScreen extends StatelessWidget {
                               usageText,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: blocked
-                                    ? AppColors.grey600Color
-                                    : AppColors.grey800Color,
+                                color: AppColors.grey800Color,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

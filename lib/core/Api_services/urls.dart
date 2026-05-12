@@ -1,6 +1,6 @@
 class Urls {
   //ip
-  static String ip = "192.168.1.103";
+  static String ip = "192.168.1.3";
 
   static String fixUrl(String url) {
     if (url.contains("127.0.0.1")) {
@@ -17,7 +17,6 @@ class Urls {
 
   //ports
   static String basePort = "8000/api";
-  static String aiPort = "8001/api";
 
   //auth endpoint
   static String login = "$basePort/login";
@@ -92,25 +91,15 @@ class Urls {
 
   static String addRate = "$basePort/patient/appointments/rate";
 
-  //Diagnose endpoints
-  static String categories = "$aiPort/v1/categories";
-  static String questions(int categoryId) =>
-      "$aiPort/v1/categories/$categoryId/questions";
-  static String diagnose = "$aiPort/v1/diagnose";
-  static String n8nPort = "5678";
-  static String getSymptomsAutomation =
-      "http://$ip:$n8nPort/webhook-test/get-symptoms";
-  static String diagnoseAutomation =
-      "http://$ip:$n8nPort/webhook-test/diagnose";
-  static String analyzeChestXrayAutomation =
-      "http://$ip:$n8nPort/webhook-test/analyze-xray";
-  static String generateDietPlanAutomation =
-      "http://$ip:$n8nPort/webhook-test/generate-diet-plan";
+  // AI proxy endpoints
+  static String aiGenerateDietPlan = "$basePort/ai/generate-diet-plan";
+  static String aiAnalyzeXray = "$basePort/ai/analyze-xray";
+  static String aiGetSymptoms = "$basePort/ai/get-symptoms";
+  static String aiDiagnose = "$basePort/ai/diagnose";
   static String nutritionPlans = "$basePort/nutrition-plans";
   static String latestNutritionPlan = "$nutritionPlans/latest";
   static String nutritionPlanById(String id) => "$nutritionPlans/$id";
 
   // AI usage limits
-  static String aiUseFeature = "$basePort/ai/use-feature";
   static String aiRemaining = "$basePort/ai/remaining";
 }

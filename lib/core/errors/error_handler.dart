@@ -1,5 +1,8 @@
-import 'package:dio/dio.dart';
 import 'dart:io';
+
+import 'package:dio/dio.dart';
+
+import 'ai_exception.dart';
 import 'failuer.dart';
 
 class ErrorHandler {
@@ -20,6 +23,9 @@ class ErrorHandler {
   static String defaultMessage() => errorTryAgain;
 
   static Failure handle(dynamic error) {
+    if (error is AiException) {
+      return ServerFailure(error.message);
+    }
     if (error is DioException) {
       return _handleDioError(error);
     }
