@@ -41,6 +41,8 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
   late final TextEditingController _chronicDiseasesController;
   late final TextEditingController _medicationsController;
   late final TextEditingController _allergiesController;
+  late final TextEditingController _favoriteFoodsController;
+  late final TextEditingController _dislikedFoodsController;
   late final TextEditingController _digestionIssuesController;
   late final TextEditingController _mealsPerDayController;
   late final TextEditingController _sweetsFrequencyController;
@@ -96,6 +98,8 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     _chronicDiseasesController = TextEditingController();
     _medicationsController = TextEditingController();
     _allergiesController = TextEditingController();
+    _favoriteFoodsController = TextEditingController();
+    _dislikedFoodsController = TextEditingController();
     _digestionIssuesController = TextEditingController();
     _mealsPerDayController = TextEditingController(text: '3');
     _sweetsFrequencyController = TextEditingController();
@@ -163,6 +167,8 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     _chronicDiseasesController.dispose();
     _medicationsController.dispose();
     _allergiesController.dispose();
+    _favoriteFoodsController.dispose();
+    _dislikedFoodsController.dispose();
     _digestionIssuesController.dispose();
     _mealsPerDayController.dispose();
     _sweetsFrequencyController.dispose();
@@ -190,6 +196,8 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     _chronicDiseasesController.text = request.chronicDiseases;
     _medicationsController.text = request.medications;
     _allergiesController.text = request.allergies;
+    _favoriteFoodsController.text = request.favoriteFoods ?? '';
+    _dislikedFoodsController.text = request.dislikedFoods ?? '';
     _digestionIssuesController.text = request.digestionIssues;
     _mealsPerDayController.text = request.mealsPerDay.toString();
     _sweetsFrequencyController.text = request.sweetsFrequency;
@@ -256,6 +264,14 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
       defaultValues: canReplaceLocalizedDefaults
           ? [_localizedDefaultNoneValue]
           : const <String>[],
+    );
+    _setProfileValue(
+      _favoriteFoodsController,
+      user.moreData?.favoriteFoods ?? '',
+    );
+    _setProfileValue(
+      _dislikedFoodsController,
+      user.moreData?.dislikedFoods ?? '',
     );
     _setProfileValue(
       _digestionIssuesController,
@@ -342,6 +358,8 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
       chronicDiseases: _chronicDiseasesController.text.trim(),
       medications: _medicationsController.text.trim(),
       allergies: _allergiesController.text.trim(),
+      favoriteFoods: _favoriteFoodsController.text.trim(),
+      dislikedFoods: _dislikedFoodsController.text.trim(),
       digestionIssues: _digestionIssuesController.text.trim(),
       mealsPerDay: _parseInt(_mealsPerDayController.text, 3),
       sweetsFrequency: _sweetsFrequencyController.text.trim(),
@@ -514,6 +532,14 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
                           controller: _allergiesController,
                           label: 'diet_form_allergies'.tr(context),
                           validator: _required,
+                        ),
+                        DietLabeledCustomField(
+                          controller: _favoriteFoodsController,
+                          label: 'favorite_foods'.tr(context),
+                        ),
+                        DietLabeledCustomField(
+                          controller: _dislikedFoodsController,
+                          label: 'disliked_foods'.tr(context),
                         ),
                         DietLabeledCustomField(
                           controller: _digestionIssuesController,

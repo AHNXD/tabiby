@@ -228,6 +228,20 @@ class DietPdfBuilder {
                     lightBg: lightBg,
                     border: border,
                   ),
+                  if ((request.favoriteFoods ?? '').trim().isNotEmpty)
+                    _kvPill(
+                      label: l10n.translate('favorite_foods'),
+                      value: request.favoriteFoods!,
+                      lightBg: lightBg,
+                      border: border,
+                    ),
+                  if ((request.dislikedFoods ?? '').trim().isNotEmpty)
+                    _kvPill(
+                      label: l10n.translate('disliked_foods'),
+                      value: request.dislikedFoods!,
+                      lightBg: lightBg,
+                      border: border,
+                    ),
                   if (request.isSpecialist) ...[
                     _kvPill(
                       label: l10n.translate('diet_form_diet_type'),

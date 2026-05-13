@@ -359,6 +359,8 @@ class DietRequestValuesCard extends StatelessWidget {
     'chronic_diseases': 'diet_form_chronic_diseases',
     'medications': 'diet_form_medications',
     'allergies': 'diet_form_allergies',
+    'favorite_foods': 'favorite_foods',
+    'disliked_foods': 'disliked_foods',
     'digestion_issues': 'diet_form_digestion_issues',
     'meals_per_day': 'diet_form_meals_per_day',
     'sweets_frequency': 'diet_form_sweets_frequency',

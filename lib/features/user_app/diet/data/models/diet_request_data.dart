@@ -10,6 +10,8 @@ class DietRequestData {
     required this.chronicDiseases,
     required this.medications,
     required this.allergies,
+    this.favoriteFoods,
+    this.dislikedFoods,
     required this.digestionIssues,
     required this.mealsPerDay,
     required this.sweetsFrequency,
@@ -36,6 +38,8 @@ class DietRequestData {
   final String chronicDiseases;
   final String medications;
   final String allergies;
+  final String? favoriteFoods;
+  final String? dislikedFoods;
   final String digestionIssues;
   final int mealsPerDay;
   final String sweetsFrequency;
@@ -63,6 +67,8 @@ class DietRequestData {
       chronicDiseases: (json['chronic_diseases'] ?? '').toString(),
       medications: (json['medications'] ?? '').toString(),
       allergies: (json['allergies'] ?? '').toString(),
+      favoriteFoods: json['favorite_foods']?.toString(),
+      dislikedFoods: json['disliked_foods']?.toString(),
       digestionIssues: (json['digestion_issues'] ?? '').toString(),
       mealsPerDay: _toInt(json['meals_per_day'], 3),
       sweetsFrequency: (json['sweets_frequency'] ?? '').toString(),
@@ -92,6 +98,8 @@ class DietRequestData {
       'chronic_diseases': chronicDiseases,
       'medications': medications,
       'allergies': allergies,
+      'favorite_foods': favoriteFoods ?? '',
+      'disliked_foods': dislikedFoods ?? '',
       'digestion_issues': digestionIssues,
       'meals_per_day': mealsPerDay,
       'sweets_frequency': sweetsFrequency,
