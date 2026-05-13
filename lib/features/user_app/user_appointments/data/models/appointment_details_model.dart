@@ -11,6 +11,8 @@ class AppointmentDetailsModel {
   final String? patientNote;
   final String? doctorNote;
   final AppointmentDiagnosisDetails? diagnosis;
+  final AppointmentSelectedItem? selectedRadiologyImageType;
+  final List<AppointmentSelectedItem> selectedLabTests;
   final bool? hasPharmacy;
   final bool? sendToPharmacy;
   final AppointmentPersonDetails? patient;
@@ -32,6 +34,8 @@ class AppointmentDetailsModel {
     this.patientNote,
     this.doctorNote,
     this.diagnosis,
+    this.selectedRadiologyImageType,
+    this.selectedLabTests = const <AppointmentSelectedItem>[],
     this.hasPharmacy,
     this.sendToPharmacy,
     this.patient,
@@ -59,6 +63,22 @@ class AppointmentDetailsModel {
               json['diagnosis'] as Map<String, dynamic>,
             )
           : null,
+      selectedRadiologyImageType:
+          json['selected_radiology_image_type'] is Map<String, dynamic>
+          ? AppointmentSelectedItem.fromJson(
+              json['selected_radiology_image_type'] as Map<String, dynamic>,
+              idKeys: const <String>['type_of_medical_image_id', 'id'],
+              titleKeys: const <String>['type_name', 'name'],
+            )
+          : null,
+      selectedLabTests: _parseList(
+        json['selected_lab_tests'],
+        (Map<String, dynamic> item) => AppointmentSelectedItem.fromJson(
+          item,
+          idKeys: const <String>['lab_test_id', 'id'],
+          titleKeys: const <String>['name', 'type_name'],
+        ),
+      ),
       hasPharmacy: _asNullableBool(json['has_pharmacy']),
       sendToPharmacy: _asNullableBool(json['send_to_pharmacy']),
       patient: json['patient'] is Map<String, dynamic>
@@ -118,6 +138,9 @@ class AppointmentDetailsModel {
           radiologyResult != null ||
           labResult != null ||
           (hasPharmacy == true));
+
+  bool get hasSelectedBookingServices =>
+      selectedRadiologyImageType != null || selectedLabTests.isNotEmpty;
 
   static List<T> _parseList<T>(
     dynamic value,
@@ -215,6 +238,24 @@ class AppointmentDiagnosisDetails {
   }
 }
 
+class AppointmentSelectedItem {
+  final int? id;
+  final String title;
+
+  const AppointmentSelectedItem({this.id, required this.title});
+
+  factory AppointmentSelectedItem.fromJson(
+    Map<String, dynamic> json, {
+    required List<String> idKeys,
+    required List<String> titleKeys,
+  }) {
+    return AppointmentSelectedItem(
+      id: _firstNullableInt(json, idKeys),
+      title: _firstString(json, titleKeys),
+    );
+  }
+}
+
 class AppointmentNamedRequest {
   final String title;
   final String notes;
@@ -301,4 +342,26 @@ bool? _asNullableBool(dynamic value) {
     return false;
   }
   return null;
+}
+
+int? _firstNullableInt(Map<String, dynamic> json, List<String> keys) {
+  for (final String key in keys) {
+    final int? value = _asNullableInt(json[key]);
+    if (value != null) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
+String _firstString(Map<String, dynamic> json, List<String> keys) {
+  for (final String key in keys) {
+    final String value = json[key]?.toString().trim() ?? '';
+    if (value.isNotEmpty) {
+      return value;
+    }
+  }
+
+  return '';
 }

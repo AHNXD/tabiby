@@ -10,13 +10,19 @@ class AiUsageCubit extends Cubit<AiUsageState> {
   AiUsageCubit(this._repo) : super(const AiUsageState());
 
   final AiUsageRepo _repo;
+  int _sessionVersion = 0;
 
   Future<void> refreshRemaining({bool silent = false}) async {
+    final int sessionVersion = _sessionVersion;
     if (!silent) {
       emit(state.copyWith(remainingStatus: AiUsageAsyncStatus.loading));
     }
 
     final result = await _repo.getRemaining();
+    if (sessionVersion != _sessionVersion) {
+      return;
+    }
+
     result.fold(
       (failure) {
         emit(
@@ -40,4 +46,9 @@ class AiUsageCubit extends Cubit<AiUsageState> {
 
   AiFeatureUsageLimit? usageFor(AiFeatureType type) =>
       state.remainingByFeature[type];
+
+  void reset() {
+    _sessionVersion++;
+    emit(const AiUsageState());
+  }
 }

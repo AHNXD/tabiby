@@ -57,6 +57,7 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
 
   bool _didPrefillUserData = false;
   bool _didApplyLocalizedDefaults = false;
+  bool _didApplyRequestData = false;
 
   @override
   void initState() {
@@ -68,10 +69,11 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     if (cachedRequest != null &&
         cachedRequest.isSpecialist == widget.isSpecialist) {
       _applyRequestData(cachedRequest);
+      _didApplyRequestData = true;
     }
 
     final userState = context.read<UserCubit>().state;
-    _prefillFromUserState(userState);
+    _prefillFromUserState(userState, canReplaceLocalizedDefaults: false);
     if (userState is! UserSuccess) {
       context.read<UserCubit>().getProfile();
     }
@@ -203,8 +205,11 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     _specialistNotesController.text = request.specialistNotes ?? '';
   }
 
-  void _prefillFromUserState(UserState state) {
-    if (_didPrefillUserData || state is! UserSuccess) {
+  void _prefillFromUserState(
+    UserState state, {
+    bool canReplaceLocalizedDefaults = true,
+  }) {
+    if (_didPrefillUserData || _didApplyRequestData || state is! UserSuccess) {
       return;
     }
 
@@ -215,26 +220,49 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
     final String? birthDate = user.moreData?.birthDate;
     final int? age = _calculateAge(birthDate);
 
-    _setIfEmpty(_nameController, fullName);
+    _setProfileValue(_nameController, fullName);
     if (age != null) {
-      _setIfEmpty(_ageController, age.toString());
+      _setProfileValue(_ageController, age.toString(), defaultValues: ['30']);
     }
 
-    _setIfEmpty(_genderController, user.moreData?.gender ?? '');
-    _setIfEmpty(_heightController, user.moreData?.height ?? '');
-    _setIfEmpty(_weightController, user.moreData?.weight ?? '');
-    _setIfEmpty(
+    _setProfileValue(_genderController, user.moreData?.gender ?? '');
+    _setProfileValue(
+      _heightController,
+      user.moreData?.height ?? '',
+      defaultValues: ['170'],
+    );
+    _setProfileValue(
+      _weightController,
+      user.moreData?.weight ?? '',
+      defaultValues: ['75'],
+    );
+    _setProfileValue(
       _chronicDiseasesController,
       user.moreData?.chronicDiseases ?? '',
+      defaultValues: canReplaceLocalizedDefaults
+          ? [_localizedDefaultNoneValue]
+          : const <String>[],
     );
-    _setIfEmpty(
+    _setProfileValue(
       _medicationsController,
       user.moreData?.permanentMedications ?? '',
+      defaultValues: canReplaceLocalizedDefaults
+          ? [_localizedDefaultNoneValue]
+          : const <String>[],
     );
-    _setIfEmpty(_allergiesController, user.moreData?.foodAllergies ?? '');
-    _setIfEmpty(
+    _setProfileValue(
+      _allergiesController,
+      user.moreData?.foodAllergies ?? '',
+      defaultValues: canReplaceLocalizedDefaults
+          ? [_localizedDefaultNoneValue]
+          : const <String>[],
+    );
+    _setProfileValue(
       _digestionIssuesController,
       user.moreData?.digestionIssues ?? '',
+      defaultValues: canReplaceLocalizedDefaults
+          ? [_localizedDefaultNoneValue]
+          : const <String>[],
     );
 
     _didPrefillUserData = true;
@@ -243,6 +271,32 @@ class _DietPlanFormScreenState extends State<DietPlanFormScreen> {
   void _setIfEmpty(TextEditingController controller, String value) {
     if (controller.text.trim().isEmpty && value.trim().isNotEmpty) {
       controller.text = value;
+    }
+  }
+
+  String get _localizedDefaultNoneValue {
+    return 'diet_default_none_value'.tr(context);
+  }
+
+  void _setProfileValue(
+    TextEditingController controller,
+    String value, {
+    List<String> defaultValues = const [],
+  }) {
+    final String trimmedValue = value.trim();
+    if (trimmedValue.isEmpty) {
+      return;
+    }
+
+    final String currentValue = controller.text.trim();
+    final bool canReplaceCurrentValue =
+        currentValue.isEmpty ||
+        defaultValues.any(
+          (defaultValue) => defaultValue.trim() == currentValue,
+        );
+
+    if (canReplaceCurrentValue) {
+      controller.text = trimmedValue;
     }
   }
 

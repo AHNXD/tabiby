@@ -17,8 +17,10 @@ class DietCubit extends Cubit<DietState> {
   }
 
   final DietRepository _dietRepository;
+  int _sessionVersion = 0;
 
   Future<void> generateDietPlan(DietRequestData request) async {
+    final int sessionVersion = _sessionVersion;
     emit(
       state.copyWith(
         submitStatus: DietAsyncStatus.loading,
@@ -32,6 +34,9 @@ class DietCubit extends Cubit<DietState> {
     );
 
     final result = await _dietRepository.generateDietPlan(request);
+    if (sessionVersion != _sessionVersion) {
+      return;
+    }
 
     await result.fold(
       (failure) async {
@@ -65,11 +70,15 @@ class DietCubit extends Cubit<DietState> {
   }
 
   Future<void> loadHistory() async {
+    final int sessionVersion = _sessionVersion;
     emit(
       state.copyWith(historyStatus: DietAsyncStatus.loading, errorMessage: ''),
     );
 
     final result = await _dietRepository.getDietPlans();
+    if (sessionVersion != _sessionVersion) {
+      return;
+    }
 
     result.fold(
       (failure) {
@@ -94,6 +103,7 @@ class DietCubit extends Cubit<DietState> {
   }
 
   Future<bool> openHistoryItem(DietPlanHistoryItem item) async {
+    final int sessionVersion = _sessionVersion;
     emit(
       state.copyWith(
         planStatus: DietAsyncStatus.loading,
@@ -106,6 +116,9 @@ class DietCubit extends Cubit<DietState> {
     );
 
     final result = await _dietRepository.getDietPlanById(item.id);
+    if (sessionVersion != _sessionVersion) {
+      return false;
+    }
 
     return result.fold(
       (failure) {
@@ -135,6 +148,7 @@ class DietCubit extends Cubit<DietState> {
   }
 
   Future<bool> openLatestPlan() async {
+    final int sessionVersion = _sessionVersion;
     emit(
       state.copyWith(
         planStatus: DietAsyncStatus.loading,
@@ -147,6 +161,9 @@ class DietCubit extends Cubit<DietState> {
     );
 
     final result = await _dietRepository.getLatestDietPlan();
+    if (sessionVersion != _sessionVersion) {
+      return false;
+    }
 
     return result.fold(
       (failure) {
@@ -185,12 +202,16 @@ class DietCubit extends Cubit<DietState> {
   }
 
   void reset() {
+    _sessionVersion++;
     emit(
       state.copyWith(
         submitStatus: DietAsyncStatus.initial,
+        historyStatus: DietAsyncStatus.initial,
         planStatus: DietAsyncStatus.initial,
         errorMessage: '',
         infoMessage: '',
+        history: const <DietPlanHistoryItem>[],
+        historyMeta: const DietPlansMeta(page: 1, limit: 10, total: 0),
         clearPlan: true,
         clearCurrentRequest: true,
         currentPlanId: '',
@@ -203,6 +224,7 @@ class DietCubit extends Cubit<DietState> {
   }
 
   Future<void> exportCurrentPlanAsPdf() async {
+    final int sessionVersion = _sessionVersion;
     final DietPlanResponse? plan = state.plan;
     final DietRequestData? request = state.currentRequest;
 
@@ -229,6 +251,9 @@ class DietCubit extends Cubit<DietState> {
       request: request,
       createdAt: state.currentPlanCreatedAt,
     );
+    if (sessionVersion != _sessionVersion) {
+      return;
+    }
 
     result.fold(
       (failure) {

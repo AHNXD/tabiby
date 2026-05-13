@@ -17,6 +17,7 @@ class LogoutRepoIplm implements LogoutRepo {
       var resp = await _apiServices.post(endPoint: Urls.logout, data: {});
       if (resp.statusCode == 200 || resp.data["status"] == true) {
         CacheHelper.removeData(key: "token");
+        CacheHelper.removeData(key: "role");
         isGuest = true;
         return right(null);
       }

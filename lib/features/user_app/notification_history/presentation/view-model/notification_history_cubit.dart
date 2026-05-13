@@ -11,8 +11,10 @@ class NotificationHistoryCubit extends Cubit<NotificationHistoryState> {
     : super(const NotificationHistoryState());
 
   final NotificationHistoryRepo _notificationHistoryRepo;
+  int _sessionVersion = 0;
 
   Future<void> loadNotifications({bool force = false}) async {
+    final int sessionVersion = _sessionVersion;
     if (state.status == NotificationHistoryStatus.loading) {
       return;
     }
@@ -29,6 +31,10 @@ class NotificationHistoryCubit extends Cubit<NotificationHistoryState> {
     );
 
     final result = await _notificationHistoryRepo.getNotifications();
+    if (sessionVersion != _sessionVersion) {
+      return;
+    }
+
     result.fold(
       (failure) => emit(
         state.copyWith(
@@ -48,6 +54,7 @@ class NotificationHistoryCubit extends Cubit<NotificationHistoryState> {
   }
 
   Future<void> markAsRead(String notificationId) async {
+    final int sessionVersion = _sessionVersion;
     NotificationHistoryItem? targetNotification;
     for (final NotificationHistoryItem item in state.notifications) {
       if (item.id == notificationId) {
@@ -71,6 +78,10 @@ class NotificationHistoryCubit extends Cubit<NotificationHistoryState> {
     );
 
     final result = await _notificationHistoryRepo.markAsRead(notificationId);
+    if (sessionVersion != _sessionVersion) {
+      return;
+    }
+
     result.fold(
       (failure) => emit(
         state.copyWith(
@@ -114,5 +125,10 @@ class NotificationHistoryCubit extends Cubit<NotificationHistoryState> {
         actionErrorMessage: '',
       ),
     );
+  }
+
+  void reset() {
+    _sessionVersion++;
+    emit(const NotificationHistoryState());
   }
 }

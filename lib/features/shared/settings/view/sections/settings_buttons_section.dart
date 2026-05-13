@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabiby/core/ai_usage/ai_usage_cubit.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/cache_helper.dart';
 import 'package:tabiby/core/utils/colors.dart';
@@ -10,6 +11,8 @@ import 'package:tabiby/features/auth/presentation/views/login/view/login_screen.
 import 'package:tabiby/features/shared/about_us/presentation/view/about_us_screen.dart';
 import 'package:tabiby/features/shared/contact_us/presentation/view/contact_us_screen.dart';
 import 'package:tabiby/features/shared/welcome/view/welcome_screen.dart';
+import 'package:tabiby/features/user_app/diet/presentation/view_models/diet_cubit.dart';
+import 'package:tabiby/features/user_app/notification_history/presentation/view-model/notification_history_cubit.dart';
 
 import '../../../../../core/locale/locale_cubit.dart';
 import '../../../../auth/presentation/view-model/logout_cubit/logout_cubit.dart';
@@ -160,6 +163,13 @@ class SettingsButtonsSection extends StatelessWidget {
     );
   }
 
+  void _clearSessionState(BuildContext context) {
+    context.read<DietCubit>().reset();
+    context.read<NotificationHistoryCubit>().reset();
+    context.read<AiUsageCubit>().reset();
+    context.read<UserCubit>().reset();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -167,6 +177,7 @@ class SettingsButtonsSection extends StatelessWidget {
         BlocListener<LogoutCubit, LogoutState>(
           listener: (context, state) {
             if (state is LogoutSuccess) {
+              _clearSessionState(context);
               messages(
                 context,
                 "logout_success".tr(context),
@@ -185,6 +196,7 @@ class SettingsButtonsSection extends StatelessWidget {
         BlocListener<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserDeleteSuccess) {
+              _clearSessionState(context);
               messages(
                 context,
                 "account_deleted_success".tr(context),

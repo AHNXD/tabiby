@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabiby/core/ai_usage/ai_usage_cubit.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
 import 'package:tabiby/core/widgets/main_screen.dart';
 import 'package:tabiby/features/doctor_app/doctor_appointment/presentation/view/doctor_appointment_screen.dart';
+import 'package:tabiby/features/user_app/diet/presentation/view_models/diet_cubit.dart';
+import 'package:tabiby/features/user_app/notification_history/presentation/view-model/notification_history_cubit.dart';
 
 import '../../../../../../user_app/user/presentation/view-model/user_cubit/user_cubit.dart';
 import '../../../../view-model/login_cubit/login_cubit.dart';
@@ -57,8 +60,14 @@ class _LoginFormState extends State<LoginForm> {
 
   void _handleSuccess(String role) {
     messages(context, "login_success".tr(context), AppColors.greenColor);
+    context.read<DietCubit>().reset();
+    context.read<NotificationHistoryCubit>().reset();
+    context.read<AiUsageCubit>().reset();
     context.read<UserCubit>().getProfile();
+    context.read<AiUsageCubit>().refreshRemaining();
     if (role == "patient") {
+      context.read<DietCubit>().loadHistory();
+      context.read<NotificationHistoryCubit>().loadNotifications(force: true);
       Navigator.pushNamedAndRemoveUntil(
         context,
         MainScreen.routeName,

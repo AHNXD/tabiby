@@ -71,6 +71,10 @@ class _AppointmentDetailsView extends StatelessWidget {
                   _DoctorCard(details: details),
                   const SizedBox(height: 16),
                   _SummaryCard(details: details),
+                  if (details.hasSelectedBookingServices) ...<Widget>[
+                    const SizedBox(height: 16),
+                    _SelectedBookingServicesSection(details: details),
+                  ],
                   if ((details.patientNote ?? '')
                       .trim()
                       .isNotEmpty) ...<Widget>[
@@ -313,6 +317,63 @@ class _SummaryCard extends StatelessWidget {
             _SummaryRow(
               title: 'birth_date'.tr(context),
               value: details.patient!.birthDate!,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SelectedBookingServicesSection extends StatelessWidget {
+  const _SelectedBookingServicesSection({required this.details});
+
+  final AppointmentDetailsModel details;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppointmentSelectedItem? selectedRadiology =
+        details.selectedRadiologyImageType;
+
+    return _SectionCard(
+      title: 'selected_appointment_services'.tr(context),
+      icon: details.selectedLabTests.isNotEmpty
+          ? Icons.science_outlined
+          : Icons.image_search_outlined,
+      child: Column(
+        children: <Widget>[
+          if (selectedRadiology != null) ...<Widget>[
+            _ItemCard(
+              title: 'selected_radiology_image_type'.tr(context),
+              rows: <MapEntry<String, String>>[
+                MapEntry(
+                  'select_image_type'.tr(context),
+                  selectedRadiology.title.isEmpty
+                      ? '--'
+                      : selectedRadiology.title,
+                ),
+              ],
+            ),
+            if (details.selectedLabTests.isNotEmpty) const SizedBox(height: 10),
+          ],
+          if (details.selectedLabTests.isNotEmpty)
+            Column(
+              children: List<Widget>.generate(details.selectedLabTests.length, (
+                int index,
+              ) {
+                final AppointmentSelectedItem test =
+                    details.selectedLabTests[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: index == details.selectedLabTests.length - 1
+                        ? 0
+                        : 10,
+                  ),
+                  child: _ItemCard(
+                    title: test.title.isEmpty ? '--' : test.title,
+                    rows: const <MapEntry<String, String>>[],
+                  ),
+                );
+              }),
             ),
         ],
       ),
