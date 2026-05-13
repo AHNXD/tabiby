@@ -9,8 +9,13 @@ import '../../../../../core/utils/services_locater.dart';
 import '../../../../../core/widgets/buttom_loader.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
+import '../../../center_details/data/models/centers_model.dart';
+import '../../../centers/data/models/centers_query_params.dart';
+import '../../../centers/data/repos/centers_repo.dart';
 import '../../data/models/doctors_query_params.dart';
 import '../../data/repos/doctors_repo.dart';
+import '../../../specialties/data/models/specialties_model.dart';
+import '../../../specialties/data/repos/user_repo.dart';
 import '../view_model/doctor_cubit.dart';
 import 'widgets/doctor_card.dart';
 
@@ -119,7 +124,8 @@ class _AllDoctorsScreenState extends State<AllDoctorsScreen> {
           builder: (BuildContext context) {
             return _DoctorsFiltersSheet(
               initialQuery: _doctorsCubit.currentQuery,
-              showCenterNameFilter: centerID == null,
+              showSpecialtyFilter: specialtyID == null,
+              showCenterFilter: centerID == null,
             );
           },
         );
@@ -453,6 +459,18 @@ class _AppliedDoctorFilters extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: [
+              if (query.selectedSpecialtyId != null)
+                _DoctorFilterChip(
+                  icon: Icons.medical_services_outlined,
+                  label:
+                      '${'specialty'.tr(context)}: ${query.normalizedSelectedSpecialtyName ?? query.selectedSpecialtyId}',
+                ),
+              if (query.selectedCenterId != null)
+                _DoctorFilterChip(
+                  icon: Icons.local_hospital_outlined,
+                  label:
+                      '${'center'.tr(context)}: ${query.normalizedSelectedCenterName ?? query.selectedCenterId}',
+                ),
               if (query.normalizedCenterName != null)
                 _DoctorFilterChip(
                   icon: Icons.apartment_rounded,
@@ -561,14 +579,18 @@ class _DoctorsEmptyState extends StatelessWidget {
 
 enum _DoctorExperienceFilterMode { exact, range }
 
+enum _DoctorCenterFilterMode { select, name }
+
 class _DoctorsFiltersSheet extends StatefulWidget {
   const _DoctorsFiltersSheet({
     required this.initialQuery,
-    required this.showCenterNameFilter,
+    required this.showSpecialtyFilter,
+    required this.showCenterFilter,
   });
 
   final DoctorsQueryParams initialQuery;
-  final bool showCenterNameFilter;
+  final bool showSpecialtyFilter;
+  final bool showCenterFilter;
 
   @override
   State<_DoctorsFiltersSheet> createState() => _DoctorsFiltersSheetState();
@@ -580,10 +602,24 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
   late final TextEditingController _minExperienceController;
   late final TextEditingController _maxExperienceController;
   late _DoctorExperienceFilterMode _selectedMode;
+  late _DoctorCenterFilterMode _centerFilterMode;
+  int? _selectedSpecialtyId;
+  int? _selectedCenterId;
+  List<SpecializationModel> _specialties = const <SpecializationModel>[];
+  List<Centers> _centers = const <Centers>[];
+  bool _isLoadingFilterOptions = false;
+  String? _filterOptionsError;
 
   @override
   void initState() {
     super.initState();
+    _selectedSpecialtyId = widget.initialQuery.selectedSpecialtyId;
+    _selectedCenterId = widget.initialQuery.selectedCenterId;
+    _centerFilterMode =
+        widget.initialQuery.selectedCenterId != null ||
+            widget.initialQuery.normalizedCenterName == null
+        ? _DoctorCenterFilterMode.select
+        : _DoctorCenterFilterMode.name;
     _centerNameController = TextEditingController(
       text: widget.initialQuery.centerName ?? '',
     );
@@ -602,6 +638,7 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
                 widget.initialQuery.maxExperience == null)
         ? _DoctorExperienceFilterMode.exact
         : _DoctorExperienceFilterMode.range;
+    _loadFilterOptions();
   }
 
   @override
@@ -620,7 +657,86 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
     _maxExperienceController.clear();
     setState(() {
       _selectedMode = _DoctorExperienceFilterMode.exact;
+      _centerFilterMode = _DoctorCenterFilterMode.select;
+      _selectedSpecialtyId = null;
+      _selectedCenterId = null;
     });
+  }
+
+  Future<void> _loadFilterOptions() async {
+    if (!widget.showSpecialtyFilter && !widget.showCenterFilter) {
+      return;
+    }
+
+    setState(() {
+      _isLoadingFilterOptions = true;
+      _filterOptionsError = null;
+    });
+
+    try {
+      final List<SpecializationModel> specialties = widget.showSpecialtyFilter
+          ? await _fetchSpecialties()
+          : const <SpecializationModel>[];
+      final List<Centers> centers = widget.showCenterFilter
+          ? await _fetchCenters()
+          : const <Centers>[];
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _specialties = specialties;
+        _centers = centers;
+        _isLoadingFilterOptions = false;
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _filterOptionsError = error.toString();
+        _isLoadingFilterOptions = false;
+      });
+    }
+  }
+
+  Future<List<SpecializationModel>> _fetchSpecialties() async {
+    final result = await getit.get<SpecialtiesRepo>().getSpecialties();
+
+    return result.fold((failure) => throw failure.message, (specialties) {
+      return (specialties.specializations ?? <SpecializationModel>[])
+          .where((specialty) => specialty.id != null)
+          .toList();
+    });
+  }
+
+  Future<List<Centers>> _fetchCenters() async {
+    final CentersRepo repo = getit.get<CentersRepo>();
+    final List<Centers> allCenters = <Centers>[];
+    int page = 1;
+
+    while (true) {
+      final result = await repo.getCenters(page, CentersQueryParams.empty);
+      final CentersModel data = result.fold(
+        (failure) => throw failure.message,
+        (centers) => centers,
+      );
+
+      allCenters.addAll(
+        (data.centers ?? <Centers>[]).where((center) => center.id != null),
+      );
+
+      final pageInfo = data.pageInfo;
+      if (pageInfo == null || pageInfo.currentPage >= pageInfo.lastPage) {
+        break;
+      }
+
+      page++;
+    }
+
+    return allCenters;
   }
 
   void _applyFilters() {
@@ -650,8 +766,26 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
     Navigator.pop(
       context,
       widget.initialQuery.copyWith(
-        centerName: widget.showCenterNameFilter
+        centerName:
+            widget.showCenterFilter &&
+                _centerFilterMode == _DoctorCenterFilterMode.name
             ? _centerNameController.text
+            : null,
+        selectedCenterId:
+            widget.showCenterFilter &&
+                _centerFilterMode == _DoctorCenterFilterMode.select
+            ? _selectedCenterId
+            : null,
+        selectedCenterName:
+            widget.showCenterFilter &&
+                _centerFilterMode == _DoctorCenterFilterMode.select
+            ? _centerNameFor(_selectedCenterId)
+            : null,
+        selectedSpecialtyId: widget.showSpecialtyFilter
+            ? _selectedSpecialtyId
+            : null,
+        selectedSpecialtyName: widget.showSpecialtyFilter
+            ? _specialtyNameFor(_selectedSpecialtyId)
             : null,
         experienceYears: _selectedMode == _DoctorExperienceFilterMode.exact
             ? exactExperience
@@ -666,6 +800,34 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
     );
   }
 
+  String? _centerNameFor(int? centerId) {
+    if (centerId == null) {
+      return null;
+    }
+
+    for (final Centers center in _centers) {
+      if (center.id == centerId) {
+        return center.name;
+      }
+    }
+
+    return null;
+  }
+
+  String? _specialtyNameFor(int? specialtyId) {
+    if (specialtyId == null) {
+      return null;
+    }
+
+    for (final SpecializationModel specialty in _specialties) {
+      if (specialty.id == specialtyId) {
+        return specialty.name;
+      }
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -677,7 +839,7 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
       child: Material(
         color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(32),
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -711,14 +873,107 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
                 ),
               ),
               const SizedBox(height: 22),
-              if (widget.showCenterNameFilter) ...[
-                _FilterFieldLabel(label: 'center_name'.tr(context)),
-                const SizedBox(height: 10),
-                _BottomSheetTextField(
-                  controller: _centerNameController,
-                  hintText: 'doctor_center_name_hint'.tr(context),
+              if (_isLoadingFilterOptions) ...[
+                const Center(child: CircularProgressIndicator()),
+                const SizedBox(height: 18),
+              ] else if (_filterOptionsError != null) ...[
+                _FilterOptionsErrorCard(
+                  message: _filterOptionsError!,
+                  onRetry: _loadFilterOptions,
                 ),
                 const SizedBox(height: 18),
+              ] else ...[
+                if (widget.showSpecialtyFilter) ...[
+                  _FilterFieldLabel(label: 'specialty'.tr(context)),
+                  const SizedBox(height: 10),
+                  _BottomSheetDropdownField(
+                    value: _dropdownValue(
+                      _selectedSpecialtyId,
+                      _specialties.map((specialty) => specialty.id).toList(),
+                    ),
+                    hintText: 'all_specialties'.tr(context),
+                    items: <DropdownMenuItem<int>>[
+                      DropdownMenuItem<int>(
+                        value: 0,
+                        child: Text('all_specialties'.tr(context)),
+                      ),
+                      ..._specialties.map(
+                        (specialty) => DropdownMenuItem<int>(
+                          value: specialty.id!,
+                          child: Text(specialty.name ?? '--'),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedSpecialtyId = value == 0 ? null : value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                ],
+                if (widget.showCenterFilter) ...[
+                  _FilterFieldLabel(label: 'center'.tr(context)),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [
+                      ChoiceChip(
+                        label: Text('select_center_from_list'.tr(context)),
+                        selected:
+                            _centerFilterMode == _DoctorCenterFilterMode.select,
+                        onSelected: (_) {
+                          setState(() {
+                            _centerFilterMode = _DoctorCenterFilterMode.select;
+                          });
+                        },
+                      ),
+                      ChoiceChip(
+                        label: Text('write_center_name'.tr(context)),
+                        selected:
+                            _centerFilterMode == _DoctorCenterFilterMode.name,
+                        onSelected: (_) {
+                          setState(() {
+                            _centerFilterMode = _DoctorCenterFilterMode.name;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  if (_centerFilterMode == _DoctorCenterFilterMode.select)
+                    _BottomSheetDropdownField(
+                      value: _dropdownValue(
+                        _selectedCenterId,
+                        _centers.map((center) => center.id).toList(),
+                      ),
+                      hintText: 'all_centers'.tr(context),
+                      items: <DropdownMenuItem<int>>[
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Text('all_centers'.tr(context)),
+                        ),
+                        ..._centers.map(
+                          (center) => DropdownMenuItem<int>(
+                            value: center.id!,
+                            child: Text(center.name ?? '--'),
+                          ),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCenterId = value == 0 ? null : value;
+                        });
+                      },
+                    )
+                  else
+                    _BottomSheetTextField(
+                      controller: _centerNameController,
+                      hintText: 'doctor_center_name_hint'.tr(context),
+                    ),
+                  const SizedBox(height: 18),
+                ],
               ],
               _FilterFieldLabel(label: 'years_of_experience'.tr(context)),
               const SizedBox(height: 10),
@@ -821,6 +1076,14 @@ class _DoctorsFiltersSheetState extends State<_DoctorsFiltersSheet> {
     );
   }
 
+  int _dropdownValue(int? selectedId, List<int?> ids) {
+    if (selectedId == null) {
+      return 0;
+    }
+
+    return ids.contains(selectedId) ? selectedId : 0;
+  }
+
   bool _hasInvalidNumber(String rawValue, int? parsedValue) {
     return rawValue.trim().isNotEmpty && parsedValue == null;
   }
@@ -866,6 +1129,80 @@ class _BottomSheetTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide.none,
         ),
+      ),
+    );
+  }
+}
+
+class _BottomSheetDropdownField extends StatelessWidget {
+  const _BottomSheetDropdownField({
+    required this.value,
+    required this.hintText,
+    required this.items,
+    required this.onChanged,
+  });
+
+  final int value;
+  final String hintText;
+  final List<DropdownMenuItem<int>> items;
+  final ValueChanged<int?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<int>(
+      key: ValueKey<String>('$hintText-$value-${items.length}'),
+      initialValue: value,
+      isExpanded: true,
+      items: items,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        hintText: hintText,
+        filled: true,
+        fillColor: AppColors.appBackgroundColor,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 16,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+}
+
+class _FilterOptionsErrorCard extends StatelessWidget {
+  const _FilterOptionsErrorCard({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.errorColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.errorColor.withValues(alpha: 0.22)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.error_outline_rounded, color: AppColors.errorColor),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message.tr(context),
+              style: const TextStyle(
+                color: AppColors.errorColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          TextButton(onPressed: onRetry, child: Text('try_again'.tr(context))),
+        ],
       ),
     );
   }

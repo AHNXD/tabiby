@@ -5,6 +5,10 @@ const Object _unset = Object();
 class DoctorsQueryParams extends Equatable {
   final String? search;
   final String? centerName;
+  final int? selectedCenterId;
+  final String? selectedCenterName;
+  final int? selectedSpecialtyId;
+  final String? selectedSpecialtyName;
   final int? experienceYears;
   final int? minExperience;
   final int? maxExperience;
@@ -12,6 +16,10 @@ class DoctorsQueryParams extends Equatable {
   const DoctorsQueryParams({
     this.search,
     this.centerName,
+    this.selectedCenterId,
+    this.selectedCenterName,
+    this.selectedSpecialtyId,
+    this.selectedSpecialtyName,
     this.experienceYears,
     this.minExperience,
     this.maxExperience,
@@ -21,17 +29,34 @@ class DoctorsQueryParams extends Equatable {
 
   String? get normalizedSearch => _normalizeText(search);
   String? get normalizedCenterName => _normalizeText(centerName);
+  String? get normalizedSelectedCenterName =>
+      _normalizeText(selectedCenterName);
+  String? get normalizedSelectedSpecialtyName =>
+      _normalizeText(selectedSpecialtyName);
 
   bool get hasActiveSearch => normalizedSearch != null;
+  bool get hasSelectedCenter => selectedCenterId != null;
+  bool get hasSelectedSpecialty => selectedSpecialtyId != null;
   bool get hasExperienceFilter =>
       experienceYears != null || minExperience != null || maxExperience != null;
   bool get hasActiveFilters =>
-      normalizedCenterName != null || hasExperienceFilter;
+      normalizedCenterName != null ||
+      hasSelectedCenter ||
+      hasSelectedSpecialty ||
+      hasExperienceFilter;
 
   int get activeFilterCount {
     int count = 0;
 
     if (normalizedCenterName != null) {
+      count++;
+    }
+
+    if (hasSelectedCenter) {
+      count++;
+    }
+
+    if (hasSelectedSpecialty) {
       count++;
     }
 
@@ -72,6 +97,10 @@ class DoctorsQueryParams extends Equatable {
   DoctorsQueryParams copyWith({
     Object? search = _unset,
     Object? centerName = _unset,
+    Object? selectedCenterId = _unset,
+    Object? selectedCenterName = _unset,
+    Object? selectedSpecialtyId = _unset,
+    Object? selectedSpecialtyName = _unset,
     Object? experienceYears = _unset,
     Object? minExperience = _unset,
     Object? maxExperience = _unset,
@@ -81,6 +110,18 @@ class DoctorsQueryParams extends Equatable {
       centerName: identical(centerName, _unset)
           ? this.centerName
           : centerName as String?,
+      selectedCenterId: identical(selectedCenterId, _unset)
+          ? this.selectedCenterId
+          : selectedCenterId as int?,
+      selectedCenterName: identical(selectedCenterName, _unset)
+          ? this.selectedCenterName
+          : selectedCenterName as String?,
+      selectedSpecialtyId: identical(selectedSpecialtyId, _unset)
+          ? this.selectedSpecialtyId
+          : selectedSpecialtyId as int?,
+      selectedSpecialtyName: identical(selectedSpecialtyName, _unset)
+          ? this.selectedSpecialtyName
+          : selectedSpecialtyName as String?,
       experienceYears: identical(experienceYears, _unset)
           ? this.experienceYears
           : experienceYears as int?,
@@ -106,6 +147,10 @@ class DoctorsQueryParams extends Equatable {
   List<Object?> get props => <Object?>[
     normalizedSearch,
     normalizedCenterName,
+    selectedCenterId,
+    normalizedSelectedCenterName,
+    selectedSpecialtyId,
+    normalizedSelectedSpecialtyName,
     experienceYears,
     minExperience,
     maxExperience,

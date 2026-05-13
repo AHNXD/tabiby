@@ -20,11 +20,12 @@ class DoctorsRepoIplm implements DoctorsRepo {
     DoctorsQueryParams queryParams,
   ) async {
     try {
-      String endpoint = Urls.doctors;
-
-      if (centerID != null || specialtyID != null) {
-        endpoint += '/${specialtyID ?? 0}/${centerID ?? 0}';
-      }
+      final int effectiveSpecialtyId =
+          specialtyID ?? queryParams.selectedSpecialtyId ?? 0;
+      final int effectiveCenterId =
+          centerID ?? queryParams.selectedCenterId ?? 0;
+      String endpoint =
+          '${Urls.doctors}/$effectiveSpecialtyId/$effectiveCenterId';
 
       final String queryString = Uri(
         queryParameters: queryParams.toQueryParameters(page: page),
