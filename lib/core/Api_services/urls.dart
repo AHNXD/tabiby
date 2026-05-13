@@ -60,6 +60,7 @@ class Urls {
   static String getAppointments = "$basePort/appointments";
   static String getMyAppointments = "$basePort/appointments";
   static String notifications = "$basePort/notifications";
+  static String fcmToken = "$basePort/fcm-token";
   static String markNotificationAsRead(String notificationId) =>
       "$notifications/$notificationId/read";
 

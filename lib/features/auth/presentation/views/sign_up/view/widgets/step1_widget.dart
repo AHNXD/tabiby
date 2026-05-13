@@ -36,9 +36,9 @@ class Step1Widget extends StatelessWidget {
           Expanded(
             child: ListView(
               shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 4),
                 CustomTextField(
                   hintText: 'first_name'.tr(context),
                   controller: firstNameCtrl,
@@ -46,7 +46,7 @@ class Step1Widget extends StatelessWidget {
                   validator: (val) =>
                       Validator.validate(val, ValidationState.normal, context),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomTextField(
                   hintText: 'last_name'.tr(context),
                   controller: lastNameCtrl,
@@ -54,7 +54,7 @@ class Step1Widget extends StatelessWidget {
                   validator: (val) =>
                       Validator.validate(val, ValidationState.normal, context),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomTextField(
                   hintText: 'phone'.tr(context),
                   suffixIcon: Icons.phone,
@@ -66,7 +66,7 @@ class Step1Widget extends StatelessWidget {
                     context,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomTextField(
                   hintText: 'email'.tr(context),
                   suffixIcon: Icons.email,
@@ -75,7 +75,7 @@ class Step1Widget extends StatelessWidget {
                       Validator.validate(val, ValidationState.email, context),
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 PasswordTextField(
                   hintText: 'password'.tr(context),
                   controller: passwordCtrl,
@@ -85,7 +85,7 @@ class Step1Widget extends StatelessWidget {
                     context,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
               ],
             ),
           ),

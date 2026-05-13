@@ -193,7 +193,7 @@ class _StepsSectionWrapperState extends State<StepsSectionWrapper> {
               onStepTapped: goToStep,
               totalSteps: 4,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 14),
             Expanded(
               child: PageView(
                 controller: _pageController,

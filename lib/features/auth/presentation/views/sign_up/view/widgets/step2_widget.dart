@@ -51,9 +51,9 @@ class Step2Widget extends StatelessWidget {
           Expanded(
             child: ListView(
               shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 4),
                 CustomTextField(
                   hintText: 'address'.tr(context),
                   controller: addressCtrl,
@@ -61,7 +61,7 @@ class Step2Widget extends StatelessWidget {
                   validator: (val) =>
                       Validator.validate(val, ValidationState.normal, context),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomDropdownField(
                   hintText: 'gender'.tr(context),
                   prefixIcon: Icons.wc_rounded,
@@ -77,7 +77,7 @@ class Step2Widget extends StatelessWidget {
                     return null;
                   },
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomDropdownField(
                   hintText: 'blood_type'.tr(context),
                   prefixIcon: Icons.bloodtype_outlined,
@@ -85,7 +85,7 @@ class Step2Widget extends StatelessWidget {
                   value: bloodType,
                   onChanged: onBloodTypeChanged,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomTextField(
                   hintText: 'weight'.tr(context),
                   controller: weightCtrl,
@@ -94,7 +94,7 @@ class Step2Widget extends StatelessWidget {
                       Validator.validate(val, ValidationState.price, context),
                   suffixIcon: Icons.monitor_weight_rounded,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 18),
                 CustomTextField(
                   hintText: 'height'.tr(context),
                   controller: heightCtrl,
@@ -103,7 +103,7 @@ class Step2Widget extends StatelessWidget {
                       Validator.validate(val, ValidationState.price, context),
                   suffixIcon: Icons.height,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
               ],
             ),
           ),

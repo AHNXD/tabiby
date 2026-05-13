@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/ai_usage/ai_usage_cubit.dart';
-import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
 import 'package:tabiby/core/utils/functions.dart';
@@ -103,21 +102,6 @@ class _LoginFormState extends State<LoginForm> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 32,
-                ),
-                child: Hero(
-                  tag: 'app-logo',
-                  child: Image.asset(
-                    AssetsData.logoGreen,
-                    color: AppColors.primaryColors,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
-
               LoginInputs(
                 formKey: _formKey,
                 phoneController: phoneController,
@@ -126,14 +110,14 @@ class _LoginFormState extends State<LoginForm> {
                 onLoginPressed: onLoginPressed,
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 22),
 
               TermsCheckbox(
                 agreeToTerms: agreeToTerms,
                 onToggle: onAgreeToggle,
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 26),
               const CreateAccountText(),
             ],
           );

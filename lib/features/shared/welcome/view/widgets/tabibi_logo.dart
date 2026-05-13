@@ -3,19 +3,18 @@ import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
 class TabibiLogo extends StatelessWidget {
-  const TabibiLogo({super.key});
+  const TabibiLogo({super.key, this.isLight = false, this.width = 190});
+
+  final bool isLight;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 64.0),
-      child: Hero(
-        tag: 'app-logo',
-        child: Image.asset(
-          AssetsData.logoGreen,
-          color: AppColors.primaryColors,
-        ),
-      ),
+    return Image.asset(
+      isLight ? AssetsData.logoWhite : AssetsData.logoGreen,
+      width: width,
+      color: isLight ? null : AppColors.primaryColors,
+      fit: BoxFit.contain,
     );
   }
 }

@@ -70,9 +70,9 @@ class _Step3WidgetState extends State<Step3Widget> {
         Expanded(
           child: ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 4),
               CustomDropdownField(
                 hintText: 'marital_status'.tr(context),
                 prefixIcon: Icons.people_outline_rounded,
@@ -84,7 +84,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                   }
                 },
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 18),
 
               // --- Have Children ---
               Opacity(
@@ -111,11 +111,15 @@ class _Step3WidgetState extends State<Step3Widget> {
                                 color: AppColors.textFieldColor,
                               ),
                               const SizedBox(width: 12),
-                              Text(
-                                'have_children'.tr(context),
-                                style: const TextStyle(
-                                  color: AppColors.textFieldColor,
-                                  fontSize: 16,
+                              Expanded(
+                                child: Text(
+                                  'have_children'.tr(context),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: AppColors.textFieldColor,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ],
@@ -140,7 +144,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 18),
 
               // --- Number of Children ---
               Opacity(
@@ -167,11 +171,15 @@ class _Step3WidgetState extends State<Step3Widget> {
                                 color: AppColors.textFieldColor,
                               ),
                               const SizedBox(width: 12),
-                              Text(
-                                'number_of_children'.tr(context),
-                                style: const TextStyle(
-                                  color: AppColors.textFieldColor,
-                                  fontSize: 16,
+                              Expanded(
+                                child: Text(
+                                  'number_of_children'.tr(context),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: AppColors.textFieldColor,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ],
@@ -189,7 +197,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 18),
               Row(
                 children: [
                   Expanded(
@@ -210,11 +218,15 @@ class _Step3WidgetState extends State<Step3Widget> {
                             color: AppColors.textFieldColor,
                           ),
                           const SizedBox(width: 12),
-                          Text(
-                            'are_you_a_smoker'.tr(context),
-                            style: const TextStyle(
-                              color: AppColors.textFieldColor,
-                              fontSize: 16,
+                          Expanded(
+                            child: Text(
+                              'are_you_a_smoker'.tr(context),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AppColors.textFieldColor,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ],
@@ -236,7 +248,7 @@ class _Step3WidgetState extends State<Step3Widget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 18),
               // --- Date of Birth Field ---
               GestureDetector(
                 onTap: () => _selectDate(context),
@@ -281,7 +293,7 @@ class _Step3WidgetState extends State<Step3Widget> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
           child: Column(
             children: [
               SecondryButton(

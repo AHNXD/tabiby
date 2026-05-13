@@ -49,7 +49,7 @@ class LoginInputs extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 18),
           Opacity(
             opacity: isLoading ? 0.6 : 1.0,
             child: IgnorePointer(
@@ -62,12 +62,17 @@ class LoginInputs extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: 14),
 
           Align(
             alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: isLoading
+            child: TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primaryColors,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              onPressed: isLoading
                   ? null
                   : () => Navigator.pushNamed(
                       context,
@@ -75,11 +80,14 @@ class LoginInputs extends StatelessWidget {
                     ),
               child: Text(
                 'forget_password'.tr(context),
-                style: TextStyle(color: AppColors.textColor, fontSize: 12),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 24),
 
           isLoading
               ? const Center(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
+import 'package:tabiby/features/auth/presentation/views/widgets/auth_page_scaffold.dart';
 
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/utils/constats.dart';
 import '../../../../../../../core/utils/enums.dart';
 import '../../../../../../../core/utils/functions.dart';
 import '../../../../../../../core/utils/styles.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../../../../../../../core/utils/validation.dart';
 import '../../../../../../../core/widgets/password_textfield.dart';
 import '../../../../view-model/reset_password_cubit/reset_password_cubit.dart';
@@ -75,12 +75,11 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final double responsiveFieldWidth = (size.width - 150) / _otpLength;
-    return Scaffold(
-      backgroundColor: AppColors.whiteColor,
-      appBar: CustomAppbar(title: 'otp'.tr(context)),
-      body: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
+    return AuthPageScaffold(
+      title: 'otp'.tr(context),
+      subtitle: 'otp_message'.tr(context),
+      icon: Icons.verified_user_outlined,
+      child: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
         listener: (context, state) {
           if (state is VerifyResetPasswordSuccess) {
             messages(
@@ -95,97 +94,97 @@ class _OTPScreenState extends State<OTPScreen> {
           }
         },
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          "otp_message".tr(context),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(),
-                        ),
-                        leading: const Icon(
-                          Icons.warning,
-                          color: AppColors.primaryColors,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: OtpTextField(
-                          onSubmit: (otp) {
-                            _otpCode = otp;
-                          },
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AuthInfoPanel(
+                text: 'otp_message'.tr(context),
+                icon: Icons.pin_outlined,
+              ),
+              const SizedBox(height: 22),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  const double fieldMargin = 3;
+                  const double totalHorizontalMargins =
+                      _otpLength * fieldMargin * 2;
+                  final double responsiveFieldWidth =
+                      ((constraints.maxWidth - totalHorizontalMargins) /
+                              _otpLength)
+                          .clamp(32.0, 44.0)
+                          .toDouble();
 
-                          borderColor: AppColors.primaryColors,
-                          focusedBorderColor: AppColors.primaryColors,
-                          cursorColor: AppColors.primaryColors,
-                          fieldWidth: responsiveFieldWidth,
-                          showFieldAsBox: true,
-                          numberOfFields: 6,
-                          borderRadius: BorderRadius.circular(kBorderRadius),
-                          textStyle: Styles.textStyle18.copyWith(
-                            color: AppColors.textButtonColors,
-                          ),
-                        ),
+                  return Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: OtpTextField(
+                      onSubmit: (otp) {
+                        _otpCode = otp;
+                      },
+                      borderColor: AppColors.sageBorderSoftColor,
+                      enabledBorderColor: AppColors.sageBorderSoftColor,
+                      focusedBorderColor: AppColors.primaryColors,
+                      cursorColor: AppColors.primaryColors,
+                      fieldWidth: responsiveFieldWidth,
+                      fieldHeight: 50,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: fieldMargin,
                       ),
-                      const SizedBox(height: 32),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                "confirm_password_message".tr(context),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(),
-                              ),
-                              leading: const Icon(
-                                Icons.warning,
-                                color: AppColors.primaryColors,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            PasswordTextField(
-                              hintText: "new_password".tr(context),
-                              controller: _newPasswordCtrl,
-                              validator: (val) => Validator.validate(
-                                val,
-                                ValidationState.password,
-                                context,
-                              ),
-                            ),
-                            const SizedBox(height: 32),
-                            PasswordTextField(
-                              hintText: "confirm_password".tr(context),
-                              controller: _confirmPasswordCtrl,
-                              validator: (val) =>
-                                  Validator.validateConfirmPassword(
-                                    val,
-                                    _newPasswordCtrl.text,
-                                    context,
-                                  ),
-                            ),
-                          ],
-                        ),
+                      contentPadding: EdgeInsets.zero,
+                      borderWidth: 1.4,
+                      showFieldAsBox: true,
+                      numberOfFields: _otpLength,
+                      borderRadius: BorderRadius.circular(kBorderRadius),
+                      textStyle: Styles.textStyle18.copyWith(
+                        color: AppColors.textButtonColors,
                       ),
-                    ],
-                  ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 26),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    AuthInfoPanel(
+                      text: 'confirm_password_message'.tr(context),
+                      icon: Icons.password_rounded,
+                    ),
+                    const SizedBox(height: 18),
+                    PasswordTextField(
+                      hintText: "new_password".tr(context),
+                      controller: _newPasswordCtrl,
+                      validator: (val) => Validator.validate(
+                        val,
+                        ValidationState.password,
+                        context,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    PasswordTextField(
+                      hintText: "confirm_password".tr(context),
+                      controller: _confirmPasswordCtrl,
+                      validator: (val) => Validator.validateConfirmPassword(
+                        val,
+                        _newPasswordCtrl.text,
+                        context,
+                      ),
+                    ),
+                  ],
                 ),
-                if (state is ResetPasswordLoading)
-                  const CircularProgressIndicator()
-                else
-                  PrimaryButton(
-                    text: 'save_changes'.tr(context),
-                    onPressed: () => _saveChangesPressed(context),
+              ),
+              const SizedBox(height: 30),
+              if (state is ResetPasswordLoading)
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryColors,
                   ),
-                const SizedBox(height: 32),
-              ],
-            ),
+                )
+              else
+                PrimaryButton(
+                  text: 'save_changes'.tr(context),
+                  onPressed: () => _saveChangesPressed(context),
+                ),
+            ],
           );
         },
       ),

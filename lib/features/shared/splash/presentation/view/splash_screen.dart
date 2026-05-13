@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  Timer? _navigationTimer;
 
   @override
   void initState() {
@@ -44,7 +45,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Timer(const Duration(seconds: 1), _splashLogic);
+        _navigationTimer = Timer(
+          const Duration(milliseconds: 700),
+          _splashLogic,
+        );
       }
     });
 
@@ -62,6 +66,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _splashLogic() {
+    if (!mounted) return;
+
     bool trueToken = _checkToken();
     if (trueToken) {
       String role = _getRole();
@@ -85,6 +91,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
+    _navigationTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -93,18 +100,38 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColors,
-      body: Center(
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: Hero(
-                tag: 'app-logo',
-                child: Image.asset(AssetsData.logoWhite),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(28, 28, 28, 34),
+          child: Column(
+            children: [
+              const Spacer(),
+              ScaleTransition(
+                scale: _scaleAnimation,
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Image.asset(
+                    AssetsData.logoWhite,
+                    width: 220,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
+              const Spacer(),
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(99),
+                  child: LinearProgressIndicator(
+                    minHeight: 5,
+                    color: AppColors.whiteColor,
+                    backgroundColor: AppColors.whiteColor.withValues(
+                      alpha: 0.22,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

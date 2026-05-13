@@ -16,36 +16,71 @@ class ProgressSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(totalSteps, (index) {
-        final isActive = index == currentStep;
-        return GestureDetector(
+    final List<Widget> stepWidgets = [];
+    for (int index = 0; index < totalSteps; index++) {
+      final bool isActive = index == currentStep;
+      final bool isCompleted = index < currentStep;
+      final Color stepColor = isActive || isCompleted
+          ? AppColors.primaryColors
+          : AppColors.grey300Color;
+
+      stepWidgets.add(
+        GestureDetector(
           onTap: () => onStepTapped(index),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 15,
-                backgroundColor: isActive
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: stepColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: isCompleted
+                  ? const Icon(
+                      Icons.check_rounded,
+                      color: AppColors.whiteColor,
+                      size: 18,
+                    )
+                  : Text(
+                      '${index + 1}',
+                      style: const TextStyle(
+                        color: AppColors.whiteColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+            ),
+          ),
+        ),
+      );
+
+      if (index < totalSteps - 1) {
+        stepWidgets.add(
+          Expanded(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              height: 3,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: isCompleted
                     ? AppColors.primaryColors
                     : AppColors.grey300Color,
-                child: Text(
-                  '${index + 1}',
-                  style: const TextStyle(color: AppColors.whiteColor),
-                ),
+                borderRadius: BorderRadius.circular(99),
               ),
-              if (index < totalSteps - 1)
-                Container(
-                  width: 40,
-                  height: 2,
-                  color: index < currentStep
-                      ? AppColors.primaryColors
-                      : AppColors.grey300Color,
-                ),
-            ],
+            ),
           ),
         );
-      }),
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.sageTintSurfaceAltColor,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.sageBorderSoftColor),
+      ),
+      child: Row(children: stepWidgets),
     );
   }
 }

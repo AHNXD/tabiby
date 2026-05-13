@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabiby/core/utils/app_localizations.dart';
-import 'package:tabiby/core/widgets/custom_appbar.dart';
 import 'package:tabiby/core/widgets/primary_button.dart';
+import 'package:tabiby/features/auth/presentation/views/widgets/auth_page_scaffold.dart';
 import '../../../../../../../core/utils/colors.dart';
 import '../../../../../../../core/utils/enums.dart';
 import '../../../../../../../core/utils/functions.dart';
@@ -41,10 +41,11 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.whiteColor,
-      appBar: CustomAppbar(title: 'confirm_password'.tr(context)),
-      body: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
+    return AuthPageScaffold(
+      title: 'confirm_password'.tr(context),
+      subtitle: 'confirm_password_message'.tr(context),
+      icon: Icons.password_rounded,
+      child: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
         listener: (context, state) {
           if (state is VerifyResetPasswordSuccess) {
             messages(
@@ -60,59 +61,46 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
         builder: (context, state) {
           return Form(
             key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        ListTile(
-                          title: Text(
-                            "confirm_password_message".tr(context),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(),
-                          ),
-                          leading: const Icon(
-                            Icons.warning,
-                            color: AppColors.primaryColors,
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                        PasswordTextField(
-                          hintText: "new_password".tr(context),
-                          controller: _newPasswordCtrl,
-                          validator: (val) => Validator.validate(
-                            val,
-                            ValidationState.password,
-                            context,
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                        PasswordTextField(
-                          hintText: "confirm_password".tr(context),
-                          controller: _confirmPasswordCtrl,
-                          validator: (val) => Validator.validateConfirmPassword(
-                            val,
-                            _newPasswordCtrl.text,
-                            context,
-                          ),
-                        ),
-                      ],
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AuthInfoPanel(
+                  text: 'confirm_password_message'.tr(context),
+                  icon: Icons.lock_outline_rounded,
+                ),
+                const SizedBox(height: 22),
+                PasswordTextField(
+                  hintText: "new_password".tr(context),
+                  controller: _newPasswordCtrl,
+                  validator: (val) => Validator.validate(
+                    val,
+                    ValidationState.password,
+                    context,
                   ),
-
-                  // Show Loading or Button
-                  if (state is ResetPasswordLoading)
-                    const CircularProgressIndicator()
-                  else
-                    PrimaryButton(
-                      text: 'save_changes'.tr(context),
-                      onPressed: () => _saveChangesPressed(context),
+                ),
+                const SizedBox(height: 18),
+                PasswordTextField(
+                  hintText: "confirm_password".tr(context),
+                  controller: _confirmPasswordCtrl,
+                  validator: (val) => Validator.validateConfirmPassword(
+                    val,
+                    _newPasswordCtrl.text,
+                    context,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                if (state is ResetPasswordLoading)
+                  const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryColors,
                     ),
-                  const SizedBox(height: 32),
-                ],
-              ),
+                  )
+                else
+                  PrimaryButton(
+                    text: 'save_changes'.tr(context),
+                    onPressed: () => _saveChangesPressed(context),
+                  ),
+              ],
             ),
           );
         },

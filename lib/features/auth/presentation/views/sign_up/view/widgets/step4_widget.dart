@@ -54,9 +54,9 @@ class Step4Widget extends StatelessWidget {
         Expanded(
           child: ListView(
             shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 4),
               _buildListField(
                 context,
                 title: 'chronic_diseases'.tr(context),
@@ -161,7 +161,7 @@ class Step4Widget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
           child: Column(
             children: [
               Row(

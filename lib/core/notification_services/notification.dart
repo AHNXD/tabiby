@@ -5,9 +5,12 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:tabiby/core/Api_services/api_services.dart';
+import 'package:tabiby/core/Api_services/urls.dart';
 
 // Assuming your CacheHelper is here
 import '../utils/cache_helper.dart';
+import '../utils/services_locater.dart';
 
 // 1. ADD THIS ANNOTATION
 // This is critical for Android release mode to prevent tree-shaking
@@ -28,8 +31,12 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 }
 
 class FirebaseApi {
+  FirebaseApi({ApiServices? apiServices})
+    : _apiServices = apiServices ?? getit.get<ApiServices>();
+
   final _firebaseMessaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
+  final ApiServices _apiServices;
 
   final _androidChannel = const AndroidNotificationChannel(
     'high_importance_channel',
@@ -164,13 +171,48 @@ class FirebaseApi {
     log("FCM Token: $token");
 
     if (token != null) {
+      final String? cachedToken = CacheHelper.getData(
+        key: "fcm_token",
+      )?.toString();
       await CacheHelper.setString(key: "fcm_token", value: token);
+      if (cachedToken != token) {
+        await _syncFcmTokenWithBackend(token);
+      }
     }
 
-    _firebaseMessaging.onTokenRefresh.listen((newToken) {
+    _firebaseMessaging.onTokenRefresh.listen((newToken) async {
       log("FCM Token Refreshed: $newToken");
-      CacheHelper.setString(key: "fcm_token", value: newToken);
-      // TODO: Send new token to backend
+      await CacheHelper.setString(key: "fcm_token", value: newToken);
+      await _syncFcmTokenWithBackend(newToken);
     });
+  }
+
+  Future<void> _syncFcmTokenWithBackend(String fcmToken) async {
+    final String? userToken = CacheHelper.getData(key: "token")?.toString();
+    if (userToken == null || userToken.isEmpty) {
+      log(
+        "FCM token saved locally. Backend sync skipped because user is not authenticated.",
+      );
+      return;
+    }
+
+    try {
+      final response = await _apiServices.put(
+        endPoint: Urls.fcmToken,
+        data: {"fcm_token": fcmToken},
+      );
+
+      if (response.data is Map && response.data['status'] == true) {
+        log("FCM token synced with backend successfully.");
+      } else {
+        log("FCM token sync returned unexpected response: ${response.data}");
+      }
+    } catch (error, stackTrace) {
+      log(
+        "Failed to sync FCM token with backend.",
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 }
