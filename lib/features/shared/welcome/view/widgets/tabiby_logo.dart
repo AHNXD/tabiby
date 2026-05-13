@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tabiby/core/utils/assets_data.dart';
 import 'package:tabiby/core/utils/colors.dart';
 
-class TabibiLogo extends StatelessWidget {
-  const TabibiLogo({super.key, this.isLight = false, this.width = 190});
+class TabibyLogo extends StatelessWidget {
+  const TabibyLogo({super.key, this.isLight = false, this.width = 190});
 
   final bool isLight;
   final double width;

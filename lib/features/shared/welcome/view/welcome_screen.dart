@@ -5,7 +5,7 @@ import 'package:tabiby/core/utils/colors.dart';
 import 'package:tabiby/features/auth/presentation/views/login/view/login_screen.dart';
 import 'package:tabiby/features/auth/presentation/views/sign_up/view/sign_up_screen.dart';
 
-import 'widgets/tabibi_logo.dart';
+import 'widgets/tabiby_logo.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const String routeName = "/welcome";
@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Center(child: TabibiLogo(width: 168)),
+                        const Center(child: TabibyLogo(width: 168)),
                         const Spacer(flex: 2),
                         const _DoctorCircleHero(),
                         const Spacer(flex: 1),

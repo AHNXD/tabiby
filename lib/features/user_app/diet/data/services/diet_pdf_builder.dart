@@ -70,10 +70,6 @@ class DietPdfBuilder {
       ),
     );
 
-    // 595.27 is the standard A4 width in points. Subtract 64 for left (32) and right (32) margins.
-    // This safely avoids any 'PdfPageFormat' import errors.
-    final double safeContentWidth = 595.27 - 64;
-
     // Use pdfDoc to prevent naming conflicts with the 'pdf' package
     final pdfDoc = pw.Document(
       theme: theme,
@@ -292,39 +288,30 @@ class DietPdfBuilder {
                 ),
 
                 pw.Expanded(
-                  child: pw.FittedBox(
-                    fit: pw.BoxFit.scaleDown,
-                    alignment: isRtl
-                        ? pw.Alignment.topRight
-                        : pw.Alignment.topLeft,
-                    child: pw.Container(
-                      width: safeContentWidth,
-                      child: pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          if (i == 0) ...[
-                            _sectionTitle(
-                              title: l10n.translate('diet_result_weekly_plan'),
-                              secondary: secondary,
-                              textAlign: textAlign,
-                            ),
-                            pw.SizedBox(height: 16),
-                          ],
-                          ..._buildDayContent(
-                            dayLabel: dayLabel,
-                            dayPlan: dayPlan,
-                            l10n: l10n,
-                            border: border,
-                            primary: primary,
-                            secondary: secondary,
-                            muted: muted,
-                            surfaceCard: surfaceCard,
-                            accentLight: accentLight,
-                            textAlign: textAlign,
-                          ),
-                        ],
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      if (i == 0) ...[
+                        _sectionTitle(
+                          title: l10n.translate('diet_result_weekly_plan'),
+                          secondary: secondary,
+                          textAlign: textAlign,
+                        ),
+                        pw.SizedBox(height: 16),
+                      ],
+                      ..._buildDayContent(
+                        dayLabel: dayLabel,
+                        dayPlan: dayPlan,
+                        l10n: l10n,
+                        border: border,
+                        primary: primary,
+                        secondary: secondary,
+                        muted: muted,
+                        surfaceCard: surfaceCard,
+                        accentLight: accentLight,
+                        textAlign: textAlign,
                       ),
-                    ),
+                    ],
                   ),
                 ),
 
@@ -620,57 +607,90 @@ class DietPdfBuilder {
     required pw.TextAlign textAlign,
   }) {
     final widgets = <pw.Widget>[];
+    final mealEntries = <MapEntry<String, MealDetails>>[
+      if (dayPlan.breakfast != null)
+        MapEntry(
+          l10n.translate('diet_result_meal_breakfast'),
+          dayPlan.breakfast!,
+        ),
+      if (dayPlan.lunch != null)
+        MapEntry(l10n.translate('diet_result_meal_lunch'), dayPlan.lunch!),
+      if (dayPlan.dinner != null)
+        MapEntry(l10n.translate('diet_result_meal_dinner'), dayPlan.dinner!),
+      if (dayPlan.snack != null)
+        MapEntry(l10n.translate('diet_result_meal_snack'), dayPlan.snack!),
+    ];
+    final int dayCalories = mealEntries.fold<int>(
+      0,
+      (total, entry) => total + entry.value.calories,
+    );
 
     // Day Banner
     widgets.add(
       pw.Container(
         width: double.infinity,
-        padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const pw.EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         decoration: pw.BoxDecoration(
-          color: secondary,
-          borderRadius: pw.BorderRadius.circular(8),
+          color: PdfColor.fromInt(0xFFF0FDF4),
+          borderRadius: pw.BorderRadius.circular(14),
+          border: pw.Border.all(color: primary.shade(0.25)),
         ),
-        child: pw.Text(
-          dayLabel,
-          textAlign: textAlign,
-          style: pw.TextStyle(
-            color: PdfColors.white,
-            fontSize: 16,
-            fontWeight: pw.FontWeight.bold,
-          ),
+        child: pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Text(
+              dayLabel,
+              textAlign: textAlign,
+              style: pw.TextStyle(
+                color: secondary,
+                fontSize: 18,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            if (dayCalories > 0)
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 10,
+                ),
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.white,
+                  borderRadius: pw.BorderRadius.circular(20),
+                  border: pw.Border.all(color: primary.shade(0.2)),
+                ),
+                child: pw.Text(
+                  '$dayCalories kcal',
+                  style: pw.TextStyle(
+                    color: primary,
+                    fontSize: 12,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
-    widgets.add(pw.SizedBox(height: 16));
+    widgets.add(pw.SizedBox(height: 14));
 
-    final mealEntries = <MapEntry<String, MealDetails?>>[
-      MapEntry('diet_result_meal_breakfast', dayPlan.breakfast),
-      MapEntry('diet_result_meal_lunch', dayPlan.lunch),
-      MapEntry('diet_result_meal_dinner', dayPlan.dinner),
-      MapEntry('diet_result_meal_snack', dayPlan.snack),
-    ].where((e) => e.value != null).toList();
-
-    for (final meal in mealEntries) {
-      widgets.add(
-        _mealCard(
-          title: l10n.translate(meal.key),
-          details: meal.value!,
-          l10n: l10n,
-          border: border,
-          primary: primary,
-          secondary: secondary,
-          muted: muted,
-          surfaceCard: surfaceCard,
-          textAlign: textAlign,
-        ),
-      );
-      widgets.add(pw.SizedBox(height: 16));
-    }
+    widgets.add(
+      _mealGrid(
+        meals: mealEntries,
+        l10n: l10n,
+        border: border,
+        primary: primary,
+        secondary: secondary,
+        muted: muted,
+        surfaceCard: surfaceCard,
+        textAlign: textAlign,
+      ),
+    );
 
     if (dayPlan.dailyAdvice.trim().isNotEmpty) {
+      widgets.add(pw.SizedBox(height: 14));
       widgets.add(
         pw.Container(
-          padding: const pw.EdgeInsets.all(16),
+          padding: const pw.EdgeInsets.all(14),
           decoration: pw.BoxDecoration(
             color: accentLight,
             borderRadius: pw.BorderRadius.circular(12),
@@ -703,8 +723,8 @@ class DietPdfBuilder {
               ),
               pw.SizedBox(height: 8),
               pw.Paragraph(
-                text: dayPlan.dailyAdvice,
-                style: pw.TextStyle(fontSize: 12, lineSpacing: 1.5),
+                text: _truncate(dayPlan.dailyAdvice.trim(), maxChars: 260),
+                style: pw.TextStyle(fontSize: 12.5, lineSpacing: 1.45),
                 margin: pw.EdgeInsets.zero,
                 textAlign: textAlign,
               ),
@@ -716,7 +736,73 @@ class DietPdfBuilder {
     return widgets;
   }
 
-  pw.Widget _mealCard({
+  pw.Widget _mealGrid({
+    required List<MapEntry<String, MealDetails>> meals,
+    required AppLocalizations l10n,
+    required PdfColor border,
+    required PdfColor primary,
+    required PdfColor secondary,
+    required PdfColor muted,
+    required PdfColor surfaceCard,
+    required pw.TextAlign textAlign,
+  }) {
+    if (meals.isEmpty) {
+      return pw.SizedBox();
+    }
+
+    final rows = <pw.Widget>[];
+    for (int index = 0; index < meals.length; index += 2) {
+      final firstMeal = meals[index];
+      final MapEntry<String, MealDetails>? secondMeal = index + 1 < meals.length
+          ? meals[index + 1]
+          : null;
+
+      rows.add(
+        pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Expanded(
+              child: _mealGridCard(
+                title: firstMeal.key,
+                details: firstMeal.value,
+                l10n: l10n,
+                border: border,
+                primary: primary,
+                secondary: secondary,
+                muted: muted,
+                surfaceCard: surfaceCard,
+                textAlign: textAlign,
+              ),
+            ),
+            pw.SizedBox(width: 12),
+            pw.Expanded(
+              child: secondMeal == null
+                  ? pw.SizedBox()
+                  : _mealGridCard(
+                      title: secondMeal.key,
+                      details: secondMeal.value,
+                      l10n: l10n,
+                      border: border,
+                      primary: primary,
+                      secondary: secondary,
+                      muted: muted,
+                      surfaceCard: surfaceCard,
+                      textAlign: textAlign,
+                    ),
+            ),
+          ],
+        ),
+      );
+
+      if (index + 2 < meals.length) {
+        rows.add(pw.SizedBox(height: 12));
+      }
+    }
+
+    return pw.Column(children: rows);
+  }
+
+  pw.Widget _mealGridCard({
     required String title,
     required MealDetails details,
     required AppLocalizations l10n,
@@ -727,163 +813,152 @@ class DietPdfBuilder {
     required PdfColor surfaceCard,
     required pw.TextAlign textAlign,
   }) {
-    final ingredients = details.ingredients.where((e) => e.trim().isNotEmpty);
-    final String mealText = _truncate(details.meal.trim(), maxChars: 700);
+    final List<String> ingredients = details.ingredients
+        .where((e) => e.trim().isNotEmpty)
+        .map((e) => e.trim())
+        .take(5)
+        .toList();
+    final String mealName = _truncate(details.meal.trim(), maxChars: 110);
     final String tipText = _truncate(
       details.preparationTip.trim(),
-      maxChars: 500,
+      maxChars: 170,
     );
 
     return pw.Container(
-      padding: const pw.EdgeInsets.all(16),
+      padding: const pw.EdgeInsets.all(13),
       decoration: pw.BoxDecoration(
         color: surfaceCard,
-        borderRadius: pw.BorderRadius.circular(10), // Softer corners
-        border: pw.Border.all(color: border, width: 0.8), // Clean, thin border
+        borderRadius: pw.BorderRadius.circular(14),
+        border: pw.Border.all(color: border, width: 0.9),
+        boxShadow: [
+          pw.BoxShadow(
+            color: PdfColor.fromInt(0x11000000),
+            blurRadius: 8,
+            offset: const PdfPoint(0, 4),
+          ),
+        ],
       ),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          // --- HEADER: Elegant Accent Line instead of Solid Badge ---
           pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Container(
-                width: 4,
-                height: 16,
-                decoration: pw.BoxDecoration(
-                  color: primary,
-                  borderRadius: pw.BorderRadius.circular(2),
+              pw.Expanded(
+                child: pw.Text(
+                  title,
+                  textAlign: textAlign,
+                  style: pw.TextStyle(
+                    fontSize: 15,
+                    fontWeight: pw.FontWeight.bold,
+                    color: secondary,
+                  ),
                 ),
               ),
-              pw.SizedBox(width: 8),
-              pw.Text(
-                title,
-                textAlign: textAlign,
-                style: pw.TextStyle(
-                  fontSize: 15,
-                  fontWeight: pw.FontWeight.bold,
-                  color: secondary,
+              if (details.calories > 0)
+                pw.Container(
+                  padding: const pw.EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 8,
+                  ),
+                  decoration: pw.BoxDecoration(
+                    color: PdfColor.fromInt(0xFFECFDF5),
+                    borderRadius: pw.BorderRadius.circular(18),
+                  ),
+                  child: pw.Text(
+                    '${details.calories} kcal',
+                    style: pw.TextStyle(
+                      fontSize: 11,
+                      fontWeight: pw.FontWeight.bold,
+                      color: primary,
+                    ),
+                  ),
                 ),
-              ),
-              pw.Spacer(),
-              // Highlight Calories on the far side
-              pw.Text(
-                '${details.calories} kcal',
-                style: pw.TextStyle(
-                  fontSize: 13,
-                  fontWeight: pw.FontWeight.bold,
-                  color: primary,
-                ),
-              ),
             ],
           ),
-          pw.SizedBox(height: 8),
-
-          // Clean Macro Line
+          if (mealName.isNotEmpty) ...[
+            pw.SizedBox(height: 8),
+            pw.Text(
+              mealName,
+              textAlign: textAlign,
+              style: pw.TextStyle(
+                fontSize: 13.5,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.black,
+                lineSpacing: 1.2,
+              ),
+            ),
+          ],
+          pw.SizedBox(height: 10),
           pw.Row(
             children: [
-              _macroMiniItem(
+              _macroChip(
                 label: 'P',
                 value: '${details.proteinG}g',
+                border: border,
                 muted: muted,
               ),
-              pw.SizedBox(width: 16),
-              _macroMiniItem(
+              pw.SizedBox(width: 6),
+              _macroChip(
                 label: 'C',
                 value: '${details.carbsG}g',
+                border: border,
                 muted: muted,
               ),
-              pw.SizedBox(width: 16),
-              _macroMiniItem(
+              pw.SizedBox(width: 6),
+              _macroChip(
                 label: 'F',
                 value: '${details.fatsG}g',
+                border: border,
                 muted: muted,
               ),
             ],
           ),
-
-          pw.SizedBox(height: 12),
-          pw.Divider(color: border, thickness: 0.5), // Subtle separator
-          pw.SizedBox(height: 12),
-
-          // --- CONTENT ---
-          if (details.meal.trim().isNotEmpty)
-            pw.Paragraph(
-              text: mealText,
-              style: pw.TextStyle(
-                fontSize: 12,
-                color: PdfColors.black,
-                lineSpacing: 1.5,
-              ),
-              margin: pw.EdgeInsets.zero,
-              textAlign: textAlign,
-            ),
-
           if (ingredients.isNotEmpty) ...[
-            pw.SizedBox(height: 12),
+            pw.SizedBox(height: 11),
             pw.Text(
               l10n.translate('diet_result_ingredients'),
               textAlign: textAlign,
               style: pw.TextStyle(
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: pw.FontWeight.bold,
                 color: secondary,
               ),
             ),
-            pw.SizedBox(height: 6),
-            ...ingredients
-                .take(10)
-                .map(
-                  (e) => pw.Padding(
-                    padding: const pw.EdgeInsets.only(bottom: 3),
-                    child: pw.Text(
-                      '• ${_truncate(e.trim(), maxChars: 90)}',
-                      textAlign: textAlign,
-                      style: pw.TextStyle(
-                        fontSize: 11,
-                        color: PdfColors.grey800,
-                      ),
-                    ),
+            pw.SizedBox(height: 5),
+            ...ingredients.map(
+              (ingredient) => pw.Padding(
+                padding: const pw.EdgeInsets.only(bottom: 3),
+                child: pw.Text(
+                  '• ${_truncate(ingredient, maxChars: 62)}',
+                  textAlign: textAlign,
+                  style: pw.TextStyle(
+                    fontSize: 11.2,
+                    color: PdfColor.fromInt(0xFF334155),
+                    lineSpacing: 1.15,
                   ),
                 ),
+              ),
+            ),
           ],
-
-          if (details.preparationTip.trim().isNotEmpty) ...[
-            pw.SizedBox(height: 16),
+          if (tipText.isNotEmpty) ...[
+            pw.SizedBox(height: 10),
             pw.Container(
-              padding: const pw.EdgeInsets.all(12),
+              width: double.infinity,
+              padding: const pw.EdgeInsets.all(9),
               decoration: pw.BoxDecoration(
-                color: PdfColor.fromInt(
-                  0xFFF8FAFC,
-                ), // Very soft, elegant cool-gray
-                borderRadius: pw.BorderRadius.circular(8),
+                color: PdfColor.fromInt(0xFFF8FAFC),
+                borderRadius: pw.BorderRadius.circular(9),
                 border: pw.Border.all(color: border, width: 0.5),
               ),
-              child: pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  pw.Text(
-                    l10n.translate('diet_result_tip'),
-                    textAlign: textAlign,
-                    style: pw.TextStyle(
-                      fontSize: 11,
-                      fontWeight: pw.FontWeight.bold,
-                      color: muted,
-                    ),
-                  ),
-                  pw.SizedBox(height: 4),
-                  pw.Paragraph(
-                    text: tipText,
-                    style: pw.TextStyle(
-                      fontSize: 11,
-                      color: PdfColors.black,
-                      lineSpacing: 1.2,
-                    ),
-                    margin: pw.EdgeInsets.zero,
-                    textAlign: textAlign,
-                  ),
-                ],
+              child: pw.Text(
+                tipText,
+                textAlign: textAlign,
+                style: pw.TextStyle(
+                  fontSize: 10.8,
+                  color: PdfColor.fromInt(0xFF334155),
+                  lineSpacing: 1.2,
+                ),
               ),
             ),
           ],
@@ -892,24 +967,45 @@ class DietPdfBuilder {
     );
   }
 
-  // --- NEW HELPER METHOD (Paste this right below _mealCard) ---
-  pw.Widget _macroMiniItem({
+  pw.Widget _macroChip({
     required String label,
     required String value,
+    required PdfColor border,
     required PdfColor muted,
   }) {
-    return pw.Row(
-      children: [
-        pw.Text('$label: ', style: pw.TextStyle(fontSize: 11, color: muted)),
-        pw.Text(
-          value,
-          style: pw.TextStyle(
-            fontSize: 11,
-            fontWeight: pw.FontWeight.bold,
-            color: PdfColors.black,
+    return pw.Expanded(
+      child: pw.Container(
+        padding: const pw.EdgeInsets.symmetric(vertical: 5),
+        decoration: pw.BoxDecoration(
+          color: PdfColor.fromInt(0xFFF8FAFC),
+          borderRadius: pw.BorderRadius.circular(8),
+          border: pw.Border.all(color: border, width: 0.5),
+        ),
+        child: pw.Center(
+          child: pw.RichText(
+            text: pw.TextSpan(
+              children: [
+                pw.TextSpan(
+                  text: '$label ',
+                  style: pw.TextStyle(
+                    fontSize: 10.5,
+                    color: muted,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+                pw.TextSpan(
+                  text: value,
+                  style: pw.TextStyle(
+                    fontSize: 10.5,
+                    color: PdfColors.black,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 
