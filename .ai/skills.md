@@ -1,275 +1,294 @@
 # AI Skills
 
-## Create a New Feature
-### Goal
-- Add a new feature without introducing patterns the repo does not use.
+## Skill: Read the Project Before Editing
 
-### When to Use
-- A brand-new capability does not fit inside an existing feature.
+### Use When
+
+Any task asks for implementation, refactor, documentation, architecture cleanup, bug fixing, or feature work.
 
 ### Workflow
-1. Inspect the closest existing feature under `lib/features/user_app`, `lib/features/doctor_app`, `lib/features/auth`, or `lib/features/shared`.
-2. Decide which case applies:
-   - Case A: the nearest comparable feature already has `data` + Cubit + presentation
-   - Case B: the nearest comparable feature is mostly View-only
-3. Create the new feature folder with the same internal pattern already used nearby:
+
+1. Identify the likely owning feature.
+2. Read nearby screens, Cubits, states, repos, and models.
+3. Read shared files if relevant:
+   - `lib/core/utils/services_locater.dart`
+   - `lib/core/utils/routs.dart`
+   - `lib/core/Api_services/urls.dart`
+   - `lib/core/Api_services/api_services.dart`
+   - `assets/lang/en.json`
+   - `assets/lang/ar.json`
+4. Decide whether the task is UI-only, state-flow, API/data, routing, localization, notification, or refactor.
+5. Make the smallest change that fits the current architecture.
+
+### Done When
+
+- The change matches local folder and state patterns.
+- No unrelated cleanup or renaming was introduced.
+
+## Skill: Add or Update a Feature
+
+### Use When
+
+Adding a new capability or extending an existing feature.
+
+### Workflow
+
+1. Inspect the nearest comparable feature.
+2. Match its structure:
    - `data/models`
    - `data/repo` or `data/repos`
-   - `presentation/view`, `presentation/views`, `presentation/view-model`, or `presentation/view_models`
-4. Case A: follow that feature's shape exactly.
-5. Case B: add only the layers required by the task:
-   - static feature: presentation only
-   - interactive or async feature: presentation + Cubit/state
-   - network/storage feature: presentation + Cubit/state + data/repo
-6. If the feature consumes API or local persistence, add models first, then repository contract, then repository implementation.
-7. Add or update endpoints in `lib/core/Api_services/urls.dart` only if the feature introduces a new API path.
-8. Register the repository in `lib/core/utils/services_locater.dart` if it should be resolved via `getit`.
-9. Add a Cubit and state classes for screen-level state and actions.
-10. Add screens plus supporting widgets/sections.
-11. Add route registration in `lib/core/utils/routs.dart` only if the feature should be reachable by named route.
-12. Add localization keys in both language files.
-13. Add or update tests only for the logic you added.
+   - `presentation/view` or `presentation/views`
+   - local `widgets` and `sections`
+   - `view-model`, `view_model`, or `view_models`
+3. If static UI only, keep it in presentation.
+4. If the feature has user actions or async state, add or extend a Cubit.
+5. If the feature calls backend/local persistence, add or extend a repository.
+6. Register new repository/service dependencies in `services_locater.dart`.
+7. Add route entries only when the feature uses named routes.
+8. Add localization keys to both language files.
+9. Add focused tests when meaningful.
 
-### Expected File Changes
-- New files inside one feature directory
-- `lib/core/utils/services_locater.dart`
-- `lib/core/utils/routs.dart` if routed
-- `assets/lang/en.json`
-- `assets/lang/ar.json`
-- Tests when practical
+### Validation
 
-### Validation Checklist
-- The new feature uses the same folder naming style as its nearest sibling.
-- If the feature has async or business flow, that logic is in a Cubit.
-- If the feature has API or persistence work, that logic is in a repo/data layer.
-- DI, route, URL, and localization files were updated only when needed.
-- No new state management pattern or architecture layer was introduced.
-
-## Add a New Screen Inside an Existing Feature
-### Goal
-- Add a screen without breaking the feature's current structure.
-
-### When to Use
-- A feature needs another page, flow step, dialog-backed screen, or detail view.
-
-### Workflow
-1. Inspect the feature's existing `presentation` structure.
-2. Decide which case applies:
-   - Case A: the feature already has a Cubit/state flow
-   - Case B: the feature is currently screen-only or partially structured
-3. Place the new screen beside related screens in `view` or `views`.
-4. Reuse existing `widgets` and `sections` folders for screen parts.
-5. Case A: extend the existing Cubit/state when the new screen belongs to the same flow.
-6. Case B: if the screen is static, keep it as View-only; if it needs async state or business flow, add a Cubit for that screen/feature.
-7. Add a static `routeName` only when the feature already uses named routes for similar screens.
-8. Register the route in `lib/core/utils/routs.dart` only when globally navigable.
-9. Add localization keys for titles, labels, errors, and actions.
-
-### Expected File Changes
-- One or more screen/widget files in the feature's `presentation` folder
-- Cubit/state files if new state is needed
-- `lib/core/utils/routs.dart` if route-based
-- Localization JSON files
-
-### Validation Checklist
-- The screen does not call repositories or `ApiServices` directly.
-- Navigation matches the style already used in that flow: named route or `MaterialPageRoute`.
+- Views do not call `ApiServices`.
+- Cubits do not parse large backend responses.
+- Repositories return typed results.
 - Strings are localized.
-- The screen-specific UI is split into smaller widgets/sections when it gets large.
-- If new state was needed, it was added through a Cubit, not through a large stateful screen.
 
-## Add a New API Integration
-### Goal
-- Connect a feature to a new endpoint while preserving data-layer boundaries.
+## Skill: Add an API Integration
 
-### When to Use
-- A screen needs data from a new backend endpoint or automation webhook.
+### Use When
+
+A feature needs a new backend endpoint or changes how it calls an existing endpoint.
 
 ### Workflow
-1. Inspect the target feature and decide which case applies:
-   - Case A: the feature already has a repo
-   - Case B: the feature has UI/Cubit only and no repo yet
-2. Add or update endpoint constants in `lib/core/Api_services/urls.dart`.
-3. Add/update request and response models in `data/models`.
-4. Case A: extend the existing repository interface and implementation.
-5. Case B: add a small repository contract + implementation rather than putting `ApiServices` in the Cubit or View.
-6. Implement the call using `ApiServices`.
-7. Parse responses defensively and return `Either<Failure, T>`.
-8. Register the repository only if a new repo/service type is introduced.
-9. Call the new repo method from the Cubit.
-10. Update the View to react to Cubit state only.
 
-### Expected File Changes
-- Feature `data/models/*`
-- Feature repository contract and implementation
-- Cubit/state files
-- `lib/core/utils/services_locater.dart` if DI changes
+1. Add/update endpoint constants in `Urls`.
+2. Add/update request and response models in the feature `data/models`.
+3. Extend the repository contract.
+4. Implement the repository method using `ApiServices`.
+5. Convert failures through `ErrorHandler`.
+6. Return `Either<Failure, T>` if the surrounding repo does.
+7. Call the repository from the Cubit.
+8. Render loading/success/error in the View.
 
-### Validation Checklist
-- Widgets do not import `dio` or `ApiServices`.
-- Cubits do not contain endpoint strings or response parsing that belongs in the repo.
-- Errors are converted to `Failure`.
-- Response parsing matches the real API shape.
-- Loading, success, and error states are surfaced through the Cubit.
+### Validation
 
-## Add a New Bloc/Cubit Flow in MVVM Style
-### Goal
-- Introduce or extend a Cubit-driven state flow that cleanly separates View and data logic.
+- No raw endpoint string is introduced in View.
+- No new direct `Dio` call is introduced in View.
+- API response shape is checked defensively.
+- Auth and language headers continue to flow through `ApiServices`.
 
-### When to Use
-- A screen needs new async actions, validation flow, multi-step UI state, or user interaction coordination.
+## Skill: Add or Update a Cubit Flow
+
+### Use When
+
+Adding validation, loading, selection, form submission, step navigation state, or async orchestration.
 
 ### Workflow
-1. Check whether the target feature already has a Cubit.
-2. If the new behavior belongs to the existing screen flow, extend that Cubit; otherwise add a separate Cubit close to the new screen.
-3. Use Cubit, not event-based Bloc. The repo currently uses Cubit patterns.
-4. Follow the feature's existing state style:
-   - subclass-based states such as `Loading`, `Success`, `Error`
-   - one Equatable state object plus enum/status fields
-5. Define explicit loading, success, error, and reset/selection behavior.
-6. Keep Cubit dependencies limited to repositories, models, and core helpers.
-7. Put flow validation and coordination in the Cubit when it affects behavior beyond a single widget.
-8. Use `BlocBuilder`, `BlocConsumer`, or `BlocListener` in the View to react to state.
-9. Keep ephemeral widget-only concerns local only when they are purely visual.
 
-### Expected File Changes
-- Cubit file
-- State file or `part` state
-- Related screen/widget files
+1. Search for an existing Cubit in the feature.
+2. Extend the existing Cubit if the behavior belongs to the same flow.
+3. Add a new Cubit only when the behavior is separate.
+4. Match local state style:
+   - subclass states
+   - Equatable `copyWith`
+   - enum status fields
+5. Add clear action methods.
+6. Emit loading, success, error, and reset/idle as needed.
+7. Keep repository calls in the Cubit, not widgets.
+8. Keep response parsing in the repository, not Cubit.
 
-### Validation Checklist
-- State shape is explicit and typed.
-- View only dispatches actions and renders state.
-- Cubit does not import widget/rendering code.
-- Async paths cover loading, success, and failure states.
-- The Cubit is scoped to one feature flow, not turned into a generic app service.
+### Validation
 
-## Fix a Bug
-### Goal
-- Resolve a defect with the smallest architecture-safe change.
+- View only dispatches actions and renders/listens to state.
+- Cubit has no widget imports.
+- Async failure paths are visible to the UI.
 
-### When to Use
-- Existing behavior is incorrect, crashing, inconsistent, or regressed.
+## Skill: Add a Screen
+
+### Use When
+
+Adding a page, step, picker, result screen, details screen, or form screen.
 
 ### Workflow
-1. Reproduce and locate the bug in View, Cubit, repo, model mapping, or shared core code.
-2. Inspect adjacent files for the established pattern before editing.
-3. Decide whether the buggy area is:
-   - already structured correctly
-   - partially structured
-   - legacy exception
-4. Fix the root cause, not just the symptom.
-5. If the buggy code is already in the correct layer, keep it there.
-6. If the buggy code is a legacy exception, do not rewrite the whole feature unless required; only move the touched logic toward the correct layer when that change is small and safe.
-7. Add or update a test when there is logic worth locking down.
-8. Check whether localization, navigation, DI, or endpoint constants were part of the issue.
 
-### Expected File Changes
-- Minimal targeted edits in the affected feature/core files
-- Tests when feasible
+1. Place the screen beside related screens in `view` or `views`.
+2. Place reusable parts in local `widgets` or `sections`.
+3. Use local Cubit state if the screen is interactive.
+4. Use existing shared widgets/styles/colors.
+5. Add `routeName` only if similar screens in the feature use named routing.
+6. Register in `routs.dart` only if globally navigable.
+7. Localize titles, labels, buttons, empty/error messages, and dialog text.
 
-### Validation Checklist
-- The fix does not move logic into the wrong layer.
-- The fix does not widen the legacy exception.
-- Existing flows still compile conceptually with the change.
-- User-visible strings remain localized.
-- Related edge cases are considered.
+### Validation
 
-## Refactor an Existing Feature
-### Goal
-- Improve maintainability without changing behavior unintentionally.
+- Screen has no API parsing or repository implementation details.
+- Navigation style matches the feature.
+- Layout is split when it becomes large.
 
-### When to Use
-- A feature has grown too large, duplicated logic, or unclear responsibilities.
+## Skill: Update Booking Flow
+
+### Use When
+
+Changing appointment booking, centers, days, times, lab tests, medical image type selection, attachments, or booking submission.
 
 ### Workflow
-1. Inspect the full feature slice before moving code.
-2. Label the feature as:
-   - MVVM already established
-   - partial MVVM
-   - view-only
-3. Keep file moves scoped to the feature unless the extraction is already reused or clearly shared.
-4. Extract repeated UI into `widgets` or `sections`.
-5. Extract orchestration or repeated state logic into the Cubit.
-6. Extract repeated API/data logic into repositories or shared core helpers only when the task touches that logic and the move is low-risk.
-7. Preserve route names, localization keys, DI contracts, and existing public method names unless the task explicitly includes changing them.
-8. Do not use a refactor task as an excuse to normalize every folder/file naming inconsistency in the repo.
 
-### Expected File Changes
-- Existing feature files, possibly split into smaller presentation/data units
+1. Read `BookingCubit`, `BookingState`, `BookingScreen`, and `booking_form.dart`.
+2. Read `AddAppoinmentRepo` and `AddAppoinmentRepoIplm`.
+3. Keep selection and submission state in `BookingCubit`.
+4. Keep request payload changes in `AppointmentBookingRequest`.
+5. Keep endpoint changes in `Urls` and repository implementation.
+6. Preserve `BookingSuccess` fallback behavior for recoverable failures.
 
-### Validation Checklist
-- No new architecture violations are introduced.
-- Behavior remains the same unless the task says otherwise.
-- Files are smaller and responsibilities clearer after the refactor.
-- The refactor improves the touched feature without forcing a repo-wide redesign.
+### Validation
 
-## Add Localization Keys
-### Goal
-- Add translatable strings in the same style used across the app.
+- Center/date/time reset behavior remains coherent.
+- `isBooking`, loading days, and loading times states are handled.
+- Department-specific rules remain in `BookingDepartmentType`/Cubit, not scattered in widgets.
 
-### When to Use
-- New text is introduced in screens, dialogs, buttons, errors, or labels.
+## Skill: Update Diagnosis or Diet AI Flows
+
+### Use When
+
+Changing symptom diagnosis, X-ray diagnosis, diet generation, diet history, latest diet plan, AI usage, or exports.
 
 ### Workflow
-1. Add the key to `assets/lang/en.json`.
-2. Add the matching key to `assets/lang/ar.json`.
-3. Use `'key'.tr(context)` in widgets.
-4. Reuse existing key naming patterns when possible; prefer feature-specific snake_case keys over vague names.
 
-### Expected File Changes
-- `assets/lang/en.json`
-- `assets/lang/ar.json`
-- The consuming widget/screen
+1. Read the relevant Cubit/state first:
+   - `DiagnosisCubit` and `DiagnosisState`
+   - `DietCubit` and `DietState`
+   - `AiUsageCubit` if limits are involved
+2. Read the repository and models.
+3. Keep AI requests behind backend proxy services/repositories.
+4. Do not add direct client-side OpenAI/API-key calls.
+5. Preserve Diet async session protection with `_sessionVersion`.
+6. Update AI usage refresh behavior if the backend action consumes quota.
 
-### Validation Checklist
-- Both language files contain the same key.
-- No new hard-coded UI string remains.
-- The key name is clear and feature-specific when needed.
+### Validation
 
-## Add Tests
-### Goal
-- Add focused tests around real logic in this Flutter app.
+- Loading/error/success states are explicit.
+- Selected images/files are handled defensively.
+- Existing result screens still get the state they expect.
 
-### When to Use
-- New business/state logic is added or a bug fix should be protected.
+## Skill: Update Medical Files
 
-### Workflow
-1. Assume there is no reliable existing test pattern; inspect `test/` before adding tests.
-2. Prefer testing Cubit behavior, model mapping, or utility logic over broad UI snapshots.
-3. Place tests under `test/` using a structure that mirrors the feature when possible.
-4. Mock or fake repositories if needed.
-5. Assert loading, success, and error transitions for Cubits.
-6. Add widget tests only for meaningful interaction/rendering behavior in the touched feature.
+### Use When
 
-### Expected File Changes
-- New test files under `test/`
-- Small production-code changes only if needed for testability
-
-### Validation Checklist
-- Tests cover the changed logic, not unrelated scaffolding.
-- Test names describe behavior.
-- New tests do not depend on the default counter sample.
-
-## Update Documentation
-### Goal
-- Keep repo guidance aligned with the current Flutter architecture.
-
-### When to Use
-- Structure, workflow, conventions, or agent instructions changed.
+Changing upload, list, filter, picker, preview, download, or file attachment behavior.
 
 ### Workflow
+
+1. Read `MedicalFilesCubit`, `MedicalFilesState`, repository, and models.
+2. Be aware `show_medical_files_screen.dart` is large and partly legacy.
+3. Put new upload/list API logic in `MedicalFilesRepo`.
+4. Put new screen state in `MedicalFilesCubit`.
+5. For booking attachments, also read `MedicalAttachmentItem` and booking flow.
+
+### Validation
+
+- File type filters still work.
+- Upload success merges or reloads files correctly.
+- New IO is not added directly to presentation unless the task is explicitly a tiny legacy fix.
+
+## Skill: Update Notifications
+
+### Use When
+
+Changing FCM setup, notification history, notification click behavior, token sync, or foreground local notifications.
+
+### Workflow
+
+1. Read `FirebaseApi` in `lib/core/notification_services/notification.dart`.
+2. Read `NotificationHistoryCubit` and repository if history is involved.
+3. Keep token sync through `Urls.fcmToken` and `ApiServices`.
+4. If implementing click navigation, use `navigatorKey` and existing routes.
+5. Parse notification payloads defensively.
+
+### Validation
+
+- Foreground local notifications still show.
+- Token refresh still updates backend when authenticated.
+- iOS APNS token behavior remains safe for simulators.
+
+## Skill: Add Localization Keys
+
+### Use When
+
+Adding or changing user-facing text.
+
+### Workflow
+
+1. Search both locale files for an existing key.
+2. Add the key to `assets/lang/en.json`.
+3. Add the same key to `assets/lang/ar.json`.
+4. Use `'key'.tr(context)`.
+5. Keep keys readable and feature-specific.
+
+### Validation
+
+- Both locale files contain the same new keys.
+- New UI has no hardcoded user-facing strings.
+
+## Skill: Fix a Bug
+
+### Use When
+
+Existing behavior is wrong, crashing, inconsistent, or regressed.
+
+### Workflow
+
+1. Reproduce or trace the bug path.
+2. Locate whether the bug is in View, Cubit, repo, model, route, DI, localization, or API config.
+3. Fix the root cause in the correct layer.
+4. Keep the patch narrow.
+5. Add a focused test if the behavior is easy to isolate.
+
+### Validation
+
+- The fix does not widen legacy patterns.
+- Failure states and null cases are handled.
+- Existing navigation/DI/localization contracts remain intact.
+
+## Skill: Refactor Safely
+
+### Use When
+
+The user explicitly asks for refactoring or cleanup.
+
+### Workflow
+
+1. Read the full feature slice.
+2. Keep moves inside the feature unless extracting truly shared code.
+3. Extract UI into `widgets`/`sections`.
+4. Move flow logic into Cubit.
+5. Move API/storage logic into repository/helper.
+6. Preserve route names, localization keys, constructor contracts, and public Cubit methods unless the refactor requires changing them.
+7. Avoid repo-wide naming normalization.
+
+### Validation
+
+- Behavior remains the same unless requested.
+- Files become clearer without creating new architecture layers.
+- No cross-feature dependency is introduced unnecessarily.
+
+## Skill: Update Documentation
+
+### Use When
+
+Updating `README.md`, `.ai/*`, or developer guidance.
+
+### Workflow
+
 1. Inspect the current implementation first.
-2. Update only docs that are affected.
-3. Separate current repo reality from future expectation.
-4. Prefer repo-specific guidance over generic Flutter advice.
-5. Mention ambiguities conservatively instead of inventing rules.
+2. Separate actual repo reality from target guidance.
+3. Mention known inconsistencies conservatively.
+4. Prefer project-specific instructions over generic Flutter advice.
+5. Update only affected docs unless the user asks for a full refresh.
 
-### Expected File Changes
-- `.ai/*`
-- `README.md` if the user requested broader project docs
+### Validation
 
-### Validation Checklist
-- Documentation matches actual folders, tools, and patterns in the repo.
-- No backend-oriented or non-Flutter guidance is introduced.
-- Guidance is actionable for future code generation and refactoring.
+- Documentation matches actual files and tools.
+- Guidance is actionable for future agents.
+- No backend-only guidance is introduced for the Flutter app.

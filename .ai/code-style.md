@@ -1,143 +1,222 @@
 # Code Style
 
-## Naming Conventions
-- Follow existing Dart/Flutter style:
-  - Files and folders: `snake_case`
-  - Classes, enums, typedefs: `PascalCase`
-  - Variables, methods, parameters: `camelCase`
-  - Constants: `camelCase` or `static const routeName` style already used in the repo
-- Use the suffixes already present in the repo:
-  - Screens: `...Screen`
-  - Widgets: `...Section`, `...Card`, `...Dialog`, `...Tile`, `...Widget`
-  - Cubits: `...Cubit`
-  - States: `...State`, or concrete states like `HomeLoading`, `HomeSuccess`, `HomeError`
-  - Repositories: `...Repo`
-  - Repository implementations: existing repo style is usually `...RepoIplm` or `...RepositoryIplm`; match the local feature even if spelling is imperfect
-  - Models: `...Model`, `...Request`, `...Response`, or feature-specific typed names
-- Do not “fix” naming inconsistencies across the repo unless explicitly asked.
-- For new files, prefer names that match nearby files exactly:
-  - `home_screen.dart`
-  - `home_cubit.dart`
-  - `home_state.dart`
-  - `home_repo.dart`
-  - `home_repo_iplm.dart`
+## Guiding Principle
 
-## Folder Naming
-- Prefer the folder pattern already used by the target feature.
-- Common patterns already present:
-  - `data/models`
-  - `data/repo`
-  - `data/repos`
-  - `presentation/view`
-  - `presentation/views`
-  - `presentation/view-model`
-  - `presentation/view_models`
-  - `presentation/view_model`
-  - `widgets`
-  - `sections`
-- If the target feature uses `view-model`, keep using `view-model` in that feature.
-- If the target feature uses `repo`, do not introduce `repos` beside it unless required by the existing local structure.
+Match the code around the file you are editing. This repo has real production features plus older inconsistencies, so consistency with the local feature is more important than applying a brand-new global style.
 
-## File Splitting
-- Keep screens focused on composition and state listening.
-- Split repeated or visually distinct UI blocks into `widgets` or `sections`.
-- Keep Cubit and state in separate files when that feature already does so.
-- Use `part` state files only when the surrounding feature already follows that style.
-- Avoid very large single files when the feature already supports decomposition.
-- Do not split files into extra abstraction layers the repo does not use.
+## Dart and Flutter Style
 
-## Widget Rules
-- Prefer `StatelessWidget` when local mutable UI state is unnecessary.
-- Use `StatefulWidget` only for widget-local concerns such as controllers, temporary selection, or lifecycle hooks.
-- Keep widgets reusable when the same UI pattern appears more than once.
-- Reuse components from `lib/core/widgets` and shared feature widgets before creating new ones.
-- Do not place API calls or repository access in widgets.
-- Do not place `Dio` downloads, endpoint strings, or response mapping in new widgets.
+- Use normal Dart formatting with `dart format`.
+- Prefer `const` constructors and values where practical.
+- Prefer `final` for values that are not reassigned.
+- Keep imports tidy and avoid unused imports.
+- Keep widgets small enough to scan.
+- Use null safety carefully and avoid force unwraps unless the surrounding flow has already validated the value.
 
-## View Rules
-- Views must focus on:
-  - rendering
-  - layout
-  - dispatching user actions
-  - reacting to Cubit state
-- Views may keep small ephemeral UI state locally, but not business rules, network flow, or persistence orchestration.
-- Use `BlocBuilder`, `BlocConsumer`, or `BlocListener` consistently with the existing flow.
-- A View may create a local `BlocProvider` for its screen-specific Cubit, because that pattern already exists in the repo.
-- A View must not talk directly to `ApiServices`, new direct `Dio` calls, or repo methods.
+## Naming
 
-## ViewModel / Cubit Rules
-- Use Cubit by default. The repo does not currently use event-based Bloc flows.
-- Cubits should:
-  - depend on repositories, models, and core helpers
-  - expose explicit methods for user actions
-  - emit clear loading/error/success/selection states
-  - coordinate calls between View and repo
-- Keep Cubits focused on one feature or one screen flow.
-- Put flow validation in the Cubit when it affects behavior across widgets or network calls.
-- Do not turn a Cubit into a grab-bag service container.
-- Do not import widget classes into Cubit files.
-- Do not put endpoint constants or response parsing in the Cubit when that logic belongs in the repo.
+General Dart naming:
 
-## Async State Handling
-- Model async flows explicitly.
-- Existing repo patterns include:
-  - sealed-ish state classes like `Loading`, `Success`, `Error`
-  - enum-driven view states inside a single Equatable state object
-- Match the pattern already used in the target feature.
-- For a new or changed async flow, account for:
-  - loading
-  - success
-  - error
-  - reset/idle or empty state when the flow needs it
-- Do not leave error handling implicit.
-- Do not hide loading state in ad-hoc widget booleans if the Cubit already owns that flow.
+- Files/folders: `snake_case`.
+- Classes/enums/typedefs: `PascalCase`.
+- Variables/methods/parameters: `camelCase`.
+- Route constants: `static const routeName = ...` where the screen already follows that pattern.
+
+Common suffixes:
+
+- Screens: `...Screen`
+- Widgets: `...Widget`, `...Card`, `...Tile`, `...Dialog`
+- Sections: `...Section`
+- Cubits: `...Cubit`
+- States: `...State` or concrete state names like `HomeLoading`
+- Repositories: `...Repo`
+- Repository implementations: match local spelling, often `...RepoIplm` or `...RepositoryIplm`
+- Models: `...Model`, `...Request`, `...Response`, or a feature-specific noun
+
+Do not rename existing misspellings unless the user explicitly requests a cleanup/refactor.
+
+## Folder Style
+
+Use the target feature's existing pattern.
+
+Existing variants include:
+
+- `data/repo`
+- `data/repos`
+- `presentation/view`
+- `presentation/views`
+- `presentation/view-model`
+- `presentation/view_model`
+- `presentation/view_models`
+- `widgets`
+- `sections`
+
+If a feature uses `view-model`, do not add `view_model` beside it.
+
+## Widgets and Screens
+
+Views should:
+
+- Compose layout.
+- Read localized strings.
+- Dispatch actions to Cubits.
+- React to Cubit state.
+- Own only widget-local state such as controllers, focus nodes, animation controllers, page controllers, tabs, and temporary visual selections.
+
+Views should not:
+
+- Call new API methods directly.
+- Import `Dio` or `ApiServices`.
+- Parse response maps.
+- Contain endpoint strings.
+- Contain major business decisions that should be testable in a Cubit.
+
+Use `StatelessWidget` unless local mutable widget state is needed.
+
+Use `StatefulWidget` for:
+
+- controllers
+- lifecycle hooks
+- form key ownership
+- local animations
+- temporary UI-only choices
+
+Split large UI into `sections` or `widgets` when the feature already uses that structure.
+
+## Cubit Style
+
+Cubits should:
+
+- Expose clear action methods.
+- Validate user actions that affect flow behavior.
+- Emit explicit loading, success, failure, and reset/idle states.
+- Call repository contracts.
+- Keep dependencies in constructor parameters.
+- Stay scoped to one feature/flow.
+
+Cubits should not:
+
+- Import widget/screen files.
+- Build UI.
+- Use `BuildContext` unless an existing legacy method already does and there is no clean alternative.
+- Contain raw endpoint strings.
+- Parse large response maps that should be models.
+
+Use Cubit, not event-based Bloc, for new work.
+
+## State Style
+
+Match the local pattern:
+
+- If the feature has subclass states, add another subclass.
+- If the feature uses one Equatable state and `copyWith`, extend that object carefully.
+- If the feature uses enum status fields, add a status only when the flow genuinely needs distinct async state.
+
+When adding `copyWith` fields that need to clear nullable values, follow existing clear flags such as `clearPlan`, `clearCurrentRequest`, or `clearExportPdfBytes`.
+
+## Repository and Model Style
+
+Repositories should:
+
+- Depend on `ApiServices`, not raw `Dio`, unless the existing repo needs direct Dio for uploads/downloads.
+- Use endpoint constants from `Urls`.
+- Convert errors with `ErrorHandler.handle(error)`.
+- Return `Either<Failure, T>` when the surrounding repo does.
+- Parse defensively:
+  - check status codes
+  - check `resp.data['status']`
+  - verify list/map types before casting
+  - provide default values where models already do
+
+Models should:
+
+- Keep JSON mapping close to the API shape.
+- Avoid UI dependencies.
+- Handle missing or nullable API fields defensively.
+
+## Async and Error Handling
+
+For async flows, account for:
+
+- idle/initial
+- loading
+- success
+- error/failure
+- empty state when relevant
+- submission in progress when forms are involved
+
+Do not swallow errors silently. Surface user-safe messages through state.
+
+Preserve stale async protection when present, such as `DietCubit`'s `_sessionVersion`.
 
 ## Localization
-- Do not hard-code user-facing strings in Views.
-- Add keys to both:
-  - `assets/lang/en.json`
-  - `assets/lang/ar.json`
-- Use `'key'.tr(context)` in widgets.
-- Keep key names readable, `snake_case`, and feature-specific when needed.
-- If you add a string to one locale file, add it to the other in the same change.
 
-## Routing
-- Use static `routeName` when the feature participates in named routing.
-- Register named routes in `lib/core/utils/routs.dart`.
-- For local step flows already using `MaterialPageRoute`, keep that pattern unless there is a clear reason to centralize the route.
-- Do not introduce a new routing package.
-- Do not force every new screen into `routs.dart` if the surrounding flow navigates locally and passes constructor arguments directly.
+New user-facing text should be localized.
+
+Steps:
+
+1. Add a readable `snake_case` key to `assets/lang/en.json`.
+2. Add the same key to `assets/lang/ar.json`.
+3. Use `'key'.tr(context)`.
+
+Use existing keys before adding new ones.
+
+Do not use `easy_localization`; this app has its own localization helper.
+
+## Navigation
+
+Use existing navigation style for the flow:
+
+- Named route with `routeName` and `Routes.routes` for global screens.
+- `MaterialPageRoute` for local step/detail flows that pass constructor arguments.
+
+Do not introduce a new routing package.
+
+When a route needs arguments, inspect current usage carefully. Some route table entries instantiate screens with placeholder IDs and may not be suitable for new argument-heavy flows.
 
 ## Dependency Injection
-- Shared repositories/services should be registered in `lib/core/utils/services_locater.dart`.
-- Use `getit.get<T>()` consistently where the feature already resolves dependencies that way.
-- Provide Cubits globally only when they are truly app-wide; otherwise create them close to the screen with `BlocProvider`.
-- Do not invent a second DI mechanism.
 
-## Null Safety and Defensive Coding
-- Respect Dart null safety.
-- Check nullable IDs, models, and selected values before using them.
-- Parse API responses defensively.
-- Return typed failures instead of throwing UI-facing exceptions through widgets.
-- Preserve existing guard-clause style where it already exists in Cubits.
-- When extending repo code, prefer returning `Either<Failure, T>` like the surrounding data layer.
+- Register shared repositories/services in `lib/core/utils/services_locater.dart`.
+- Use `getit.get<T>()` where the feature already resolves dependencies that way.
+- Keep feature Cubits local with `BlocProvider` unless the state is intentionally app-wide.
+- Avoid service locator calls inside deeply reusable widgets.
 
-## Readability and Maintainability
-- Keep methods short and intention-revealing.
-- Prefer explicit names over overly generic abstractions.
-- Reuse current core helpers such as cache, localization, colors, styles, and error widgets.
-- Follow the feature's local import and file organization pattern.
-- Add comments only when a piece of logic is not obvious from the code.
-- Prefer incremental improvement in the touched flow over broad rewrites.
+## Assets and Fonts
 
-## Anti-Patterns to Avoid
-- Business logic inside widgets
-- New widget directly importing `dio`, `ApiServices`, or repo methods for side effects
-- Repository logic placed in a screen or section widget
-- Presentation code imported into the data layer
-- Adding a new state management library or event-based Bloc architecture
-- Hardcoded user-facing strings in UI
-- Huge files that should be split into sections/widgets/state classes
-- Duplicating shared UI or utility logic that already exists in `core` or the same feature
-- Broad architecture rewrites when the task only needs a focused feature change
-- Copying legacy presentation-layer IO patterns from `medical_files` or `user_appointments` into new code
+Assets are declared in `pubspec.yaml`:
+
+- `assets/lang/`
+- `assets/images/`
+- `assets/icons/`
+- `assets/fonts/`
+
+Custom fonts:
+
+- `cocon-next-arabic`
+- `Hacen Beirut`
+
+When adding an asset, update `pubspec.yaml` only if the asset is outside the existing declared directories.
+
+## Formatting and Quality Commands
+
+Use:
+
+```bash
+dart format lib test
+dart analyze
+flutter test
+```
+
+Run `flutter pub get` after dependency or asset config changes.
+
+## Avoid
+
+- Hardcoded user-facing strings in new UI.
+- New API calls in widgets.
+- New direct `Dio` usage in presentation.
+- New state management libraries.
+- New route/navigation libraries.
+- Broad file/folder renames as drive-by cleanup.
+- Huge new screen files.
+- Copying legacy IO patterns from large screens into fresh code.
+- Reimplementing shared buttons, colors, styles, loaders, or error widgets that already exist.
